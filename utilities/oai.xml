@@ -1,0 +1,67 @@
+---
+#####
+# generate OAI-PMH static repository xml file 
+# see docs/oai-pmh.md for details
+# the gateway-baseurl and admin-email must be set here for the static repository to be valid
+# only generated during production environment build
+#####
+gateway-baseurl: http://gateway.institution.org/oai/
+admin-email: libstatic.uidaho@gmail.com
+permalink: /oai.xml
+---
+{%- if jekyll.environment == "production" -%}
+{%- assign items = site.data[site.metadata] -%}
+{%- assign fields = site.data.config-metadata | where_exp: 'field','field.dc_map' -%}
+{%- assign oai_dc_fields = "creator;subject;description;publisher;contributor;type;format;identifier;source;language;relation;coverage;rights" | split: ";" -%}
+<?xml version="1.0" encoding="UTF-8"?>
+<Repository xmlns="http://www.openarchives.org/OAI/2.0/static-repository" 
+            xmlns:oai="http://www.openarchives.org/OAI/2.0/" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+            xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/static-repository 
+                                http://www.openarchives.org/OAI/2.0/static-repository.xsd">
+    <Identify>
+        <oai:repositoryName>{{ site.title | xml_escape }}</oai:repositoryName>
+        <oai:baseURL>{{ page.gateway-baseurl }}{{ page.url | absolute_url | remove: "https://" | remove: "http://" }}</oai:baseURL>
+        <oai:protocolVersion>2.0</oai:protocolVersion>
+        <oai:adminEmail>{{ page.admin-email }}</oai:adminEmail>
+        <oai:earliestDatestamp>{{ site.time | date: "%Y-%m-%d" }}</oai:earliestDatestamp>
+        <oai:deletedRecord>no</oai:deletedRecord>
+        <oai:granularity>YYYY-MM-DD</oai:granularity>
+    </Identify>
+    <ListMetadataFormats>
+        <oai:metadataFormat>
+            <oai:metadataPrefix>oai_dc</oai:metadataPrefix>
+            <oai:schema>http://www.openarchives.org/OAI/2.0/oai_dc.xsd</oai:schema>
+            <oai:metadataNamespace>http://www.openarchives.org/OAI/2.0/oai_dc/</oai:metadataNamespace>
+        </oai:metadataFormat>
+    </ListMetadataFormats>
+    <ListRecords metadataPrefix="oai_dc">
+        {% for item in items %}
+        <oai:record> 
+            <oai:header>
+                <oai:identifier>oai:{{ site.url | remove: 'https://' | remove: 'http://' }}:{{ site.baseurl | remove: '/' }}/{{ item.objectid }}</oai:identifier> 
+                <oai:datestamp>{{ site.time | date: "%Y-%m-%d" }}</oai:datestamp>
+            </oai:header>
+            <oai:metadata>
+                <oai_dc:dc 
+                xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" 
+                xmlns:dc="http://purl.org/dc/elements/1.1/" 
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ 
+                                    http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+                    <dc:title>{{ item.title | xml_escape }}</dc:title>
+                    {% for f in fields %}
+                    {%- assign map = f.dc_map | split: "." | last -%}{%- if oai_dc_fields contains map -%}
+                    <dc:{{ map }}>{{ item[f.field] | xml_escape }}</dc:{{ map }}>
+                    {% elsif map == "created" or map == "date" %}<dc:date>{{ item[f.field] }}</dc:date>
+                    {%- endif -%}
+                    {%- endfor -%}
+                    <dc:identifier>{{ item.objectid }}</dc:identifier>
+                    <dc:identifier>{{ '/items/' | absolute_url | append: item.objectid | append: '.html' }}</dc:identifier>
+                </oai_dc:dc>
+            </oai:metadata>
+        </oai:record>
+        {% endfor %}
+    </ListRecords>
+</Repository>
+{%- endif -%}

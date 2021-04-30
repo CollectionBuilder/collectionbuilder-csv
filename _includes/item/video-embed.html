@@ -1,0 +1,19 @@
+{% comment %}
+
+    Adds an iframe video embed from a YouTube or Vimeo link given in object_download. 
+
+{%- endcomment -%}
+{% if page.object_download contains 'vimeo' %}
+{% assign vimeo_id = page.object_download | split: '/' | last %}
+<div class="embed-responsive embed-responsive-16by9">
+    <iframe class="embed-responsive-item" src="https://player.vimeo.com/video/{{ vimeo_id }}" allowfullscreen></iframe>
+</div>
+{%- elsif page.object_download contains 'youtu' -%}
+{% assign youtube_id = page.object_download | split: '/' | last %}
+{% if youtube_id contains '?' %}{% assign youtube_id = youtube_id | split: '?' | last | split: '&' | first | replace: 'v=','' %}{% endif %}
+<div class="embed-responsive embed-responsive-16by9">
+    <iframe class="embed-responsive-item" src="https://www.youtube-nocookie.com/embed/{{ youtube_id }}?rel=0&modestbranding=1" allowfullscreen></iframe>
+</div>
+{% else %}
+{% include item/item-thumb.html %}
+{% endif %}

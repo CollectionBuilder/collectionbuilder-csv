@@ -1,0 +1,16 @@
+<style>
+#jumbo-feature {
+    background-image: url('{% include image/featured-image.html %}');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: {{ site.data.theme.home-banner-image-position | default: top }};
+}
+</style>
+<div class="jumbotron feature px-0 py-5 border" id="jumbo-feature">
+    <div id="home-title-box">
+        <div class="title-card p-2 text-center">
+            <h1 class="display-4">{{ site.title }}</h1>
+            {% if site.tagline %}<p id="home-tagline">{{ site.tagline }}</p>{% endif %}
+        </div>
+    </div>
+</div>

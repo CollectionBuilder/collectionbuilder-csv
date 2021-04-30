@@ -1,0 +1,31 @@
+{% assign fcount = site.data.config-table | size %}
+<script type="text/javascript" language="javascript" src="{{ '/assets/lib/datatables/datatables.min.js' | relative_url }}"></script>
+<script>
+/* use jquery to initialize DataTables and load collection data */
+(function(){
+    $('#item-table').DataTable( {
+        // use DataTables ajax load 
+        ajax: { url: '{{ "/assets/js/metadata.min.json" | relative_url }}', dataSrc: 'objects' },
+        // defer render to speed up large sets
+        "deferRender": true,
+        // enable pagination 
+        "paging": true,
+        "lengthMenu": [[ 25, 50, 100, -1], [ 25, 50, 100, "All"]],
+        // add download features
+        dom: 'B<"row mt-2"<"col-md-6"l><"col-md-6"f>>t<"row"<"col-md-6"i><"col-md-6"p>>', 
+        buttons: [ 'excelHtml5', 'csvHtml5' ],
+        // get the data from json
+        columns: [ {% for i in (0..fcount) %}{ data: '{{ i }}' }{% unless forloop.last %},{% endunless %}{% endfor %} ],
+        columnDefs: [ 
+            // turn relative link into absolute
+            { "render": function ( data ) { return '{{ "/" | relative_url }}' + data; },"targets": {{ fcount }} },
+            // combine link with first column
+            { "render": function ( data, type, row ) { return '<a href="' + row['{{ fcount }}'] +'">'+ data +'</a>'; },"targets": 0 },
+            // hide the link column
+            { "visible": false,  "targets": [ {{ fcount }} ] }
+        ],
+        // sort based on the second column
+        order: [[ 1, "asc" ]]
+    });
+})();
+</script>

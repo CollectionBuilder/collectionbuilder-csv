@@ -1,0 +1,38 @@
+{% comment %}
+
+    Requires cb_page_gen plugin.
+    The item order follows the order in the metadata CSV, so pre-sort the CSV to the desired order.
+
+{%- endcomment -%}
+<div class="text-center">
+    <a class="btn btn-secondary" href="{{ page.previous_item | relative_url }}" id="prev-page-button">&laquo; Previous</a>
+    <a class="btn btn-secondary" href="{{ '/browse.html' | relative_url }}" >Back to Browse</a>
+    <a class="btn btn-secondary" href="{{ page.next_item | relative_url }}" id="next-page-button">Next &raquo;</a>
+</div>
+<div id="item-nav">
+    <div class="d-none d-md-block">
+        <a class="previous btn btn-lg btn-secondary" href="{{ page.previous_item | relative_url }}">&laquo;</a>
+        <a class="next btn btn-lg btn-secondary" href="{{ page.next_item | relative_url }}">&raquo;</a>
+    </div>
+</div>
+<script>
+    function leftArrowPressed() {
+       location.href = document.getElementById("prev-page-button").href;
+    }
+    
+    function rightArrowPressed() {
+        location.href = document.getElementById("next-page-button").href;
+    }
+    
+    document.onkeydown = function(evt) {
+        evt = evt || window.event;
+        switch (evt.keyCode) {
+            case 37:
+                leftArrowPressed();
+                break;
+            case 39:
+                rightArrowPressed();
+                break;
+        }
+    };
+</script>

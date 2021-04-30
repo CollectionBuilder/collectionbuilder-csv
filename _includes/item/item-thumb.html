@@ -1,0 +1,15 @@
+{% comment %}
+
+    Add a thumbnail image or icon based on format for an item, with a object_download link (if available).
+
+{% endcomment %}
+{% if page.object_download %}<a href="{{ page.object_download | relative_url }}" target="_blank" rel="noopener">{% endif %}
+    {% if page.image_thumb or page.image_small %}
+    <img class="img-thumbnail" src="{{ page.image_small | default: page.image_thumb | relative_url }}" alt="{{ page.title | escape }}">
+    {% else %}
+    <svg class="bi text-body" fill="currentColor" aria-hidden="true">
+        <use xlink:href="{{ '/assets/lib/bootstrap-icons.svg' | relative_url }}#{% if page.format contains 'image' %}{{ site.data.theme.icon-image | default: 'file-image' }}{% elsif page.format contains 'audio' %}{{ site.data.theme.icon-audio | default: 'file-play' }}{% elsif page.format contains 'video' %}{{ site.data.theme.icon-video | default: 'film' }}{% elsif page.format contains 'pdf' %}{{ site.data.theme.icon-pdf | default: 'file-richtext' }}{% else %}{{ site.data.theme.icon-default | default: 'file-earmark' }}{% endif %}"/>
+    </svg>
+    <span class="sr-only">{{ page.title | escape }} - {{ page.format }}</span>
+    {% endif %}
+{% if page.object_download %}</a>{% endif %}

@@ -1,0 +1,52 @@
+---
+layout: default
+item-meta: true
+---
+<div class="container py-3">
+
+    {% include item/breadcrumbs.html %}
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4 text-center">
+                <div class="m-2">
+                    <p>
+                        {% include item/item-thumb.html %}
+                    </p>
+                </div>
+                
+                <div class="my-2">
+
+                    {% if page.object_download %}<a target="_blank" rel="noopener" href="{{ page.object_download | relative_url }}" class="btn btn-outline-info">Object Link</a>{% endif %}
+                    {% if page.date %}{%- capture year -%}{% if page.date contains "-" %}{{ page.date | split: "-" | first }}{% elsif page.date contains "/" %}{{ page.date | split: "/" | last }}{% else %}{{ page.date }}{% endif %}{%- endcapture -%}
+                    <a href="{{ year | strip | prepend: '/timeline.html#' | relative_url }}" class="ml-2 btn btn-outline-info">View on Timeline</a>{% endif %}
+                    {% if page.latitude and page.longitude %}
+                    <a href="{{ '/map.html#' | append: page.latitude  | append: ',' | append: page.longitude | relative_url}}" class="ml-2 btn btn-outline-info">View on Map</a>{% endif %}
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-md-6">
+
+            {% include item/metadata.html %}
+            
+        </div>
+    </div>
+
+    <div class="row justify-content-end mt-4">
+        <div class="col-md-5">
+            {% include item/citation-box.html %}
+        </div>
+        {% if page.rights or page.rightsstatement %}
+        <div class="col-md-5">
+            {% include item/rights-box.html %}
+        </div>
+        {% endif %}
+    </div>
+
+    {%- if site.data.theme.browse-buttons == true -%}
+        {% include item/browse-buttons.html %}
+    {%- endif -%}
+</div>

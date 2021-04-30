@@ -1,0 +1,133 @@
+/*  
+    base - slight modifications to override base Bootstrap
+    these values are configurable using theme.yml > Theme Fonts area 
+    or by editing base variables in custom.scss
+*/
+body {
+    @if $base-font-family != "" { font-family: $base-font-family; }
+    @if $base-font-size != "" { font-size: $base-font-size; }
+    @if $text-color != "" { color: $text-color; }
+}
+a {
+    @if $link-color != "" { 
+        color: $link-color; 
+        &:hover {
+            @if $text-color != "" { color: $text-color; }
+        }
+    }
+}
+
+/* skip nav for accessibility, based on https://webaim.org/techniques/skipnav/ */
+#skip-to-content a {
+	padding:6px;
+	position: absolute;
+	top:-100px;
+	left:0px;
+	color:white;
+	border-right:1px solid white;
+	border-bottom:1px solid white;
+	border-bottom-right-radius:8px;
+	background:#BF1722;
+	-webkit-transition: top 1s ease-out;
+    transition: top 1s ease-out;
+    z-index: 100;
+}
+#skip-to-content a:focus {
+	position:absolute;
+	left:0px;
+	top:0px;
+	outline-color:transparent;	
+	-webkit-transition: top .1s ease-in;
+    transition: top .1s ease-in;
+}
+
+/* banner */
+.title-card {
+    background-color: #25242485;
+    background-color: rgba(37, 36, 36, 0.72);
+    color: white !important;
+}
+.featured-link {
+    background:rgba(0,0,0,.5);
+    padding:.5em;
+}
+#home-title-box {
+    img { height:40px; }
+}
+#home-banner {
+    @include media-query($on-palm) {
+    max-height:500px;
+    }
+}
+.display-4 {
+    @include media-query($on-palm) {
+       font-size:1.75em;
+    }
+}
+#home-tagline{
+  @include media-query($on-palm) {
+      font-size:.85em;
+    }
+}
+
+/* nav bar */
+.navbar-dark .navbar-nav .nav-link:focus, .navbar-dark .navbar-nav .nav-link:hover {
+    color: rgba(255,255,255,.75);
+}
+.navbar-dark .navbar-nav .nav-link {
+    color: rgba(255,255,255,.5);
+}
+#mobile-nav-image {
+    max-height: 1.5em;
+}
+
+/* footer */
+#footer-credits {
+    img { height: 40px; }
+}
+
+/* scroll to top */
+#scroll-to-top {
+    display: none; 
+    position: fixed; 
+    bottom: 38px; 
+    right: 22px; 
+    z-index: 99;
+    font-size: 40px; 
+}
+
+/* feature include tweaks */
+.feature-alert p:last-of-type { margin-bottom: 0; }
+@media (min-width: 768px) {
+    .feature-w-25 {
+        width: 25%!important;
+    }
+    .feature-w-50 {
+        width: 50%!important;
+    }
+    .feature-w-75 {
+        width: 75%!important;
+    }
+    .feature-w-100 {
+        width: 100%!important;
+    }
+    .feature-float-right {
+        float: right!important;
+    }
+    .feature-float-left {
+        float: left!important;
+    } 
+}
+
+/* bootstrap icons tweaks */
+.bi { 
+    display: inline-block;
+    fill: currentColor;
+    vertical-align: text-bottom; 
+    overflow: hidden;
+}
+.icon-sprite {
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.1em;
+}

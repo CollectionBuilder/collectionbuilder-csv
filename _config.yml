@@ -1,0 +1,77 @@
+##########
+# collectionbuilder-sa
+# Jekyll Digital Collection Generator
+# https://github.com/CollectionBuilder/collectionbuilder-sa
+##########
+
+##########
+# URL VARIABLES
+#
+# site domain, full URL to the production location of your collection
+url: https://www.lib.uidaho.edu
+# path to location on the domain if necessary e.g. /digital/hjccc
+baseurl: /demo
+# location of code, the full url to your github repository
+source-code: https://github.com/CollectionBuilder/collectionbuilder-csv
+
+##########
+# SITE SETTINGS
+#
+# title of site appears in banner
+title: CollectionBuilder CSV
+# tagline, a short phrase that will appear throughout the site in the top banner
+tagline: Digital Collection Magic with Static Web Technologies
+# description appears in meta tags and other locations
+# this description might appear in search result lists, keep around 160 characters max
+description: "CollectionBuilder-CSV is a template for creating digital collection exhibits using static web technology."
+# keywords, a short list of subjects describing the collection, separated by semicolon, to appear in rich markup
+keywords: idaho;history;inland northwest
+# creator of the digital collection, to appear in meta tags; we typically use our GitHub usernames but feel free to just use your name
+author: CollectionBuilder
+# Organization branding
+organization-name: "Digital Initiatives, University of Idaho Library"
+organization-link: https://www.lib.uidaho.edu/digital/
+organization-logo-banner: https://www.lib.uidaho.edu/media/digital/justdi_logo_sm.png
+organization-logo-nav: https://www.lib.uidaho.edu/media/digital/bannerlogo_allwhite.png
+
+##########
+# COLLECTION SETTINGS
+#
+# choose metadata: this is the name of the csv file in your _data directory that describes the objects in your collection
+metadata: demo-metadata
+# page generation settings [optional!]
+# [optional: only used if you need to tweak CB defaults or generate from more than one data file]
+# page_gen:
+#   - data: 'demo-metadata'
+#     template: 'item'
+#     name: 'objectid'
+#     dir: 'items'
+#     extension: 'html' 
+#     filter: 'objectid'  
+
+##########
+# GOOGLE SERVICES [optional!]
+#
+# leave these blank or comment out to NOT include google code
+# if present, used to add analytics during "production" build only
+# google-analytics-id: "UA-74844011-1"
+# google-cse-id: "002151703305773322890:1pu3smhw1t8"
+
+##########
+# ROBOTS EXCLUDE
+#
+# set noindex to true if you do NOT want Google to index your site
+# noindex: true 
+
+##########
+# BUILD SETTINGS 
+#
+# Note: use environment variable on build command to include analytics
+# JEKYLL_ENV=production jekyll build
+# (this is done automatically by gh-pages build)
+#
+# ignore stuff
+exclude: [docs/, Rakefile, README.md, LICENSE]
+# compress CSS output
+sass:
+  style: compressed

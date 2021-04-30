@@ -1,0 +1,54 @@
+---
+layout: default
+item-meta: true
+# this item layout supports YouTube or Vimeo objects by default.
+# the YouTube or Vimeo video link should be in the object_download column.
+---
+<div class="container py-3">
+
+    {% include item/breadcrumbs.html %}
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4 text-center">
+                <div class="mt-4">
+
+                    {% include item/video-embed.html %}
+
+                </div>
+                
+                <div class="my-2">
+
+                    <a target="_blank" rel="noopener" href="{{ page.object_download | relative_url }}" class="btn btn-outline-info">View {% if page.object_download contains 'vimeo' %}on Vimeo{% elsif page.object_download contains 'youtu' %}on YouTube{% else %}Video{% endif %}</a>
+                    {% if page.date %}{%- capture year -%}{% if page.date contains "-" %}{{ page.date | split: "-" | first }}{% elsif page.date contains "/" %}{{ page.date | split: "/" | last }}{% else %}{{ page.date }}{% endif %}{%- endcapture -%}
+                    <a href="{{ year | strip | prepend: '/timeline.html#' | relative_url }}" class="ml-2 btn btn-outline-info">View on Timeline</a>{% endif %}
+                    {% if page.latitude and page.longitude %}
+                    <a href="{{ '/map.html#' | append: page.latitude  | append: ',' | append: page.longitude | relative_url}}" class="ml-2 btn btn-outline-info">View on Map</a>{% endif %}
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-md-6">
+
+            {% include item/metadata.html %}
+            
+        </div>
+    </div>
+
+    <div class="row justify-content-end mt-4">
+        <div class="col-md-5">
+            {% include item/citation-box.html %}
+        </div>
+        {% if page.rights or page.rightsstatement %} 
+        <div class="col-md-5">
+            {% include item/rights-box.html %}
+        </div>
+        {% endif %}
+    </div>
+
+    {%- if site.data.theme.browse-buttons == true -%}
+        {% include item/browse-buttons.html %}
+    {%- endif -%}
+</div>

@@ -1,0 +1,53 @@
+---
+layout: default
+item-meta: true
+---
+<div class="container py-3">
+
+    {% include item/breadcrumbs.html %}
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4 text-center">
+                <div class="m-2">
+
+                    {% include item/item-thumb.html %}
+                
+                </div>
+                <div class="m-2">
+
+                    {% include item/audio-player.html %}
+                    
+                </div>
+                
+                <div class="my-2">
+
+                    {% include item/download-buttons.html %}
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-md-6">
+
+            {% include item/metadata.html %}
+            
+        </div>
+    </div>
+
+    <div class="row justify-content-end mt-4">
+        <div class="col-md-5">
+            {% include item/citation-box.html %}
+        </div>
+        {% if page.rights or page.rightsstatement %} 
+        <div class="col-md-5">
+            {% include item/rights-box.html %}
+        </div>
+        {% endif %}
+    </div>
+
+    {%- if site.data.theme.browse-buttons == true -%}
+        {% include item/browse-buttons.html %}
+    {%- endif -%}
+</div>

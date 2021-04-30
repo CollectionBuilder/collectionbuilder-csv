@@ -1,0 +1,10 @@
+<script src="{{ '/assets/lib/jquery.mousewheel.min.js' | relative_url }}"></script>
+<script src="{{ '/assets/lib/lightgallery/js/lightgallery-all.min.js' | relative_url }}"></script>
+<script>
+    $(document).ready(function() {
+        $("#lightgallery").lightGallery({
+            selector: '.gallery-img',
+            thumbnail:true
+        }); 
+    });
+</script>

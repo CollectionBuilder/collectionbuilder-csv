@@ -1,0 +1,15 @@
+---
+# find all unique subjects used in the metadata 
+---
+{%- if site.data.theme.subjects-fields -%}
+{%- assign subjects-fields = site.data.theme.subjects-fields | split: ";" -%}
+{%- assign subjects = "" -%}
+{%- for c in subjects-fields -%}
+{% assign new = site.data[site.metadata] | map: c | join: ";" %}
+{% assign subjects = subjects | append: ";" | append: new %}
+{%- endfor -%}
+{%- assign uniqSubjects = subjects | downcase | split: ";" | array_count_uniq -%}
+subject,count,link
+{% for s in uniqSubjects %}"{{ s[0] }}",{{ s[1] }},"{{ s[0] | url_param_escape | prepend: '/browse.html#' | absolute_url }}"
+{% endfor %}
+{%- endif -%}

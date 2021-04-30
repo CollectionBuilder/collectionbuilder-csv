@@ -1,0 +1,74 @@
+{%- assign fields = site.data.config-search -%}
+{%- assign index_fields = fields | where: 'index','true' -%}
+<script src="{{ '/assets/lib/lunr.min.js' | relative_url }}"></script>
+<script src="{{ '/assets/js/lunr-store.js' | relative_url }}"></script>
+<script>
+/* initialize lunr */
+var idx = lunr(function () {
+  /* add index fields from config */
+  this.ref('id')
+  {% for f in index_fields %}
+  this.field({{ f.field | escape | jsonify }})
+  {% endfor %}
+
+  //this.pipeline.remove(lunr.trimmer)
+
+  for (var item in store) {
+    this.add({
+      {% for f in index_fields %}
+      {{ f.field | escape | jsonify }}: store[item][{{ f.field | escape | jsonify }}],
+      {% endfor %}
+      id: item
+    })
+  }
+});
+
+/* search function */
+function lunr_search () {
+  var resultdiv = $('#lunrResults');
+  var query = $('#lunrSearchBox').val();//.toLowerCase();
+  /* basic search that supports operators */
+  var result = idx.search(query); 
+  /* more fuzzy search, but doesn't support operators:
+  var result =
+    idx.query(function (q) {
+      query.split(lunr.tokenizer.separator).forEach(function (term) {
+        q.term(term, { boost: 100 })
+        if(query.lastIndexOf(" ") != query.length-1){
+          q.term(term, {  usePipeline: false, wildcard: lunr.Query.wildcard.TRAILING, boost: 10 })
+        }
+        if (term != ""){
+          q.term(term, {  usePipeline: false, editDistance: 1, boost: 1 })
+        }
+      })
+    });*/
+  resultdiv.empty();
+  resultdiv.prepend('<tr><td><h4 class="mt-3">' + result.length + ' Result(s) found</h4></td></tr>');
+  for (var item in result) {
+    var ref = result[item].ref;
+    var searchitem =
+      '<tr>'+
+          '<td class="">' +
+            {% assign display = fields | where: 'display','true' %}
+            {% for d in display %}
+            {% if forloop.first %}
+            '<p class="h4"><a href="{{ "/items" | relative_url }}/' + store[ref].id + '.html">' + store[ref][{{ fields[0].field | escape | jsonify }}]  + '</a></p>' +
+            '<p class="ml-3">';
+              {% else %}
+              if(store[ref][{{ d.field | escape | jsonify }}]) {
+                searchitem += store[ref][{{ d.field | escape | jsonify }}] + '<br> '; }
+              {% endif %}{% endfor %}
+              searchitem += '</p></td>' +
+      '</tr>';
+    resultdiv.append(searchitem);
+  }
+}
+/* init search box and get query string */
+$(document).ready(function() {
+  if (window.location.search) {
+    var queryString = decodeURIComponent(window.location.search.substring(1).split("=")[1]);
+    $('#lunrSearchBox').val(queryString);
+    lunr_search ();
+  }
+});
+</script>

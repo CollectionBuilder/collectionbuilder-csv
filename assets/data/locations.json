@@ -1,0 +1,15 @@
+---
+# find and count unique subjects
+---
+{%- if site.data.theme.locations-fields -%}
+{%- assign locations-fields = site.data.theme.locations-fields | split: ";" -%}
+{%- assign places = "" -%}
+{%- for c in locations-fields -%}
+{% assign new = site.data[site.metadata] | map: c | join: ";" %}
+{% assign places = places | append: ";" | append: new %}
+{%- endfor -%}
+{%- assign uniqPlaces = places | downcase | split: ";" | array_count_uniq -%}
+{ "locations": [
+    {% for s in uniqPlaces %}{ "location" : {{ s[0] | jsonify }}, "count" : {{ s[1] | jsonify }}, "link" : {{ s[0] | url_param_escape | prepend: '/browse.html#' | absolute_url | jsonify }} }{% unless forloop.last %},
+    {% endunless %}{% endfor %}
+]}{%- endif -%}

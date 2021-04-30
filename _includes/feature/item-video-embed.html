@@ -1,0 +1,38 @@
+{% comment %}
+    
+    Item video embed from objectid.
+    This include adds a video embed to the page using Bootstrap responsive embed styles, https://getbootstrap.com/docs/4.5/utilities/embed/
+
+    E.G. --> {% include feature/item-video-embed.html objectid="demo_003" %}
+
+    It requires an "objectid" with the include, which is used to find the object title and details.
+
+    Optionally: 
+    - "objectid" = an objectid of a video item in this collection that has a youtubeid or CONTENTdm hosted video
+    - "caption" = by default the figure include automatically adds the title of the item from your metadata. The caption option allows you to manually add a different caption, or give the value false for none.
+    - "width" = will use responsive sizing to set the % size on desktop (will be 100% on mobile), choose from "25", "50", "75", or "100"
+    - "ratio" = use Bootstrap embed ratio options "21by9", "16by9", "4by3", or "1by1" to customize the responsive aspect ratio. 16by9 is default.
+    - "float" = will use responsive float utility to add float on desktop (will not float on mobile), choose from "left" or "right"
+
+{%- endcomment -%}
+{%- assign item = site.data[site.metadata] | where: "objectid", include.objectid | first -%}
+<div class="text-center ">
+    <figure class="figure mx-3{% if include.float %} feature-float-{{ include.float }}{% endif %}{% if include.width %} feature-w-{{ include.width }}{% endif %}">
+        <div class="embed-responsive embed-responsive-{{ include.ratio | default: '16by9' }}">
+            {% if item.object_download contains 'vimeo' %}
+            {% assign vimeo_id = item.object_download | split: '/' | last %}
+            <iframe class="embed-responsive-item" src="https://player.vimeo.com/video/{{ vimeo_id }}" allowfullscreen></iframe>
+            {%- elsif item.object_download contains 'youtu' -%}
+            {% assign youtube_id = item.object_download | split: '/' | last %}
+            {% if youtube_id contains '?' %}{% assign youtube_id = youtube_id | split: '?' | last | split: '&' | first | replace: 'v=','' %}{% endif %}
+            <iframe class="embed-responsive-item" src="https://www.youtube-nocookie.com/embed/{{ youtube_id }}?rel=0&modestbranding=1" allowfullscreen></iframe>
+            {% else %}
+            <video class="embed-responsive-item" width="320" height="240" controls>
+                <source src="{{ item.object_download | relative_url }}" type="{{ item.format }}">
+                Your browser does not support the video tag.
+            </video>
+            {%- endif -%}
+        </div>
+        {% unless include.caption == false %}<figcaption class="figure-caption"><a href="{{ '/items/' | append: item.objectid | append: '.html' | relative_url }}">{% if include.caption %}{{ include.caption }}{% else %}{{ item.title }}{% endif %}</a></figcaption>{% endunless %}
+    </figure>
+</div>

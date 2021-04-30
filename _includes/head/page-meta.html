@@ -1,0 +1,13 @@
+<meta name="description" content="{{ site.description | escape }}">
+<meta name="author" content="{% if site.author %}{{ site.author | escape }}, {% endif %}{{ site.organization-name | escape }}" >
+<!-- Open Graph meta -->
+<meta property="og:title" content="{% if page.title %}{{ page.title | escape }} | {% endif %}{{ site.title | escape }}" />
+<meta property="og:description" content="{{ site.description | escape }}" />
+<meta property="og:site_name" content="{{ site.title | escape }}" />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="{% include image/featured-image.html %}" />
+<meta property="og:image:alt" content="{% unless site.data.theme.featured-image contains '/' %}{{ featuredItem.title | escape }}{% else %}CollectionBuilder logo{% endunless %}" />
+<meta property="og:url" content="{{ page.url | absolute_url }}" />
+<meta property="og:locale" content="en_US" />
+<!-- schema.org JSON-LD -->
+<script type="application/ld+json">{"@context":"http://schema.org","@type":"WebPage","headline":"{% if page.title %}{{ page.title | escape }} | {% endif %}{{ site.title | escape }}","publisher": { "@context": "https://schema.org", "@type": "Organization", "name": "{{ site.organization-name }}", "url": "{{ site.organization-link }}", "logo": "{{ site.organization-logo-banner }}" },"description":{{ site.description | jsonify }},"image":"{% include image/featured-image.html %}","url":"{{ page.url | absolute_url }}"}</script> 

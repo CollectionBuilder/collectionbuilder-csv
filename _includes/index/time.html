@@ -1,0 +1,11 @@
+{%- assign raw-dates = items | map: 'date' | compact | uniq -%}
+{%- capture clean-years -%}{% for date in raw-dates %}{% if date contains "-" %}{{ date | strip | split: "-" | first }}{% elsif date contains "/" %}{{ date | strip | split: "/" | last }}{% else %}{{ date | strip }}{% endif %}{% unless forloop.last %};{% endunless %}{%- endfor -%}{%- endcapture -%}
+{%- assign date-range = clean-years | remove: " " | split: ";" | uniq | sort  -%}
+<div class="card mb-3">
+  <div class="card-body">
+    <h5 class="card-title">Time Span</h5>
+    <p class="card-text h5">{{ date-range | first }} to {{ date-range | last }}
+      <br><a href="{{ '/timeline.html' | relative_url }}" class="btn btn-sm btn-outline-secondary mt-2">View Timeline</a>
+    </p>
+  </div>
+</div>

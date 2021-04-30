@@ -1,0 +1,17 @@
+---
+# facets generator
+# creates a csv of unique values and their counts of fields given in site.data.theme.metadata-facets-fields
+---
+{%- assign fields = site.data.theme.metadata-facets-fields | split: "," -%}
+{
+    "facets": [ 
+        {% for f in fields %}{%- assign uniqueArray = site.data[site.metadata] | map: f | join: ";" | downcase | split: ";" | array_count_uniq -%} 
+        {
+            "field": {{ f | jsonify }},
+            "terms": { {% for unique in uniqueArray %}
+                {{ unique[0] | jsonify }}: {{ unique[1] | jsonify }}{% unless forloop.last %},{% endunless %}{% endfor %}
+            }
+        }{% unless forloop.last %},{% endunless %}
+        {% endfor %}
+    ]
+}

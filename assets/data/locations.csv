@@ -1,0 +1,15 @@
+---
+# find all unique locations used in the metadata
+---
+{%- if site.data.theme.locations-fields -%}
+{%- assign locations-fields = site.data.theme.locations-fields | split: ";" -%}
+{%- assign places = "" -%}
+{%- for c in locations-fields -%}
+{% assign new = site.data[site.metadata] | map: c | join: ";" %}
+{% assign places = places | append: ";" | append: new %}
+{%- endfor -%}
+{%- assign uniqPlaces = places | downcase | split: ";" | array_count_uniq -%}
+location,count,link
+{% for s in uniqPlaces %}"{{ s[0] }}",{{ s[1] }},"{{ s[0] | url_param_escape | prepend: '/browse.html#' | absolute_url }}"
+{% endfor %}
+{%- endif -%}

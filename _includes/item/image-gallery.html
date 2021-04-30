@@ -1,0 +1,12 @@
+{% comment %}
+
+    For image items, a zoomable, full screen gallery view is added using lightGallery.
+    Ensure dependencies are added by including `gallery: true` in the layout front matter calling this include.
+
+{%- endcomment -%}
+<div id="lightgallery">
+    <div class="gallery-img" data-src="{{ page.object_download | relative_url }}">
+        <p><img src="{{ page.image_small | relative_url }}" alt="item thumbnail for {{ page.title | escape }}" class="img-fluid"></p>
+        <p><small>Click to view full screen</small></p>
+    </div>
+</div>

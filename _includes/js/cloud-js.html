@@ -1,0 +1,47 @@
+{%- assign cloud-fields = include.fields | split: ";" -%}
+{%- assign terms = "" -%}
+{%- for c in cloud-fields -%}
+{% assign new = site.data[site.metadata] | map: c | join: ";" %}
+{% assign terms = terms | append: ";" | append: new %}
+{%- endfor -%}
+{%- assign termsMin = include.min | default: 1 -%}
+{%- assign uniqTerms = terms | downcase | split: ";" | array_count_uniq | sort | where_exp: 't','t[1] >= termsMin' -%}
+<script>
+    /* subject terms + count */
+    var terms = [
+        {% for t in uniqTerms %}[{{ t[0] | jsonify }}, {{ t[1] | jsonify }}]{% unless forloop.last %}, {% endunless %}{% endfor %}
+    ];
+
+    {% if include.stopwords %}/* apply stopwords */
+    var stopWords = {{ include.stopwords | downcase | split: ';' | jsonify }};
+    terms = terms.filter(function(a) { return stopWords.indexOf(a[0]) < 0;});{% endif %}
+    /* calculate max size */
+    var counts = terms.map(function(obj){ return obj[1]; });
+    var countMax = counts.reduce(function(a, b) { return Math.max(a, b); });
+    var cloud = document.getElementById("cloud");
+    /* Fisher-Yates shuffle https://bost.ocks.org/mike/shuffle/ */
+    /* function shuffle(array) {
+        var m = array.length, t, i;
+        while (m) {
+        i = Math.floor(Math.random() * m--);
+        t = array[m];
+        array[m] = array[i];
+        array[i] = t;
+        }
+        return array;
+    } */
+    function mapSize(x) { return Math.round(x * 9 / countMax + 1); }
+    /* create cloud */
+    function makeGrid(array) {
+        var i, size;
+        var items = "";
+        //shuffle(array);
+        for (i = 0; i < array.length; i++) {
+            size = mapSize(array[i][1]);
+            items += '<a class="btn btn-outline-info m-2 tagcloud' + size + '" href="{{ "/browse.html" | relative_url }}#' + encodeURIComponent(array[i][0]) + '" >' + array[i][0] + '</a>';
+        }
+        cloud.innerHTML = items;
+    }
+    makeGrid(terms);
+
+</script>

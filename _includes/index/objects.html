@@ -1,0 +1,32 @@
+{%- assign formats = site.data[site.metadata] | map: "format" -%}
+{%- assign types = "image;audio;video;pdf;record;url" | split: ";" -%}
+<div class="card mb-3" >
+  <div class="card-body">
+    <h5 class="card-title">Objects</h5>
+    <p class="card-text"> 
+      {% for t in types %}
+      {%- assign count = formats | where_exp: 'item','item contains t' | size -%}
+      {% if count > 0 %}
+      {{ count }}
+      {% case t %}
+      {% when 'image' %} 
+      <a class="text-dark" href="{{ 'image' | prepend: '/browse.html#' | relative_url }}">Images {% include feature/icon.html icon="file-image" %}</a><br>
+      {% when 'audio' %}
+      <a class="text-dark" href="{{ 'audio' | prepend: '/browse.html#' | relative_url }}">Audio {% include feature/icon.html icon="file-play" %}</a><br>
+      {% when 'video' %}
+      <a class="text-dark" href="{{ 'video' | prepend: '/browse.html#' | relative_url }}">Videos {% include feature/icon.html icon="film" %}</a><br>
+      {% when 'pdf' %}
+      <a class="text-dark" href="{{ 'pdf' | prepend: '/browse.html#' | relative_url }}">PDFs {% include feature/icon.html icon="file-richtext" %}</a><br>
+      {% when 'record' %}
+      <a class="text-dark" href="{{ 'record' | prepend: '/browse.html#' | relative_url }}">Records {% include feature/icon.html icon="file-text" %}</a><br>
+      {% when 'url' %}
+      <a class="text-dark" href="{{ 'link' | prepend: '/browse.html#' | relative_url }}">URLs {% include feature/icon.html icon="link" %}</a><br>
+      {% else %}
+      <a class="text-dark" href="{{ 'file' | prepend: '/browse.html#' | relative_url }}">Files {% include feature/icon.html icon="file-earmark" %}</a><br>
+      {%- endcase -%}
+      {%- endif -%}
+      {%- endfor -%}
+      <a class="btn btn-sm btn-outline-secondary mt-2" href="{{ '/data.html' | relative_url }}">View table</a>
+    </p>
+  </div>
+</div>

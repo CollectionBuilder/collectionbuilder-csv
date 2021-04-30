@@ -1,0 +1,31 @@
+{% comment %} 
+    This include creates a card with btn links to the Browse page from a set of automatically generated or manually set terms.
+    It accepts these variables:
+    
+    title - will become card title [optional]
+    field - a field from the metadata that will be used to auto generate top terms
+    featured - a manually created list of featured terms, separated by ; 
+    max - max number of terms to display
+    btn-color - bootstrap btn color class to add. the template starts with "btn-", so this value can be any bootstrap template color (e.g. info, success) or outline (e.g. outline-info, outline-success). 
+
+{%- endcomment -%}
+{% if include.featured %}
+{% assign topTerms = include.featured | split: ";" %}
+{%- else -%}
+{% assign termsField = include.field | default: "subject" %}
+{% assign termsMax = include.max | default: 4 %}
+{% assign terms = site.data[site.metadata] | map: termsField | join: ";" %}
+{%- assign uniqTerms = terms | downcase | split: ";" | array_count_uniq -%}
+{% capture topTerms %}
+{% for i in uniqTerms limit: termsMax %}{{ i[0] }};{% endfor %}{% endcapture %}
+{% assign topTerms = topTerms | split: ";" %}
+{%- endif -%}
+<div class="card mb-3">
+    <div class="card-body">
+        <h5 class="card-title">{{ include.title }}</h5>
+        <p class="card-text">
+            {% for s in topTerms %}
+            <a class="btn btn-sm btn-{{ include.btn-color | default: 'info' }} m-1" href="{{ s | strip | url_param_escape | prepend: '/browse.html#' | relative_url }}">{{ s | strip }}</a>{% endfor %}
+        </p>
+    </div>
+</div>
