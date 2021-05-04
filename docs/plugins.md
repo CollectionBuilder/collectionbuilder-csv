@@ -62,28 +62,27 @@ Full configuration options:
 | data | A file from _data to use to generate pages | `metadata` | A valid data file is required. Plugin warns if there is no match in _data and skips generation. |
 | template | Set the default layout to use for pages from _layouts | `item` | The default layout must exist. Plugin warns if there is no match in _layouts and skips generation. |
 | object_template | Optionally set layout using a value from the individual record data, allowing you to have different layouts for each page. | `object_template` | Record values must match a valid layout. Fallback is to template value. |
-| name | The value from each record to use for output filename base (no extension). | `objectid` | A valid filename is required. Plugin skips record generation if value is blank or empty. Filenames are sanitized using Jekyll's `slugify` filter in pretty mode. |
-| dir | Folder to output the pages in _site. | `items` |  |
+| name | The value from each record to use for output filename base (no extension). | `objectid` | A valid filename is required. Plugin skips record generation if value is blank or empty. Filenames are sanitized using Jekyll's `slugify` filter in pretty mode. CB pages assume objectid will be used for the name to create links between visualizations and item pages. |
+| dir | Folder to output the pages in _site. | `items` | The dir + name + extension will control the URL of the generated pages. For example, defaults items + objectid + .html will result in link something like "/items/demo_001.html". |
 | extension | File type to output, will generally be html. | `html` |  | 
-| filter | A data value to filter records on. If the record has an empty value, it will not be generated. | `nil` | |
+| filter | A data value to filter records on. If the record has an empty value, it will not be generated. | `objectid` | Since CB templates assume a valid objectid for every item in the collection to create links across the site, the records are filtered by objectid by default. |
 | filter_condition | A Ruby expression to filter data. | `nil` | |
 
 Note: defaults are set for *all* configuration options, so none are technically required when providing a config.
 If none is provided, they will fallback to the default.
 If an option is invalid, the plugin will usually catch it and provide an error message.
 Configuration issues and metadata errors will not interrupt normal Jekyll build process, however your site may not have item pages generated.
-Please check the terminal for notices and errors from cb_page_gen.
+Please check the terminal output for notices and errors from cb_page_gen.
 
 Filenames are created from the "name" option, which is a key in the data (i.e. a column in the csv).
 File extension (generally .html) is added during the process.
 The value in "name" is sanitized using the Jekyll filter slugify in "pretty" mode--this will downcase, replace all spaces and invalid url characters with `-`.
 This is important to ensure valid links and filenames across platforms and servers.
-If you are using CB "objectid", your values should already meet these requirements and will not be changed by sanitizing. 
+If you are using CB's "objectid" convention, your values should already meet these requirements and will not be changed by sanitizing. 
 However, if your objectid contain odd characters (and are thus sanitized), links in the rest of the collection site may not point to the correct url.
 If for some reason you can not clean up your objectid field, you can  apply slugify filter to objectid in other page templates when calculating links to fix the issue.
 
 If customizing new Item types, it maybe helpful to tweak the "Default Settings" values in CollectionBuilderPageGenerator (as an alternative to passing configuration values).
-For example, some CB set ups handle "compound objects" by having records with no objectid value representing child objects--you may want to update to `filter_default = "objectid"`.
 
 *Note:* CollectionBuilder originally used a modified version of [Adolfo Villafiorita jekyll-datapage_gen](https://github.com/avillafiorita/jekyll-datapage_gen), however, the plugin has been completely rewritten following the basic [Jekyll Generator Plugins](https://jekyllrb.com/docs/plugins/generators/).
 This allows CB Page Gen to more closely follow CB conventions, configuration options, and needs.

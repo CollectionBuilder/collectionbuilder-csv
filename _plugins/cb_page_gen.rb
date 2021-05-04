@@ -35,7 +35,7 @@ module CollectionBuilderPageGenerator
       name_default = 'objectid' # value to use for filename
       dir_default = 'items' # where to output pages
       extension_default = 'html' # extension, usually html
-      filter_default = nil # value to filter records on, off by default
+      filter_default = 'objectid' # value to filter records on, filters on objectid by default
       filter_condition_default = nil # expression to filter records on, off by default
       #
       ######
@@ -72,9 +72,22 @@ module CollectionBuilderPageGenerator
           end
         end
 
-        # Filter records if filter or filter_condition is configured
-        records = records.select { |r| r[filter] } if filter
-        records = records.select { |record| eval(data_config['filter_condition']) } if filter_condition
+        # Filter records if filter is configured (default is on objectid)
+        if filter 
+          filtered_records = records.select { |r| r[filter] }
+          filtered_number = records.size - filtered_records.size
+          # provide notice if filter is applied
+          puts color_text("Notice cb_page_gen: filter on '#{filter}' is applied. #{filtered_number} records are filtered because they do not have a value in '#{filter}'.", :yellow) if filtered_number != 0 
+          records = filtered_records
+        end
+        # Filter records if filter_condition is configured
+        if filter_condition
+          filtered_records = records.select { |record| eval(data_config['filter_condition']) } 
+          filtered_number = records.size - filtered_records.size
+          # provide notice if filter is applied
+          puts color_text("Notice cb_page_gen: filter_condition '#{filter_condition}' is applied. #{filtered_number} records are filtered.", :yellow) if filtered_number != 0 
+          records = filtered_records
+        end
 
         # Check for unique names, if not provide error message
         names_test = records.map { |x| x[name] }
