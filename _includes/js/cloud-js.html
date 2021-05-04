@@ -1,7 +1,8 @@
+{%- assign items = site.data[site.metadata] | where_exp: 'item','item.objectid' -%}
 {%- assign cloud-fields = include.fields | split: ";" -%}
 {%- assign terms = "" -%}
 {%- for c in cloud-fields -%}
-{% assign new = site.data[site.metadata] | map: c | join: ";" %}
+{% assign new = items | map: c | join: ";" %}
 {% assign terms = terms | append: ";" | append: new %}
 {%- endfor -%}
 {%- assign termsMin = include.min | default: 1 -%}

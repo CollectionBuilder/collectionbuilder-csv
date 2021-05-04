@@ -10,7 +10,7 @@ admin-email: libstatic.uidaho@gmail.com
 permalink: /oai.xml
 ---
 {%- if jekyll.environment == "production" -%}
-{%- assign items = site.data[site.metadata] -%}
+{%- assign items = site.data[site.metadata] | where_exp: 'item','item.objectid' -%}
 {%- assign fields = site.data.config-metadata | where_exp: 'field','field.dc_map' -%}
 {%- assign oai_dc_fields = "creator;subject;description;publisher;contributor;type;format;identifier;source;language;relation;coverage;rights" | split: ";" -%}
 <?xml version="1.0" encoding="UTF-8"?>

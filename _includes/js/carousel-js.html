@@ -1,4 +1,4 @@
-{%- assign carousel-items = site.data[site.metadata] | where_exp: "item","item.image_small" -%}
+{%- assign carousel-items = site.data[site.metadata] | where_exp: 'item','item.objectid' | where_exp: "item","item.image_small" -%}
 <script> 
     //title,objectid,image_small
     var carouselItems = [ {% for c in carousel-items %}[ {{ c.title | escape | jsonify }}, "{{ c.objectid }}", {{ c.image_small | relative_url | jsonify }} ]{% unless forloop.last %}, {% endunless %}{% endfor %}];

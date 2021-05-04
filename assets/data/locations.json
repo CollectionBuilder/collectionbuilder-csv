@@ -2,10 +2,11 @@
 # find and count unique subjects
 ---
 {%- if site.data.theme.locations-fields -%}
+{%- assign items = site.data[site.metadata] | where_exp: 'item','item.objectid' -%}
 {%- assign locations-fields = site.data.theme.locations-fields | split: ";" -%}
 {%- assign places = "" -%}
 {%- for c in locations-fields -%}
-{% assign new = site.data[site.metadata] | map: c | join: ";" %}
+{% assign new = items | map: c | join: ";" %}
 {% assign places = places | append: ";" | append: new %}
 {%- endfor -%}
 {%- assign uniqPlaces = places | downcase | split: ";" | array_count_uniq -%}

@@ -1,7 +1,7 @@
 ---
 # generate time-focused json data suitable for TimelineJS
 ---
-{%- assign items = site.data[site.metadata] -%}
+{%- assign items = site.data[site.metadata] | where_exp: 'item','item.objectid' -%}
 {
     "title": {
         "media": {

@@ -1,7 +1,7 @@
 ---
 # create custom metadata csv for download
 ---
-{%- assign items = site.data[site.metadata] -%}
+{%- assign items = site.data[site.metadata] | where_exp: 'item','item.objectid' -%}
 {%- assign fields = site.data.theme.metadata-export-fields | split: "," -%}
 {{ fields | join: "," }},object_thumb,object_download,reference_url
 {% for item in items %}{% for f in fields %}"{{ item[f] | escape }}",{% endfor %}"{{ item.image_thumb | absolute_url }}","{{ item.object_download | absolute_url }}","{{ '/items/' | absolute_url | append: item.objectid | append: '.html' }}"

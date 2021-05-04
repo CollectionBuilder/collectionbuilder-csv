@@ -1,7 +1,7 @@
 ---
 # metadata for json export
 ---
-{%- assign items = site.data[site.metadata] -%}
+{%- assign items = site.data[site.metadata] | where_exp: 'item','item.objectid' -%}
 {%- assign fields = site.data.theme.metadata-export-fields | split: "," -%}
 { "objects": [
     {%- for item in items -%}
