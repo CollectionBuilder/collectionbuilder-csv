@@ -6,7 +6,6 @@
 {% if layout.gallery == true or page.gallery == true %}{% include js/gallery-js.html %}{% endif %}
 {% if page.layout == "subjects" and site.data.theme.subjects-fields %}{% include js/cloud-js.html fields=site.data.theme.subjects-fields min=site.data.theme.subjects-min stopwords=site.data.theme.subjects-stopwords %}{% endif %}
 {% if page.layout == "locations" and site.data.theme.locations-fields %}{% include js/cloud-js.html fields=site.data.theme.locations-fields min=site.data.theme.locations-min stopwords=site.data.theme.locations-stopwords %}{% endif %}
-{% if page.layout == "search" %}{% include js/lunr-js.html %}{% endif %}
 {%- if page.layout == "home-infographic" %}{% include js/carousel-js.html %}{% endif -%}
 {% if page.custom-foot %}{% include {{ page.custom-foot }} %}{% endif %}
 {% if layout.custom-foot %}{% include {{ layout.custom-foot }} %}{% endif %}
