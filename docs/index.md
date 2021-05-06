@@ -4,8 +4,8 @@
 
 metadata.md
 metadata-template.csv
-migrate-to-sa.md
-rake-tasks.md
+migrate_to_sa.md
+rake_tasks.md
 
 ## Deploy
 
@@ -14,12 +14,12 @@ build.md
 
 ## Customization
 
-advanced-theme.md
-color-theme.md
+advanced_theme.md
+color_theme.md
 
 ## Page Details
 
-item-pages.md
+item_pages.md
 cloud.md
 data.md
 maps.md
@@ -28,7 +28,8 @@ tables.md
 
 ## Technical Components
 
-design.md
+code_design_notes.md
+foot.md
 icons.md
 lazyload.md
 lightgallery.md
