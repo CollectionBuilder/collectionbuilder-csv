@@ -44,14 +44,17 @@ end
 
 desc "Generate derivative image files from collection objects"
 task :generate_derivatives, [:thumbs_size, :small_size, :density, :missing, :im_executable] do |t, args|
+
+  # set default arguments 
   args.with_defaults(
-    :thumbs_size => "300x300",
+    :thumbs_size => "400x400",
     :small_size => "800x800",
     :density => "300",
     :missing => "true",
     :im_executable => "magick",
   )
 
+  # set the folder locations
   objects_dir = "objects"
   thumb_image_dir = "objects/thumbs"
   small_image_dir = "objects/small"
@@ -59,12 +62,16 @@ task :generate_derivatives, [:thumbs_size, :small_size, :density, :missing, :im_
   # Ensure that the output directories exist.
   [thumb_image_dir, small_image_dir].each &$ensure_dir_exists
 
+  # support these file types
   EXTNAME_TYPE_MAP = {
+    '.tiff' => :image,
+    '.tif' => :image,  
     '.jpg' => :image,
+    '.png' => :image,
     '.pdf' => :pdf
   }
 
-  # Generate derivatives.
+  # Iterate over files in objects directory.
   Dir.glob(File.join([objects_dir, '*'])).each do |filename|
     # Ignore subdirectories.
     if File.directory? filename
@@ -75,7 +82,7 @@ task :generate_derivatives, [:thumbs_size, :small_size, :density, :missing, :im_
     extname = File.extname(filename).downcase
     file_type = EXTNAME_TYPE_MAP[extname]
     if !file_type
-      puts "Skipping file with unsupported extension: #{extname}"
+      puts "Skipping file with unsupported extension: #{filename}"
       next
     end
 
@@ -94,6 +101,8 @@ task :generate_derivatives, [:thumbs_size, :small_size, :density, :missing, :im_
     if args.missing == 'false' or !File.exists?(thumb_filename)
       puts "Creating: #{thumb_filename}";
       system("#{cmd_prefix} -resize #{args.thumbs_size} -flatten #{thumb_filename}")
+    else
+      puts "Skipping: #{thumb_filename} already exists"
     end
 
     # Generate the small image.
@@ -101,6 +110,8 @@ task :generate_derivatives, [:thumbs_size, :small_size, :density, :missing, :im_
     if args.missing == 'false' or !File.exists?(small_filename)
       puts "Creating: #{small_filename}";
       system("#{cmd_prefix} -resize #{args.small_size} -flatten #{small_filename}")
+    else
+      puts "Skipping: #{small_filename} already exists"
     end
   end
 end
