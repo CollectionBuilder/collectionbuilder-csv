@@ -4,7 +4,7 @@
 It is a standard part of all Ruby installs, so if you are using Jekyll, you have it.
 Adding a `Rakefile` allows you to add commands to automate repetitive tasks.
 
-CollectionBuilder-SA provides a `Rakefile` with tasks to help set up and deploy your digital collection. 
+CollectionBuilder-CSV provides a `Rakefile` with tasks to help set up and deploy your digital collection. 
 This allows you to run `rake` commands inside this repository: 
 
 ## deploy

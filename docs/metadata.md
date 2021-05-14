@@ -22,7 +22,7 @@ If image derivatives are not available (i.e. the field is left blank), the logic
 
 These fields should be filed out in your spreadsheet using formulas / recipes depending on where your objects are hosted. 
 This provides flexibility to include objects from multiple sources and to generate the URLs using a variety of approaches without needing to modify the template code.
-CollectionBuilder-SA aims to provide API recipes to generate the links for a variety of hosting solutions--but this work is done on the metadata, not embedded in the collectionbuilder-sa template code logic.
+CollectionBuilder-CSV aims to provide API recipes to generate the links for a variety of hosting solutions--but this work is done on the metadata, not embedded in the collectionbuilder-csv template code logic.
 
 If the objects are included within the project repository use the relative path starting with `/` from the root of the repository. 
 For example if some images are in the "objects" folder, use a relative path, e.g. `/objects/example_object.jpg`.

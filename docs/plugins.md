@@ -4,7 +4,7 @@ Jekyll is designed to be extensible via [Plugins](https://jekyllrb.com/docs/plug
 The simplest method is to add Plugins directly to the `_plugins` directory, making them a part of the project repository (rather than an external Gem).
 The plugins are Ruby code and run immediately as Jekyll starts.
 
-CollectionBuilder-SA currently uses two custom plugins "CollectionBuilder Page Generator" (`cb_page_gen.rb`) and "Array Count Uniq" (`array_count_uniq.rb`).
+CollectionBuilder-CSV currently uses two custom plugins "CollectionBuilder Page Generator" (`cb_page_gen.rb`) and "Array Count Uniq" (`array_count_uniq.rb`).
 
 Keep in mind that plugins can not be used on GitHub Pages default build (although they *can* be used by setting up a GitHub Actions based build process).
 Thus, collectionbuilder-gh uses fairly slow and complicated Liquid and Javascript to generate items pages and unique counts from metadata.

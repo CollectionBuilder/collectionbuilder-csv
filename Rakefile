@@ -1,4 +1,4 @@
-# CollectionBuilder-SA helper tasks
+# CollectionBuilder-CSV helper tasks
 
 ###############################################################################
 # TASK: deploy

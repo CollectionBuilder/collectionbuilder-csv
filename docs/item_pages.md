@@ -1,6 +1,6 @@
 # Item pages
 
-CollectionBuilder-SA uses "CollectionBuilder Page Generator" plugin to generate individual pages for each record in the collection metadata on the fly.
+CollectionBuilder-CSV uses "CollectionBuilder Page Generator" plugin to generate individual pages for each record in the collection metadata on the fly.
 
 Typical use requires no configuration.
 CB Page Gen will automatically generate pages from the data specified by _config.yml `metadata` (the same as used to populate the rest of the site).
