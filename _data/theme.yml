@@ -76,6 +76,16 @@ metadata-facets-fields: "subject,creator,format"
 # ADVANCED OPTIONS
 #
 
+# THEME ICONS
+# the template uses Bootstrap Icons, https://icons.getbootstrap.com/
+# find the names on the BI icons page, e.g. file-image
+icon-image: image
+icon-audio: file-play
+icon-video: film
+icon-pdf: file-richtext
+icon-default: file-earmark # fall back icon
+icon-scroll-to-top: arrow-up-square # icon for scroll to top button
+
 # NAVBAR COLORS
 # navbar text color
 # Choose from "navbar-light" for use with light background colors, or "navbar-dark" for dark background colors
@@ -95,13 +105,3 @@ text-color: "#191919"
 link-color: "#17a2b8"
 base-font-family: # comment out for bootstrap defaults. e.g. Roboto
 font-cdn: # add font stylesheet, e.g. <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
-
-# THEME ICONS
-# the template uses Bootstrap Icons, https://icons.getbootstrap.com/
-# find the names on the BI icons page, e.g. file-image
-icon-image: image
-icon-audio: file-play
-icon-video: film
-icon-pdf: file-richtext
-icon-default: file-earmark # fall back icon
-icon-scroll-to-top: arrow-up-square # icon for scroll to top button
