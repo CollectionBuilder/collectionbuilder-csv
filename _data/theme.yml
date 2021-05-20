@@ -24,12 +24,6 @@ featured-locations: # separate by semi-colon(';')
 featured-locations-max: 3 # set number of top locations to display if auto generating
 
 ##########
-# BROWSE PAGE
-#
-# see _data/browse-config.csv for field display options
-# fields given the "btn" option can be multivalued with ";" such as subjects.
-
-##########
 # ITEM PAGE
 #
 # see _data/metadata-config.csv to define the metadata fields that will display.
