@@ -79,12 +79,18 @@ metadata-facets-fields: "subject,creator,format"
 # THEME ICONS
 # the template uses Bootstrap Icons, https://icons.getbootstrap.com/
 # find the names on the BI icons page, e.g. file-image
+icons: 
+  icon-image: image
+  icon-audio: file-play
+  icon-video: film
+  icon-pdf: file-richtext
+  icon-default: file-earmark # fall back icon
+
 icon-image: image
 icon-audio: file-play
 icon-video: film
 icon-pdf: file-richtext
 icon-default: file-earmark # fall back icon
-icon-scroll-to-top: arrow-up-square # icon for scroll to top button
 
 # NAVBAR COLORS
 # navbar text color
