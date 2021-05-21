@@ -70,6 +70,10 @@ metadata: demo-metadata
 # JEKYLL_ENV=production jekyll build
 # (this is done automatically by gh-pages build)
 #
+collections: 
+  icons:
+    output: true
+    permalink: /assets/lib/icons/:name
 # ignore stuff
 exclude: [docs/, Rakefile, README.md, LICENSE]
 # compress CSS output
