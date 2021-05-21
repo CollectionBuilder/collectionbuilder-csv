@@ -15,7 +15,7 @@
     If adding more than one icon to a page, using the include "feature/icon.html" is more efficient.
 
 {%- endcomment -%}
-{% capture icon %}icons/{{ include.icon }}.svg{%- endcapture -%}
-{% capture markup %}{% include {{ icon }} %}{%- endcapture -%}
-{% if include.label %}{% assign label = 'role="img" aria-label="' | append: include.label | append: '"' %}{% assign markup = markup | replace: 'width="16"',label %}{%- endif -%}
-{{ markup | replace: 'width="16"','' | replace: 'height="16"','' | replace: 'class="bi','class="bi icon-sprite' | normalize_whitespace }}
+{% capture icon_id %}/assets/lib/icons/{{ include.icon }}{%- endcapture -%}
+{%- assign icon = site.icons | where: 'id',icon_id | first -%}
+{% if include.label %}{% capture label %}role="img" aria-label="{{ include.label }}"{%- endcapture -%}{%- endif -%}
+{{ icon.content | replace: 'width="16" height="16"',label | replace: 'class="bi','class="bi icon-sprite' | normalize_whitespace }}

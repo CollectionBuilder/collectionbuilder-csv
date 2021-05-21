@@ -78,13 +78,15 @@ metadata-facets-fields: "subject,creator,format"
 
 # THEME ICONS
 # the template uses Bootstrap Icons, https://icons.getbootstrap.com/
-# find the names on the BI icons page, e.g. file-image
-icons: 
+# by default, the template uses values from icon-image, icon-audio, icon-pdf, icon-default (all nested under the icons key)
+# to change the values, find the names on the BI page, e.g. file-image
+object-icons: 
   icon-image: image
   icon-audio: file-play
   icon-video: film
   icon-pdf: file-richtext
   icon-default: file-earmark # fall back icon
+  up-arrow: arrow-up-square
 
 icon-image: image
 icon-audio: file-play
