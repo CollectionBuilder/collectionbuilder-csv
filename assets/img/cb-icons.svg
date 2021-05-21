@@ -1,0 +1,11 @@
+---
+# generate icons 
+---
+<?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    {%- for i in site.data.theme.object-icons -%}
+    {% capture icon_id %}/assets/lib/icons/{{ i[1] }}{%- endcapture -%}
+    {%- assign icon = site.icons | where: 'id',icon_id | first -%}
+    {% capture icon_start %}<symbol id="{{ i[1] }}"{%- endcapture -%}
+    {{ icon.content | replace: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"', icon_start | replace: '</svg>','</symbol>' | normalize_whitespace }}
+    {% endfor %}
+</svg>

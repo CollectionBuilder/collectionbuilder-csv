@@ -14,15 +14,15 @@ function makeCard(obj) {
         imgSrc = obj.img;
     // else add a placeholder based on format
     } else if (obj.format.includes("image")) {
-        thumbSrc = '<svg class="bi text-body" fill="currentColor"><use xlink:href="{{ "/assets/lib/bootstrap-icons.svg" | relative_url }}#{{ site.data.theme.icon-image | default: "file-image" }}"/></svg><span class="sr-only">Image File</span>';
+        thumbSrc = '<svg class="bi text-body" fill="currentColor"><use xlink:href="{{ '/assets/img/cb-icons.svg' | relative_url }}#{{ site.data.theme.icon-image | default: "file-image" }}"/></svg><span class="sr-only">Image File</span>';
     } else if (obj.format.includes("audio")) {
-        thumbSrc = '<svg class="bi text-body" fill="currentColor"><use xlink:href="{{ "/assets/lib/bootstrap-icons.svg" | relative_url }}#{{ site.data.theme.icon-audio | default: "file-play" }}"/></svg><span class="sr-only">Audio File</span>';
+        thumbSrc = '<svg class="bi text-body" fill="currentColor"><use xlink:href="{{ '/assets/img/cb-icons.svg' | relative_url }}#{{ site.data.theme.icon-audio | default: "file-play" }}"/></svg><span class="sr-only">Audio File</span>';
     } else if (obj.format.includes("video")) {
-        thumbSrc = '<svg class="bi text-body" fill="currentColor"><use xlink:href="{{ "/assets/lib/bootstrap-icons.svg" | relative_url }}#{{ site.data.theme.icon-video | default: "film" }}"/></svg><span class="sr-only">Video File</span>';
+        thumbSrc = '<svg class="bi text-body" fill="currentColor"><use xlink:href="{{ '/assets/img/cb-icons.svg' | relative_url }}#{{ site.data.theme.icon-video | default: "film" }}"/></svg><span class="sr-only">Video File</span>';
     } else if (obj.format.includes("pdf")) {
-        thumbSrc = '<svg class="bi text-body" fill="currentColor"><use xlink:href="{{ "/assets/lib/bootstrap-icons.svg" | relative_url }}#{{ site.data.theme.icon-pdf | default: "file-richtext" }}"/></svg><span class="sr-only">Video File</span>';
+        thumbSrc = '<svg class="bi text-body" fill="currentColor"><use xlink:href="{{ '/assets/img/cb-icons.svg' | relative_url }}#{{ site.data.theme.icon-pdf | default: "file-richtext" }}"/></svg><span class="sr-only">Video File</span>';
     } else {
-        thumbSrc = '<svg class="bi text-body" fill="currentColor"><use xlink:href="{{ "/assets/lib/bootstrap-icons.svg" | relative_url }}#{{ site.data.theme.icon-default | default: "file-earmark" }}"/></svg><span class="sr-only">File Icon</span>';
+        thumbSrc = '<svg class="bi text-body" fill="currentColor"><use xlink:href="{{ '/assets/img/cb-icons.svg' | relative_url }}#{{ site.data.theme.icon-default | default: "file-earmark" }}"/></svg><span class="sr-only">File Icon</span>';
     }
     // start card
     var card = '<div class="item col-lg-4 col-md-6 mb-2"><div class="card">';
@@ -58,7 +58,7 @@ function makeCard(obj) {
     // media type
     if(obj.format != "") {
         card += '<p class="card-text"><small><a class="btn btn-sm btn-outline-secondary" href="{{ "/browse.html" | relative_url }}#' + encodeURIComponent(obj.format) + '">' + 
-        obj.format.split("/").pop().toUpperCase() + ' <svg class="bi icon-sprite"><use xlink:href="{{ "/assets/lib/bootstrap-icons.svg" | relative_url }}#';
+        obj.format.split("/").pop().toUpperCase() + ' <svg class="bi icon-sprite"><use xlink:href="{{ '/assets/img/cb-icons.svg' | relative_url }}#';
         if(obj.format.includes('image')){
             card += '{{ site.data.theme.icon-image | default: "image" }}';
         } else if(obj.format.includes('audio')){
