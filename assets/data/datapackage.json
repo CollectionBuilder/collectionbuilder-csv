@@ -18,7 +18,7 @@
             "role": "author"
         }
     ],
-    "image": "{% include image/featured-image.html %}",
+    "image": "{{ site.data.featured_item.src | absolute_url }}",
     "licenses": [
         {
             "name": "CC0-1.0",

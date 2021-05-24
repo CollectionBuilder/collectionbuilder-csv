@@ -1,6 +1,6 @@
 <style>
 #jumbo-feature {
-    background-image: url('{% include image/featured-image.html %}');
+    background-image: url('{{ site.data.featured_item.src | absolute_url }}');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: {{ site.data.theme.home-banner-image-position | default: top }};
