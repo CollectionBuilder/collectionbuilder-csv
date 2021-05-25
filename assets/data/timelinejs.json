@@ -5,7 +5,7 @@
 {
     "title": {
         "media": {
-          "url": "{% include image/featured-image.html %}",
+          "url": "{{ site.data.featured_item.src | relative_url }}",
           "caption": {{ featuredItem.title | jsonify }},
           "credit": {{ site.title | jsonify }}
         },
