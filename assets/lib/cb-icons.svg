@@ -19,7 +19,7 @@
 <?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     {%- for i in icons -%}
     {% capture icon %}icons/{{ i }}.svg{%- endcapture -%}
-    {% capture markup %}{% include {{ icon }} %}{%- endcapture -%}
+    {% capture markup %}{% include_relative {{ icon }} %}{%- endcapture -%}
     {% capture icon_start %}<symbol id="{{ i }}"{% endcapture %}
     {{ markup | replace: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"', icon_start | replace: '</svg>','</symbol>' | normalize_whitespace }}
     {%- endfor -%}
