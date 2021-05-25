@@ -162,7 +162,7 @@ module CollectionBuilderPageGenerator
     end
 
     # Color helper, to add warning colors to message outputs
-    # use like: puts colorize("example", :red)
+    # use like: puts color_text("example", :red)
     def text_colors
       @colors = {
         red: 31,
