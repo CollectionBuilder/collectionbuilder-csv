@@ -45,6 +45,44 @@ module CollectionBuilderHelperGenerator
 
       # add site.data.featured_item object with src, alt, and link 
       site.data['featured_item'] = { "src" => featured_item_src, "alt" => featured_item_alt, "link" => featured_item_link }
+
+      #####
+      #
+      # Icon Theme
+      # find icons configured in "theme.yml" or set defaults
+      # return new variable --> site.data.icon
+      #
+      #####
+
+      # get list of existing icons in assets
+      lib_icon_names = site.static_files.select { |file| file.path.include? '/assets/lib/icons/' }.map { |i| i.basename }
+      # get icons configured in theme.yml
+      theme_icons = site.data['theme']['icons'] || { "icon-default" => "file-earmark" }
+      if !theme_icons['icon-image']
+        theme_icons['icon-image'] = "image"
+      end
+      if !theme_icons['icon-audio']
+        theme_icons['icon-audio'] = "file-play"
+      end
+      if !theme_icons['icon-video']
+        theme_icons['icon-video'] = "film"
+      end
+      if !theme_icons['icon-pdf']
+        theme_icons['icon-pdf'] = "file-richtext"
+      end
+      if !theme_icons['icon-default']
+        theme_icons['icon-default'] = "file-earmark"
+      end
+      # check if icons exist
+      theme_icons.each do |i|
+        if !lib_icon_names.include? i[1]
+          puts color_text("Error cb_vars: configured icon '#{i[0]}: #{i[1]}' does not exist. Please check 'theme.yml' and 'assets/lib/icons'.", :yellow)
+        end
+      end
+
+      puts "#{theme_icons}"
+
+      
       
     end
 
