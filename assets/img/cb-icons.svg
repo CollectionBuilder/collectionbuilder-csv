@@ -1,0 +1,22 @@
+---
+# generate icons 
+---
+{% comment %}
+    Set icons with defaults 
+{% endcomment %}
+{% assign icon-image = site.data.theme.icon-image | default: "image" %}
+{% assign icon-audio = site.data.theme.icon-audio | default: "file-play" %}
+{% assign icon-video = site.data.theme.icon-video | default: "film" %} 
+{% assign icon-pdf = site.data.theme.icon-pdf | default: "file-richtext" %}
+{% assign icon-default = site.data.theme.icon-default | default: "file-earmark" %} 
+{% assign icon-back-to-top = site.data.theme.icon-back-to-top | default: "arrow-up-square" %}
+{% capture icons %}{{ icon-image }};{{ icon-audio }};{{ icon-video }};{{ icon-pdf }};{{ icon-default }};{{ icon-back-to-top }}{% endcapture %}
+{%- assign icons = icons | split: ";" -%}
+<?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    {%- for i in icons -%}
+    {% capture icon %}icons/{{ i }}.svg{%- endcapture -%}
+    {% capture markup %}{% include {{ icon }} %}{%- endcapture -%}
+    {% capture icon_start %}<symbol id="{{ i }}"{% endcapture %}
+    {{ markup | replace: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"', icon_start | replace: '</svg>','</symbol>' | normalize_whitespace }}
+    {%- endfor -%}
+</svg>
