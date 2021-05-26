@@ -50,14 +50,17 @@ module CollectionBuilderHelperGenerator
       #
       # Icon Theme
       # find icons configured in "theme.yml" or set defaults
-      # return new variable --> site.data.icon
+      # return new variable --> site.data.theme_icons
+      # containing keys for each icon, each with key for inline or symbol markup
       #
       #####
 
       # get list of existing icons in assets
-      lib_icon_names = site.static_files.select { |file| file.path.include? '/assets/lib/icons/' }.map { |i| i.basename }
+      lib_icons = site.static_files.select { |file| file.path.include? '/assets/lib/icons/' }
+      lib_icon_names = lib_icons.map { |i| i.basename }
       # get icons configured in theme.yml
-      theme_icons = site.data['theme']['icons'] || { "icon-default" => "file-earmark" }
+      theme_icons = site.data['theme']['icons'] || { }
+      # set default values for icons used in template in case nothing is configured
       if !theme_icons['icon-image']
         theme_icons['icon-image'] = "image"
       end
@@ -73,17 +76,38 @@ module CollectionBuilderHelperGenerator
       if !theme_icons['icon-default']
         theme_icons['icon-default'] = "file-earmark"
       end
-      # check if icons exist
+      if !theme_icons['icon-back-to-top']
+        theme_icons['icon-back-to-top'] = "arrow-up-square"
+      end
+      # process icons
+      icon_set = { }
       theme_icons.each do |i|
+        # check if icon svg file exists in assets
         if !lib_icon_names.include? i[1]
           puts color_text("Error cb_vars: configured icon '#{i[0]}: #{i[1]}' does not exist. Please check 'theme.yml' and 'assets/lib/icons'.", :yellow)
+        else
+          # find matching icon
+          svg_file = lib_icons.find { |icon| icon.basename == i[1] }
+          # open icon svg from assets
+          file = File.open(svg_file.path, "rb").read
+          # remove whitespace
+          markup = normalize_whitespace(file)
+          # create symbol style markup
+          symbol_start = '<symbol id="' + i[0] + '"'
+          symbol = markup.gsub('<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"', symbol_start).gsub('</svg>','</symbol>')
+          # add to icon set hash
+          icon_set[i[0]] = { "inline" => markup, "symbol" => symbol }
         end
       end
+      # add icon set to site data
+      site.data['theme_icons'] = icon_set
+ 
+    end
 
-      puts "#{theme_icons}"
-
-      
-      
+    # normalize whitespace
+    # taken from Jekyll Filters
+    def normalize_whitespace(input)
+      input.to_s.gsub(%r!\s+!, " ").tap(&:strip!)
     end
 
     # Color helper, to add warning colors to message outputs
