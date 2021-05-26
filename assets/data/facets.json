@@ -1,6 +1,8 @@
 ---
 # facets generator
 # creates a csv of unique values and their counts of fields given in site.data.theme.metadata-facets-fields
+#
+# Requires CB's array_count_uniq.rb plugin!
 ---
 {%- assign items = site.data[site.metadata] | where_exp: 'item','item.objectid' -%}
 {%- assign fields = site.data.theme.metadata-facets-fields | split: "," -%}

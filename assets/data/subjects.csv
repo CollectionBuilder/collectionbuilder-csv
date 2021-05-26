@@ -1,5 +1,7 @@
 ---
 # find all unique subjects used in the metadata 
+#
+# Requires CB's array_count_uniq.rb plugin!
 ---
 {%- if site.data.theme.subjects-fields -%}
 {%- assign items = site.data[site.metadata] | where_exp: 'item','item.objectid' -%}

@@ -1,3 +1,9 @@
+{%- comment -%}
+
+    Generates a subject cloud using js to process the terms for display on "cloud" layout.
+    Requires CB's array_count_uniq.rb plugin!
+
+{%- endcomment -%}
 {%- assign items = site.data[site.metadata] | where_exp: 'item','item.objectid' -%}
 {%- assign cloud-fields = include.fields | split: ";" -%}
 {%- assign terms = "" -%}
