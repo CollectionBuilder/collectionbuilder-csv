@@ -76,23 +76,7 @@ metadata-facets-fields: "subject,creator,format"
 # ADVANCED OPTIONS
 #
 
-# THEME ICONS
-# the template uses Bootstrap Icons, https://icons.getbootstrap.com/
-# find the names on the BI icons page, e.g. file-image
-icons: 
-  icon-image: image
-  icon-audio: file-play
-  icon-video: film
-  icon-pdf: file-richtext
-  icon-default: file-earmark # fall back icon
-
-icon-image: image
-icon-audio: file-play
-icon-video: film
-icon-pdf: file-richtext
-icon-default: file-earmark # fall back icon
-
-# NAVBAR COLORS
+# NAVBAR COLORS [optional!]
 # navbar text color
 # Choose from "navbar-light" for use with light background colors, or "navbar-dark" for dark background colors
 navbar-color: navbar-dark
@@ -100,14 +84,27 @@ navbar-color: navbar-dark
 # Choose from bg-primary, bg-secondary, bg-success, bg-danger, bg-warning, bg-info, bg-light, bg-dark, bg-white
 navbar-background: bg-dark
 
-# BOOTSWATCH THEMES
+# BOOTSWATCH THEMES [optional!]
 # You can replace the standard Bootstrap theme with a Bootswatch (https://github.com/thomaspark/bootswatch) option
 # Choose from: cerulean; cosmo; cyborg; darkly; flatly; journal; litera; lumen; lux; materia; minty; pulse; sandstone; simplex; sketchy; slate; solar; spacelab; superhero; united; yeti 
 bootswatch: # leave blank or comment out for plain bootstrap
 
-# THEME FONTS
+# THEME FONTS [optional!]
 base-font-size: 1.2em
 text-color: "#191919"
 link-color: "#17a2b8"
 base-font-family: # comment out for bootstrap defaults. e.g. Roboto
 font-cdn: # add font stylesheet, e.g. <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+
+# THEME ICONS [optional!]
+# default icons can be overridden or new icons can be added using "icons" object
+# the template uses Bootstrap Icons, https://icons.getbootstrap.com/
+# find the names on the BI icons page, e.g. file-image
+#
+# icons: 
+#   icon-image: image
+#   icon-audio: file-play
+#   icon-video: film
+#   icon-pdf: file-richtext
+#   icon-default: file-earmark # fall back icon
+
