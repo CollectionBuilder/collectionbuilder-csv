@@ -44,14 +44,15 @@ custom-foot: js/timeline-js.html
                 {% for item in inYear %}
                 <div class="col-lg-4 col-md-6">
                     <a href="{{ '/items/' | append: item.objectid | append: '.html' | relative_url }}" >
-                        {% if item.image_thumb or item.image_small %}
-                        <img class="lazyload img-thumbnail timeline-thumb" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'%3E%3C/svg%3E" data-src="{{ item.image_thumb | default: item.image_small | relative_url }}" alt="{{ item.title | escape }}" data-toggle="tooltip" data-placement="bottom" title="{{ item.title | escape }}">
+                        {% if item.image_thumb %}
+                        <img class="lazyload img-thumbnail timeline-thumb" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'%3E%3C/svg%3E" data-src="{{ item.image_thumb | relative_url }}" alt="{{ item.title | escape }}" data-toggle="tooltip" data-placement="bottom" title="{{ item.title | escape }}">
                         {% else %}
                         <div class="card"> 
                             <div class="card-body text-center">
                                 <div class="h5 text-dark">{{ item.title }}</div>
                                 <svg class="bi timeline-thumb text-body" fill="currentColor" aria-hidden="true">
-                                    <use xlink:href="{{ '/assets/lib/bootstrap-icons.svg' | relative_url }}#{% if item.format contains 'image' %}{{ site.data.theme.icon-image | default: 'file-image' }}{% elsif item.format contains 'audio' %}{{ site.data.theme.icon-audio | default: 'file-play' }}{% elsif item.format contains 'video' %}{{ site.data.theme.icon-video | default: 'film' }}{% elsif item.format contains 'pdf' %}{{ site.data.theme.icon-pdf | default: 'file-richtext' }}{% else %}{{ site.data.theme.icon-default | default: 'file-earmark' }}{% endif %}"/>
+                                    <use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#{% if item.object_template contains 'image' or item.format contains 'image' %}icon-image
+                                    {% elsif item.object_template contains 'pdf' or item.format contains 'pdf' %}icon-pdf{% elsif item.object_template contains 'audio' or item.format contains 'audio' %}icon-audio{% elsif item.object_template contains 'video' or item.format contains 'video' %}icon-video{% else %}icon-default{% endif %}"/>
                                 </svg>
                             </div>
                         </div>
