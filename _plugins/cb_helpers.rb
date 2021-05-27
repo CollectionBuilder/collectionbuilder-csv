@@ -1,11 +1,28 @@
+# frozen_string_literal: true
+
+#########
+#
+# CollectionBuilder Helpers Generator
+#
+# Jekyll plugin to generate theme variables for the template.
+# 
+# Helper functions work with settings in "theme.yml" to add variables to site.data.
+# This optimizes setting defaults and calculating some values,
+# to avoid slow Liquid routines.
+# (c) 2021 CollectionBuilder, evanwill, https://github.com/CollectionBuilder/
+# Distributed under the conditions of the MIT license
+#
+#########
+
 module CollectionBuilderHelperGenerator
   class Generator < Jekyll::Generator
+    safe true
 
     def generate(site)
 
       #####
       #
-      # Featured Image 
+      # Featured Item 
       # find featured image as configured in "theme.yml"
       # return new varible --> site.data.featured_item with .src, .alt, .link
       #
@@ -48,7 +65,7 @@ module CollectionBuilderHelperGenerator
 
       #####
       #
-      # Icon Theme
+      # Theme Icons
       # find icons configured in "theme.yml" or set defaults
       # return new variable --> site.data.theme_icons
       # containing keys for each icon, each with key for inline or symbol markup
