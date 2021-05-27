@@ -12,36 +12,22 @@ var items = [
         "title":{{ i.title | strip | escape | jsonify }}, "id":{{ i.objectid | jsonify }} }{% unless forloop.last %},{% endunless %}{%- endfor -%}
 ];
 
-// placeholder image for lazyload
-var placeholder = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'%3E%3C/svg%3E";
+{% include image/get-icon.js %}
+
 /* function to create cards for each item */ 
 function makeCard(obj) {
+    // placeholder image for lazyload
+    var placeholder = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'%3E%3C/svg%3E";
     // find item link
     var itemHref = "{{ '/items/' | relative_url }}" + obj.id + ".html";
-    // find images
-    var imgSrc, thumbSrc;
+    // find image
+    var imgSrc, thumbIcon;
     // if there is a thumb in the csv display it
     if(obj.img) {
         imgSrc = obj.img;
     // else add an icon based on object_template or format
     } else {
-        var iconId;
-        // avoid errors if no format
-        if (!obj.format) { obj.format = "" }
-        // choose icon
-        if (obj.template == "image" || obj.format.includes("image")) {
-            iconId = "icon-image";
-        } else if (obj.template == "pdf" || obj.format.includes("pdf")) {
-            iconId = "icon-pdf";
-        } else if (obj.template == "video" || obj.template == "video-embed" || obj.format.includes("video")) {
-            iconId = "icon-video";
-        } else if (obj.template == "audio" || obj.format.includes("audio")) {
-            iconId = "icon-audio";
-        } else {
-            iconId = "icon-default";
-        }
-        // icon sprite as thumb
-        thumbSrc = '<svg class="bi text-body" fill="currentColor"><use xlink:href="{{ "/assets/lib/cb-icons.svg" | relative_url }}#' + iconId + '"/></svg>';
+        thumbIcon = getIcon(obj.template,obj.format)
     }
 
     // start card
@@ -53,8 +39,8 @@ function makeCard(obj) {
     // title
     card += '<div class="card-body text-center"> <h4 class="card-title"><a href="' + itemHref + '" class="text-dark">' + obj.title + '</a></h4>';
     // icon thumb for item without image
-    if(thumbSrc){
-        card += '<p><a href="' + itemHref + '">' + thumbSrc + '</a></p>';
+    if(thumbIcon){
+        card += '<p><a href="' + itemHref + '">' + thumbIcon + '</a></p>';
     }
     // other fields
     card += '<p class="card-text">';
