@@ -9,16 +9,17 @@ See general documentation: https://collectionbuilder.github.io/docs/metadata.htm
 
 ## Object Download and Display images
 
-- `object_download`: a full URL to download the full quality digital object or relative path if items are contained with in the project.
-- `image_small`: a full URL to a small image representation of the object or relative path if items are contained with in the project.
-- `image_thumb`: a full URL to a thumb image representation of the object or relative path if items are contained with in the project.
-- `format`: object's MIME media type. If an object does not have an image_small or image_thumb, format is used by template logic to switch between different icons.
+- `object_download`: a full URL to download the full quality digital object or relative path if items are contained with in the project. This file is not used for display on the website, except in the case of image galleries on item pages.
+- `image_small`: a full URL to a small image representation of the object or relative path if items are contained with in the project. If this field is filled, the image will be displayed to represent the item on Item pages or in features added to content pages.
+- `image_thumb`: a full URL to a thumb image representation of the object or relative path if items are contained with in the project. If this field is filled, the image will be displayed to represent the item on visualization pages.
+- `format`: object's MIME media type. If an object does not have an image_thumb, format is used by template logic to switch between different icons.
 
 Each object will likely have an object_download value, the link where the digital file can be downloaded (or potentially accessed in a different platform). 
 It is not a required field--items without an object_download will become metadata only records.
 
-For display images in various visualizations the template checks the fields image_small and image_thumb for links to image derivatives.
-If image derivatives are not available (i.e. the field is left blank), the logic will select icons or alternatives based on the format field.
+For display images in various visualization pages the template checks the fields image_thumb for links to image derivatives (Browse, Map, Timeline).
+If image_thumb derivatives are not available (i.e. the field is left blank), the logic will select icons alternatives based on the object_template or format field.
+If the item has neither object_template or format, it will fall back to a default icon.
 
 These fields should be filed out in your spreadsheet using formulas / recipes depending on where your objects are hosted. 
 This provides flexibility to include objects from multiple sources and to generate the URLs using a variety of approaches without needing to modify the template code.
