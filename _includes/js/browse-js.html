@@ -12,7 +12,7 @@ var items = [
         "title":{{ i.title | strip | escape | jsonify }}, "id":{{ i.objectid | jsonify }} }{% unless forloop.last %},{% endunless %}{%- endfor -%}
 ];
 
-{% include image/get-icon.js %}
+{% include js/get-icon.js %}
 
 /* function to create cards for each item */ 
 function makeCard(obj) {

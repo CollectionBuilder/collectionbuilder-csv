@@ -71,7 +71,7 @@
     var markers = L.markerClusterGroup({ maxClusterRadius: {{ site.data.theme.map-cluster-radius | default: 15 }}, singleMarkerMode: true {% if site.data.theme.map-search == true %}, removeOutsideVisibleBounds: false{% endif %} });{% endif %}
 
     /* get icons function */ 
-    {% include image/get-icon.js %}
+    {% include js/get-icon.js %}
 
     /* object popup function */
     function objectPopups(feature, layer) {
