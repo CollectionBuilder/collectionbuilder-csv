@@ -1,7 +1,7 @@
 ---
 # CollectionBuilder-Icons
 #
-# This file prepares a central icon sprite file for use on all pages.
+# This file prepares a central svg sprite file for use on all pages.
 # Default icons can be over ridden in theme.yml, 
 # using icon names in Bootstrap Icons, https://icons.getbootstrap.com/
 #
