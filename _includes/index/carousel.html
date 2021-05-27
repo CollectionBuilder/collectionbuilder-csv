@@ -1,4 +1,4 @@
-{%- assign carousel-size = site.data[site.metadata] | where_exp: 'item','item.objectid' | where_exp: "item","item.image_small" | size | at_most: 9 -%}
+{%- assign carousel-size = site.data[site.metadata] | where_exp: 'item','item.objectid' | where_exp: "item","item.image_thumb" | size | at_most: 9 -%}
 <style>
     #imageCarousel .carousel-item { height: {{ site.data.theme.carousel-height | remove: "px" | default: '300' }}px; }
 </style>
