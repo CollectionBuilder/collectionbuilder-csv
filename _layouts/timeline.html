@@ -51,8 +51,8 @@ custom-foot: js/timeline-js.html
                             <div class="card-body text-center">
                                 <div class="h5 text-dark">{{ item.title }}</div>
                                 <svg class="bi timeline-thumb text-body" fill="currentColor" aria-hidden="true">
-                                    <use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#{% if item.object_template contains 'image' or item.format contains 'image' %}icon-image
-                                    {% elsif item.object_template contains 'pdf' or item.format contains 'pdf' %}icon-pdf{% elsif item.object_template contains 'audio' or item.format contains 'audio' %}icon-audio{% elsif item.object_template contains 'video' or item.format contains 'video' %}icon-video{% else %}icon-default{% endif %}"/>
+                                    {%- assign icon_template = item.object_template | default: item.format -%}
+                                    <use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#{% if icon_template contains 'image' %}icon-image{% elsif icon_template contains 'pdf' %}icon-pdf{% elsif icon_template contains 'audio' %}icon-audio{% elsif icon_template contains 'video' %}icon-video{% else %}icon-default{% endif %}"/>
                                 </svg>
                             </div>
                         </div>

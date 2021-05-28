@@ -3,17 +3,22 @@
     return svg sprite
 */
 function getIcon(objectTemplate,objectFormat) {
-    var iconId;
-    // avoid errors if no format
-    if (!objectFormat) { objectFormat = "" }
+    var iconTemplate, iconId;
+    if (objectTemplate && objectTemplate != "") {
+        iconTemplate = objectTemplate;
+    } else if (objectFormat && objectFormat != "") {
+        iconTemplate = objectFormat;
+    } else {
+        iconTemplate = ""
+    }
     // choose icon
-    if (objectTemplate == "image" || objectFormat.includes("image")) {
+    if (iconTemplate.includes("image")) {
         iconId = "icon-image";
-    } else if (objectTemplate == "pdf" || objectFormat.includes("pdf")) {
+    } else if (iconTemplate.includes("pdf")) {
         iconId = "icon-pdf";
-    } else if (objectTemplate == "video" || objectTemplate == "video-embed" || objectFormat.includes("video")) {
+    } else if (iconTemplate.includes("video")) {
         iconId = "icon-video";
-    } else if (objectTemplate == "audio" || objectFormat.includes("audio")) {
+    } else if (iconTemplate.includes("audio")) {
         iconId = "icon-audio";
     } else {
         iconId = "icon-default";
