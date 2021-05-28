@@ -9,8 +9,9 @@
 <meta property="og:title" content="{{ page.title | escape }}" />
 <meta property="og:type" content="website" />
 <meta property="og:description" content="Item from {{ site.title | escape }}. {{ page.description | truncatewords: 30 | escape }}" />
-<meta property="og:image" content="{{ page.image_small | relative_url }}" />
-<meta property="og:image:alt" content="{{ page.title | escape }}" />
+{% if page.image_small or page.image_thumb %}
+<meta property="og:image" content="{{ page.image_small | default: page.image_thumb | relative_url }}" />
+<meta property="og:image:alt" content="{{ page.title | escape }}" />{% endif %}
 <meta property="og:site_name" content="{{ site.title | escape }}" />
 <meta property="og:url" content="{{ page.url | absolute_url }}" />
 <meta property="og:locale" content="en_US" />

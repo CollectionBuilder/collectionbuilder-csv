@@ -1,10 +1,10 @@
 # Jekyll Plugins
 
 Jekyll is designed to be extensible via [Plugins](https://jekyllrb.com/docs/plugins/) written in Ruby.
-The simplest method is to add Plugins directly to the `_plugins` directory, making them a part of the project repository (rather than an external Gem).
+The simplest method is to add Plugins directly to the "_plugins" directory, making them a part of the project repository (rather than an external Gem).
 The plugins are Ruby code and run immediately as Jekyll starts.
 
-CollectionBuilder-CSV currently uses two custom plugins "CollectionBuilder Page Generator" (`cb_page_gen.rb`) and "Array Count Uniq" (`array_count_uniq.rb`).
+CollectionBuilder-CSV currently uses three custom plugins "CollectionBuilder Page Generator" ("cb_page_gen.rb"), "CollectionBuilder Helpers" ("cb_helpers.rb"), and "Array Count Uniq" ("array_count_uniq.rb").
 
 Keep in mind that plugins can not be used on GitHub Pages default build (although they *can* be used by setting up a GitHub Actions based build process).
 Thus, collectionbuilder-gh uses fairly slow and complicated Liquid and Javascript to generate items pages and unique counts from metadata.
@@ -12,7 +12,7 @@ Those methods are not efficient enough to handle larger collections.
 
 ## CollectionBuilder Page Generator
 
-"CollectionBuilder Page Generator" (`cb_page_gen.rb`) creates individual html pages from each record in your metadata CSV (or other _data files). 
+"CollectionBuilder Page Generator" ("cb_page_gen.rb") creates individual html pages from each record in your metadata CSV (or other _data files). 
 I.e. it generates Item pages for your collection driven directly from your metadata.
 It can also generate all sort of other pages from any data file.
 
@@ -91,9 +91,20 @@ However, the plugin configuration is still fully backwards compatible with older
 If you used the old page gen plugin, your existing configuration should work with the new one.
 As of 2020, jekyll-datapage_gen added additional options that are *not* supported in CB Page Gen (index_files, name_expr, title, title_expr)--if you would like to use those options, you should still be able to swap in the newest version of jekyll-datapage_gen and delete cb_page_gen.
 
+## CollectionBuilder Helpers
+
+"CollectionBuilder Helpers" ("cb_helpers.rb") provides helper functions to generate theme variables which are added to `site.data` for use in templates.
+The functions set defaults and calculate values in a much more efficient manner than using Liquid in template pages.
+This helps optimize built times for large collections.
+
+Current helpers include:
+
+- Featured Item -- reads `featured-image` from "theme.yml" and provides a `site.data.featured_item` object to the template at build. This allows you to get `featured_item.src`, `.alt`, and `.link`. Currently used to populate meta tags.
+- Theme Icons -- reads `icons` object in "theme.yml", sets icon defaults, processes icon svgs, and provides a `site.data.theme_icons` objects to the template at build. See "docs/icons.md" for details of use.
+
 ## Array Count Uniq
 
-"Array Count Uniq" (`array_count_uniq.rb`) provides a convenient Liquid filter to calculate the count of unique values in an array.
+"Array Count Uniq" ("array_count_uniq.rb") provides a convenient Liquid filter to calculate the count of unique values in an array.
 The filter takes a Liquid array as input and returns an array of the unique values and their counts. 
 This allows you to quickly extract unique terms from large metadata files, which would take too long using Liquid alone.
 This is some what idiosyncratic to the needs of CollectionBuilder projects, used to efficiently generate Cloud pages and data derivatives.

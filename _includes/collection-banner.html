@@ -1,7 +1,7 @@
 {% if page.layout == "home-infographic" and site.data.theme.featured-image %}
 <style>
 #home-banner {
-    background-image: url('{% include image/featured-image.html %}');
+    background-image: url('{{ site.data.featured_item.src | relative_url }}');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: {{ site.data.theme.home-banner-image-position | default: 'top' }};
@@ -28,7 +28,7 @@
         </div>
     </div>
     {% unless site.data.theme.featured-image contains '/' %}<div class="text-right p-0 mt-0">
-        <small><a class="text-info featured-link" href="{{ '/items/' | relative_url | append: site.data.theme.featured-image | append: '.html' }}" title="{{ featuredItem.title | escape }}">Featured Image</a></small>
+        <small><a class="text-info featured-link" href="{{ site.data.featured_item.link | relative_url }}" title="{{ site.data.featured_item.alt | escape }}">Featured Image</a></small>
     </div>{% endunless %}
 </div>
 {%- else -%}

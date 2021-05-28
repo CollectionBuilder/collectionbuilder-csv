@@ -1,0 +1,14 @@
+---
+# CollectionBuilder-Icons
+#
+# This file prepares a central svg sprite file for use on all pages.
+# Default icons can be over ridden in theme.yml, 
+# using icon names in Bootstrap Icons, https://icons.getbootstrap.com/
+#
+# Requires the cb_helpers.rb plugin!
+---
+<?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    {%- for i in site.data.theme_icons -%}
+    {{ i[1].symbol }}
+    {%- endfor -%}
+</svg>

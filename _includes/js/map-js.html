@@ -13,8 +13,14 @@
     var geodata = { "type": "FeatureCollection", "features": [ 
     {% for item in items %}
     { "type":"Feature", "geometry":{ "type":"Point", "coordinates":[{{ item.longitude | strip }},{{ item.latitude | strip }}] }, "properties":
-    { "title": {{ item.title | escape | jsonify }}, 
-    {% for f in fields %}{{ f.field | escape | jsonify }}: {{ item[f.field] | escape | jsonify }},{% endfor %}{% if item.image_thumb %} "img": {{ item.image_thumb | relative_url | jsonify }},{% endif %} "format": {{ item.format | jsonify }}, "id": {{ item.objectid | jsonify }} } }{% unless forloop.last %}, {% endunless %}{% endfor %}
+    { 
+        {% for f in fields %}{% if item[f.field] %}{{ f.field | escape | jsonify }}:{{ item[f.field] | strip | escape | jsonify }}, {%- endif -%}{%- endfor -%}
+        {% if item.image_thumb %}"img": {{ item.image_thumb | relative_url | jsonify }},{% endif %}
+        {% if item.object_template %}"template": {{ item.object_template | escape | jsonify }}, {%- endif -%}
+        {% if item.format %}"format": {{ item.format | escape | jsonify }}, {%- endif -%}
+        "title": {{ item.title | escape | jsonify }}, 
+        "id": {{ item.objectid | jsonify }} 
+    } }{% unless forloop.last %}, {% endunless %}{% endfor %}
     ]};
 
     /* init map and set zoom */
@@ -64,28 +70,26 @@
     /* create cluster group */
     var markers = L.markerClusterGroup({ maxClusterRadius: {{ site.data.theme.map-cluster-radius | default: 15 }}, singleMarkerMode: true {% if site.data.theme.map-search == true %}, removeOutsideVisibleBounds: false{% endif %} });{% endif %}
 
+    /* get icons function */ 
+    {% include js/get-icon.js %}
+
     /* object popup function */
     function objectPopups(feature, layer) {
         {% if site.data.theme.map-search == true %}/* bind feature for search */
         feature.layer = layer;{% endif %}
-        /* create pop up */
+        // find item link
         var itemHref = '{{ "/items/" | relative_url }}' + feature.properties.id + '.html';
+        // find image
+        var thumbImg;
         if (feature.properties.img) {
-            var thumbSrc = '<img class="map-thumb" src="' + feature.properties.img + '" alt="item thumbnail">';
-        } else if (feature.properties.format.includes("image")) {
-            var thumbSrc = '<svg class="bi text-body map-thumb" fill="currentColor"><use xlink:href="{{ "/assets/lib/bootstrap-icons.svg" | relative_url }}#{{ site.data.theme.icon-image | default: "file-image" }}"/></svg><span class="sr-only">Image File</span>';
-        } else if (feature.properties.format.includes("audio")) {
-            var thumbSrc = '<svg class="bi text-body map-thumb" fill="currentColor"><use xlink:href="{{ "/assets/lib/bootstrap-icons.svg" | relative_url }}#{{ site.data.theme.icon-audio | default: "file-play" }}"/></svg><span class="sr-only">Audio File</span>';
-        } else if (feature.properties.format.includes("video")) {
-            var thumbSrc = '<svg class="bi text-body map-thumb" fill="currentColor"><use xlink:href="{{ "/assets/lib/bootstrap-icons.svg" | relative_url }}#{{ site.data.theme.icon-video | default: "film" }}"/></svg><span class="sr-only">Video File</span>';
-        } else if (feature.properties.format.includes("pdf")) {
-            var thumbSrc = '<svg class="bi text-body map-thumb" fill="currentColor"><use xlink:href="{{ "/assets/lib/bootstrap-icons.svg" | relative_url }}#{{ site.data.theme.icon-pdf | default: "file-richtext" }}"/></svg><span class="sr-only">Video File</span>';
+            thumbImg = '<img class="map-thumb" src="' + feature.properties.img + '" alt="item thumbnail">';
         } else {
-            var thumbSrc = '<svg class="bi text-body map-thumb" fill="currentColor"><use xlink:href="{{ "/assets/lib/bootstrap-icons.svg" | relative_url }}#{{ site.data.theme.icon-default | default: "file-earmark" }}"/></svg><span class="sr-only">File Icon</span>';
+            thumbImg = getIcon(feature.properties.template,feature.properties.format)
         }
+        // set up popup content
         var popupTemplate = '<h4><a class="text-dark" href="' + itemHref + '">' +
             feature.properties.title + '</a></h4><div class="text-center"><a href="' + itemHref + 
-            '" >' + thumbSrc + '</a></div><p>';
+            '" >' + thumbImg + '</a></div><p>';
         {% for f in fields %}{% if f.display_name %}
         if (feature.properties[{{ f.field | escape | jsonify }}]) {
             popupTemplate += '<strong>{{ f.display_name }}:</strong> ' + feature.properties[{{ f.field | escape | jsonify }}] + '<br>'; 

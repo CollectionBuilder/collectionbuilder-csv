@@ -8,7 +8,8 @@
     <img class="img-thumbnail" src="{{ page.image_small | default: page.image_thumb | relative_url }}" alt="{{ page.title | escape }}">
     {% else %}
     <svg class="bi text-body" fill="currentColor" aria-hidden="true">
-        <use xlink:href="{{ '/assets/lib/bootstrap-icons.svg' | relative_url }}#{% if page.format contains 'image' %}{{ site.data.theme.icon-image | default: 'file-image' }}{% elsif page.format contains 'audio' %}{{ site.data.theme.icon-audio | default: 'file-play' }}{% elsif page.format contains 'video' %}{{ site.data.theme.icon-video | default: 'film' }}{% elsif page.format contains 'pdf' %}{{ site.data.theme.icon-pdf | default: 'file-richtext' }}{% else %}{{ site.data.theme.icon-default | default: 'file-earmark' }}{% endif %}"/>
+        <use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#{% if item.object_template contains 'image' or item.format contains 'image' %}icon-image
+        {% elsif item.object_template contains 'pdf' or item.format contains 'pdf' %}icon-pdf{% elsif item.object_template contains 'audio' or item.format contains 'audio' %}icon-audio{% elsif item.object_template contains 'video' or item.format contains 'video' %}icon-video{% else %}icon-default{% endif %}"/>
     </svg>
     <span class="sr-only">{{ page.title | escape }} - {{ page.format }}</span>
     {% endif %}
