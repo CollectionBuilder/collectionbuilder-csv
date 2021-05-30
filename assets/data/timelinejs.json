@@ -1,7 +1,7 @@
 ---
 # generate time-focused json data suitable for TimelineJS
 ---
-{%- assign items = site.data[site.metadata] | where_exp: 'item','item.objectid' -%}
+{%- assign items = site.data[site.metadata] | where_exp: 'item','item.objectid' | where_exp: 'item', 'item.date' -%}
 {
     "title": {
         "media": {
@@ -17,14 +17,14 @@
     "events": [
       {% for item in items %}{% if item.date %}{
         "media": {
-          "url": "{{ item.image_small | absolute_url }}",
+          "url": "{{ item.image_small | default: item.image_thumb | default: item.object_download | relative_url }}",
           "caption": {{ item.title | jsonify }},
-          "link": "{{ '/items/' | append: item.objectid | append: '.html' | absolute_url }}",
-          "credit": "{{ site.title }}"
+          "link": "{{ '/items/' | append: item.objectid | append: '.html' | relative_url }}"
         },
-        "start_date": { {% if item.date contains '-' %}{% assign dates = item.date | split: '-' %}
-          "month": "{{ dates[1] }}",
-          "day": "{{ dates[2] }}",
+        "start_date": { 
+          {% if item.date contains '-' %}{% assign dates = item.date | strip | split: '-' %}
+          {% if dates[1] %}"month": "{{ dates[1] }}",
+          {% if dates[2] %}"day": "{{ dates[2] }}",{% endif %}{% endif %}
           "year": "{{ dates[0] }}"{% elsif item.date contains '/' %}"year": "{{ item.date | strip | split: '/' | last }}"{% else %}
           "year": "{{ item.date }}"{% endif %}
         },
