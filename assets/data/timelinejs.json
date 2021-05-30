@@ -8,7 +8,7 @@
     "title": {
         "media": {
           "url": "{{ site.data.featured_item.src | relative_url }}",
-          "caption": {{ featuredItem.title | jsonify }},
+          "caption": {{ site.data.featured_item.title | jsonify }},
           "credit": {{ site.title | jsonify }}
         },
         "text": {
