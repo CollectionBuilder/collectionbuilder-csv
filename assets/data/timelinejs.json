@@ -17,7 +17,7 @@
         }
     },
     "events": [
-      {% for item in items %}{% if item.date %}{
+      {% for item in items %}{
         "media": {
           "url": "{{ item.image_small | default: item.image_thumb | default: item.object_download | relative_url }}",
           "caption": {{ item.title | jsonify }},
@@ -34,6 +34,6 @@
           "headline": {{ item.title | jsonify }}{% if item.description %},
           "text": {{ item.description | jsonify }}{% endif %}
         }
-      }{% unless forloop.last %},{% endunless %}{% endif %}{% endfor %}
+      }{% unless forloop.last %},{% endunless %}{% endfor %}
     ]
 }
