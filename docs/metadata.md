@@ -1,4 +1,4 @@
-# Metadata Standards for CB Stand Alone
+# Metadata Standards for CB-CSV
 
 See general documentation: https://collectionbuilder.github.io/docs/metadata.html
 
