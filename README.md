@@ -4,6 +4,8 @@
 
 CollectionBuilder-CSV is a "stand alone" template for creating digital collection and exhibit websites using Jekyll and a metadata CSV.
 
+[Google Sheets Metadata Template](https://docs.google.com/spreadsheets/d/1nN_k4JQB4LJraIzns7WcM3OXK-xxGMQhW1shMssflNM/edit?usp=sharing)
+
 Driven by your collection metadata, the template generates engaging visualizations to browse and explore your objects.
 The resulting static site can be hosted on any basic web server.
 
