@@ -1,5 +1,7 @@
 # CollectionBuilder-CSV helper tasks
 
+require 'csv'
+
 ###############################################################################
 # TASK: deploy
 ###############################################################################
@@ -71,47 +73,63 @@ task :generate_derivatives, [:thumbs_size, :small_size, :density, :missing, :im_
     '.pdf' => :pdf
   }
 
-  # Iterate over files in objects directory.
-  Dir.glob(File.join([objects_dir, '*'])).each do |filename|
-    # Ignore subdirectories.
-    if File.directory? filename
-      next
-    end
+  # CSV output
+  list_name = File.join([objects_dir, "object_list.csv"])
+  field_names = "object_download,image_small,image_thumb".split(",")
+  # open file
+  CSV.open(list_name, "w") do |csv|
+    # write the header fields 
+    csv << field_names
 
-    # Determine the file type and skip if unsupported.
-    extname = File.extname(filename).downcase
-    file_type = EXTNAME_TYPE_MAP[extname]
-    if !file_type
-      puts "Skipping file with unsupported extension: #{filename}"
-      next
-    end
-
-    # Define the file-type-specific ImageMagick command prefix.
-    cmd_prefix =
-      case file_type
-      when :image then "#{args.im_executable} #{filename}"
-      when :pdf then "#{args.im_executable} -density #{args.density} #{filename}[0]"
+    # Iterate over files in objects directory.
+    Dir.glob(File.join([objects_dir, '*'])).each do |filename|
+      # Ignore subdirectories.
+      if File.directory? filename
+        next
+      end
+      # Ignore README
+      if File.basename(filename) == "README.md"
+        next
       end
 
-    # Get the lowercase filename without any leading path and extension.
-    base_filename = File.basename(filename)[0..-(extname.length + 1)].downcase
+      # Determine the file type and skip if unsupported.
+      extname = File.extname(filename).downcase
+      file_type = EXTNAME_TYPE_MAP[extname]
+      if !file_type
+        puts "Skipping file with unsupported extension: #{filename}"
+        csv << ["/" + filename,"",""]
+        next
+      end
 
-    # Generate the thumb image.
-    thumb_filename=File.join([thumb_image_dir, "#{base_filename}_th.jpg"])
-    if args.missing == 'false' or !File.exists?(thumb_filename)
-      puts "Creating: #{thumb_filename}";
-      system("#{cmd_prefix} -resize #{args.thumbs_size} -flatten #{thumb_filename}")
-    else
-      puts "Skipping: #{thumb_filename} already exists"
-    end
+      # Define the file-type-specific ImageMagick command prefix.
+      cmd_prefix =
+        case file_type
+        when :image then "#{args.im_executable} #{filename}"
+        when :pdf then "#{args.im_executable} -density #{args.density} #{filename}[0]"
+        end
 
-    # Generate the small image.
-    small_filename = File.join([small_image_dir, "#{base_filename}_sm.jpg"])
-    if args.missing == 'false' or !File.exists?(small_filename)
-      puts "Creating: #{small_filename}";
-      system("#{cmd_prefix} -resize #{args.small_size} -flatten #{small_filename}")
-    else
-      puts "Skipping: #{small_filename} already exists"
+      # Get the lowercase filename without any leading path and extension.
+      base_filename = File.basename(filename)[0..-(extname.length + 1)].downcase
+
+      # Generate the thumb image.
+      thumb_filename=File.join([thumb_image_dir, "#{base_filename}_th.jpg"])
+      if args.missing == 'false' or !File.exists?(thumb_filename)
+        puts "Creating: #{thumb_filename}";
+        system("#{cmd_prefix} -resize #{args.thumbs_size} -flatten #{thumb_filename}")
+      else
+        puts "Skipping: #{thumb_filename} already exists"
+      end
+
+      # Generate the small image.
+      small_filename = File.join([small_image_dir, "#{base_filename}_sm.jpg"])
+      if args.missing == 'false' or !File.exists?(small_filename)
+        puts "Creating: #{small_filename}";
+        system("#{cmd_prefix} -resize #{args.small_size} -flatten #{small_filename}")
+      else
+        puts "Skipping: #{small_filename} already exists"
+      end
+      csv << ["/"+filename,"/"+small_filename,"/"+thumb_filename]
     end
   end
+  puts "See '#{list_name}' for list of objects and derivatives created."
 end
