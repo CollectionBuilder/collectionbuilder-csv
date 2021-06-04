@@ -7,14 +7,14 @@ CB Page Gen will automatically generate pages from the data specified by "_confi
 For more advanced configuration options, including generating other types of pages, see "docs/plugins.md".
 
 CB Page Gen passes all metadata fields through to Jekyll as if each was front matter on a normal file so that the values can be used to populate Item page content.
-This page object is passed to the layout matching the `object_template` value set in each item's metadata, falling back to the default `template` value (normally `item`).
+This page object is passed to the layout matching the `display_template` value set in each item's metadata, falling back to the default `template` value (normally `item`).
 
-## object_template Layouts 
+## display_template Layouts 
 
-The `object_template` layouts provide templates for presenting different item types.
+The `display_template` layouts provide templates for presenting different item types.
 The files are found in "_layouts" (default item layouts have the front matter `item-meta: true`, which adds item meta markup).
 
-Each object_template layout is typically constructed of modular item page components (found in "_includes/item/") and arranged using Bootstrap.
+Each display_template layout is typically constructed of modular item page components (found in "_includes/item/") and arranged using Bootstrap.
 This simplifies customization of the different item pages depending on collection needs.
 
 Default supported options: `item_image`,`item_pdf`, `item_video`, `item_audio`, `item_video_embed`, `item_record`, `item`. 
@@ -80,7 +80,7 @@ See "docs/lightgallery.md" for more details.
 
 ### item-thumb
 
-Add a thumbnail image or icon (based on object_template or format) for an item, with a `object_download` link (if available).
+Add a thumbnail image or icon (based on display_template or format) for an item, with a `object_download` link (if available).
 
 ### metadata 
 

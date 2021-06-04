@@ -26,7 +26,7 @@ The full options with the default values look like:
 page_gen:
   - data: 'metadata'
     template: 'item'
-    object_template: 'object_template'
+    display_template: 'display_template'
     name: 'objectid'
     dir: 'items'
     extension: 'html' 
@@ -61,7 +61,7 @@ Full configuration options:
 | --- | --- | --- | -- |
 | data | A file from _data to use to generate pages | `metadata` | A valid data file is required. Plugin warns if there is no match in _data and skips generation. |
 | template | Set the default layout to use for pages from _layouts | `item` | The default layout must exist. Plugin warns if there is no match in _layouts and skips generation. |
-| object_template | Optionally set layout using a value from the individual record data, allowing you to have different layouts for each page. | `object_template` | Record values must match a valid layout. Fallback is to template value. |
+| display_template | Optionally set layout using a value from the individual record data, allowing you to have different layouts for each page. | `display_template` | Record values must match a valid layout. Fallback is to template value. |
 | name | The value from each record to use for output filename base (no extension). | `objectid` | A valid filename is required. Plugin skips record generation if value is blank or empty. Filenames are sanitized using Jekyll's `slugify` filter in pretty mode. CB pages assume objectid will be used for the name to create links between visualizations and item pages. |
 | dir | Folder to output the pages in _site. | `items` | The dir + name + extension will control the URL of the generated pages. For example, defaults items + objectid + .html will result in link something like "/items/demo_001.html". |
 | extension | File type to output, will generally be html. | `html` |  | 

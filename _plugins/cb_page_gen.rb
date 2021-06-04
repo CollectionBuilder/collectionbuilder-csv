@@ -31,7 +31,7 @@ module CollectionBuilderPageGenerator
       #
       data_file_default = site.config['metadata'] || 'metadata' # _data to use
       template_default = 'item' # layout to use for all pages by default
-      object_template_default = 'object_template' # metadata column to use to assign layout
+      display_template_default = 'display_template' # metadata column to use to assign layout
       name_default = 'objectid' # value to use for filename
       dir_default = 'items' # where to output pages
       extension_default = 'html' # extension, usually html
@@ -48,7 +48,7 @@ module CollectionBuilderPageGenerator
       configure_gen.each do |data_config|
         data_file = data_config['data'] || data_file_default
         template = data_config['template'] || template_default
-        object_template = data_config['object_template'] || object_template_default
+        display_template = data_config['display_template'] || display_template_default
         name = data_config['name'] || name_default
         dir = data_config['dir'] || dir_default
         extension = data_config['extension'] || extension_default
@@ -96,17 +96,17 @@ module CollectionBuilderPageGenerator
         end
 
         # Check for missing layouts
-        template_test = records.map { |x| x[object_template] ? x[object_template].strip : template }.uniq
+        template_test = records.map { |x| x[display_template] ? x[display_template].strip : template }.uniq
         #puts "#{template_test}"
         all_layouts = site.layouts.keys
         missing_layouts = (template_test - all_layouts)
         if !missing_layouts.empty? # if there is missing layouts
           if all_layouts.include? template 
             # if there is a valid default layout fallback, continue
-            puts color_text("Notice cb_page_gen: could not find layout(s) #{missing_layouts.join(', ')} in '_layouts'. Records with these layouts or object_template will fallback to the default layout '#{template}'. If this is unexpected, please add the missing layout(s) or check configuration of 'template' / 'object_template'.", :yellow)
+            puts color_text("Notice cb_page_gen: could not find layout(s) #{missing_layouts.join(', ')} in '_layouts'. Records with these layouts or display_template will fallback to the default layout '#{template}'. If this is unexpected, please add the missing layout(s) or check configuration of 'template' / 'display_template'.", :yellow)
           else
             # if there is no valid fallback / template, skip gen
-            puts color_text("Error cb_page_gen: could not find layout(s) #{missing_layouts.join(', ')} in '_layouts'. This includes the default layout '#{template}'. Please add the layout(s) or check configuration of 'template' / 'object_template'. Item pages are NOT being generated from '#{data_file}'!", :red)
+            puts color_text("Error cb_page_gen: could not find layout(s) #{missing_layouts.join(', ')} in '_layouts'. This includes the default layout '#{template}'. Please add the layout(s) or check configuration of 'template' / 'display_template'. Item pages are NOT being generated from '#{data_file}'!", :red)
             next
           end
         end
@@ -143,9 +143,9 @@ module CollectionBuilderPageGenerator
           end
           record['previous_item'] = "/" + dir + "/" + slugify(previous_item, mode: "pretty").to_s + "." + extension.to_s
           
-          # Add layout value from object_template or the default
-          if all_layouts.include? record[object_template]
-            record['layout'] = record[object_template].strip
+          # Add layout value from display_template or the default
+          if all_layouts.include? record[display_template]
+            record['layout'] = record[display_template].strip
           else
             record['layout'] = template
           end

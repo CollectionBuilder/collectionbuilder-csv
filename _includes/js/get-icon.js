@@ -1,5 +1,5 @@
 /* 
-    get a theme icon based on object_template or format 
+    get a theme icon based on display_template or format 
     return svg sprite
 */
 function getIcon(objectTemplate,objectFormat) {

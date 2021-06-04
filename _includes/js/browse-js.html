@@ -7,7 +7,7 @@ var items = [
     {% for i in items %}
     { {% for f in fields %}{% if i[f.field] %}{{ f.field | escape | jsonify }}:{{ i[f.field] | strip | escape | jsonify }}, {%- endif -%}{%- endfor -%}
         {% if i.image_thumb %}"img": {{ i.image_thumb | relative_url | jsonify }}, {%- endif -%} 
-        {% if i.object_template %}"template": {{ i.object_template | escape | jsonify }}, {%- endif -%}
+        {% if i.display_template %}"template": {{ i.display_template | escape | jsonify }}, {%- endif -%}
         {% if i.format %}"format": {{ i.format | escape | jsonify }}, {%- endif -%}
         "title":{{ i.title | strip | escape | jsonify }}, "id":{{ i.objectid | jsonify }} }{% unless forloop.last %},{% endunless %}{%- endfor -%}
 ];
@@ -25,7 +25,7 @@ function makeCard(obj) {
     // if there is a thumb in the csv display it
     if(obj.img) {
         imgSrc = obj.img;
-    // else add an icon based on object_template or format
+    // else add an icon based on display_template or format
     } else {
         thumbIcon = getIcon(obj.template,obj.format)
     }
