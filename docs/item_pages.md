@@ -26,8 +26,6 @@ Default supported options: `item_image`,`item_pdf`, `item_video`, `item_audio`, 
 - `item_record`: metadata only record.
 - `item`: generic fallback item page, displays image or icon depending on "image_thumb"
 
-- `item_video_embed`: default support for YouTube or Vimeo videos.
-
 ## Item Page Components
 
 Components intended for use in Item page layouts can be found in "_includes/item".
