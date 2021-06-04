@@ -1,4 +1,4 @@
-{%- assign templates = site.data[site.metadata] | where_exp: 'item','item.objectid' | map: "object_template" -%}
+{%- assign templates = site.data[site.metadata] | where_exp: 'item','item.objectid' | map: "display_template" -%}
 {%- assign types = "image;audio;video;pdf;record" | split: ";" -%}
 <div class="card mb-3" >
   <div class="card-body">

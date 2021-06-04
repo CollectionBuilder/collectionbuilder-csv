@@ -16,7 +16,7 @@
     { 
         {% for f in fields %}{% if item[f.field] %}{{ f.field | escape | jsonify }}:{{ item[f.field] | strip | escape | jsonify }}, {%- endif -%}{%- endfor -%}
         {% if item.image_thumb %}"img": {{ item.image_thumb | relative_url | jsonify }},{% endif %}
-        {% if item.object_template %}"template": {{ item.object_template | escape | jsonify }}, {%- endif -%}
+        {% if item.display_template %}"template": {{ item.display_template | escape | jsonify }}, {%- endif -%}
         {% if item.format %}"format": {{ item.format | escape | jsonify }}, {%- endif -%}
         "title": {{ item.title | escape | jsonify }}, 
         "id": {{ item.objectid | jsonify }} 

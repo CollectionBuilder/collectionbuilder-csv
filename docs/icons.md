@@ -49,7 +49,7 @@ In this example, the classes on the svg element control the size and color:
 ## Theme Icons
 
 CollectionBuilder-CSV uses a small set of icons for fall back thumbnails for items that do no have images available. 
-If a template page is looking for `image_small` or `image_thumb` and finds it blank, it will choose an icon replacement based on `object_template` or `format` fields (on Browse, Map, Timeline, and Item pages).
+If a template page is looking for `image_small` or `image_thumb` and finds it blank, it will choose an icon replacement based on `display_template` or `format` fields (on Browse, Map, Timeline, and Item pages).
 Theme icons are also used for the "back to top" button.
 
 During Jekyll's build process, CollectionBuilder's "cb_helpers" plugin processes the icons and adds them to `site.data.theme_icons`. 

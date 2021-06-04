@@ -18,8 +18,8 @@ Each object will likely have an object_download value, the link where the digita
 It is not a required field--items without an object_download will become metadata only records.
 
 For display images in various visualization pages the template checks the fields image_thumb for links to image derivatives (Browse, Map, Timeline).
-If image_thumb derivatives are not available (i.e. the field is left blank), the logic will select icons alternatives based on the object_template or format field.
-If the item has neither object_template or format, it will fall back to a default icon.
+If image_thumb derivatives are not available (i.e. the field is left blank), the logic will select icons alternatives based on the display_template or format field.
+If the item has neither display_template or format, it will fall back to a default icon.
 
 These fields should be filed out in your spreadsheet using formulas / recipes depending on where your objects are hosted. 
 This provides flexibility to include objects from multiple sources and to generate the URLs using a variety of approaches without needing to modify the template code.
@@ -32,4 +32,4 @@ Do not include the `baseurl` value that you set in "_config.yml", since this wil
 
 ## Object Template
 
-- `object_template`: a template type used in logic to set up different Item page features. If blank the object will default to a generic item page. Default supported options: `image`,`pdf`, `video`, `audio`, `youtube-embed`. See docs/item-pages.md for details.
+- `display_template`: a template type used in logic to set up different Item page features. If blank the object will default to a generic item page. Default supported options: `image`,`pdf`, `video`, `audio`, `youtube-embed`. See docs/item-pages.md for details.
