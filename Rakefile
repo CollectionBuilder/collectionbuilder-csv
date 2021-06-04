@@ -97,7 +97,7 @@ task :generate_derivatives, [:thumbs_size, :small_size, :density, :missing, :im_
       file_type = EXTNAME_TYPE_MAP[extname]
       if !file_type
         puts "Skipping file with unsupported extension: #{filename}"
-        csv << ["/" + filename,"",""]
+        csv << ["/" + filename,nil,nil]
         next
       end
 
