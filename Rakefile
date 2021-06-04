@@ -131,5 +131,5 @@ task :generate_derivatives, [:thumbs_size, :small_size, :density, :missing, :im_
       csv << ["/"+filename,"/"+small_filename,"/"+thumb_filename]
     end
   end
-  puts "See '#{list_name}' for list of objects and derivatives created."
+  puts "\e[32mSee '#{list_name}' for list of objects and derivatives created.\e[0m"
 end
