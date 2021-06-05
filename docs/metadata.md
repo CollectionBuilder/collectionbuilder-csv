@@ -32,4 +32,4 @@ Do not include the `baseurl` value that you set in "_config.yml", since this wil
 
 ## Object Template
 
-- `display_template`: a template type used in logic to set up different Item page features. If blank the object will default to a generic item page. Default supported options: `image`,`pdf`, `video`, `audio`, `youtube-embed`. See docs/item-pages.md for details.
+- `display_template`: a template type used in logic to set up different Item page features. If blank the object will default to a generic item page. Default supported options: `item_image`,`item_pdf`, `item_video`, `item_audio`,  `item_record`, `item`. See docs/item-pages.md for details.

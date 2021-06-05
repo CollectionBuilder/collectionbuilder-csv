@@ -17,7 +17,7 @@ The files are found in "_layouts" (default item layouts have the front matter `i
 Each display_template layout is typically constructed of modular item page components (found in "_includes/item/") and arranged using Bootstrap.
 This simplifies customization of the different item pages depending on collection needs.
 
-Default supported options: `item_image`,`item_pdf`, `item_video`, `item_audio`, `item_video_embed`, `item_record`, `item`. 
+Default supported options: `item_image`,`item_pdf`, `item_video`, `item_audio`,  `item_record`, `item`. 
 
 - `item_image`: Displays image_small if available, with fall back to object_download. Adds LightGallery view to open images full screen using object_download, with fall back to image_small.
 - `item_pdf`: Displays image_small if available, with fall back to image_thumb, or a pdf icon.
