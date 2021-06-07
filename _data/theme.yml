@@ -13,8 +13,6 @@ featured-image: demo_001
 home-title-y-padding: 12em # the margin from the top your title portion will appear.
 # optional: change position of background image, center, top, bottom
 home-banner-image-position: center # Default is top
-# height of the carousel at the bottom of the home page; this is in px, but just enter a number (don't include "px"). Default is 300
-carousel-height: 300 
 
 ##########
 # ITEM PAGE
