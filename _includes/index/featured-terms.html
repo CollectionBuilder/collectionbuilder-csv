@@ -1,21 +1,36 @@
 {% comment %} 
-    This include creates a card with btn links to the Browse page from a set of automatically generated or manually set terms.
-    It accepts these variables:
-    
-    title - will become card title [optional]
-    field - a field from the metadata that will be used to auto generate top terms
-    featured - a manually created list of featured terms, separated by ; 
-    max - max number of terms to display
-    btn-color - bootstrap btn color class to add. the template starts with "btn-", so this value can be any bootstrap template color (e.g. info, success) or outline (e.g. outline-info, outline-success). 
+
+    Featured Terms button-links.
+    This include creates a card with btn links to the Browse page from a set of automatically generated or manually selected terms. Either use the "field" option to auto generate *or* the "featured" option to manually create list of terms.
+
+    E.G. --> {% include index/featured-terms.html field="subject" title="Top Subjects" btn-color="outline-info" max=8 %}
+
+    E.G. --> {% include index/featured-terms.html featured="Example term; Another; One more" title="Topic Areas" btn-color="success" %}
+
+    Options:
+
+    - "field" - a field from your metadata that will be used to auto generate top terms (required to auto generate)
+    - "featured" - a manually created list of featured terms, separated by ; semicolon (required if not auto generating from a field)
+    - "title" - card title text inside card content area (optional)
+    - "header" = card header text in bar above card content (optional)
+    - "max" - max number of terms to display if auto generating (optional, default 5)
+    - "btn-color" - a bootstrap color class to theme the buttons. Can be any bootstrap template color (e.g. info, success) or outline (e.g. outline-info, outline-success), including colors created in config-theme-colors. (optional, default "info")
 
     Requires CB's "array_count_uniq.rb" plugin!
 
 {%- endcomment -%}
+
 {% if include.featured %}
 {% assign topTerms = include.featured | split: ";" %}
 {%- else -%}
+
+
+{% comment %} 
+    Use termsField and termsMax to customize feature 
+{% endcomment %}
 {% assign termsField = include.field | default: "subject" %}
-{% assign termsMax = include.max | default: 4 %}
+{% assign termsMax = include.max | default: 5 %}
+
 {% assign terms = site.data[site.metadata] | where_exp: 'item','item.objectid' | map: termsField | join: ";" %}
 {%- assign uniqTerms = terms | downcase | split: ";" | array_count_uniq -%}
 {% capture topTerms %}
@@ -23,8 +38,9 @@
 {% assign topTerms = topTerms | split: ";" %}
 {%- endif -%}
 <div class="card mb-3">
+    {% if include.header %}<h5 class="card-header">{{ include.header }}</h5>{% endif %}
     <div class="card-body">
-        <h5 class="card-title">{{ include.title }}</h5>
+        {% if include.title %}<h5 class="card-title">{{ include.title }}</h5>{% endif %}
         <p class="card-text">
             {% for s in topTerms %}
             <a class="btn btn-sm btn-{{ include.btn-color | default: 'info' }} m-1" href="{{ s | strip | url_param_escape | prepend: '/browse.html#' | relative_url }}">{{ s | strip }}</a>{% endfor %}
