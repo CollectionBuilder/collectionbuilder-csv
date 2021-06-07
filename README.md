@@ -9,6 +9,8 @@ CollectionBuilder-CSV is a "stand alone" template for creating digital collectio
 Driven by your collection metadata, the template generates engaging visualizations to browse and explore your objects.
 The resulting static site can be hosted on any basic web server.
 
+Check [CollectionBuilder Docs](https://collectionbuilder.github.io/cb-docs/) for information about getting started.
+
 ----------
 
 ## CollectionBuilder 
