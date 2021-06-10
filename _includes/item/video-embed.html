@@ -10,10 +10,9 @@
 </div>
 {%- elsif page.object_download contains 'youtu' -%}
 {% assign youtube_id = page.object_download | split: '/' | last %}
-{% if youtube_id contains '?' %}{% assign youtube_id = youtube_id | split: '?' | last | split: '&' | first | replace: 'v=','' %}{% endif %}
+{% if youtube_id contains 'v=' %}{% assign youtube_id = youtube_id | split: 'v=' | last | split: '&' | first %}
+{% elsif youtube_id contains '?' %}{% assign youtube_id = youtube_id | split: '?' | first %}{% endif %}
 <div class="embed-responsive embed-responsive-16by9">
     <iframe class="embed-responsive-item" src="https://www.youtube-nocookie.com/embed/{{ youtube_id }}?rel=0&modestbranding=1" allowfullscreen></iframe>
 </div>
-{% else %}
-{% include item/item-thumb.html %}
 {% endif %}
