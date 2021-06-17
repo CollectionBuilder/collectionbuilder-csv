@@ -96,7 +96,7 @@ module CollectionBuilderPageGenerator
         end
 
         # Check for missing layouts
-        template_test = records.map { |x| x[display_template] ? x[display_template].strip : template }.uniq
+        template_test = records.map { |x| x[display_template] ? "item/" + x[display_template].strip : "item/" + template }.uniq
         #puts "#{template_test}"
         all_layouts = site.layouts.keys
         missing_layouts = (template_test - all_layouts)
@@ -144,10 +144,10 @@ module CollectionBuilderPageGenerator
           record['previous_item'] = "/" + dir + "/" + slugify(previous_item, mode: "pretty").to_s + "." + extension.to_s
           
           # Add layout value from display_template or the default
-          if all_layouts.include? record[display_template]
-            record['layout'] = record[display_template].strip
+          if all_layouts.include? "item/" + record[display_template]
+            record['layout'] = "item/" + record[display_template].strip
           else
-            record['layout'] = template
+            record['layout'] = "item/" + template
           end
           # Check if layout exists, if not provide error message and skip
           if !all_layouts.include? record['layout']
