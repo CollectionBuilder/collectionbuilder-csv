@@ -1,12 +1,12 @@
 # YouTube
 
-YouTube items are supported in Item pages via the `item_video` "display_template". 
+YouTube items are supported in Item pages via the `video` "display_template". 
 Provide the full YouTube video link in "object_location" field. 
 Use the API recipes below to fill in the "image_small" and "image_thumb" fields if desired.
 
 ## Item page
 
-The default `item_video` display_template will display the video embedded in an [YouTube Player iframe](https://developers.google.com/youtube/iframe_api_reference). 
+The default `video` display_template will display the video embedded in an [YouTube Player iframe](https://developers.google.com/youtube/iframe_api_reference). 
 It is styled using [Bootstrap Embeds utility class](https://getbootstrap.com/docs/4.4/utilities/embed/), set as 16x9 ratio (which is default for YouTube, however, if your videos differ significantly from that ratio try modifying the class in _includes/item/video-embed.html).
 The embed is given these options:
 

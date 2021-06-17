@@ -17,13 +17,13 @@ The files are found in "_layouts" (default item layouts have the front matter `i
 Each display_template layout is typically constructed of modular item page components (found in "_includes/item/") and arranged using Bootstrap.
 This simplifies customization of the different item pages depending on collection needs.
 
-Default supported options: `item_image`,`item_pdf`, `item_video`, `item_audio`,  `item_record`, `item`. 
+Default supported options: `image`,`pdf`, `video`, `audio`,  `record`, `item`. 
 
-- `item_image`: Displays image_small if available, with fall back to object_location. Adds LightGallery view to open images full screen using object_location, with fall back to image_small.
-- `item_pdf`: Displays image_small if available, with fall back to image_thumb, or a pdf icon.
-- `item_video`: Displays a video embedded on the page with default support for video files (using `<video>` element with object_location as src), YouTube (from link in object_location), or Vimeo videos (from link in object_location).
-- `item_audio`: Uses `<audio>` element to embed audio file from object_location as src.
-- `item_record`: metadata only record.
+- `image`: Displays image_small if available, with fall back to object_location. Adds LightGallery view to open images full screen using object_location, with fall back to image_small.
+- `pdf`: Displays image_small if available, with fall back to image_thumb, or a pdf icon.
+- `video`: Displays a video embedded on the page with default support for video files (using `<video>` element with object_location as src), YouTube (from link in object_location), or Vimeo videos (from link in object_location).
+- `audio`: Uses `<audio>` element to embed audio file from object_location as src.
+- `record`: metadata only record.
 - `item`: generic fallback item page, displays image or icon depending on "image_thumb"
 
 ## Item Page Components
