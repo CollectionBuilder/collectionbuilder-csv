@@ -75,7 +75,7 @@ task :generate_derivatives, [:thumbs_size, :small_size, :density, :missing, :im_
 
   # CSV output
   list_name = File.join([objects_dir, "object_list.csv"])
-  field_names = "object_download,image_small,image_thumb".split(",")
+  field_names = "object_location,image_small,image_thumb".split(",")
   # open file
   CSV.open(list_name, "w") do |csv|
     # write the header fields 

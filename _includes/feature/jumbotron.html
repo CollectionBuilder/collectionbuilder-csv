@@ -21,7 +21,7 @@
 {% assign jumboSrc = jumboId | relative_url %}
 {% else %}
 {% assign item = site.data[site.metadata] | where: "objectid", jumboId | first %}
-{% capture jumboSrc %}{{ item.object_download | default: item.image_small | relative_url }}{% endcapture %}
+{% capture jumboSrc %}{{ item.object_location | default: item.image_small | relative_url }}{% endcapture %}
 {%- endif -%}
 
 <style>

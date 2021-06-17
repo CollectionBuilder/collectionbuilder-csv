@@ -19,7 +19,7 @@
 {%- assign src = include.objectid -%}
 {%- else -%}
 {%- assign item = site.data[site.metadata] | where: "objectid", include.objectid | first -%}
-{%- capture src -%}{{ item.object_download | relative_url }}{% endcapture %}
+{%- capture src -%}{{ item.object_location | relative_url }}{% endcapture %}
 {%- endif -%}
 <p class="text-center my-3">
     <audio controls class="w-100">

@@ -1,7 +1,7 @@
 # YouTube
 
 YouTube items are supported in Item pages via the `item_video` "display_template". 
-Provide the full YouTube video link in "object_download" field. 
+Provide the full YouTube video link in "object_location" field. 
 Use the API recipes below to fill in the "image_small" and "image_thumb" fields if desired.
 
 ## Item page

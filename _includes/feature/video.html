@@ -30,14 +30,14 @@
     {% endif %}
 {%- else -%}
     {%- assign item = site.data[site.metadata] | where: "objectid", include.objectid | first -%}
-    {% if item.object_download contains 'vimeo' %}
-    {% assign vimeo_id = item.object_download | split: '/' | last %}
-    {%- elsif item.object_download contains 'youtu' -%}
-    {% assign youtube_id = item.object_download | split: '/' | last %}
+    {% if item.object_location contains 'vimeo' %}
+    {% assign vimeo_id = item.object_location | split: '/' | last %}
+    {%- elsif item.object_location contains 'youtu' -%}
+    {% assign youtube_id = item.object_location | split: '/' | last %}
     {% if youtube_id contains 'v=' %}{% assign youtube_id = youtube_id | split: 'v=' | last | split: '&' | first %}
     {% elsif youtube_id contains '?' %}{% assign youtube_id = youtube_id | split: '?' | first %}{% endif %}
     {% else %}
-    {%- capture src -%}{{ item.object_download | relative_url }}{% endcapture %}
+    {%- capture src -%}{{ item.object_location | relative_url }}{% endcapture %}
     {% endif %}
 {%- endif -%}
 <div class="text-center my-4">

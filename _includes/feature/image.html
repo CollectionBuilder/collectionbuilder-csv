@@ -28,7 +28,7 @@
 <div class="row">
     {% for i in figures %}
     {%- assign item = site.data[site.metadata] | where: "objectid", i | first -%}
-    {%- capture src -%}{% if item.image_small %}{{ item.image_small | relative_url }}{% elsif item.image_thumb %}{{ item.image_thumb | relative_url }}{% else %}{{ item.object_download | relative_url }}{% endif %}{% endcapture %}
+    {%- capture src -%}{% if item.image_small %}{{ item.image_small | relative_url }}{% elsif item.image_thumb %}{{ item.image_thumb | relative_url }}{% else %}{{ item.object_location | relative_url }}{% endif %}{% endcapture %}
     <div class="col-md text-center">
         <figure class="figure mx-3{% if include.float %} feature-float-{{ include.float }}{% endif %}{% if include.width %} feature-w-{{ include.width }}{% endif %}">
             <a href="{{ '/items/' | append: item.objectid | append: '.html' | relative_url }}">

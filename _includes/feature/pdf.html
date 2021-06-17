@@ -23,7 +23,7 @@
 {%- assign src = include.objectid -%}
 {%- else -%}
 {%- assign item = site.data[site.metadata] | where: "objectid", include.objectid | first -%}
-{%- capture src -%}{{ item.object_download | relative_url }}{% endcapture %}
+{%- capture src -%}{{ item.object_location | relative_url }}{% endcapture %}
 {%- endif -%}
 <div class="text-center">
     <figure class="figure border rounded p-1 feature-w-{{ include.width | default: '100' }}{% if include.float %} feature-float-{{ include.float }} mx-3{% endif %}">

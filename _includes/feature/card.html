@@ -18,7 +18,7 @@
 {%- assign src = include.objectid -%}
 {%- elsif include.objectid -%}
 {%- assign item = site.data[site.metadata] | where: "objectid", include.objectid | first -%}
-{%- capture src -%}{% if item.image_small %}{{ item.image_small | relative_url }}{% elsif item.image_thumb %}{{ item.image_thumb | relative_url }}{% else %}{{ item.object_download | relative_url }}{% endif %}{% endcapture %}
+{%- capture src -%}{% if item.image_small %}{{ item.image_small | relative_url }}{% elsif item.image_thumb %}{{ item.image_thumb | relative_url }}{% else %}{{ item.object_location | relative_url }}{% endif %}{% endcapture %}
 {%- endif -%}
 <div class="card mb-3{% if include.float %} feature-float-{{ include.float }}{% endif %}{% if include.width %} feature-w-{{ include.width }}{% endif %}{% if include.centered %} mx-auto{% endif %}">
     {% if src %}<img class="card-img-top" src="{{ src }}" alt="{{ item.title | default: include.title | escape }}">{%- endif -%}

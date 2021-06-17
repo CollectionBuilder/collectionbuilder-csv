@@ -1,15 +1,15 @@
 {% comment %}
 
-    Adds an iframe video embed from a YouTube or Vimeo link given in object_download. 
+    Adds an iframe video embed from a YouTube or Vimeo link given in object_location. 
 
 {%- endcomment -%}
-{% if page.object_download contains 'vimeo' %}
-{% assign vimeo_id = page.object_download | split: '/' | last %}
+{% if page.object_location contains 'vimeo' %}
+{% assign vimeo_id = page.object_location | split: '/' | last %}
 <div class="embed-responsive embed-responsive-16by9">
     <iframe class="embed-responsive-item" src="https://player.vimeo.com/video/{{ vimeo_id }}" allowfullscreen></iframe>
 </div>
-{%- elsif page.object_download contains 'youtu' -%}
-{% assign youtube_id = page.object_download | split: '/' | last %}
+{%- elsif page.object_location contains 'youtu' -%}
+{% assign youtube_id = page.object_location | split: '/' | last %}
 {% if youtube_id contains 'v=' %}{% assign youtube_id = youtube_id | split: 'v=' | last | split: '&' | first %}
 {% elsif youtube_id contains '?' %}{% assign youtube_id = youtube_id | split: '?' | first %}{% endif %}
 <div class="embed-responsive embed-responsive-16by9">
