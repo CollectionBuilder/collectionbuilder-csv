@@ -17,13 +17,13 @@ The files are found in "_layouts" (default item layouts have the front matter `i
 Each display_template layout is typically constructed of modular item page components (found in "_includes/item/") and arranged using Bootstrap.
 This simplifies customization of the different item pages depending on collection needs.
 
-Default supported options: `item_image`,`item_pdf`, `item_video`, `item_audio`,  `item_record`, `item`. 
+Default supported options: `image`,`pdf`, `video`, `audio`,  `record`, `item`. 
 
-- `item_image`: Displays image_small if available, with fall back to object_download. Adds LightGallery view to open images full screen using object_download, with fall back to image_small.
-- `item_pdf`: Displays image_small if available, with fall back to image_thumb, or a pdf icon.
-- `item_video`: Displays a video embedded on the page with default support for video files (using `<video>` element with object_download as src), YouTube (from link in object_download), or Vimeo videos (from link in object_download).
-- `item_audio`: Uses `<audio>` element to embed audio file from object_download as src.
-- `item_record`: metadata only record.
+- `image`: Displays image_small if available, with fall back to object_location. Adds LightGallery view to open images full screen using object_location, with fall back to image_small.
+- `pdf`: Displays image_small if available, with fall back to image_thumb, or a pdf icon.
+- `video`: Displays a video embedded on the page with default support for video files (using `<video>` element with object_location as src), YouTube (from link in object_location), or Vimeo videos (from link in object_location).
+- `audio`: Uses `<audio>` element to embed audio file from object_location as src.
+- `record`: metadata only record.
 - `item`: generic fallback item page, displays image or icon depending on "image_thumb"
 
 ## Item Page Components
@@ -38,7 +38,7 @@ Below are the default item includes:
 
 ### audio-player
 
-Uses `<audio>` element to embed audio file from object_download as src.
+Uses `<audio>` element to embed audio file from object_location as src.
 Use this option if you are directly exposing audio files on the web, such as on a static server.
 
 ### breadcrumbs
@@ -79,7 +79,7 @@ See "docs/lightgallery.md" for more details.
 
 ### item-thumb
 
-Add a thumbnail image or icon (based on display_template or format) for an item, with a `object_download` link (if available).
+Add a thumbnail image or icon (based on display_template or format) for an item, with a `object_location` link (if available).
 
 ### metadata 
 
@@ -101,19 +101,19 @@ If your collection uses different field names for these values, either modify th
 
 ### video-embed
 
-Adds an iframe embed for YouTube or Vimeo videos given a link in `object_download`.
+Adds an iframe embed for YouTube or Vimeo videos given a link in `object_location`.
 For items without a YouTube or Vimeo link, falls back to an thumb/icon and link.
 
-For items that are YouTube videos, please fill in the object_download field with the YouTube share link or watch link (e.g. `https://youtu.be/dbKNr3wuiuQ` or `https://www.youtube.com/watch?v=dbKNr3wuiuQ`).
+For items that are YouTube videos, please fill in the object_location field with the YouTube share link or watch link (e.g. `https://youtu.be/dbKNr3wuiuQ` or `https://www.youtube.com/watch?v=dbKNr3wuiuQ`).
 In most cases you will want to ensure the youtubeid is the end of URL (e.g. `dbKNr3wuiuQ`, and does *not* end with other query strings such as `?t=51` or `&feature=youtu.be`). 
-The template will parse the `object_download` link to find the youtube id and set up a iframe embed using the modest branding and privacy options. 
+The template will parse the `object_location` link to find the youtube id and set up a iframe embed using the modest branding and privacy options. 
 
-For items that are Vimeo videos, please fill in the object_download field with the full Vimeo link, e.g. `https://vimeo.com/330826859`.
-The template will parse the `object_download` link to find the vimeo id and set up a iframe embed using the modest branding and privacy options. 
+For items that are Vimeo videos, please fill in the object_location field with the full Vimeo link, e.g. `https://vimeo.com/330826859`.
+The template will parse the `object_location` link to find the vimeo id and set up a iframe embed using the modest branding and privacy options. 
 
 ### video-player
 
-Uses `<video>` element to embed a video file from `object_download` as src.
+Uses `<video>` element to embed a video file from `object_location` as src.
 Use this option if you are directly exposing video files on the web, such as on a static server.
 
 ## Item Meta Markup

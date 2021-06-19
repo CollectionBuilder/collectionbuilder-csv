@@ -19,7 +19,7 @@
     "events": [
       {% for item in items %}{
         "media": {
-          "url": "{{ item.image_small | default: item.image_thumb | default: item.object_download | relative_url }}",
+          "url": "{{ item.image_small | default: item.image_thumb | default: item.object_location | relative_url }}",
           "caption": {{ item.title | jsonify }},
           "link": "{{ '/items/' | append: item.objectid | append: '.html' | relative_url }}"
         },

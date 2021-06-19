@@ -16,7 +16,7 @@
             "properties":{
                 {% for f in fields %}{% if item[f] %}{{ f | jsonify }}: {{ item[f] | jsonify }},{% endif %}
                 {% endfor %}{% if item.image_thumb %}"object_thumb": "{{ item.image_thumb | absolute_url }}",{% endif %}
-                "object_download": "{{ item.object_download | absolute_url }}",
+                "object_location": "{{ item.object_location | absolute_url }}",
                 "reference_url": {{ '/items/' | absolute_url | append: item.objectid | append: '.html' | jsonify }}
             }
         }{% unless forloop.last %}, {% endunless %}{% endfor %}

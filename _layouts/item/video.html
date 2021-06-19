@@ -2,7 +2,7 @@
 layout: default
 item-meta: true
 # this item layout supports video files (MP4 is most compatible), YouTube, or Vimeo objects by default.
-# the YouTube or Vimeo video link should be in the object_download column.
+# the YouTube or Vimeo video link should be in the object_location column.
 ---
 <div class="container py-3">
 
@@ -13,7 +13,7 @@ item-meta: true
             <div class="card mb-4 text-center">
                 <div class="mt-4">
 
-                    {% if page.object_download contains 'vimeo' or page.object_download contains 'youtu' %}
+                    {% if page.object_location contains 'vimeo' or page.object_location contains 'youtu' %}
                     {% include item/video-embed.html %}
                     {% else %}
                     {% include item/video-player.html %}
@@ -23,8 +23,8 @@ item-meta: true
                 
                 <div class="my-2">
 
-                    {% if page.object_download contains 'vimeo' or page.object_download contains 'youtu' %}
-                    <a target="_blank" rel="noopener" href="{{ page.object_download | relative_url }}" class="btn btn-outline-info">View {% if page.object_download contains 'vimeo' %}on Vimeo{% elsif page.object_download contains 'youtu' %}on YouTube{% else %}Video{% endif %}</a>
+                    {% if page.object_location contains 'vimeo' or page.object_location contains 'youtu' %}
+                    <a target="_blank" rel="noopener" href="{{ page.object_location | relative_url }}" class="btn btn-outline-info">View {% if page.object_location contains 'vimeo' %}on Vimeo{% elsif page.object_location contains 'youtu' %}on YouTube{% else %}Video{% endif %}</a>
                     {% if page.date %}{%- capture year -%}{% if page.date contains "-" %}{{ page.date | split: "-" | first }}{% elsif page.date contains "/" %}{{ page.date | split: "/" | last }}{% else %}{{ page.date }}{% endif %}{%- endcapture -%}
                     <a href="{{ year | strip | prepend: '/timeline.html#' | relative_url }}" class="ml-2 btn btn-outline-info">View on Timeline</a>{% endif %}
                     {% if page.latitude and page.longitude %}
