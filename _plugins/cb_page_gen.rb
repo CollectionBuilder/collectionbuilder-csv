@@ -30,6 +30,7 @@ module CollectionBuilderPageGenerator
       # Defaults follow CollectionBuilder specific conventions.
       #
       data_file_default = site.config['metadata'] || 'metadata' # _data to use
+      template_location = "item/" # folder in _layouts used to organize templates, ends with slash, empty if using root
       template_default = 'item' # layout to use for all pages by default
       display_template_default = 'display_template' # metadata column to use to assign layout
       name_default = 'objectid' # value to use for filename
@@ -47,7 +48,7 @@ module CollectionBuilderPageGenerator
       # this allows to generate from multiple _data sources
       configure_gen.each do |data_config|
         data_file = data_config['data'] || data_file_default
-        template = data_config['template'] || template_default
+        template = template_location + (data_config['template'] || template_default)
         display_template = data_config['display_template'] || display_template_default
         name = data_config['name'] || name_default
         dir = data_config['dir'] || dir_default
@@ -96,25 +97,23 @@ module CollectionBuilderPageGenerator
         end
 
         # Check for missing layouts
-        template_test = records.map { |x| x[display_template] ? "item/" + x[display_template].strip : "item/" + template }.uniq
-        #puts "#{template_test}"
+        template_test = records.map { |x| x[display_template] ? template_location + x[display_template].strip : template }.uniq
         all_layouts = site.layouts.keys
         missing_layouts = (template_test - all_layouts)
         if !missing_layouts.empty? # if there is missing layouts
           if all_layouts.include? template 
             # if there is a valid default layout fallback, continue
-            puts color_text("Notice cb_page_gen: could not find layout(s) #{missing_layouts.join(', ')} in '_layouts'. Records with these layouts or display_template will fallback to the default layout '#{template}'. If this is unexpected, please add the missing layout(s) or check configuration of 'template' / 'display_template'.", :yellow)
+            puts color_text("Notice cb_page_gen: could not find layout(s) #{missing_layouts.join(', ')} in '_layouts/'. Records with these display_template will fallback to the default layout '#{template}'. If this is unexpected, please add the missing layout(s) or check configuration of 'template' and 'display_template' field.", :yellow)
           else
-            # if there is no valid fallback / template, skip gen
-            puts color_text("Error cb_page_gen: could not find layout(s) #{missing_layouts.join(', ')} in '_layouts'. This includes the default layout '#{template}'. Please add the layout(s) or check configuration of 'template' / 'display_template'. Item pages are NOT being generated from '#{data_file}'!", :red)
-            next
+            # if there is no valid fallback / template
+            puts color_text("Notice cb_page_gen: could not find layout(s) #{missing_layouts.join(', ')} in '_layouts/'. This includes the default layout '#{template}'. Please add the layout(s) or check configuration of 'template' and 'display_template'. Item pages will not be generated for records using the missing layouts!", :yellow)
+            #next
           end
         end
 
         # Generate pages for each record
         records.each_with_index do |record, index|
           # Check for valid name, skip page gen if none
-          #if !object.nil? && !object.empty?
           if record[name].nil? || record[name].strip.empty?
             puts color_text("Notice cb_page_gen: record '#{index}' in '#{data_file}' does not have a value in '#{name}'! This record will be skipped.", :yellow)
             next
@@ -144,10 +143,14 @@ module CollectionBuilderPageGenerator
           record['previous_item'] = "/" + dir + "/" + slugify(previous_item, mode: "pretty").to_s + "." + extension.to_s
           
           # Add layout value from display_template or the default
-          if all_layouts.include? "item/" + record[display_template]
-            record['layout'] = "item/" + record[display_template].strip
+          if record[display_template]
+            record['layout'] = template_location + record[display_template].strip
+            # if not valid layout, fall back to template default
+            if !all_layouts.include? record['layout']
+              record['layout'] = template
+            end
           else
-            record['layout'] = "item/" + template
+            record['layout'] = template
           end
           # Check if layout exists, if not provide error message and skip
           if !all_layouts.include? record['layout']
