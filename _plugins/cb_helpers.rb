@@ -42,7 +42,7 @@ module CollectionBuilderHelperGenerator
         featured_record = site.data[site.config['metadata']].select { |item| item['objectid'] == featured_image }
         # provide error message if no matching item
         if featured_record.empty?
-          puts color_text("Error cb_vars: Item for featured image with objectid '#{featured_image}' not found in configured metadata '#{site.config['metadata']}'. Please check 'featured-image' in '_data/theme.yml'", :yellow)
+          puts color_text("Error cb_helpers: Item for featured image with objectid '#{featured_image}' not found in configured metadata '#{site.config['metadata']}'. Please check 'featured-image' in '_data/theme.yml'", :yellow)
         else
           # use object_location for image items, image_small for others
           if featured_record[0]['format'] and featured_record[0]['format'].include? 'image'
@@ -52,7 +52,7 @@ module CollectionBuilderHelperGenerator
           end
           # provide error message if no matching image src
           if featured_item_src.nil? 
-            puts color_text("Error cb_vars: Item for featured image with objectid '#{featured_image}' does not have an image url in metadata. Please check 'featured-image' in '_data/theme.yml' and choose an item that has 'object_location' or 'image_small'", :yellow)
+            puts color_text("Error cb_helpers: Item for featured image with objectid '#{featured_image}' does not have an image url in metadata. Please check 'featured-image' in '_data/theme.yml' and choose an item that has 'object_location' or 'image_small'", :yellow)
           end
           featured_item_alt = featured_record[0]['title'] || site.config['title']
           featured_item_link = "/items/" + featured_image + ".html"
@@ -101,7 +101,7 @@ module CollectionBuilderHelperGenerator
       theme_icons.each do |i|
         # check if icon svg file exists in assets
         if !lib_icon_names.include? i[1]
-          puts color_text("Error cb_vars: configured icon '#{i[0]}: #{i[1]}' does not exist. Please check 'theme.yml' and 'assets/lib/icons'.", :yellow)
+          puts color_text("Error cb_helpers: configured icon '#{i[0]}: #{i[1]}' does not exist. Please check 'theme.yml' and 'assets/lib/icons'.", :yellow)
         else
           # find matching icon
           svg_file = lib_icons.find { |icon| icon.basename == i[1] }
