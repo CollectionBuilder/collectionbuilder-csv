@@ -30,7 +30,7 @@ module CollectionBuilderPageGenerator
       # Defaults follow CollectionBuilder specific conventions.
       #
       data_file_default = site.config['metadata'] || 'metadata' # _data to use
-      template_location = "item/" # folder in _layouts used to organize templates, ends with slash, empty if using root
+      template_location_default = "item/" # folder in _layouts used to organize templates, ends with slash, empty if using root
       template_default = 'item' # layout to use for all pages by default
       display_template_default = 'display_template' # metadata column to use to assign layout
       name_default = 'objectid' # value to use for filename
@@ -48,6 +48,7 @@ module CollectionBuilderPageGenerator
       # this allows to generate from multiple _data sources
       configure_gen.each do |data_config|
         data_file = data_config['data'] || data_file_default
+        template_location = data_config['template_location'] || template_location_default
         template = template_location + (data_config['template'] || template_default)
         display_template = data_config['display_template'] || display_template_default
         name = data_config['name'] || name_default
