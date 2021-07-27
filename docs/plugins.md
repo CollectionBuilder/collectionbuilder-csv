@@ -17,9 +17,9 @@ I.e. it generates Item pages for your collection driven directly from your metad
 It can also generate all sort of other pages from any data file.
 
 Basic use following CB conventions requires no configuration. 
-CB Page Gen will automatically generate pages from the data specified by _config.yml `metadata`.
+CB Page Gen will automatically generate pages from the data specified by "_config.yml" `metadata` option.
 
-Alternatively, for more advanced use you can provide one or more configurations in the `page_gen` option in _config.yml. 
+Alternatively, for more advanced use you can provide one or more configurations in the `page_gen` option in "_config.yml". 
 The full options with the default values look like:
 
 ```
@@ -60,7 +60,8 @@ Full configuration options:
 | option | use | default | notes |
 | --- | --- | --- | -- |
 | data | A file from _data to use to generate pages | `metadata` | A valid data file is required. Plugin warns if there is no match in _data and skips generation. |
-| template | Set the default layout to use for pages from _layouts | `item` | The default layout must exist. Plugin warns if there is no match in _layouts and skips generation. |
+| template_location | Optionally set the folder inside of "_layouts" that contains the layouts used for these records. This helps keep the _layouts directory organized and simplifies values set in template and display_template. By default CB uses item layouts in "_layouts/item/" folder, thus the default template_location is `item`. If you want to add a new layout, it must be added to that folder. | `item` | The values of template and display_template will be appended after the template_location, i.e. they are assumed to be inside that folder. E.g. if template_location is `item`, the plugin will look for the template and display_template layouts in "_layouts/item/". If you want to use layout files from the root of _layouts, set template_location to `""` an empty string. |
+| template | Set the default layout to use for pages from _layouts in the template_location | `item` | The default layout file should exist to provide a fallback for items. Plugin warns if there is no match in _layouts. During generation if there is no valid matching layout, individual item generation will be skipped. |
 | display_template | Optionally set layout using a value from the individual record data, allowing you to have different layouts for each page. | `display_template` | Record values must match a valid layout. Fallback is to template value. |
 | name | The value from each record to use for output filename base (no extension). | `objectid` | A valid filename is required. Plugin skips record generation if value is blank or empty. Filenames are sanitized using Jekyll's `slugify` filter in pretty mode. CB pages assume objectid will be used for the name to create links between visualizations and item pages. |
 | dir | Folder to output the pages in _site. | `items` | The dir + name + extension will control the URL of the generated pages. For example, defaults items + objectid + .html will result in link something like "/items/demo_001.html". |
@@ -89,7 +90,7 @@ This allows CB Page Gen to more closely follow CB conventions, configuration opt
 Much of this is CB specific, such as providing metadata-centric defaults and fairly detailed error messages.
 However, the plugin configuration is still fully backwards compatible with older jekyll-datapage_gen configuration options (as used in CB projects). 
 If you used the old page gen plugin, your existing configuration should work with the new one.
-As of 2020, jekyll-datapage_gen added additional options that are *not* supported in CB Page Gen (index_files, name_expr, title, title_expr)--if you would like to use those options, you should still be able to swap in the newest version of jekyll-datapage_gen and delete cb_page_gen.
+As of 2020, jekyll-datapage_gen added additional options that are *not* supported in CB Page Gen (index_files, name_expr, title, title_expr)--if you would like to use those options, you should still be able to swap in the newest version of jekyll-datapage_gen and delete cb_page_gen in your _plugins directory.
 
 ## CollectionBuilder Helpers
 

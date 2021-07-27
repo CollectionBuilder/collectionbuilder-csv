@@ -12,7 +12,7 @@ This page object is passed to the layout matching the `display_template` value s
 ## display_template Layouts 
 
 The `display_template` layouts provide templates for presenting different item types.
-The files are found in "_layouts" (default item layouts have the front matter `item-meta: true`, which adds item meta markup).
+The files are found in "_layouts/item/" (default item layouts have the front matter `item-meta: true`, which adds item meta markup).
 
 Each display_template layout is typically constructed of modular item page components (found in "_includes/item/") and arranged using Bootstrap.
 This simplifies customization of the different item pages depending on collection needs.
