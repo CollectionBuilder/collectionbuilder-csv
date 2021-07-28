@@ -6,7 +6,6 @@ description,Description,,DCTERMS.description,description
 subject,Subjects,true,DCTERMS.subject,keywords
 location,Location,,,contentLocation
 latitude,Latitude
-image_small,image small
 longitude,Longitude
 source,Source
 identifier,Source Identifier
