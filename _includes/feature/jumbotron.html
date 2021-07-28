@@ -16,18 +16,12 @@
 
 {%- endcomment -%}
 
-{% assign jumboId = include.objectid | default: site.data.theme.featured-image %}
+{% assign jumboId = include.objectid | default: site.data.featured_item.src %}
 {% if jumboId contains '/' %}
 {% assign jumboSrc = jumboId | relative_url %}
 {% else %}
 {% assign jumboItem = site.data[site.metadata] | where: "objectid", jumboId | first %}
-{% if jumboItem.youtubeid %}
-{% assign jumboSrc = 'https://img.youtube.com/vi/' | append: jumboItem.youtubeid | append: '/maxresdefault.jpg' %}
-{% elsif jumboitem.object_location contains '/' %}
-{% assign jumboSrc = jumboitem.object_location | relative_url %}
-{% else %}
-{% assign jumboSrc = jumboitem.object_location | prepend:  relative_url %}
-{%- endif -%}
+{% capture jumboSrc %}{{ jumboItem.object_location | default: jumboItem.image_small | relative_url }}{% endcapture %}
 {%- endif -%}
 
 <style>
