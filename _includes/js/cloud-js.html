@@ -19,6 +19,7 @@
 {%- assign uniqTerms = terms | downcase | split: ";" | array_count_uniq | sort | where_exp: 't','t[1] >= termsMin' -%}
 
 <script>
+(function(){    
     /* subject terms + count */
     var terms = [
         {% for t in uniqTerms %}[{{ t[0] | jsonify }}, {{ t[1] | jsonify }}]{% unless forloop.last %}, {% endunless %}{% endfor %}
@@ -72,4 +73,5 @@
     }
     makeGrid(terms);
 
+})();
 </script>
