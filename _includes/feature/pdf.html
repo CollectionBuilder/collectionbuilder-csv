@@ -22,13 +22,13 @@
 
 {%- endcomment -%}
 {% if include.objectid contains "/" %}
-{%- capture src -%}{{ include.objectid }}{%- endcapture -%}
+{%- capture src -%}{{ include.objectid | relative_url }}{%- endcapture -%}
 {%- capture pdf_link -%}{{ src }}{%- endcapture -%}
 {%- capture pdf_caption -%}{{ include.caption }}{%- endcapture -%}
 {% else %}
 {%- assign item = site.data[site.metadata] | where: "objectid", include.objectid | first -%}
 {%- capture src -%}{{ item.object_location | relative_url }}{% endcapture %}
-{%- capture pdf_link -%}{{ '/items/' | append: item.objectid | append: '.html' | relative_url}}{%- endcapture -%}
+{%- capture pdf_link -%}{{ '/items/' | append: item.objectid | append: '.html' | relative_url }}{%- endcapture -%}
 {%- capture pdf_caption -%}{% if include.caption %}{{ include.caption }}{% else %}{{ item.title }}{% endif %}{%- endcapture -%}
 {% endif %}
 <div class="text-center">
