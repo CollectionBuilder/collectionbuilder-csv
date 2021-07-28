@@ -15,7 +15,7 @@
     Note: if using a YouTube item and an error image appears, the video may not have a "maxresdefault" image available. Replace "maxresdefault.jpg" in the code below with "hqdefault.jpg"
 
 {%- endcomment -%}
-{% assign jumbo_div_id = "j-" | append: include.objectid | slugify | truncate: 10 %}
+{% assign jumbo_div_id = "j-" | append: include.objectid | slugify | truncate: 12, "" %}
 {% assign jumboId = include.objectid | default: site.data.featured_item.src %}
 {% if jumboId contains '/' %}
 {% assign jumboSrc = jumboId | relative_url %}
