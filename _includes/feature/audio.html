@@ -25,7 +25,7 @@
 {% else %}
 {%- assign item = site.data[site.metadata] | where: "objectid", include.objectid | first -%}
 {%- capture audio_link -%}{{ '/items/' | append: item.objectid | append: '.html' | relative_url}}{%- endcapture -%}
-{%- capture src -%}{% if item.object_location contains '//' %}{{ item.object_location }}{% else %}{{  item.object_location | relative_url }}{% endif %}{% endcapture %}
+{%- capture src -%}{{  item.object_location | relative_url }}{% endcapture %}
 {%- capture audio_caption -%}{% if include.caption %}{{ include.caption }}{% else %}{{ item.title }}{% endif %}{%- endcapture -%}
 {% endif %}
 <p class="text-center my-3">
