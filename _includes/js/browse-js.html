@@ -5,10 +5,10 @@
 /* add items */
 var items = [
     {% for i in items %}
-    { {% for f in fields %}{% if i[f.field] %}{{ f.field | escape | jsonify }}:{{ i[f.field] | strip | escape | jsonify }}, {%- endif -%}{%- endfor -%}
+    { {% for f in fields %}{% if i[f.field] %}{{ f.field | escape | jsonify }}:{{ i[f.field] | strip | jsonify }}, {%- endif -%}{%- endfor -%}
         {% if i.image_thumb %}"img": {{ i.image_thumb | relative_url | jsonify }}, {%- endif -%} 
-        {% if i.display_template %}"template": {{ i.display_template | escape | jsonify }}, {%- endif -%}
-        {% if i.format %}"format": {{ i.format | escape | jsonify }}, {%- endif -%}
+        {% if i.display_template %}"template": {{ i.display_template | jsonify }}, {%- endif -%}
+        {% if i.format %}"format": {{ i.format | jsonify }}, {%- endif -%}
         "title":{{ i.title | strip | escape | jsonify }}, "id":{{ i.objectid | jsonify }} }{% unless forloop.last %},{% endunless %}{%- endfor -%}
 ];
 
