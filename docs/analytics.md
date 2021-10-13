@@ -1,45 +1,33 @@
 # Analytics 
 
-Analytics is only included when building with "JEKYLL_ENV=production".
-By default, Jekyll is in the development ENV, and analytics will not be added.
-Paste this command into Git Bash or Terminal: 
+CollectionBuilder templates have a builtin method to add analytics tracking snippets to your site.
 
-`JEKYLL_ENV=production jekyll build`
+Any analytics platform can be added by pasting the tracking snippet they provide into "_includes/head/analytics.html".
+During "production" build *only*, the include is added to every page.
+By default, Jekyll is in the "development" environment, so analytics will not be added while you are testing your site locally.
+
+Since many people will opt to use Google Analytics, we provide a pre-configured tracking code snippet that can be added simply by pasting your Google Analytics ID as the `google-analytics-id` value in "_config.yml".
+The template uses the "gtag.js" implementation, with the [Anonymize IP](https://developers.google.com/analytics/devguides/collection/gtagjs/ip-anonymization) enabled to provide basic privacy enhancement to your users.
+
+However, there are many alternatives emerging, so you may want to explore the options in your context to avoid concerns over data privacy.
+
+We have been very satisfied using self-hosted [Matomo](https://matomo.org/).
+
+## Production environment
+
+Analytics is only included when building with `JEKYLL_ENV=production`.
+By default, Jekyll is in the development environment, and analytics will not be added.
+To add analytics during build, use this command into Git Bash or Terminal: 
+
+`JEKYLL_ENV=production bundle exec jekyll build`
 
 Or use our short cut Rake task: 
 
 `rake deploy`
 
-## Set up
+## Advanced Google options
 
-We use google analytics, using the newest implementation gtag.
-The same code snippet can be used on any web page. 
-Looks like:
+You may want to add:
 
-```
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-76328753-1"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  /* load umbrella property with enhanced link attribution and cross domain tracking */
-  gtag('config', '{{ site.google-analytics-id }}', {
-    'link_attribution': true
-  });
-</script>
-```
-
-## Enhanced link attribution 
-
-is enabled. 
-Uses ID of link or nearby parent to specify which link (of all the same href on a page) was actually clicked.
-
-https://developers.google.com/analytics/devguides/collection/gtagjs/enhanced-link-attribution
-
-## Cross domain tracking
-
-Fairly easy to set up using gtag. 
-We just have to provide a list of all domains we want to track across, can use same snippet on all pages and domains.  
-
-https://developers.google.com/analytics/devguides/collection/gtagjs/cross-domain
+- [enhanced link attribution](https://developers.google.com/analytics/devguides/collection/gtagjs/enhanced-link-attribution)
+- [cross domain tracking](https://developers.google.com/analytics/devguides/collection/gtagjs/cross-domain)
