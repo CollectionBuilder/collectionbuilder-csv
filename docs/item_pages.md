@@ -17,7 +17,7 @@ The files are found in "_layouts/item/" (default item layouts have the front mat
 Each display_template layout is typically constructed of modular item page components (found in "_includes/item/") and arranged using Bootstrap.
 This simplifies customization of the different item pages depending on collection needs.
 
-Default supported options: `image`,`pdf`, `video`, `audio`,  `record`, `item`. 
+Default supported options: `image`,`pdf`, `video`, `audio`,  `record`, `item`, and `compound`. 
 
 - `image`: Displays image_small if available, with fall back to object_location. Adds LightGallery view to open images full screen using object_location, with fall back to image_small.
 - `pdf`: Displays image_small if available, with fall back to image_thumb, or a pdf icon.
@@ -25,6 +25,7 @@ Default supported options: `image`,`pdf`, `video`, `audio`,  `record`, `item`.
 - `audio`: Uses `<audio>` element to embed audio file from object_location as src.
 - `record`: metadata only record.
 - `item`: generic fallback item page, displays image or icon depending on "image_thumb"
+- `compound`: a record for a object that includes multiple file instances that are described/managed separately in the metadata. Compound objects use their own set of conventions, see "docs/compound_objects.md" for details.
 
 ## Item Page Components
 
