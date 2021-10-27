@@ -1,0 +1,66 @@
+---
+layout: default
+item-meta: true
+gallery: true
+---
+{% assign children = site.data[site.metadata] | where_exp: 'item','item.parentid == page.objectid' %}
+<div class="container py-3">
+
+    {% include item/breadcrumbs.html %}
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4 text-center">
+                <p class="mt-3 text-center">View {{ children | size | plus: 1 }} Items Below<br /><small>Click any image
+                        to view all images in full-screen gallery</small></p>
+                <div id="lightgallery">
+                    
+                    {% for child in children %}
+                    {% if child.display_template == 'image' %}
+                    {% include item/compound-image-gallery.html %}
+                    {% elsif child.display_template == 'video' %}
+                        {% if child.object_location contains 'vimeo' or child.object_location contains 'youtu' %}
+                        {% include item/compound-video-embed.html %}
+                        {% else %}
+                        {% include item/compound-video-player.html %}
+                        {% endif %}
+                    {% elsif child.display_template == 'audio' %}
+                    {% include item/compound-audio-player.html %}
+                    {% elsif child.display_template == 'panorama' %}
+                    {% include item/compound-panorama.html %}
+                    {% else %}
+                    {% include item/compound-item-thumb.html %}
+                    {% endif %}
+                    {% endfor %}
+                    <div class="my-2">
+
+                        {% include item/compound-download-buttons.html %}
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+
+            {% include item/metadata.html %}
+
+        </div>
+    </div>
+
+    <div class="row justify-content-end mt-4">
+        <div class="col-md-5">
+            {% include item/citation-box.html %}
+        </div>
+        {% if page.rights or page.rightsstatement %}
+        <div class="col-md-5">
+            {% include item/rights-box.html %}
+        </div>
+        {% endif %}
+    </div>
+
+    {%- if site.data.theme.browse-buttons == true -%}
+    {% include item/browse-buttons.html %}
+    {%- endif -%}
+</div>
