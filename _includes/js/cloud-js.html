@@ -45,19 +45,6 @@
         return array;
     }
     {% endif %}
-    function mapSize(x) { return Math.round(x * 9 / countMax + 1); }
-    /* create cloud */
-    function makeGrid(array) {
-        var i, size;
-        var items = "";
-        //shuffle(array);
-        for (i = 0; i < array.length; i++) {
-            size = mapSize(array[i][1]);
-            items += '<a class="btn btn-outline-info m-2 tagcloud' + size + '" href="{{ "/browse.html" | relative_url }}#' + encodeURIComponent(array[i][0]) + '" >' + array[i][0] + '</a>';
-        }
-        cloud.innerHTML = items;
-    }
-    makeGrid(terms);
 
     function mapSize(x) { return Math.round(x * 9 / countMax + 1); }
     /* create cloud */
