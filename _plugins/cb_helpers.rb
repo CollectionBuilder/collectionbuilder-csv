@@ -38,24 +38,29 @@ module CollectionBuilderHelperGenerator
         featured_item_link = featured_item_src
       else
         # if featured image is an objectid
-        # find item in site metadata
-        featured_record = site.data[site.config['metadata']].select { |item| item['objectid'] == featured_image }
-        # provide error message if no matching item
-        if featured_record.empty?
-          puts color_text("Error cb_helpers: Item for featured image with objectid '#{featured_image}' not found in configured metadata '#{site.config['metadata']}'. Please check 'featured-image' in '_data/theme.yml'", :yellow)
-        else
-          # use object_location for image items, image_small for others
-          if featured_record[0]['format'] and featured_record[0]['format'].include? 'image'
-            featured_item_src = featured_record[0]['object_location'] || featured_record[0]['image_small']
+        # check configured metadata exists
+        if site.data[site.config['metadata']]
+          # find item in site metadata
+          featured_record = site.data[site.config['metadata']].select { |item| item['objectid'] == featured_image }
+          # provide error message if no matching item
+          if featured_record.empty?
+            puts color_text("Error cb_helpers: Item for featured image with objectid '#{featured_image}' not found in configured metadata '#{site.config['metadata']}'. Please check 'featured-image' in '_data/theme.yml'", :yellow)
           else
-            featured_item_src = featured_record[0]['image_small']
+            # use object_location for image items, image_small for others
+            if featured_record[0]['format'] and featured_record[0]['format'].include? 'image'
+              featured_item_src = featured_record[0]['object_location'] || featured_record[0]['image_small']
+            else
+              featured_item_src = featured_record[0]['image_small']
+            end
+            # provide error message if no matching image src
+            if featured_item_src.nil? 
+              puts color_text("Error cb_helpers: Item for featured image with objectid '#{featured_image}' does not have an image url in metadata. Please check 'featured-image' in '_data/theme.yml' and choose an item that has 'object_location' or 'image_small'", :yellow)
+            end
+            featured_item_alt = featured_record[0]['title'] || site.config['title']
+            featured_item_link = "/items/" + featured_image + ".html"
           end
-          # provide error message if no matching image src
-          if featured_item_src.nil? 
-            puts color_text("Error cb_helpers: Item for featured image with objectid '#{featured_image}' does not have an image url in metadata. Please check 'featured-image' in '_data/theme.yml' and choose an item that has 'object_location' or 'image_small'", :yellow)
-          end
-          featured_item_alt = featured_record[0]['title'] || site.config['title']
-          featured_item_link = "/items/" + featured_image + ".html"
+        else
+          puts color_text("Error cb_helpers: configured metadata '#{site.config['metadata']}' not found in '_data'.", :yellow)
         end
 
       end
