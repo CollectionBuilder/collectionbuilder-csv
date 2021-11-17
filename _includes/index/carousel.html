@@ -31,7 +31,7 @@
     Set up carousel div
 {%- endcomment -%}
 <style>
-    #imageCarousel .carousel-item { height: {{ site.data.theme.carousel-height | remove: "px" | default: '300' }}px; }
+    #imageCarousel .carousel-item { height: {{ include.height | remove: "px" | default: '300' }}px; }
 </style>
 <div class="card mb-3">
     {% if include.header %}<h5 class="card-header">{{ include.header }}</h5>{% endif %}
