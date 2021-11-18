@@ -8,9 +8,9 @@
 # URL VARIABLES
 #
 # site domain, full URL to the production location of your collection
-url: https://www.lib.uidaho.edu
+url: 
 # path to location on the domain if necessary e.g. /digital/hjccc
-baseurl: /demo
+baseurl: 
 # location of code, the full url to your github repository
 source-code: https://github.com/CollectionBuilder/collectionbuilder-csv
 
