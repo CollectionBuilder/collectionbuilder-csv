@@ -14,5 +14,6 @@ vendor/
 # temporarily ignore gemfile.lock
 Gemfile.lock
 
-# If you would like to Ignore objects directory to avoid committing binary files (other than demo files), uncomment the line below.
-# objects/
+# Ignore objects directory to avoid committing binary files (other than demo files)
+# if you would like to commit your objects to github, delete the line below!
+objects/
