@@ -51,12 +51,9 @@ a {
     background:rgba(0,0,0,.5);
     padding:.5em;
 }
-#home-title-box {
-    img { height:40px; }
-}
 #home-banner {
     @include media-query($on-palm) {
-    max-height:500px;
+        max-height:500px;
     }
 }
 .display-4 {
@@ -82,6 +79,9 @@ a {
 }
 
 /* footer */
+#footer-logo {
+    height: 40px;
+}
 #footer-credits {
     img { height: 40px; }
 }

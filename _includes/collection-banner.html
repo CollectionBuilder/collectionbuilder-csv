@@ -10,6 +10,9 @@
     padding-top: {{ site.data.theme.home-title-y-padding | default: '5em' }};
     padding-bottom: {{ site.data.theme.home-title-y-padding | default: '5em' }};
 }
+#home-banner-logo { 
+    height: 40px; 
+}
 @media screen and (max-width: 576px) {
     #home-title-box {
         padding-top: 5em;
@@ -21,7 +24,7 @@
     <div id="home-title-box">
         <div class="title-card p-2 text-center">
             <a class="d-none d-md-block" href="{{ site.organization-link }}" target="_blank" rel="noopener">
-                <img src="{{ site.organization-logo-nav | relative_url }}" alt="{{ site.organization-name }} home" >
+                <img id="home-banner-logo" src="{{ site.organization-logo-nav | relative_url }}" alt="{{ site.organization-name }} home" >
             </a>
             <h1 class="display-4">{{ site.title }}</h1>
             {% if site.tagline %}<p id="home-tagline">{{ site.tagline }}</p>{% endif %}
