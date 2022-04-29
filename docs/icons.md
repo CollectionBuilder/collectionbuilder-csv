@@ -12,12 +12,12 @@ The pattern to use the full Bootstrap SVG Sprite set looks like this:
 
 ```
 <svg class="bi icon-sprite" aria-hidden="true">
-    <use xlink:href="{{ '/assets/lib/bootstrap-icons.svg' | relative_url }}#arrow-up-square" href="{{ '/assets/lib/bootstrap-icons.svg' | relative_url }}#arrow-up-square"></use>
+    <use xlink:href="{{ '/assets/lib/icons/bootstrap-icons.svg' | relative_url }}#arrow-up-square" href="{{ '/assets/lib/icons/bootstrap-icons.svg' | relative_url }}#arrow-up-square"></use>
 </svg>
 <span class="sr-only">Up Arrow</span>
 ```
 
-The `xlink:href` is the link to the icons file (all icons are includes in the file "/assets/lib/bootstrap-icons.svg"), plus `#` plus the id of the icon you want to use. 
+The `xlink:href` is the link to the icons file (all icons are includes in the file "/assets/lib/icons/bootstrap-icons.svg"), plus `#` plus the id of the icon you want to use. 
 Find the id/names of all icons on the [Bootstrap Icons](https://icons.getbootstrap.com/) page.
 
 Styles to make the sprites work are in `_sass/_base.scss`. 
@@ -36,7 +36,7 @@ To use an icon similar to an image (for example as an icon stand in for thumbnai
 
 ```
 <svg class="bi w-50 text-body" fill="currentColor" aria-hidden="true">
-    <use xlink:href="{{ '/assets/lib/bootstrap-icons.svg' | relative_url }}#file-earmark-play"/>
+    <use xlink:href="{{ '/assets/lib/icons/bootstrap-icons.svg' | relative_url }}#file-earmark-play"/>
 </svg>
 <span class="sr-only">File icon</span>
 ```
