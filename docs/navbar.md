@@ -1,6 +1,6 @@
 # Nav configuration
 
-The navigation bar in the CollectionBuilder template uses the [Bootstrap navbar component](https://getbootstrap.com/docs/4.4/components/navbar/) to add links to the main pages and a search box. 
+The navigation bar in the CollectionBuilder template uses the [Bootstrap navbar component](https://getbootstrap.com/docs/5.1/components/navbar/) to add links to the main pages and a search box. 
 The Bootstrap navbar automatically collapses into a menu button on smaller screens (break point `-lg`, which is approximately tablet size). 
 
 The navbar is configured using "_data/config-nav.csv". 
@@ -18,7 +18,7 @@ Each item in the nav is one row of config-nav, including the columns `display_na
 
 ## Dropdown menus
 
-A [Bootstrap dropdown menu](https://getbootstrap.com/docs/4.4/components/dropdowns/) can be added to a nav item following this convention in config-nav:
+A [Bootstrap dropdown menu](https://getbootstrap.com/docs/5.1/components/dropdowns/) can be added to a nav item following this convention in config-nav:
 
 - if the item has a `stub`, but no value in `dropdown_parent`, it becomes a normal nav item
 - if the item has NO `stub`, it will become a dropdown menu
