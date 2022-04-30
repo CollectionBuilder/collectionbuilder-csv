@@ -17,5 +17,5 @@ For convenience, the standard Bootstrap theme colors are provided to fill in if 
 Adding a non-Bootstrap "color_class" will generate new custom btn colors.
 E.g. "color_class" `special` will generate CSS for `.btn-special` and `.btn-outline-special`.
 
-CollectionBuilder uses `btn-primary`, `btn-outline-primary`, `btn-success`, `btn-info`, `btn-outline-info`, `btn-outline-secondary`, `btn-light`, and `btn-outline-light` in page layouts, so overriding those styles will have immediate effects on the colors.
+CollectionBuilder uses `btn-primary`, `btn-outline-primary`, `btn-success`, `btn-info`, `btn-outline-secondary`, `btn-light`, and `btn-outline-light` in page layouts, so overriding those styles will have immediate effects on the colors.
 The nav elements use `bg-dark` and `text-dark` by default.
