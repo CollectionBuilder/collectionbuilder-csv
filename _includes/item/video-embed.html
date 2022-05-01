@@ -6,13 +6,13 @@
 {% if page.object_location contains 'vimeo' %}
 {% assign vimeo_id = page.object_location | split: '/' | last %}
 <div class="ratio ratio-16x9">
-    <iframe src="https://player.vimeo.com/video/{{ vimeo_id }}" allowfullscreen></iframe>
+    <iframe title="video embed {{ page.title | escape }}" src="https://player.vimeo.com/video/{{ vimeo_id }}" allowfullscreen></iframe>
 </div>
 {%- elsif page.object_location contains 'youtu' -%}
 {% assign youtube_id = page.object_location | split: '/' | last %}
 {% if youtube_id contains 'v=' %}{% assign youtube_id = youtube_id | split: 'v=' | last | split: '&' | first %}
 {% elsif youtube_id contains '?' %}{% assign youtube_id = youtube_id | split: '?' | first %}{% endif %}
 <div class="ratio ratio-16x9">
-    <iframe src="https://www.youtube-nocookie.com/embed/{{ youtube_id }}?rel=0&modestbranding=1" allowfullscreen></iframe>
+    <iframe title="video embed {{ page.title | escape }}" src="https://www.youtube-nocookie.com/embed/{{ youtube_id }}?rel=0&modestbranding=1" allowfullscreen></iframe>
 </div>
 {% endif %}
