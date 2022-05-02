@@ -19,7 +19,7 @@ This simplifies customization of the different item pages depending on collectio
 
 Default supported options: `image`,`pdf`, `video`, `audio`,  `record`, `item`. 
 
-- `image`: Displays image_small if available, with fall back to object_location. Adds LightGallery view to open images full screen using object_location, with fall back to image_small.
+- `image`: Displays image_small if available, with fall back to object_location. Adds gallery view to open images full screen using object_location, with fall back to image_small.
 - `pdf`: Displays image_small if available, with fall back to image_thumb, or a pdf icon.
 - `video`: Displays a video embedded on the page with default support for video files (using `<video>` element with object_location as src), YouTube (from link in object_location), or Vimeo videos (from link in object_location).
 - `audio`: Uses `<audio>` element to embed audio file from object_location as src.
@@ -73,9 +73,9 @@ Plus add hash link to Timeline if there is a date, and hash link to Map if there
 
 ### image-gallery
 
-For image items, a zoomable, full screen gallery view is added using [lightGallery](http://sachinchoolur.github.io/lightGallery/).
+For image items, a zoomable, full screen gallery view is added using [Spotlight gallery](https://github.com/nextapps-de/spotlight).
 Ensure dependencies are added by including `gallery: true` in the layout front matter.
-See "docs/lightgallery.md" for more details.
+See "docs/gallery.md" for more details.
 
 ### item-thumb
 

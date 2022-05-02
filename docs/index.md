@@ -32,7 +32,7 @@ code_design_notes.md
 foot.md
 icons.md
 lazyload.md
-lightgallery.md
+gallery.md
 markup.md
 noindex.md
 oai-pmh.md

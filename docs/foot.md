@@ -3,7 +3,7 @@
 All JS is loaded at the bottom of the page in "foot.html" include.
 This ensures JS libraries are loaded in correct order and are optimized for page load.
 
-First, "foot.html" adds jquery, bootstrap bundle, and lazysizes assets which are required on all pages. 
+First, "foot.html" adds bootstrap bundle and lazysizes assets which are required on all pages. 
 Next, any other chunks of JS are added via includes based on the page layout or front matter options.
 
 Most default CB layouts have a custom JS component specific to the visualization.
@@ -35,4 +35,4 @@ custom-foot: js/example.html;js/another_example.html
 ---
 ```
 
-The two includes will be added by "foot.html", after jquery and bootstrap js are loaded.
+The two includes will be added by "foot.html", after bootstrap js is loaded.
