@@ -1,6 +1,6 @@
 {% comment %}
 
-    Bootstrap Card, https://getbootstrap.com/docs/4.5/components/card/
+    Bootstrap Card, https://getbootstrap.com/docs/5.1/components/card/
 
     E.G. --> {% include feature/card.html text="Some text" header="Example item" objectid="demo_004" %}
 
@@ -12,7 +12,7 @@
     - "alt" = if adding an external image using objectid option, provide alt text for image
     - "width" = will use responsive sizing to set the % size on desktop (will be 100% on mobile), choose from "25", "50", "75", or "100"
     - "centered" = give "true" to add mx-auto class on the card to center it (don't use with float!)
-    - "float" = will use responsive float utility to add float on desktop (will not float on mobile), choose from "left" or "right"
+    - "float" = will use responsive float utility to add float on desktop (will not float on mobile), choose from "start" (left) or "end" (right)
 
 {%- endcomment -%}
 {%- if include.objectid contains '/' -%}

@@ -7,7 +7,7 @@ Use the API recipes below to fill in the "image_small" and "image_thumb" fields 
 ## Item page
 
 The default `video` display_template will display the video embedded in an [YouTube Player iframe](https://developers.google.com/youtube/iframe_api_reference). 
-It is styled using [Bootstrap Embeds utility class](https://getbootstrap.com/docs/4.4/utilities/embed/), set as 16x9 ratio (which is default for YouTube, however, if your videos differ significantly from that ratio try modifying the class in _includes/item/video-embed.html).
+It is styled using [Bootstrap ratio class](https://getbootstrap.com/docs/5.1/helpers/ratio/), set as 16x9 ratio (which is default for YouTube, however, if your videos differ significantly from that ratio try modifying the class in _includes/item/video-embed.html).
 The embed is given these options:
 
 - Privacy-enhanced mode: does not send data to YouTube unless users click play (enabled by using domain `www.youtube-nocookie.com` rather than `www.youtube.com`

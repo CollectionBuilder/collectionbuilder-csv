@@ -9,6 +9,8 @@ body {
     @if $text-color != "" { color: $text-color; }
 }
 a {
+    /* remove link underline */ 
+    text-decoration: none;
     @if $link-color != "" { 
         color: $link-color; 
         &:hover {
@@ -42,84 +44,11 @@ a {
 }
 
 /* banner */
-.title-card {
-    background-color: #25242485;
-    background-color: rgba(37, 36, 36, 0.72);
-    color: white !important;
-}
-.featured-link {
-    background:rgba(0,0,0,.5);
-    padding:.5em;
-}
-#home-banner {
-    @include media-query($on-palm) {
-        max-height:500px;
-    }
-}
-.display-4 {
-    @include media-query($on-palm) {
-       font-size:1.75em;
-    }
-}
-#home-tagline{
-  @include media-query($on-palm) {
-      font-size:.85em;
-    }
-}
-
 #home-banner-logo { 
     height: 40px; 
 }
-@media screen and (max-width: 576px) {
-    #home-title-box {
-        padding-top: 5em;
-        padding-bottom: 5em; 
-    }
-}
-
 
 /* nav bar */
-
-.navbar-dark .navbar-nav .nav-link:focus, .navbar-dark .navbar-nav .nav-link:hover {
-    color: white;
-    background: rgba(255,255,255,.10);
-}
-
-.navbar-dark .navbar-nav .nav-link {
-    color: #fff;
-    padding-bottom: 3px;
-    border-bottom: 2px solid transparent;
-      }
-
-.navbar-dark .navbar-nav .active > .nav-link, .navbar-dark .navbar-nav .nav-link.active, .navbar-dark .navbar-nav .nav-link.show, .navbar-dark .navbar-nav .show > .nav-link {
-    color: #fff;
-    border-bottom: 2px solid white;
-    @media screen and (max-width: 992px) {
-        border-bottom: 2px solid transparent;
-        text-decoration: underline;
-    }
-}
-
-.navbar-light .navbar-nav .nav-link:focus, .navbar-light .navbar-nav .nav-link:hover {
-    color: #000;
-    background: rgba(0,0,0,.10);
-}
-
-.navbar-light .navbar-nav .nav-link {
-    color: #000;
-    padding-bottom: 3px;
-    border-bottom: 2px solid transparent;
-      }
-
-.navbar-light .navbar-nav .active > .nav-link, .navbar-light .navbar-nav .nav-link.active, .navbar-light .navbar-nav .nav-link.show, .navbar-light .navbar-nav .show > .nav-link {
-    color: #000;
-    border-bottom: 2px solid black;
-    @media screen and (max-width: 992px) {
-        border-bottom: 2px solid transparent;
-        text-decoration: underline;
-    }
-}
-
 #mobile-nav-image {
     max-height: 1.5em;
 }
@@ -142,7 +71,6 @@ a {
     color: white;
     background: rgba(255,255,255,.10);
 }
-
 
 /* scroll to top */
 #scroll-to-top {
@@ -169,10 +97,10 @@ a {
     .feature-w-100 {
         width: 100%!important;
     }
-    .feature-float-right {
+    .feature-float-end {
         float: right!important;
     }
-    .feature-float-left {
+    .feature-float-start {
         float: left!important;
     } 
 }

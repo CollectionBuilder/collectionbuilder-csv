@@ -12,12 +12,12 @@ The pattern to use the full Bootstrap SVG Sprite set looks like this:
 
 ```
 <svg class="bi icon-sprite" aria-hidden="true">
-    <use xlink:href="{{ '/assets/lib/bootstrap-icons.svg' | relative_url }}#arrow-up-square" href="{{ '/assets/lib/bootstrap-icons.svg' | relative_url }}#arrow-up-square"></use>
+    <use xlink:href="{{ '/assets/lib/icons/bootstrap-icons.svg' | relative_url }}#arrow-up-square" href="{{ '/assets/lib/icons/bootstrap-icons.svg' | relative_url }}#arrow-up-square"></use>
 </svg>
-<span class="sr-only">Up Arrow</span>
+<span class="visually-hidden">Up Arrow</span>
 ```
 
-The `xlink:href` is the link to the icons file (all icons are includes in the file "/assets/lib/bootstrap-icons.svg"), plus `#` plus the id of the icon you want to use. 
+The `xlink:href` is the link to the icons file (all icons are includes in the file "/assets/lib/icons/bootstrap-icons.svg"), plus `#` plus the id of the icon you want to use. 
 Find the id/names of all icons on the [Bootstrap Icons](https://icons.getbootstrap.com/) page.
 
 Styles to make the sprites work are in `_sass/_base.scss`. 
@@ -25,7 +25,7 @@ The `.bi` class applies to all the sprite icons generally to set some useful def
 The `.icon-sprite` class adds a width and height of `1em` which allows the icon to be used like a font character (when combined with the `bi` styles).
 These are kept separate for instances when you might want to use the icon like an image with a percentage width or other sizing method.
 
-If the icon is used to convey meaning, you should use `aria-label=` or `<span class="sr-only">` to add an alternative for icon as sibling of svg.
+If the icon is used to convey meaning, you should use `aria-label=` or `<span class="visually-hidden">` to add an alternative for icon as sibling of svg.
 The svg element should have `aria-hidden="true"` added to avoid issues with the content being read twice on screen readers. 
 
 The icon-sprite style icons can be added using the feature/icon.html include, 
@@ -36,9 +36,9 @@ To use an icon similar to an image (for example as an icon stand in for thumbnai
 
 ```
 <svg class="bi w-50 text-body" fill="currentColor" aria-hidden="true">
-    <use xlink:href="{{ '/assets/lib/bootstrap-icons.svg' | relative_url }}#file-earmark-play"/>
+    <use xlink:href="{{ '/assets/lib/icons/bootstrap-icons.svg' | relative_url }}#file-earmark-play"/>
 </svg>
-<span class="sr-only">File icon</span>
+<span class="visually-hidden">File icon</span>
 ```
 
 In this example, the classes on the svg element control the size and color: 
