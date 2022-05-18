@@ -12,7 +12,7 @@ This page object is passed to the layout matching the `display_template` value s
 ## display_template Layouts 
 
 The `display_template` layouts provide templates for presenting different item types.
-The files are found in "_layouts/item/" (default item layouts have the front matter `item-meta: true`, which adds item meta markup).
+The files are found in "_layouts/item/".
 
 Each display_template layout is typically constructed of modular item page components (found in "_includes/item/") and arranged using Bootstrap.
 This simplifies customization of the different item pages depending on collection needs.
@@ -25,6 +25,10 @@ Default supported options: `image`,`pdf`, `video`, `audio`,  `record`, `item`.
 - `audio`: Uses `<audio>` element to embed audio file from object_location as src.
 - `record`: metadata only record.
 - `item`: generic fallback item page, displays image or icon depending on "image_thumb"
+
+Each of these layouts in turn is generally given `layout: item-page-base`, so that the custom features of the display templates will share the same standard page layout.
+If you want to change the basic structure of all items pages (breadcrumbs and title at top, citation and rights at button), edit the "_layouts/item/item-page-base". 
+If you create a new custom template type you can use `layout: item-page-base` to inherit the styles, or you can skip to `layout: default` to have a completely custom page.
 
 ## Item Page Components
 
@@ -118,6 +122,8 @@ Use this option if you are directly exposing video files on the web, such as on 
 
 ## Item Meta Markup
 
-The default item layouts have the front matter value `item-meta: true`.
+The default `item-page-base` layout has the front matter value `item-meta: true`.
 This will pull specialized meta markup in head from "_includes/head/item-meta.html" designed to help search indexing, social sharing, and SEO.
 The mark up is configured using "_data/config-metadata.csv" and driven by the metadata fields (see "docs/markup.md").
+
+If you create a new custom layout that does not use `layout: item-page-base`, you will want to add `item-meta: true` to your layout front matter.
