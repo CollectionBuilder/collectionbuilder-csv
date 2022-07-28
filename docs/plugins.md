@@ -10,6 +10,8 @@ Keep in mind that plugins can not be used on GitHub Pages default build (althoug
 Thus, collectionbuilder-gh uses fairly slow and complicated Liquid and Javascript to generate items pages and unique counts from metadata.
 Those methods are not efficient enough to handle larger collections.
 
+---------
+
 ## CollectionBuilder Page Generator
 
 "CollectionBuilder Page Generator" ("cb_page_gen.rb") creates individual html pages from each record in your metadata CSV (or other _data files). 
@@ -19,7 +21,19 @@ It can also generate all sort of other pages from any data file.
 Basic use following CB conventions requires no configuration. 
 CB Page Gen will automatically generate pages from the data specified by "_config.yml" `metadata` option.
 
-Alternatively, for more advanced use you can provide one or more configurations in the `page_gen` option in "_config.yml". 
+Alternatively, for more advanced use you can provide one or more configurations in the `page_gen` option in "_config.yml", allowing you to customize the generation options or generate pages from multiple CSVs.
+
+### Considerations 
+
+Keep in mind that the default template pages (Browse, Map, Timeline, etc) all use the `metadata` value to pull in the collection data to populate the page, so you will still need a `metadata` value even if you customize `page_gen` (unless you do more customization to the template pages).
+I.e. `page_gen` values do not set the `metadata` value for the template, the default pages will be blank if you don't have a `metadata` value. 
+Thus `page_gen` can not be used to concatenate multiple CSVs into one collection without further customization of the template.
+Instead it is designed to allow you to generate other types of pages, in addition to item pages.
+
+If you set up a custom `page_gen` value, you will normally require one of the values to match the `metadata` value.
+
+### Page Gen options
+
 The full options with the default values look like:
 
 ```
@@ -85,12 +99,14 @@ If for some reason you can not clean up your objectid field, you can  apply slug
 
 If customizing new Item types, it maybe helpful to tweak the "Default Settings" values in CollectionBuilderPageGenerator (as an alternative to passing configuration values).
 
-*Note:* CollectionBuilder originally used a modified version of [Adolfo Villafiorita jekyll-datapage_gen](https://github.com/avillafiorita/jekyll-datapage_gen), however, the plugin has been completely rewritten following the basic [Jekyll Generator Plugins](https://jekyllrb.com/docs/plugins/generators/).
+**Note:** CollectionBuilder originally used a modified version of [Adolfo Villafiorita jekyll-datapage_gen](https://github.com/avillafiorita/jekyll-datapage_gen), however, the plugin has been completely rewritten following the basic [Jekyll Generator Plugins](https://jekyllrb.com/docs/plugins/generators/).
 This allows CB Page Gen to more closely follow CB conventions, configuration options, and needs.
 Much of this is CB specific, such as providing metadata-centric defaults and fairly detailed error messages.
 However, the plugin configuration is still fully backwards compatible with older jekyll-datapage_gen configuration options (as used in CB projects). 
 If you used the old page gen plugin, your existing configuration should work with the new one.
 As of 2020, jekyll-datapage_gen added additional options that are *not* supported in CB Page Gen (index_files, name_expr, title, title_expr)--if you would like to use those options, you should still be able to swap in the newest version of jekyll-datapage_gen and delete cb_page_gen in your _plugins directory.
+
+-----------
 
 ## CollectionBuilder Helpers
 
@@ -102,6 +118,8 @@ Current helpers include:
 
 - Featured Item -- reads `featured-image` from "theme.yml" and provides a `site.data.featured_item` object to the template at build. This allows you to get `featured_item.src`, `.alt`, and `.link`. Currently used to populate meta tags.
 - Theme Icons -- reads `icons` object in "theme.yml", sets icon defaults, processes icon svgs, and provides a `site.data.theme_icons` objects to the template at build. See "docs/icons.md" for details of use.
+
+------------
 
 ## Array Count Uniq
 
