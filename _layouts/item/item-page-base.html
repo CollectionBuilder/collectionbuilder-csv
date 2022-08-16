@@ -1,0 +1,30 @@
+---
+# base layout for other item display_template layouts
+# adds breadcrumbs and title at top; citation box, rights box, and browse buttons at bottom
+layout: default
+# item-meta adds rich meta markup to the page on production build
+item-meta: true
+---
+<div class="container py-3">
+
+    {% include item/breadcrumbs.html %}
+
+    <h2 class="mb-4">{{ page.title }}</h2>
+
+    {{ content }}
+
+    <div class="row justify-content-end mt-4">
+        <div class="col-md-5">
+            {% include item/citation-box.html %}
+        </div>
+        {% if page.rights or page.rightsstatement %}
+        <div class="col-md-5">
+            {% include item/rights-box.html %}
+        </div>
+        {% endif %}
+    </div>
+
+    {%- if site.data.theme.browse-buttons == true -%}
+        {% include item/browse-buttons.html %}
+    {%- endif -%}
+</div>

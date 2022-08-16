@@ -17,24 +17,24 @@ custom-foot: js/timeline-js.html
 {%- assign navYears = navYears | split: ";" -%}
 {%- endif -%}
 {%- if navYears -%}
-<div class="dropdown float-right" id="year-nav">
-    <button class="btn btn-info dropdown-toggle" type="button" id="yearButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+<div class="dropdown float-end" id="year-nav">
+    <button class="btn btn-primary dropdown-toggle" type="button" id="yearButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Year
     </button>
     <div class="dropdown-menu" aria-labelledby="yearButton">
         {% for y in navYears %}
-        <a class="dropdown-item" href="#{{ y }}">{{ y }}</a>{% endfor %}
+        <a class="dropdown-item" href="#y{{ y }}">{{ y }}</a>{% endfor %}
     </div>
 </div>
 {%- endif -%}
 
 {{ content }}
 
-<h3><a href="#{{ uniqueYears | first }}">{{ uniqueYears | first }}</a> to <a href="#{{ uniqueYears | last }}">{{ uniqueYears | last }}</a></h3>
+<h3><a href="#y{{ uniqueYears | first }}">{{ uniqueYears | first }}</a> to <a href="#y{{ uniqueYears | last }}">{{ uniqueYears | last }}</a></h3>
 
 <table id="timeline" class="table table-striped">
     {% for year in uniqueYears %}
-    <tr id="{{ year }}">
+    <tr id="y{{ year }}">
         <th>
             <h3>{{ year }}</h3>
         </th>
@@ -45,7 +45,7 @@ custom-foot: js/timeline-js.html
                 <div class="col-lg-4 col-md-6">
                     <a href="{{ '/items/' | append: item.objectid | append: '.html' | relative_url }}" >
                         {% if item.image_thumb %}
-                        <img class="lazyload img-thumbnail timeline-thumb" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'%3E%3C/svg%3E" data-src="{{ item.image_thumb | relative_url }}" alt="{{ item.title | escape }}" data-toggle="tooltip" data-placement="bottom" title="{{ item.title | escape }}">
+                        <img class="lazyload img-thumbnail timeline-thumb" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'%3E%3C/svg%3E" data-src="{{ item.image_thumb | relative_url }}" alt="{{ item.title | escape }}" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ item.title | escape }}">
                         {% else %}
                         <div class="card"> 
                             <div class="card-body text-center">

@@ -8,9 +8,9 @@
 # URL VARIABLES
 #
 # site domain, full URL to the production location of your collection
-url: https://www.lib.uidaho.edu
+url: 
 # path to location on the domain if necessary e.g. /digital/hjccc
-baseurl: /demo
+baseurl: 
 # location of code, the full url to your github repository
 source-code: https://github.com/CollectionBuilder/collectionbuilder-csv
 
@@ -28,11 +28,6 @@ description: "CollectionBuilder-CSV is a template for creating digital collectio
 keywords: idaho;history;inland northwest
 # creator of the digital collection, to appear in meta tags; we typically use our GitHub usernames but feel free to just use your name
 author: CollectionBuilder
-# Organization branding
-organization-name: "Digital Initiatives, University of Idaho Library"
-organization-link: https://www.lib.uidaho.edu/digital/
-organization-logo-banner: https://www.lib.uidaho.edu/media/digital/justdi_logo_sm.png
-organization-logo-nav: https://www.lib.uidaho.edu/media/digital/bannerlogo_allwhite.png
 
 ##########
 # COLLECTION SETTINGS
@@ -49,6 +44,16 @@ metadata: compoundobjects-demo-metadata
 #     dir: 'items'
 #     extension: 'html' 
 #     filter: 'objectid'  
+
+##########
+# Site/Organization Branding 
+#   Enter information for your organization (replacing the CDIL links and name below) if you'd like to brand your site with a logo
+#   To remove the branding, comment out these values, or delete them. 
+#
+organization-name: "Center for Digital Inquiry and Learning (CDIL)"
+organization-link: https://cdil.lib.uidaho.edu/
+organization-logo-banner: https://cdil.lib.uidaho.edu/storying-extinction/assets/img/cdil.png
+organization-logo-nav: https://cdil.lib.uidaho.edu/assets/img/logo.png
 
 ##########
 # GOOGLE SERVICES [optional!]

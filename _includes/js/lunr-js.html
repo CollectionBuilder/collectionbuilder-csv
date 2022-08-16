@@ -8,7 +8,7 @@ var idx = lunr(function () {
   /* add index fields from config */
   this.ref('id')
   {% for f in index_fields %}
-  this.field({{ f.field | escape | jsonify }})
+  this.field({{ f.field | jsonify }})
   {% endfor %}
 
   //this.pipeline.remove(lunr.trimmer)
@@ -16,17 +16,18 @@ var idx = lunr(function () {
   for (var item in store) {
     this.add({
       {% for f in index_fields %}
-      {{ f.field | escape | jsonify }}: store[item][{{ f.field | escape | jsonify }}],
+      {{ f.field | jsonify }}: store[item][{{ f.field | jsonify }}],
       {% endfor %}
       id: item
     })
   }
+
 });
 
 /* search function */
 function lunr_search () {
-  var resultdiv = $('#lunrResults');
-  var query = $('#lunrSearchBox').val();//.toLowerCase();
+  var resultdiv = document.querySelector('#lunrResults');
+  var query = document.querySelector('#lunrSearchBox').value;//.toLowerCase();
   /* basic search that supports operators */
   var result = idx.search(query); 
   /* more fuzzy search, but doesn't support operators:
@@ -42,33 +43,33 @@ function lunr_search () {
         }
       })
     });*/
-  resultdiv.empty();
-  resultdiv.prepend('<tr><td><h4 class="mt-3">' + result.length + ' Result(s) found</h4></td></tr>');
+  resultdiv.innerHTML = "";
+  var newresults = '<tr><td><h4 class="mt-3">' + result.length + ' Result(s) found</h4></td></tr>';
   for (var item in result) {
     var ref = result[item].ref;
     var searchitem =
       '<tr>'+
-          '<td class="">' +
+          '<td>' +
             {% assign display = fields | where: 'display','true' %}
             {% for d in display %}
             {% if forloop.first %}
-            '<p class="h4"><a href="{{ "/items" | relative_url }}/' + store[ref].id + '.html">' + store[ref][{{ fields[0].field | escape | jsonify }}]  + '</a></p>' +
-            '<p class="ml-3">';
+            '<p class="h4"><a href="{{ site.baseurl }}/item.html?id=' + store[ref].id + '">' + store[ref][{{ fields[0].field | jsonify }}]  + '</a></p>' +
+            '<p class="ms-3">';
               {% else %}
-              if(store[ref][{{ d.field | escape | jsonify }}]) {
-                searchitem += store[ref][{{ d.field | escape | jsonify }}] + '<br> '; }
+              if(store[ref][{{ d.field | jsonify }}]) {
+                searchitem += store[ref][{{ d.field | jsonify }}] + '<br> '; }
               {% endif %}{% endfor %}
               searchitem += '</p></td>' +
       '</tr>';
-    resultdiv.append(searchitem);
+    newresults += searchitem;
   }
+  resultdiv.innerHTML = newresults;
 }
+
 /* init search box and get query string */
-$(document).ready(function() {
-  if (window.location.search) {
-    var queryString = decodeURIComponent(window.location.search.substring(1).split("=")[1]);
-    $('#lunrSearchBox').val(queryString);
-    lunr_search ();
-  }
-});
+if (window.location.search) {
+  var queryString = decodeURIComponent(window.location.search.substring(1).split("=")[1]);
+  document.querySelector('#lunrSearchBox').value = queryString;
+  lunr_search();
+}
 </script>

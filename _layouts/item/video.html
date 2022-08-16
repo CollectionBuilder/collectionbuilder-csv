@@ -1,62 +1,41 @@
 ---
-layout: default
-item-meta: true
-# this item layout supports video files (MP4 is most compatible), YouTube, or Vimeo objects by default.
-# the YouTube or Vimeo video link should be in the object_location column.
+# basic video item layout
+# Displays a video embedded on the page with default support for video files (using <video> element with object_location as src, MP4 is most compatible format), YouTube (from full link in object_location), or Vimeo videos (from full link in object_location).
+layout: item/item-page-base
 ---
-<div class="container py-3">
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-4 text-center">
+            <div class="mt-4">
 
-    {% include item/breadcrumbs.html %}
-
-    <div class="row">
-        <div class="col-md-6">
-            <div class="card mb-4 text-center">
-                <div class="mt-4">
-
-                    {% if page.object_location contains 'vimeo' or page.object_location contains 'youtu' %}
-                    {% include item/video-embed.html %}
-                    {% else %}
-                    {% include item/video-player.html %}
-                    {% endif %}
-
-                </div>
-                
-                <div class="my-2">
-
-                    {% if page.object_location contains 'vimeo' or page.object_location contains 'youtu' %}
-                    <a target="_blank" rel="noopener" href="{{ page.object_location | relative_url }}" class="btn btn-outline-info">View {% if page.object_location contains 'vimeo' %}on Vimeo{% elsif page.object_location contains 'youtu' %}on YouTube{% else %}Video{% endif %}</a>
-                    {% if page.date %}{%- capture year -%}{% if page.date contains "-" %}{{ page.date | split: "-" | first }}{% elsif page.date contains "/" %}{{ page.date | split: "/" | last }}{% else %}{{ page.date }}{% endif %}{%- endcapture -%}
-                    <a href="{{ year | strip | prepend: '/timeline.html#' | relative_url }}" class="ml-2 btn btn-outline-info">View on Timeline</a>{% endif %}
-                    {% if page.latitude and page.longitude %}
-                    <a href="{{ '/map.html#' | append: page.latitude  | append: ',' | append: page.longitude | relative_url}}" class="ml-2 btn btn-outline-info">View on Map</a>{% endif %}
-                    {% else %}
-                    {% include item/download-buttons.html %}
-                    {% endif %}
-
-                </div>
+                {% if page.object_location contains 'vimeo' or page.object_location contains 'youtu' %}
+                {% include item/video-embed.html %}
+                {% else %}
+                {% include item/video-player.html %}
+                {% endif %}
 
             </div>
-        </div>
-
-        <div class="col-md-6">
-
-            {% include item/metadata.html %}
             
+            <div class="my-2">
+
+                {% if page.object_location contains 'vimeo' or page.object_location contains 'youtu' %}
+                <a target="_blank" rel="noopener" href="{{ page.object_location | relative_url }}" class="btn btn-outline-primary">View {% if page.object_location contains 'vimeo' %}on Vimeo{% elsif page.object_location contains 'youtu' %}on YouTube{% else %}Video{% endif %}</a>
+                {% if page.date %}{%- capture year -%}{% if page.date contains "-" %}{{ page.date | split: "-" | first }}{% elsif page.date contains "/" %}{{ page.date | split: "/" | last }}{% else %}{{ page.date }}{% endif %}{%- endcapture -%}
+                <a href="{{ year | strip | prepend: '/timeline.html#y' | relative_url }}" class="ms-2 btn btn-outline-primary">View on Timeline</a>{% endif %}
+                {% if page.latitude and page.longitude %}
+                <a href="{{ '/map.html#' | append: page.latitude  | append: ',' | append: page.longitude | relative_url}}" class="ms-2 btn btn-outline-primary">View on Map</a>{% endif %}
+                {% else %}
+                {% include item/download-buttons.html %}
+                {% endif %}
+
+            </div>
+
         </div>
     </div>
 
-    <div class="row justify-content-end mt-4">
-        <div class="col-md-5">
-            {% include item/citation-box.html %}
-        </div>
-        {% if page.rights or page.rightsstatement %} 
-        <div class="col-md-5">
-            {% include item/rights-box.html %}
-        </div>
-        {% endif %}
-    </div>
+    <div class="col-md-6">
 
-    {%- if site.data.theme.browse-buttons == true -%}
-        {% include item/browse-buttons.html %}
-    {%- endif -%}
+        {% include item/metadata.html %}
+        
+    </div>
 </div>

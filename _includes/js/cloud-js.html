@@ -37,27 +37,14 @@
     function shuffle(array) {
         var m = array.length, t, i;
         while (m) {
-        i = Math.floor(Math.random() * m--);
-        t = array[m];
-        array[m] = array[i];
-        array[i] = t;
+            i = Math.floor(Math.random() * m--);
+            t = array[m];
+            array[m] = array[i];
+            array[i] = t;
         }
         return array;
     }
     {% endif %}
-    function mapSize(x) { return Math.round(x * 9 / countMax + 1); }
-    /* create cloud */
-    function makeGrid(array) {
-        var i, size;
-        var items = "";
-        //shuffle(array);
-        for (i = 0; i < array.length; i++) {
-            size = mapSize(array[i][1]);
-            items += '<a class="btn btn-outline-info m-2 tagcloud' + size + '" href="{{ "/browse.html" | relative_url }}#' + encodeURIComponent(array[i][0]) + '" >' + array[i][0] + '</a>';
-        }
-        cloud.innerHTML = items;
-    }
-    makeGrid(terms);
 
     function mapSize(x) { return Math.round(x * 9 / countMax + 1); }
     /* create cloud */
@@ -67,7 +54,7 @@
         {% if include.shuffle == true %}shuffle(array);{% endif %}
         for (i = 0; i < array.length; i++) {
             size = mapSize(array[i][1]);
-            items += '<a class="btn btn-{{ include.button | default: "outline-info" }} m-2 tagcloud' + size + '" href="{{ "/browse.html" | relative_url }}#' + encodeURIComponent(array[i][0]) + '" >' + array[i][0] + '</a>';
+            items += '<a class="btn btn-{{ include.button | default: "outline-primary" }} m-2 tagcloud' + size + '" href="{{ "/browse.html" | relative_url }}#' + encodeURIComponent(array[i][0]) + '" >' + array[i][0] + '</a>';
         }
         cloud.innerHTML = items;
     }

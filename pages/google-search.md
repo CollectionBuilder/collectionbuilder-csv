@@ -2,6 +2,7 @@
 title: Google CSE
 layout: page
 permalink: /search/google.html
+noindex: true
 ---
 
 ## Google Site Search
