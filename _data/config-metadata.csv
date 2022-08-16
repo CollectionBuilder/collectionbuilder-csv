@@ -9,6 +9,7 @@ latitude,Latitude
 longitude,Longitude
 source,Source
 identifier,Source Identifier
+display_template,DisplayTemplate
 type,Type,,DCTERMS.type
 format,Format,,,encodingFormat
 rightsstatement,,,DCTERMS.rights,license

@@ -6,7 +6,7 @@
 <div class="my-5">
 {% if child.object_location contains 'vimeo' %}
 {% assign vimeo_id = child.object_location | split: '/' | last %}
-<div class="embed-responsive embed-responsive-16by9">
+<div class="embed-responsive embed-responsive-16by9 my-4">
     <iframe class="embed-responsive-item" src="https://player.vimeo.com/video/{{ vimeo_id }}" allowfullscreen></iframe>
 </div>
 {%- elsif child.object_location contains 'youtu' -%}
