@@ -8,8 +8,8 @@ item-meta: true
 <div class="container py-3">
 
     {% include item/breadcrumbs.html %}
-
-    <h2 class="mb-4">{{ page.title }}</h2>
+    <h5 class="my-0 small">{{page.display_template | replace: "_", " " | upcase}} </h5>
+    <h2 class="mb-3">{{ page.title }} {% unless page.display_template == 'record' %}<a href="#metadata" class="ms-5 btn btn-sm btn-outline-dark small">Item Info {% include feature/icon.html icon="arrow-down" label="Down arrow" %}</a>{% endunless %}</h2>
 
     {{ content }}
 

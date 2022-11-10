@@ -4,18 +4,19 @@
 layout: item/item-page-base
 ---
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-10 mx-auto col-12">
         <div class="card mb-4 text-center">
-            <div class="m-2">
-
-                {% include item/item-thumb.html %}
-            
-            </div>
             <div class="m-2">
 
                 {% include item/audio-player.html %}
                 
             </div>
+            <div class="m-2">
+
+                {% include item/item-thumb.html %}
+            
+            </div>
+            
             
             <div class="my-2">
 
@@ -26,7 +27,7 @@ layout: item/item-page-base
         </div>
     </div>
 
-    <div class="col-md-6">
+    <div class="col-md-10 mx-auto col-12" id="metadata">
 
         {% include item/metadata.html %}
         
