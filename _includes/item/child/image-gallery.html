@@ -1,0 +1,10 @@
+{% comment %}
+
+    For image items, a zoomable, full screen gallery view is added using Spotlight gallery.
+    Ensure dependencies are added by including `gallery: true` in the layout front matter calling this include.
+
+{%- endcomment -%}
+<div class="spotlight gallery-img" data-download="true" data-src="{{ child.object_location | relative_url }}">
+    <img src="{{ child.image_small | relative_url }}" alt="item thumbnail for {{ child.title | escape }}" class="img-fluid">
+    <p><small>Click to view full screen</small></p>
+</div>

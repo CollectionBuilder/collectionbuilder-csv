@@ -18,5 +18,6 @@
 {% else %}
 {% include item/item-thumb.html %}
 {% endif %}
-{% if page.title != child.title %}<p class="mb-4"><small>{{child.title}}</small></p>{% endif %}
 </div>
+
+{% include item/child/modal.html %}

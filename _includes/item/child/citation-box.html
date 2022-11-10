@@ -1,0 +1,11 @@
+<div class="card mb-2">
+    <div class="card-header">Source</div>
+    <div class="card-body">
+        <dl>
+            <dt>Preferred Citation:</dt>
+            <dd>"{{ child.title }}", {{ site.title }}, {{ site.organization-name }}</dd>
+            <dt>Reference Link:</dt>
+            <dd>{{ page.url | absolute_url }}#{{ child.title | slugify }}</dd>
+        </dl>
+    </div>
+</div>

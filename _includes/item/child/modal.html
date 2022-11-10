@@ -1,0 +1,83 @@
+
+<!-- Button trigger modal -->
+<p class="text-center mb-5">
+    <a id="{{ child.title | slugify }}" onclick="window.location.hash='{{ child.title | slugify }}'" type="button" class="small text-secondary" data-bs-toggle="modal" data-bs-target="#{{ child.title | slugify }}Modal">{{child.title}}</a> 
+    <a id="item-{{ forloop.index }}" onclick="window.location.hash='item-{{ forloop.index }}'" type="button" class="btn btn-sm btn-outline-secondary small" data-bs-toggle="modal" data-bs-target="#{{ child.title | slugify }}Modal">{{child.display_template | capitalize }} Info</a>
+</p>
+<!-- Modal -->
+<div class="modal fade" id="{{ child.title | slugify }}Modal" tabindex="-1" role="dialog" aria-labelledby="{{ child.title | slugify }}ModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="max-width: 90% !important;">
+        <div class="modal-content">
+            <div class="w-100 text-right mb-0">
+                <button type="button" class="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-header ">
+                
+                <div class="modal-title w-100" id="{{ child.title | slugify }}ModalLabel">
+                    <div class="row">
+                        <div class="col-1 col-md-2 text-right">
+                         <button onclick="document.getElementById('item-{% if forloop.index == 1 %}{{forloop.length}}{% else %}{{forloop.index | minus: 1 }}{% endif %}').click();window.location.hash='{{ child.title | slugify }}'" class="btn btn-outline-dark btn-sm">{% include feature/icon.html icon="arrow-left" label="Left arrow" %} <span class="d-none d-md-inline">Previous Item</span></button>
+                         </div>
+                        <div class="col-9 col-md-8 text-center">
+                            <h5>{{page.title}} <span class="d-none d-md-inline">-</span><span class="d-md-none"><br></span> Item {{forloop.index}} of {{children | size }}</h5>
+                            </div>
+                        <div class="col-1 col-md-2 text-left">
+                         <button onclick="document.getElementById('item-{% if forloop.index == forloop.length %}1{% else %}{{forloop.index | plus: 1 }}{% endif %}').click();window.location.hash='{{ child.title | slugify }}'" class="ms-md-5 btn btn-outline-dark btn-sm"><span class="d-none d-md-inline">Next Item</span> {% include feature/icon.html icon="arrow-right" label="Right arrow" %}</button>
+                        </div>
+                </div>
+            </div>
+                
+            </div>
+            <div class="modal-body" >
+                <div class="row">
+                    <div class="col-md-6">
+                    <div class="card mb-4 text-center">
+                        <div class="m-2">
+                            <p>
+                                {% if child.display_template == 'image' %}
+                                {% include item/child/image-gallery.html %}
+                                {% elsif child.display_template == 'video' %}
+                                    {% if child.object_location contains 'vimeo' or child.object_location contains 'youtu' %}
+                                    {% include item/child/video-embed.html %}
+                                    {% else %}
+                                    {% include item/child/video-player.html %}
+                                    {% endif %}
+                                {% elsif child.display_template == 'audio' %}
+                                {% include item/child/audio-player.html %}
+                                {% elsif child.display_template == 'panorama' %}
+                                {% include item/child/panorama.html %}
+                                {% else %}
+                                {% include item/child/item-thumb.html %}
+                                {% endif %}
+                                                        </p>
+                        </div>
+                        
+                        <div class="my-2">
+            
+                            {% include item/child/download-buttons.html %}
+            
+                        </div>
+            
+                    </div>
+                </div>
+            
+                <div class="col-md-6">
+            
+                    {% include item/child/metadata.html %}
+                    
+                </div>
+            </div>
+            <div class="row justify-content-end mt-4">
+                <div class="col-md-5">
+                    {% include item/child/citation-box.html %}
+                </div>
+                {% if child.rights or child.rightsstatement %}
+                <div class="col-md-5">
+                    {% include item/child/rights-box.html %}
+                </div>
+                {% endif %}
+            </div>
+            </div>
+        </div>
+    </div>
+</div>

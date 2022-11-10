@@ -3,5 +3,6 @@
     <source src="{{ child.object_location | relative_url }}" type="audio/mpeg">
     Your browser does not support the audio element.
 </audio>
-{% if page.title != child.title %}<p><small>{{child.title}}</small></p>{% endif %}
 </div>
+
+{% include item/child/modal.html %}

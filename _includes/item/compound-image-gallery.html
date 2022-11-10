@@ -7,5 +7,6 @@
 
     <div class="gallery-img" data-src="{{ child.object_location | relative_url }}">
         <p><img src="{{ child.image_small | relative_url }}" alt="{% if page.title != child.title %}{{child.title | escape }}{% else %}{{page.title | escape }}[{{forloop.index}}]{% endif %}" class="img-fluid"></p>
-        {% if page.title != child.title %}<p><small>{{child.title}}</small></p>{% endif %}
     </div>
+
+    {% include item/child/modal.html %}

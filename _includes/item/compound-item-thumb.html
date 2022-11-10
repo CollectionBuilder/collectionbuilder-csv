@@ -4,7 +4,7 @@
 
 {% endcomment %}
 <div class="p-2">
-    {% if child.object_location %}<a href="{{ child.object_location | relative_url }}" target="_blank" rel="noopener">{% endif %}
+    {% if child.object_location %}<a href="{{ child.object_location | relative_url }}" target="_blank" rel="noopener" class=""> </a>{% endif %} 
         {% if child.image_thumb or child.image_small %}
     <img class="img-thumbnail w-50" src="{{ child.image_small | default: child.image_thumb | relative_url }}" alt="{{ child.title | escape }}">
     {% else %}
@@ -13,6 +13,7 @@
     </svg>
     <span class="sr-only">{{ child.title | escape }} - {{ child.format }}</span>
     {% endif %}
-{% if child.object_location %}</a>{% endif %}
-{% if page.title != child.title %}<p><small>{{child.title}}</small></p>{% endif %}
+
 </div>
+ 
+{% include item/child/modal.html %}
