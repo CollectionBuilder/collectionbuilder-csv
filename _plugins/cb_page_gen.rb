@@ -37,7 +37,7 @@ module CollectionBuilderPageGenerator
       dir_default = 'items' # where to output pages
       extension_default = 'html' # extension, usually html
       filter_default = 'objectid' # value to filter records on, filters on objectid by default
-      filter_condition_default = nil # expression to filter records on, off by default
+      filter_condition_default = '!record["parentid"]' # expression to filter records on, off by default
       #
       ######
 
@@ -84,7 +84,7 @@ module CollectionBuilderPageGenerator
         end
         # Filter records if filter_condition is configured
         if filter_condition
-          filtered_records = records.select { |record| eval(data_config['filter_condition']) } 
+          filtered_records = records.select { |record| eval(filter_condition) } 
           filtered_number = records.size - filtered_records.size
           # provide notice if filter is applied
           puts color_text("Notice cb_page_gen: filter_condition '#{filter_condition}' is applied. #{filtered_number} records are filtered.", :yellow) if filtered_number != 0 
