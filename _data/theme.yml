@@ -94,7 +94,7 @@ font-cdn: # add font stylesheet, e.g. <link href="https://fonts.googleapis.com/c
 #
 icons: 
    icon-image: image
-   icon-audio: play
+   icon-audio: soundwave
    icon-video: film
    icon-pdf: file-pdf
    icon-record: file-text
