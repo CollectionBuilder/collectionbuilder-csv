@@ -1,8 +1,7 @@
 
 <!-- Button trigger modal -->
-<p class="text-center mb-5">
-    <a id="{{ child.title | slugify }}" onclick="window.location.hash='{{ child.title | slugify }}'" type="button" class="small text-secondary" data-bs-toggle="modal" data-bs-target="#{{ child.title | slugify }}Modal">{{child.title}}</a> 
-    <a id="item-{{ forloop.index }}" onclick="window.location.hash='item-{{ forloop.index }}'" type="button" class="btn btn-sm btn-outline-secondary small" data-bs-toggle="modal" data-bs-target="#{{ child.title | slugify }}Modal">{{child.display_template | capitalize }} Info</a>
+<p class="text-center mb-5"> 
+    <a id="item-{{ forloop.index }}" onclick="window.location.hash='item-{{ forloop.index }}'" type="button" class="btn btn-sm btn-outline-secondary small stretched-link" data-bs-toggle="modal" data-bs-target="#{{ child.title | slugify }}Modal">Item Info {% include feature/icon.html icon="plus" label="plus icon" %}</a>
 </p>
 <!-- Modal -->
 <div class="modal fade" id="{{ child.title | slugify }}Modal" tabindex="-1" role="dialog" aria-labelledby="{{ child.title | slugify }}ModalLabel" aria-hidden="true">
@@ -16,13 +15,13 @@
                 <div class="modal-title w-100" id="{{ child.title | slugify }}ModalLabel">
                     <div class="row">
                         <div class="col-1 col-md-2 text-right">
-                         <button onclick="document.getElementById('item-{% if forloop.index == 1 %}{{forloop.length}}{% else %}{{forloop.index | minus: 1 }}{% endif %}').click();window.location.hash='{{ child.title | slugify }}'" class="btn btn-outline-dark btn-sm">{% include feature/icon.html icon="arrow-left" label="Left arrow" %} <span class="d-none d-md-inline">Previous Item</span></button>
+                         <button onclick="document.getElementById('item-{% if forloop.index == 1 %}{{forloop.length}}{% else %}{{forloop.index | minus: 1 }}{% endif %}').click();window.location.hash='item-{% if forloop.index == 1 %}{{forloop.length}}{% else %}{{forloop.index | minus: 1 }}{% endif %}'" class="btn btn-outline-dark btn-sm">{% include feature/icon.html icon="arrow-left" label="Left arrow" %} <span class="d-none d-md-inline">Previous Item</span></button>
                          </div>
                         <div class="col-9 col-md-8 text-center">
                             <h5>{{page.title}} <span class="d-none d-md-inline">-</span><span class="d-md-none"><br></span> Item {{forloop.index}} of {{children | size }}</h5>
                             </div>
                         <div class="col-1 col-md-2 text-left">
-                         <button onclick="document.getElementById('item-{% if forloop.index == forloop.length %}1{% else %}{{forloop.index | plus: 1 }}{% endif %}').click();window.location.hash='{{ child.title | slugify }}'" class="ms-md-5 btn btn-outline-dark btn-sm"><span class="d-none d-md-inline">Next Item</span> {% include feature/icon.html icon="arrow-right" label="Right arrow" %}</button>
+                         <button onclick="document.getElementById('item-{% if forloop.index == forloop.length %}1{% else %}{{forloop.index | plus: 1 }}{% endif %}').click();window.location.hash='item-{% if forloop.index == forloop.length %}1{% else %}{{forloop.index | plus: 1 }}{% endif %}'" class="ms-md-5 btn btn-outline-dark btn-sm"><span class="d-none d-md-inline">Next Item</span> {% include feature/icon.html icon="arrow-right" label="Right arrow" %}</button>
                         </div>
                 </div>
             </div>
@@ -30,7 +29,7 @@
             </div>
             <div class="modal-body" >
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-8">
                     <div class="card mb-4 text-center">
                         <div class="m-2">
                             <p>
@@ -43,7 +42,9 @@
                                     {% include item/child/video-player.html %}
                                     {% endif %}
                                 {% elsif child.display_template == 'audio' %}
+                                <div class="my-auto">
                                 {% include item/child/audio-player.html %}
+                                </div>
                                 {% elsif child.display_template == 'panorama' %}
                                 {% include item/child/panorama.html %}
                                 {% else %}
@@ -61,7 +62,7 @@
                     </div>
                 </div>
             
-                <div class="col-md-6">
+                <div class="col-md-4">
             
                     {% include item/child/metadata.html %}
                     
