@@ -8,7 +8,7 @@ Add a thumbnail image or icon based on format for an item, with a object_locatio
         <div class="p-2 text-center">
             <a id="{{ child.title | slugify }}" onclick="window.location.hash='{{ child.title | slugify }}'" type="button" class="small mb-2 text-dark" data-bs-toggle="modal" data-bs-target="#{{ child.title | slugify }}Modal">{{child.title | truncatewords: 4}}</a><br>
             {% if child.image_thumb or child.image_small %}
-            <img class="img-thumbnail w-50" src="{{ child.image_small | default: child.image_thumb | relative_url }}" alt="{{ child.title | escape }}">
+            <img class="img-thumbnail w-50" src="{{ child.image_thumb | default: child.image_small | relative_url }}" alt="{{ child.title | escape }}">
             {% else %}
             <svg class="bi timeline-thumb text-body" fill="currentColor" aria-hidden="true">
                 {%- assign icon_template = child.display_template | default: item.format -%}
