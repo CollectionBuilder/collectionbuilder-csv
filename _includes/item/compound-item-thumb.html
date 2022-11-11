@@ -3,7 +3,7 @@
 Add a thumbnail image or icon based on format for an item, with a object_location link (if available).
 
 {% endcomment %}
-<div class="card mb-2" >
+<div class="card h-100" >
     <div class="my-auto">
         <div class="p-2 text-center">
             <a id="{{ child.title | slugify }}" onclick="window.location.hash='{{ child.title | slugify }}'" type="button" class="small mb-2 text-dark" data-bs-toggle="modal" data-bs-target="#{{ child.title | slugify }}Modal">{{child.title | truncatewords: 4}}</a><br>
