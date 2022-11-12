@@ -64,6 +64,18 @@ metadata-export-fields: "title,creator,date,description,subject,location,latitud
 metadata-facets-fields: "subject,creator,format"
 
 ##########
+# Compound Objects 
+# 
+# Ignore this section if you are not including any compound objects
+# Note, like other items, child objects will only appear in visualizations if they have the correct metadata (lat long for map; date for timeline)
+# select true if you'd like your compound object's child objects to appear in the map feature
+map-child-objects: true # true / false
+# select true if you'd like your compound object's child objects to appear in the timeline feature
+timeline-child-objects: true # true / false
+# select true if you'd like your compound object's child objects to appear in the timeline feature
+browse-child-objects: false # true / false
+
+##########
 # ADVANCED OPTIONS
 #
 
