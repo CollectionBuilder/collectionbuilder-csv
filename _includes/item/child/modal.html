@@ -1,10 +1,10 @@
 
 <!-- Button trigger modal -->
 <p class="text-center mb-5"> 
-    <a id="item-{{ forloop.index }}" onclick="window.location.hash='item-{{ forloop.index }}'" type="button" class="btn btn-sm btn-outline-secondary small stretched-link" data-bs-toggle="modal" data-bs-target="#{{ child.title | slugify }}Modal">Item Info {% include feature/icon.html icon="plus" label="plus icon" %}</a>
+    <a id="item-{{ forloop.index }}" onclick="window.location.hash='item-{{ forloop.index }}'" type="button" class="btn btn-sm btn-outline-secondary small stretched-link" data-bs-toggle="modal" data-bs-target="#{{ child.objectid | slugify }}Modal">Item Info {% include feature/icon.html icon="plus" label="plus icon" %}</a>
 </p>
 <!-- Modal -->
-<div class="modal fade" id="{{ child.title | slugify }}Modal" tabindex="-1" role="dialog" aria-labelledby="{{ child.title | slugify }}ModalLabel" aria-hidden="true">
+<div class="modal fade" id="{{ child.objectid | slugify }}Modal" tabindex="-1" role="dialog" aria-labelledby="{{ child.objectid | slugify }}ModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document" style="max-width: 90% !important;">
         <div class="modal-content">
             <div class="w-100 text-right mb-0">
@@ -12,7 +12,7 @@
             </div>
             <div class="modal-header ">
                 
-                <div class="modal-title w-100" id="{{ child.title | slugify }}ModalLabel">
+                <div class="modal-title w-100" id="{{ child.objectid | slugify }}ModalLabel">
                     <div class="row">
                         <div class="col-1 col-md-2 text-right">
                          <button onclick="document.getElementById('item-{% if forloop.index == 1 %}{{forloop.length}}{% else %}{{forloop.index | minus: 1 }}{% endif %}').click();window.location.hash='item-{% if forloop.index == 1 %}{{forloop.length}}{% else %}{{forloop.index | minus: 1 }}{% endif %}'" class="btn btn-outline-dark btn-sm">{% include feature/icon.html icon="arrow-left" label="Left arrow" %} <span class="d-none d-md-inline">Previous Item</span></button>
