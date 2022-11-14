@@ -30,7 +30,9 @@
 {% endcomment %}
 {% assign termsField = include.field | default: "subject" %}
 {% assign termsMax = include.max | default: 5 %}
-{% assign terms = site.data[site.metadata] | where_exp: 'item','item.objectid' | map: termsField | join: ";" %}
+{% if site.data.theme.browse-child-objects == false %}
+{%- assign terms = site.data[site.metadata] | where_exp: 'item','item.parentid == nil' | map: termsField | join: ";" -%}{% else %}
+{%- assign terms = site.data[site.metadata] | where_exp: 'item','item.objectid' | map: termsField | join: ";" -%}{% endif %}
 {%- assign uniqTerms = terms | downcase | split: ";" | array_count_uniq -%}
 {% capture topTerms %}
 {% for i in uniqTerms limit: termsMax %}{{ i[0] }};{% endfor %}{% endcapture %}

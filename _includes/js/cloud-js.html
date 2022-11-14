@@ -4,7 +4,11 @@
     Requires CB's array_count_uniq.rb plugin!
 
 {%- endcomment -%}
+{% if site.data.theme.browse-child-objects == false %}
+{%- assign items = site.data[site.metadata] | where_exp: 'item','item.parentid == nil' -%}
+{% else %}
 {%- assign items = site.data[site.metadata] | where_exp: 'item','item.objectid' -%}
+{% endif %}
 {%- assign termsMin = include.min | plus: 0 | default: 1 -%}
 {%- assign cloud_id = include.id | default: "cloud" -%}
 {%- assign cloud-fields = include.fields | split: ";" -%}
