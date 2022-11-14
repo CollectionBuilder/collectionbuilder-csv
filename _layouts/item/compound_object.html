@@ -1,11 +1,21 @@
 ---
 layout: item/item-page-base
 item-meta: true
+gallery: true
 custom-foot: js/modal-hash-js.html
 ---
 {% assign children = site.data[site.metadata] | where_exp: 'item','item.parentid == page.objectid' %}
 <div class="container py-3">
     <div class="row">
+        {% if page.format == "postcard" %}
+        <div class="col-md-10 col-12 mx-auto">
+            <div class="mb-4 ">
+                    {% for child in children %}
+                    <div class="col">
+                        {% include item/compound-image-gallery.html %}
+                    </div>
+                    {% endfor %}
+                    {% else %}
         <div class="col-md-10 col-12 mx-auto">
             <div class="mb-4 ">
                 <div class="row row-cols-2 row-cols-lg-4 g-2">
@@ -14,9 +24,8 @@ custom-foot: js/modal-hash-js.html
                         {% include item/compound-item-thumb.html %}
                     </div>
                     {% endfor %}
-
                 </div>
-
+                {% endif %}
                 <div class="my-2">
 
                     {% include item/compound-download-buttons.html %}

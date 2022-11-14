@@ -17,7 +17,7 @@
                     <li><a target="_blank" rel="noopener" href="{{ child.object_location | relative_url }}"
                         class="dropdown-item">{%
                         if page.title != child.title %}{{child.title | truncatewords: 3}}{% else
-                        %}Item {{ forloop.index | plus: 1}}{% endif %} ({{ child.format | split: '/' | last | upcase }})</a>
+                        %}Item {{ forloop.index | plus: 1}}{% endif %}{% if child.format%} ({{ child.format | split: '/' | last | upcase }}){% endif %}</a>
                     {% endunless %}</li>
                     {% endfor %}
                 </ul>
