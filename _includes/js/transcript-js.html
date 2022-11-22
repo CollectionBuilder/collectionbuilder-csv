@@ -1,0 +1,163 @@
+<script type="text/javascript">
+ 
+ document.getElementById("filters").addEventListener('change', (e) => {
+    let myClass = this.value;
+    vizFilter(myClass);
+    $("input#quicksearch").value = "";
+    document.getElementByClassName("line").classList.remove("featured");
+    document.getElementByClassName("words").classList.remove("featured");
+    document.getElementByClassName("line").classList.remove("grey");
+    document.getElementByClassName("line").classList.add("grey-small");    
+    document.getElementByClassName("line").classList.remove("anchored-highlight");
+    $('div.' + myClass).classList.remove("grey-small");  
+    $('div.' + myClass).classList.add("featured-filter");  
+    let numberof = $('div.'+ myClass).length;
+    document.getElementById("numberoffilters").innerHTML = numberof + " related lines";
+    document.getElementByClassName("filtercount").classList.remove("d-none");  
+    let url = new URL(window.location);
+    let params = url.searchParams;
+    params.set('filter', myClass);
+    params.delete('q');
+    params.delete('scene');
+    let p = params.toString();
+    document.getElementByClassName("filter-search").classList.add("d-none");
+    window.history.replaceState({}, '', location.pathname + '?' + p);
+  });
+
+   $("button.reset").click(function() {
+  $("div").removeClass("grey"); 
+  $("div").removeClass("grey-small"); 
+
+  $('.filtercount').addClass('d-none');  
+  $('div').removeClass("anchored-highlight"); 
+    $("div").removeClass("featured");
+    $("p").removeClass("featured");
+    $('.filter-search').addClass('d-none');
+    $("input#quicksearch").val(""); 
+    $("#filters").val($("#filters option:first").val());
+    var numberofint = $('tr').length;
+   $("#numberof").html(numberofint);
+   let url = new URL(window.location);
+let params = url.searchParams;
+params.delete('q'); 
+   params.delete('filter'); 
+   var p = params.toString();
+window.history.replaceState({}, '', location.pathname + '?' + p );
+$("rect").removeClass("dark");
+$("rect").removeClass("dark");
+$("rect").removeClass (function (index, className) {
+    return (className.match (/(^|\s)primary-\S+/g) || []).join(' ');
+});         
+ });
+
+
+ function filterLines() {
+    $('.line').removeClass("anchored-highlight");
+    $(".line").removeClass("featured");
+    $("div").removeClass("grey-small"); 
+    $(".line").addClass("grey");
+    var input, filter, p, span, i;
+    input = document.getElementById("quicksearch");
+    let url = new URL(window.location);
+    let params = url.searchParams;
+    params.set('q', input.value);
+    var p = params.toString();
+    window.history.replaceState({}, '', location.pathname + '?' + p);
+    filterplain = input.value;
+    filter = input.value.toUpperCase();
+    itemcontainer = document.getElementById("contents-container");
+    item = itemcontainer.getElementsByClassName("line");
+    var searchResults = '<option>Select and scroll to a matching line</option>';
+    for (i = 0; i < item.length; i++) {
+      itemcontents = item[i].getElementsByClassName("words")[0];
+      var index = itemcontents.innerHTML.indexOf(filterplain);
+      if (itemcontents) {
+        if (itemcontents.innerHTML.toUpperCase().indexOf(filter) > -1) {
+          itemcontents.classList.add("featured");
+          itemcontents.classList.remove("grey");
+          searchResults += '<option class=text-truncate" style="max-width: 250px;" value="'+ i +'">Line ' + i + ' -- ' + itemcontents.innerHTML.substring(0,125) + '...</option>';
+          itemcontents.innerHTML = itemcontents.innerHTML.replace(filterplain, "<span class='text-danger'>" + filterplain + "</span>");
+          } else {
+        }
+      }
+      $("#filters").val($("#filters option:first").val("search filtering"));
+
+     var numberofint = $('.featured').length;
+     $("#numberof").html(numberofint + " lines match your query");
+     $("#searchResults").html(searchResults);
+     $('.linecount').removeClass('d-none');
+     $('.filter-search').removeClass('d-none');
+     $("#numberoffilters").html("");
+    $('.filtercount').addClass('d-none'); 
+    }
+  }
+
+
+  function scrollToLine() {
+  var line_array_num = document.getElementById('searchResults').value;
+  const featured_lines = document.getElementsByClassName('line');
+  var line_num = parseInt(line_array_num);
+  var position = featured_lines[line_num].offsetTop;
+  var plus_position = parseInt(position) - 300;
+    window.scroll({
+    top: plus_position,
+    behavior: 'smooth'
+  });
+console.log(position + ' - ' + plus_position);
+}
+
+
+
+
+
+  // click goButton to search if return pressed in search box
+  $('#quicksearch').keypress(function(e){
+       if(e.which == 13){//Enter key pressed
+           $('#goButton').click();
+           //Trigger search button click event
+        }
+   });
+
+
+$(document).ready(function() {
+ let url = new URL(window.location);
+let params = url.searchParams;
+var dataFilter = url.searchParams.get('q');
+var codeFilter = url.searchParams.get('filter');
+var hashfilter = decodeURIComponent(location.hash.substr(1));//.replace(/%20/g, " ");
+ if(dataFilter) { 
+     // code to be executed if a hash is contained in the url
+  $('#quicksearch').val($('#quicksearch').val() + dataFilter);
+ $('#goButton').click();
+ params.delete('filter'); 
+ $('#filter-button').click();
+
+ //$(hashfilterclass).addClass('active');
+ }
+ else if(codeFilter) { params.delete('q'); 
+     // code to be executed if a filter is contained in the url search parameters
+  $('#filters').val(codeFilter).change();
+  $('#filter-button').click();
+ //$(hashfilterclass).addClass('active');
+ }
+ else if(hashfilter) { params.delete('q'); 
+     // code to be executed if an anchor (#) is contained in the url
+     $('#' + hashfilter).addClass('anchored-highlight');
+
+ }
+ else{
+ }});
+ 
+
+
+ function vizFilter(x) {
+  $("rect").removeClass (function (index, className) {
+    return (className.match (/(^|\s)primary-\S+/g) || []).join(' ');
+});    
+              $("rect").addClass("dark");            
+              $('rect.' + x).toggleClass("dark").addClass("primary-" + x);
+              $("rect").not('.dark').closest('div.vizdiv').removeClass("hidden");
+          }
+  
+
+</script>

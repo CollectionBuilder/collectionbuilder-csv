@@ -10,10 +10,14 @@ To enable compound objects in CollectionBuilder, you will need:
 
 And these parameters must be followed: 
 
-- The parent metadata record should have a display template of `compound_object` or `postcard`. 
 - Each child record should have a parentid value that matches the parent metadata records objectid.
+- The parent metadata record should have a display template of `compound_object` or `postcard`. 
+    - Those items with the dispay_template field of `compound_object` will display as a grid of cards featuring item thumbnails that, upon being clicked, will open a child object page as a modal. 
+    - Those items with the dispay_template field of `postcard` will display as larger small images that *do not* have child object pages. If one clicks on one of these larger images, they will open up in a zoomable spotlight gallery.
+        - If one describes the format of this type of compound object as `postcard`, the format above the title at the top of the page will read postcard. 
+        - If one describes the format of this type of compound object as `compound_object`, the format about the title will read "Compound Object" and the number of objects associated with it will be listed. 
 
-Please look at the demo compound object metadata sheet for an example of how this might look: <https://docs.google.com/spreadsheets/d/1UNwl02r3fB-ybiKqb3SY4K30Tf4_rY_NOv5_o5WtVoY/edit?usp=sharing>
+Please look at the demo compound object metadata sheet for an example of how this might look in the metadata: <https://docs.google.com/spreadsheets/d/1UNwl02r3fB-ybiKqb3SY4K30Tf4_rY_NOv5_o5WtVoY/edit?usp=sharing>, and see the demo CollectionBuilder-CSV site for how this looks in operation. 
 
 ## Context
 
@@ -64,9 +68,3 @@ Create a new "postcard" item template in "_layouts/item" (likely based on the st
 
 3D archeological artifacts with a set of standard images for each object might also be implemented in this way to avoid the overhead of many addition empty metadata rows with repeating view names.
 
-## Separate Objects + Images List
-
-Another approach that has been implemented for large collections of compound images, is to describe the parent "objects" in a standard metadata template, plus describe each individual image in a separate spreadsheet (in their own template). 
-On the item layout, the template will use the objectid to check the image list to find the related child images to display. 
-
-CollectionBuilder doesn't do this though. Evan did it once, so he mentioned it in the docs. 
