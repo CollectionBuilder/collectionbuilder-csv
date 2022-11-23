@@ -112,6 +112,6 @@ icons:
    icon-pdf: file-pdf
    icon-record: file-text
    icon-compound-object: collection 
-   icon-postcard: postcard
+   icon-multiple: postcard
    icon-default: file-earmark # fall back icon
 

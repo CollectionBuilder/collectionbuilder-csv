@@ -1,5 +1,5 @@
 {%- assign templates = site.data[site.metadata] | where_exp: 'item','item.parentid == nil ' | map: "display_template" -%}
-{%- assign types = "image;audio;video;pdf;record;compound_object;postcard" | split: ";" -%}
+{%- assign types = "image;audio;video;pdf;record;compound_object;multiple" | split: ";" -%}
 <div class="card mb-3" >
   <div class="card-body">
     <h5 class="card-title">Objects</h5>
@@ -21,8 +21,8 @@
       <a class="text-dark" href="{{ 'record' | prepend: '/browse.html#' | relative_url }}">Record{% if count > 1 %}s{% endif %} <svg class="bi icon-sprite text-body" fill="currentColor" aria-hidden="true"><use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#icon-default"/></svg></a><br>
       {% when 'compound_object' %}
       <a class="text-dark" href="{{ 'compound_object' | prepend: '/browse.html#' | relative_url }}">Compound Object{% if count > 1 %}s{% endif %} <svg class="bi icon-sprite text-body" fill="currentColor" aria-hidden="true"><use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#icon-compound-object"/></svg></a><br>
-      {% when 'postcard' %}
-      <a class="text-dark" href="{{ 'postcard' | prepend: '/browse.html#' | relative_url }}">Postcard{% if count > 1 %}s{% endif %} <svg class="bi icon-sprite text-body" fill="currentColor" aria-hidden="true"><use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#icon-postcard"/></svg></a><br>
+      {% when 'multiple' %}
+      <a class="text-dark" href="{{ 'multiple' | prepend: '/browse.html#' | relative_url }}">Multiple{% if count > 1 %}s{% endif %} <svg class="bi icon-sprite text-body" fill="currentColor" aria-hidden="true"><use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#icon-multiple"/></svg></a><br>
       {% else %}
       <a class="text-dark" href="{{ 'file' | prepend: '/browse.html#' | relative_url }}">File{% if count > 1 %}s{% endif %} <svg class="bi icon-sprite text-body" fill="currentColor" aria-hidden="true"><use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#icon-default"/></svg></a><br>
       {%- endcase -%}
