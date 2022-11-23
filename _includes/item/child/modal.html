@@ -1,7 +1,7 @@
 
 <!-- Button trigger modal -->
 <p class="text-center mb-5"> 
-    <a id="item-{{ forloop.index }}" onclick="window.location.hash='{{ child.objectid }}'" type="button" class="btn btn-sm btn-outline-secondary small stretched-link" data-bs-toggle="modal" data-bs-target="#{{ child.objectid }}Modal">Item Info {% include feature/icon.html icon="plus" label="plus icon" %}</a>
+    <a id="item-{{ forloop.index }}" onclick="window.location.hash='{{ child.objectid }}'" type="button" class="btn btn-sm btn-outline-secondary small stretched-link" data-bs-toggle="modal" data-bs-target="#{{ child.objectid }}Modal">{{child.display_template | capitalize | default: "Item" }} & Info</a>
 </p>
 <!-- Modal -->
 <div class="modal fade" id="{{ child.objectid }}Modal" tabindex="-1" role="dialog" aria-labelledby="{{ child.objectid }}ModalLabel" aria-hidden="true">
