@@ -23,9 +23,12 @@ Default supported options: `image`,`pdf`, `video`, `audio`,  `record`, `item`, a
 - `pdf`: Displays image_small if available, with fall back to image_thumb, or a pdf icon.
 - `video`: Displays a video embedded on the page with default support for video files (using `<video>` element with object_location as src), YouTube (from link in object_location), or Vimeo videos (from link in object_location).
 - `audio`: Uses `<audio>` element to embed audio file from object_location as src.
+- `panorama`: a 360 degree image. Item pages will use the Javascript based panorama viewer, [Panellum](https://pannellum.org/) to display the image in a 360 degree view.
 - `record`: metadata only record.
 - `item`: generic fallback item page, displays image or icon depending on "image_thumb"
-- `compound`: a record for a object that includes multiple file instances that are described/managed separately in the metadata. Compound objects use their own set of conventions, see "docs/compound_objects.md" for details.
+- `compound_object`: a record for a object that includes multiple file instances that are described/managed separately in the metadata. Compound objects use their own set of conventions, see "docs/compound_objects.md" for details.
+- `multiple`: a record for a object that includes multiple images (such as a postcard) that are listed separately in the metadata. Multiples use their own set of conventions, see "docs/compound_objects.md" for details.
+
 
 Each of these layouts in turn is generally given `layout: item-page-base`, so that the custom features of the display templates will share the same standard page layout.
 If you want to change the basic structure of all items pages (breadcrumbs and title at top, citation and rights at button), edit the "_layouts/item/item-page-base". 

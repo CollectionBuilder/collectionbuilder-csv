@@ -1,21 +1,17 @@
 # Compound Objects
 
-## Quick Overview Requirements
+## Quick Overview + Requirements
 
-To enable compound objects in CollectionBuilder, you will need: 
+To enable compound objects in CollectionBuilder, the following conventions must be followed:
 
-- a "parent" metadata record for the compound object
-- child metadata record(s) for the objects that connect in the compound object
-- a "parentid" field in your metadata
-
-And these parameters must be followed: 
-
-- Each child record should have a parentid value that matches the parent metadata records objectid.
-- The parent metadata record should have a display template of `compound_object` or `postcard`. 
-    - Those items with the dispay_template field of `compound_object` will display as a grid of cards featuring item thumbnails that, upon being clicked, will open a child object page as a modal. 
-    - Those items with the dispay_template field of `postcard` will display as larger small images that *do not* have child object pages. If one clicks on one of these larger images, they will open up in a zoomable spotlight gallery.
-        - If one describes the format of this type of compound object as `postcard`, the format above the title at the top of the page will read postcard. 
-        - If one describes the format of this type of compound object as `compound_object`, the format about the title will read "Compound Object" and the number of objects associated with it will be listed. 
+- A "parentid" field must be present in your metadata spreadsheet/csv. 
+- A parent metadata record must be created for each compund object that has a display template of either `compound_object` or `multiple`. 
+    - a `compound_object` will display a grid of collected items (of any accepted CB type) whose metadata and media can be viewed in a series of browsable modals
+    - a `multiple` is image based and will display a vertical series of larger images that scroll down the page
+- The parent metadata record should have an objectid but no parentid
+- Each child record must have an objectid AND a parentid 
+- Each child record's parentid value must match the parent metadata record's `objectid` 
+    - e.g. If the parent's objectid is example002, then all children for have "example002" in their parentid field
 
 Please look at the demo compound object metadata sheet for an example of how this might look in the metadata: <https://docs.google.com/spreadsheets/d/1UNwl02r3fB-ybiKqb3SY4K30Tf4_rY_NOv5_o5WtVoY/edit?usp=sharing>, and see the demo CollectionBuilder-CSV site for how this looks in operation. 
 
@@ -23,48 +19,41 @@ Please look at the demo compound object metadata sheet for an example of how thi
 
 "Compound objects" are a concept used in some repository platforms to describe items that are made up of a set of digital files intended to be treated as one singular connected object in the system. 
 
-For example, consider these item types:
+There are two main approaches to representing these types of objects in a CollectionBuilder project. These correspond to the display templates "compound_object" and "multiple." 
 
-- Book: for a digitized book the "compound object" might contain a series of 25 individual page images. The parent metadata record provides full details about the book, while the child metadata records will only describe the unique information about each page such as a transcript.
+A `compound_object` can include any type of media that CollectionBuilder handles, i.e. image, pdf, video, audio, panorama, or record. A `multiple` should be image based, and is best used for items such as postcards or multi-view records of a 3-dimensional object. These items will display as such: 
+
+    - Those items with the dispay_template field of `compound_object` will display as a grid of cards featuring item thumbnails that, upon being clicked, will open a child object page as a modal. 
+    - Those items with the dispay_template field of `multiple` will display as larger small images that *do not* have child object pages. If one clicks on one of these larger images, they will open up in a zoomable spotlight gallery.
+
+**Note:** The "multiple" display template works well if the additional files do *not* require their own extensive metadata. Our build will only represent the "title" of the child elements on the item page -- all other metadata for child objects with the display_template postcard will be ignored. 
+
+#### `compound_object` Examples
+
+- Scrapbook: for a digitized book the "compound object" might contain a series of 25 individual page images. The parent metadata record provides full details about the book, while the child metadata records will only describe the unique information about each page such as a transcript.
+- Oral history: each object might contain different derivatives of an interview, audio, video, transcript, and portrait.
+- Gallery: a gallery of images from one event that are individually described
+
+#### `multiple` Examples
+
 - Postcard: usually a compound object containing a front and back image. 
 - 3D archeological artifact: archeological objects are often imaged from standardized perspectives to provide experts information about the piece.
-- Oral history: each object might contain different derivatives of an interview, audio, video, transcript, and portrait.
-
-There are multiple approaches to representing these types of objects in a CollectionBuilder project.
-Which approach you choose will depend on the source of metadata, needs of the materials, and aims of the exhibit.
-
+- Gallery: a gallery of images from one event that are not individually described
+ 
 ## Parentid
 
-A powerful option for describing "compound objects" is built into CollectionBuilder-CSV.
-In this approach, a top level metadata record describes the object overall (the parent), while child metadata record(s) describe the individual related files.
+Our approach for describing "compound objects" and "multiples" require a top level metadata record describing the object overall (the parent). As such, these items diplays depends on the parentid field, which connects child metadata record(s) that describe the individual related files to the parent record. 
 This allows each child object to be fully described individually (or not) using your full metadata template.
 It is also useful if you are exporting existing metadata from a platform such as CONTENTdm with "page level" metadata.
-
-However, because the spreadsheet will contain two different types of records represented in the same template, it can sometimes be more cumbersome to implement and manage.
-If you are transforming existing data or have relatively simple compound object types, you might want to consider the other options outlined below this section.
 
 These are the basic conventions:
 
 - The child record(s) must have a "parentid" that matches the "objectid" of their parent.
 - Both the parent and the child must have an "objectid".
-- The parent should have "display_template" of "compound_object" to use the built-in CB compound object template.
+- The parent should have a "display_template" of "compound_object" or "multiple" to use the respective display templates.
 - Child records should have their own "display_template" to help choose the appropriate features on the item page. (i.e. use "image" for a .JPG file)
 - The image listed in image_thumb and image_small of the parent will be used to represent the item in all visualizations.
 - You can use the Compound Objects options in the theme page to determine if you would like your compound objects to show up in the timeline, map, or browse pages.
 - Default visualizations (except the item page) use *only* the parent record, so child records are not searchable on the browse page of search page.
 
-## Simple Compound Objects / aka Postcards
-
-The default display of compound objects in CollectionBuilder consists of a grid of thumbnails with a shortened title and an "Item Info" button that opens up a modal with the child item's information. If you would prefer to display larger versions of the children in your compound object, you should use the display template `postcard`. 
-
-This approach works well if the additional files do *not* require their own extensive metadata, which is why the "postcard" moniker is used. Our build will only represent the "title" of the child elements on the item page -- all other metadata for child objects with the display_template postcard will be ignored. 
-
-Objects with multiple derivatives or standardized image sets might also be well served by this simple approach to avoid confusion and overhead describing different formats available for download/view.
-
-For example, a collection consisting mostly of postcards can be quickly implemented following this method. 
-The main image fields would represent the front of the postcard, with an additional column added for the "image_back" (or what ever your organization terms it). 
-The "object_location" could be the link to a PDF version of the complete post card.
-Create a new "postcard" item template in "_layouts/item" (likely based on the standard "image" template) that displays the "image_back".
-
-3D archeological artifacts with a set of standard images for each object might also be implemented in this way to avoid the overhead of many addition empty metadata rows with repeating view names.
 
