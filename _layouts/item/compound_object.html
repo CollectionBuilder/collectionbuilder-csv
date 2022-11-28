@@ -5,56 +5,37 @@ gallery: true
 custom-foot: js/modal-hash-js.html
 ---
 {% assign children = site.data[site.metadata] | where_exp: 'item','item.parentid == page.objectid' %}
-<div class="container py-3">
-    <div class="row">
-        {% if page.format == "postcard" %}
-        <div class="col-md-10 col-12 mx-auto">
-            <div class="mb-4 text-center">
-                    {% for child in children %}
-                    <div class="col">
-                        {% include item/compound-image-gallery.html %}
-                    </div>
-                    {% endfor %}
-                    {% else %}
-        <div class="col-md-10 col-12 mx-auto">
-            <div class="mb-4 ">
-                <div class="row row-cols-2 row-cols-lg-4 g-2">
-                    {% for child in children %}
-                    <div class="col">
-                        {% include item/compound-item-thumb.html %}
-                    </div>
-                    {% endfor %}
+
+<div class="row">
+    {% if page.format == "postcard" %}
+    <div class="col-md-10 col-12 mx-auto">
+        <div class="mb-4 text-center">
+            {% for child in children %}
+            <div class="col">
+                {% include item/compound-image-gallery.html %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% else %}
+    <div class="col-md-10 col-12 mx-auto">
+        <div class="mb-4 ">
+            <div class="row row-cols-2 row-cols-lg-4 g-2">
+                {% for child in children %}
+                <div class="col">
+                    {% include item/compound-item-thumb.html %}
                 </div>
-                {% endif %}
-                <div class="my-2">
+                {% endfor %}
+            </div>
+            {% endif %}
 
-                    {% include item/compound-download-buttons.html %}
-
-                </div>
-
+            <div class="my-2">
+                {% include item/compound-download-buttons.html %}
             </div>
         </div>
     </div>
 
     <div class="col-md-10 mx-auto col-12" id="metadata">
-
         {% include item/metadata.html %}
-
     </div>
-</div>
-
-<div class="row justify-content-end mt-4">
-    <div class="col-md-5">
-        {% include item/citation-box.html %}
-    </div>
-    {% if page.rights or page.rightsstatement %}
-    <div class="col-md-5">
-        {% include item/rights-box.html %}
-    </div>
-    {% endif %}
-</div>
-
-{%- if site.data.theme.browse-buttons == true -%}
-{% include item/browse-buttons.html %}
-{%- endif -%}
 </div>
