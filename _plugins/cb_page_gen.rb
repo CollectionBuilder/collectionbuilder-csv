@@ -75,19 +75,19 @@ module CollectionBuilderPageGenerator
         end
 
         # Filter records if filter is configured (default is on objectid)
-        if filter 
+        if filter
           filtered_records = records.select { |r| r[filter] }
           filtered_number = records.size - filtered_records.size
           # provide notice if filter is applied
-          puts color_text("Notice cb_page_gen: filter on '#{filter}' is applied. #{filtered_number} records are filtered because they do not have a value in '#{filter}'.", :yellow) if filtered_number != 0 
+          puts color_text("Notice cb_page_gen: filter on '#{filter}' is applied. #{filtered_number} records are filtered because they do not have a value in '#{filter}'.", :green) if filtered_number != 0 
           records = filtered_records
         end
         # Filter records if filter_condition is configured
-        if filter_condition
+        if filter_condition && filter_condition != filter_condition_default 
           filtered_records = records.select { |record| eval(filter_condition) } 
           filtered_number = records.size - filtered_records.size
           # provide notice if filter is applied
-          puts color_text("Notice cb_page_gen: filter_condition '#{filter_condition}' is applied. #{filtered_number} records are filtered.", :yellow) if filtered_number != 0 
+          puts color_text("Notice cb_page_gen: filter_condition '#{filter_condition}' is applied. #{filtered_number} records are filtered.", :green) if filtered_number != 0 
           records = filtered_records
         end
 
