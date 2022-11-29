@@ -83,12 +83,14 @@ module CollectionBuilderPageGenerator
           records = filtered_records
         end
         # Filter records if filter_condition is configured
-        if filter_condition && filter_condition != filter_condition_default 
+        if filter_condition
           filtered_records = records.select { |record| eval(filter_condition) } 
           filtered_number = records.size - filtered_records.size
-          # provide notice if filter is applied
-          puts color_text("Notice cb_page_gen: filter_condition '#{filter_condition}' is applied. #{filtered_number} records are filtered.", :green) if filtered_number != 0 
           records = filtered_records
+          # provide notice if non-default filter is applied
+          if filter_condition != filter_condition_default 
+            puts color_text("Notice cb_page_gen: filter_condition '#{filter_condition}' is applied. #{filtered_number} records are filtered.", :green) if filtered_number != 0 
+          end
         end
 
         # Check for unique names, if not provide error message
