@@ -45,22 +45,21 @@
                             <div class="m-2">
                                 <p>
                                     {% if child.display_template == 'image' %}
-                                    {% include item/child/image-gallery.html %}
+                                        {% include item/child/image-gallery.html %}
                                     {% elsif child.display_template == 'video' %}
-                                    {% if child.object_location contains 'vimeo' or child.object_location contains
-                                    'youtu' %}
-                                    {% include item/child/video-embed.html %}
-                                    {% else %}
-                                    {% include item/child/video-player.html %}
-                                    {% endif %}
+                                        {% if child.object_location contains 'vimeo' or child.object_location contains 'youtu' %}
+                                            {% include item/child/video-embed.html %}
+                                        {% else %}
+                                            {% include item/child/video-player.html %}
+                                        {% endif %}
                                     {% elsif child.display_template == 'audio' %}
-                                <div class="my-auto">
-                                    {% include item/child/audio-player.html %}
-                                </div>
+                                        <div class="my-auto">
+                                            {% include item/child/audio-player.html %}
+                                        </div>
                                     {% elsif child.display_template == 'panorama' %}
-                                    {% include item/child/panorama.html %}
+                                        {% include item/child/panorama.html %}
                                     {% else %}
-                                    {% include item/child/item-thumb.html %}
+                                        {% include item/child/item-thumb.html %}
                                     {% endif %}
                                 </p>
                             </div>
@@ -85,9 +84,9 @@
                         {% include item/child/citation-box.html %}
                     </div>
                     {% if child.rights or child.rightsstatement %}
-                    <div class="col-md-5">
-                        {% include item/child/rights-box.html %}
-                    </div>
+                        <div class="col-md-5">
+                            {% include item/child/rights-box.html %}
+                        </div>
                     {% endif %}
                 </div>
             </div>
