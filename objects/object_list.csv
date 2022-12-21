@@ -1,9 +1,14 @@
 object_location,image_small,image_thumb
+/objects/armantrout.jpg,/objects/small/armantrout_sm.jpg,/objects/thumbs/armantrout_th.jpg
+/objects/armantrout.pdf,/objects/small/armantrout_sm.jpg,/objects/thumbs/armantrout_th.jpg
 /objects/demo_001.jpg,/objects/small/demo_001_sm.jpg,/objects/thumbs/demo_001_th.jpg
 /objects/demo_002.pdf,/objects/small/demo_002_sm.jpg,/objects/thumbs/demo_002_th.jpg
 /objects/demo_003.mp3,,
 /objects/demo_004.jpg,/objects/small/demo_004_sm.jpg,/objects/thumbs/demo_004_th.jpg
 /objects/hells_half_theta.JPG,/objects/small/hells_half_theta_sm.jpg,/objects/thumbs/hells_half_theta_th.jpg
+/objects/mohammad.csv,,
+/objects/mohammad.jpg,/objects/small/mohammad_sm.jpg,/objects/thumbs/mohammad_th.jpg
+/objects/mohammad.pdf,/objects/small/mohammad_sm.jpg,/objects/thumbs/mohammad_th.jpg
 /objects/object_list.csv,,
 /objects/pg_9_14_05a.jpg,/objects/small/pg_9_14_05a_sm.jpg,/objects/thumbs/pg_9_14_05a_th.jpg
 /objects/pg_9_14_05a_b.jpg,/objects/small/pg_9_14_05a_b_sm.jpg,/objects/thumbs/pg_9_14_05a_b_th.jpg
