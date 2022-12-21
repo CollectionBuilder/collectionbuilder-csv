@@ -7,18 +7,7 @@ custom-foot: js/modal-hash-js.html
 {% assign children = site.data[site.metadata] | where_exp: 'item','item.parentid == page.objectid' %}
 
 <div class="row">
-    {% if page.format == "postcard" %}
-    <div class="col-md-10 col-12 mx-auto">
-        <div class="mb-4 text-center">
-            {% for child in children %}
-            <div class="col">
-                {% include item/compound-image-gallery.html %}
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-    {% else %}
-    <div class="col-md-10 col-12 mx-auto">
+       <div class="col-md-10 col-12 mx-auto">
         <div class="mb-4 ">
             <div class="row row-cols-2 row-cols-lg-4 g-2">
                 {% for child in children %}
@@ -27,7 +16,6 @@ custom-foot: js/modal-hash-js.html
                 </div>
                 {% endfor %}
             </div>
-            {% endif %}
 
             <div class="my-2">
                 {% include item/compound-download-buttons.html %}
