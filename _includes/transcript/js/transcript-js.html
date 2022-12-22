@@ -1,7 +1,7 @@
 <script type="text/javascript">
- function filterLines() {
-    itemcontainer = document.getElementById("contents-container");
-    item = itemcontainer.getElementsByClassName("line");
+ function searchLines() {
+    var itemcontainer = document.getElementById("contents-container");
+    var item = itemcontainer.getElementsByClassName("line");
     var input, filter, p, span, i;
     input = document.getElementById("quicksearch");
     let url = new URL(window.location);
@@ -9,8 +9,8 @@
     params.set('q', input.value);
     var p = params.toString();
     window.history.replaceState({}, '', location.pathname + '?' + p);
-    filterplain = input.value;
-    filter = input.value.toUpperCase();
+    var filterplain = input.value;
+    var filter = input.value.toUpperCase();
     var searchResults = '<option>Select and scroll to a matching line</option>';
     for (i = 0; i < item.length; i++) {
       itemcontents = item[i].getElementsByClassName("words")[0];
@@ -34,10 +34,46 @@
     }
   }
 
+  function filterLines() {
+    var itemcontainer = document.getElementById("contents-container");
+    var item = itemcontainer.getElementsByClassName("line");
+    var input, filter, p, span, i;
+    input = document.getElementById("filters");
+    let url = new URL(window.location);
+    let params = url.searchParams;
+    params.set('filter', input.value);
+    var p = params.toString();
+    window.history.replaceState({}, '', location.pathname + '?' + p);
+    var filterplain = input.value;
+    var filter = input.value.toUpperCase();
+    var searchResults = '<option>Select and scroll to a matching line</option>';
+    for (i = 0; i < item.length; i++) {
+      itemcontents = item[i].getElementsByClassName("words")[0];
+      var index = itemcontents.innerHTML.indexOf(filterplain);
+      if (itemcontents) {
+        if (itemcontents.innerHTML.toUpperCase().indexOf(filter) > -1) {
+          itemcontents.classList.add("featured");
+          itemcontents.classList.remove("text-muted");
+          searchResults += '<option class=text-truncate" style="max-width: 250px;" value="'+ i +'">Line ' + i + ' -- ' + itemcontents.innerHTML.substring(0,125) + '...</option>';
+          itemcontents.innerHTML = itemcontents.innerHTML.replace(filterplain, "<span class='text-danger'>" + filterplain + "</span>");
+          } else {
+            itemcontents.classList.add("text-muted");
+        }
+      }
+     document.getElementById("filters").selectedIndex = 0;
+     let numberofint = document.querySelectorAll('.featured').length;
+     document.getElementById("numberof").innerHTML = numberofint + " lines match your query";
+     document.getElementById("searchResults").innerHTML = searchResults;
+     document.getElementById("linecount").classList.remove("d-none");
+     document.getElementById("filtersearch").classList.remove("d-none");
+    }
+  }
+
+
 var elem = document.getElementById("quicksearch");
 elem.onkeyup = function(e){
     if(e.keyCode == 13){
-       validate();
+       searchLines();
     }
 }
 
