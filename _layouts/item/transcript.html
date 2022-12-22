@@ -66,7 +66,7 @@ endcapture -%}
     <div id="filters-content" class="pe-md-5">
       <div class="row my-3 sticky-top bg-white border-bottom border-left border-right d-print-none pb-3 w-md-75" id="filters-search"  style="z-index: 0;">
         <div class="col-6 col-md-4 pt-4">
-          <select id="filters" title="Filter by Topic" aria-label="Topic filtering dropdown select option" class="filters form-select">
+          <select id="filters" title="Filter by Topic" aria-label="Topic filtering dropdown select option" class="filters form-select" onchange="filterLines()">
             <option value="#" class="reset" selected="selected reset">Filter by Topic</option>
             <option value="all" selected="selected">On All Topics</option>
             {% assign filters = site.data.filters %}
