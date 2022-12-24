@@ -21,7 +21,7 @@ This is mainly just a fun way to demonstrate the power of CSS and frameworks to 
 ## Theme fonts 
 
 To tweak the default font and text colors check the "Theme fonts" section.
-These setting will be passed to `/assets/css/custom.scss` which in turn passes the values to the `_sass` to build out the final CSS. 
+These setting will be passed to `/assets/css/cb.scss` which in turn passes the values to the `_sass` to build out the final CSS. 
 
 - `base-font-size` we set font size a bit bigger than Bootstrap default, which can be tweaked here.
 - `text-color` we set the base color to a darker black.
