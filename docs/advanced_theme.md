@@ -10,7 +10,7 @@ By modifying `navbar-color` and `navbar-background` the basic colors of the navi
 - `navbar-color`: either navbar-light" for use with light background colors, or "navbar-dark" for dark background colors
 - `navbar-background`: choose from standard Bootstrap color utilities, bg-primary, bg-secondary, bg-success, bg-danger, bg-warning, bg-info, bg-light, bg-dark, or bg-white
 
-## Bootswatch option
+## Bootswatch themes
 
 To play with more Bootstrap theme-ing, try swapping out a [Bootswatch](https://github.com/thomaspark/bootswatch) favor. 
 This will remove default Bootstrap CSS for the Bootswatch version (from a CDN), swiftly changing the entire look.
@@ -28,3 +28,7 @@ These setting will be passed to `/assets/css/cb.scss` which in turn passes the v
 - `link-color` by default set to match Bootstrap "info". This is an easy way to add a distinctive brand color to your site.
 - `base-font-family` sets the font-family for `body`, overriding Bootstrap. It will be necessary to use `font-cdn` or manually add loading the font in the head element (_includes/head/head.html). 
 - `font-cdn` will add a font stylesheet, such as from [Google Fonts](https://fonts.google.com/), to the head element. Use valid markup, e.g. `<link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">`. Keep in mind, these CDN expose your users to a 3rd party service and trackers.
+
+## Theme icons 
+
+See "docs/icons.md" for details.
