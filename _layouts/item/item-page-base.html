@@ -10,7 +10,7 @@ item-meta: true
 
     {% include item/breadcrumbs.html %}
     <h5 class="my-0 small">{{page.display_template | replace: "_", " " | upcase}} {% if page.display_template == "compound_object"%} ({{children | size}} Items){% endif %} </h5>
-    <h2 class="mb-3">{{ page.title }} {% unless page.display_template == 'record' %}<a href="#metadata" class="ms-5 btn btn-sm btn-outline-dark small">Item Info {% include feature/icon.html icon="arrow-down" label="Down arrow" %}</a>{% endunless %}</h2>
+    {% unless page.display_template == 'transcript' %}<h2 class="mb-3">{{ page.title }} {% unless page.display_template == 'record' %}<a href="#metadata" class="ms-5 btn btn-sm btn-outline-dark small">Item Info {% include feature/icon.html icon="arrow-down" label="Down arrow" %}</a>{% endunless %}</h2>{% endunless %}
 
     {{ content }}
 
