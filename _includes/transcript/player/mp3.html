@@ -3,3 +3,21 @@
     Your browser does not support the audio element.
 </audio>
 </div>
+<script>
+    var mediaElement = document.getElementById('audio-player');
+    var playPromise = mediaElement.play();
+
+    function timestampMP3(x){
+       if (mediaElement.duration > 0 && !mediaElement.paused) {
+    //Its playing...do your job
+   var timeSought = x;
+       mediaElement.currentTime = timeSought;
+       mediaElement.play();
+   } else {
+   //Not playing...maybe paused, stopped or never played.
+   mediaElement.play();
+   var timeSought = x;
+       mediaElement.currentTime = timeSought;
+   }
+      };
+   </script>

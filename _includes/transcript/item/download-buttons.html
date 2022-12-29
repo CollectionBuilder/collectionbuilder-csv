@@ -1,4 +1,4 @@
-<div class="btn-group" role="group" aria-label="Button group">
+<div class="btn-group meta" role="group" aria-label="Button group">
 <a data-bs-toggle="modal" data-bs-target="#metadata-modal" class="btn btn-outline-primary">View Item Information</a>
 {% if page.date %}{%- capture year -%}{% if page.date contains "-" %}{{ page.date | split: "-" | first }}{% elsif page.date contains "/" %}{{ page.date | split: "/" | last }}{% else %}{{ page.date }}{% endif %}{%- endcapture -%}
 <a href="{{ year | strip | prepend: '/timeline.html#y' | relative_url }}" class="btn btn-outline-primary">View on Timeline</a>{% endif %}

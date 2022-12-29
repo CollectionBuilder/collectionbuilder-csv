@@ -38,20 +38,15 @@ endcapture -%}
       <h2 class="title">{{ page.title}} {% if page.bio %}<a type="button" class="btn btn-sm btn-outline-dark meta ms-3"
           data-bs-toggle="modal" data-bs-target="#bio-modal">Click for bio</a>{% endif %}</h2>
       {% if page.bio %}{% include transcript/item/bio-modal.html %}{% endif %}
-      <p class="meta">{%if page.location%}<span class="me-3"><b>Location:</b> {% if page.latitude and page.longitude
-          %}<a
-            href="{{ '/map.html?location=' | append: page.latitude  | append: ',' | append: page.longitude | append: '&marker=' | append: page.objectid | relative_url}}"
-            class="text-primary">{{page.location}}</a>{% else %}{{page.location}}{% endif %} </span>{%endif%}{%if
-        page.date%}<b>Date :</b> <a
-          href="{{ page.date | date: '%Y' | strip | prepend: '/timeline.html#y' | relative_url }}"
-          class="text-primary">{{page.date | date: "%B %d, %Y" }}</a>{%endif%}
+      <p class="meta">{%if page.location%}<span class="me-3"><b>Location:</b>  {{page.location}}</span>{%endif%}{%if
+        page.date%}<b>Date :</b>{{page.date | date: "%B %d, %Y" }}{%endif%}
         {%if page.interviewer %} <br>Interviewer: {{page.interviewer}}{%endif%}</p>
       {% include transcript/item/download-buttons.html %}
       {% include transcript/item/metadata-modal.html %}
 
     </div>
     {% if page.image_small or page.image_thumb %}
-    <div class="col-md-3">
+    <div class="col-md-3 meta">
       <img class="img-thumbnail timeline-thumb" src="{{page.image_small | default: page.image_thumb }}" alt="{page.title}">
     </div>
     {% endif %}
@@ -70,11 +65,7 @@ endcapture -%}
       {% assign my_float = my_integer | times: 1.0 %}
       {% assign rect-width = 100 | divided_by: my_float %}
       <a href="{{ forloop.index | prepend: page.objectid | prepend: '#' }}">
-        <rect x="{{forloop.index0 | times: rect-width }}%" y="20" width="{{rect-width}}%" height="50"
-          data-bs-toggle="tooltip" data-placement="top" class="{%- assign tags = item.tags | split: " ;" | compact |
-          where_exp: 'item' , 'item != " "' %}{% for tag in tags %}{{tag | slugify }} {% endfor %}"
-          data-bs-title="{{ item.words }}{% if item.tags %}(Subjects: {{ item.tags | replace: ';', ', ' }}){%endif%}">
-        </rect>
+        <rect x="{{forloop.index0 | times: rect-width }}%" y="20" width="{{rect-width}}%" height="50" data-bs-toggle="tooltip" data-placement="top" class="{%- assign tags = item.tags | split: ";" | compact | where_exp: 'item', 'item != " "' %}{% for tag in tags %}{{tag | slugify }} {% endfor %}" data-bs-title="{{ item.words }}{% if item.tags %}(Subjects: {{ item.tags | replace: ';', ', ' }}){%endif%}"></rect>
       </a>{%endfor%}</svg>
   </div>{% endif %}
 </div>
@@ -90,9 +81,7 @@ endcapture -%}
         {% assign filters = site.data.filters %}
         {% for filter in filters %}
         {% assign tag = filter.tag | slugify %}
-        {%if uniqueSubjects contains tag %}<option value="{{ tag }}">
-          {{filter.description | capitalize}} ({{filter.tag}})
-        </option>{%endif%}
+        {%if uniqueSubjects contains tag %}<option value="{{ tag }}">{{filter.description | capitalize}} ({{filter.tag}})</option>{%endif%}
         {% endfor %}
       </select>
     </div>
@@ -130,18 +119,11 @@ endcapture -%}
     {% assign prev_index = forloop.index0 | times: 1 | minus: 1 %}
     {% assign prev_speaker = items[prev_index].speaker %}
     {% assign mod = forloop.index | plus: 1 | modulo: 5 %}
-    <div id="{{page.objectid}}{{ forloop.index }}" class="{%- assign tags = item.tags | split: " ;" | compact |
-      where_exp: 'item' , 'item != " "' %}{% for tag in tags %}{{tag | slugify }} {% endfor %} row line my-1">
-
+    <div id="{{page.objectid}}{{ forloop.index }}" class="{%- assign tags = item.tags | split: ";" | compact | where_exp: 'item' , 'item != " "' %}{% for tag in tags %}{{tag | slugify }} {% endfor %} row line my-1">
       <p class="words col-md-10 col-lg-8 col-print-12 pr-0">
-
-        {% unless item.speaker == prev_speaker %}{%if item.speaker %}<span class="fw-bold pe-3 pb-3">{{item.speaker |
-          remove:
-          ":"}}:</span>{% endif %}{% endunless %}{{item.words}}
+        {% unless item.speaker == prev_speaker %}{%if item.speaker %}<span class="fw-bold pe-3 pb-3">{{item.speaker | remove: ":"}}:</span>{% endif %}{% endunless %}{{item.words}}
       </p>
-      <div class="col-12 col-md-2 timestamp mb-3 small text-center">{%if item.timestamp%}{% if page.av_source %}
-        {% capture avlink %}transcript/timestamp/{{page.av_source | downcase }}.html{% endcapture %}
-        <a href="{% include {{avlink}} %}">{{item.timestamp}}</a>{% else %}{{item.timestamp}}{% endif %}{% endif %}
+      <div class="col-12 col-md-2 timestamp mb-3 small text-center">{%if item.timestamp%}{% if av %}{% capture avlink %}transcript/timestamp/{{av | downcase }}.html{% endcapture %}<a href="{% include {{avlink}} %}">{{item.timestamp}}</a>{% else %}{{item.timestamp}}{% endif %}{% endif %}
       </div>
     </div>
     {% endfor %}
