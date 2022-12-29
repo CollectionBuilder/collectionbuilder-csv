@@ -12,6 +12,10 @@
     </main>
     {% include footer.html %}
     {% include foot.html %}
+    {% if page.display_template contains "transcript" or child.display_template contains "transcript" %}
+    {% include transcript/js/scroll-to-top-js.html %}
+    {% else %} 
     {% include scroll-to-top.html %}
+    {% endif %}
   </body>
 </html>
