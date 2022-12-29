@@ -19,7 +19,7 @@
         if (itemcontents.innerHTML.toUpperCase().indexOf(filter) > -1) {
           itemcontents.classList.add("featured");
           itemcontents.classList.remove("text-muted");
-          searchResults += '<option class=text-truncate" style="max-width: 250px;" value="'+ i +'">Line ' + i + ' -- ' + itemcontents.innerHTML.substring(0,125) + '...</option>';
+          searchResults += '<option class="text-truncate" style="max-width: 250px;" value="'+ i +'">Line ' + i + ' -- ' + itemcontents.innerHTML.substring(0,125) + '...</option>';
           itemcontents.innerHTML = itemcontents.innerHTML.replace(filterplain, "<span class='text-danger'>" + filterplain + "</span>");
           } else {
             itemcontents.classList.add("text-muted");
@@ -38,9 +38,8 @@
     var itemcontainer = document.getElementById("contents-container");
     var lines = itemcontainer.getElementsByClassName("line");
     var filterClass = document.getElementById("filters").value;
-    var featuredLines = document.querySelectorAll('.' + filterClass);
     var item = itemcontainer.getElementsByClassName(filterClass);  
-    //vizFilter(filterClass);
+    vizFilter(filterClass);
     let url = new URL(window.location);
     let params = url.searchParams;
     params.set('filter', filterClass);
@@ -53,19 +52,35 @@
         if (lines[i].classList.contains(filterClass)) {
       itemcontents.classList.add("featured");
       itemcontents.classList.remove("small","text-muted");
-      searchResults += '<option class=text-truncate" style="max-width: 250px;" value="'+ i +'">Line ' + i + ' -- ' + itemcontents.innerHTML.substring(0,125) + '...</option>';}
-      else{
+      var prevLine = i - 1;
+      var nextLine = i + 1;
+        if (!lines[prevLine].classList.contains(filterClass)){
+        searchResults += '<option class="text-truncate" style="max-width: 250px;" value="'+ i +'">Line ' + i + ' to  ';
+          var startLine = itemcontents.innerHTML.substring(0,125);
+        }
+        else if (lines[nextLine].classList.contains(filterClass) && lines[prevLine].classList.contains(filterClass) ){
+          searchResults += '';
+        } 
+        else if (!lines[nextLine].classList.contains(filterClass)){
+          searchResults +=  'Line ' + i + ' -- ' + startLine + '...</option>';
+        } 
+      }
+      else {
         itemcontents.classList.add("small","text-muted");     }
       }
     }
-     document.getElementById("quicksearch").val = "";
-     let numberofint = featuredLines.length;
-     document.getElementById("numberof").innerHTML = numberofint + " lines are tagged as related to" + filterClass;
+     document.getElementById("quicksearch").value = "";
      document.getElementById("searchResults").innerHTML = searchResults;
      document.getElementById("linecount").classList.remove("d-none");
      document.getElementById("filtersearch").classList.remove("d-none");
+     countforFilter(filterClass);
     }
   
+    function countforFilter(x){
+    var numberofint = document.querySelectorAll('.' + x).length;
+    var sectnumber = document.getElementsByClassName('text-truncate').length;
+    document.getElementById("numberof").innerHTML = sectnumber + " sections (" +  numberofint + " lines) are tagged as related to " + x;
+  }
 
 
 var elem = document.getElementById("quicksearch");
@@ -122,17 +137,30 @@ else if(codeFilter) { params.delete('q');
  else{
  }});
  
-
+*/
 
  function vizFilter(x) {
-    document.querySelectorAll("rect").removeClass (function (index, className) {
-      return (className.match (/(^|s)primary-S+/g) || []).join(' ');});    
-    document.querySelectorAll("rect").classList.add("dark");            
-    document.querySelector('rect.' + x).classList.toggle("dark").classList.add("primary-" + x);
-    document.querySelector("rect").not('.dark').closest('div.vizdiv').classList.remove("hidden");
+  var svgContainer  = document.getElementById("colorViz");
+  var rects = svgContainer.getElementsByTagName('rect');
+  for (i = 0; i < rects.length; i++) {
+    var classString = rects[i].classList;
+        classString.add('dark');
+    if (classString.contains(x)){
+      classString.remove('dark');          
+      classString.add("primary-" + x);  
+    }
+    else if (classString.toString().indexOf("primary-")){
+      const p = document.getElementById('p');
+      classString.forEach(item=>{
+    if(item.startsWith('primary')) {
+      classString.remove(item) ;
+        }
+        })
+    }
   }
-  
-*/
+  }
+
+
 
 
 </script>
