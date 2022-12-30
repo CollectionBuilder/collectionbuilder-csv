@@ -49,7 +49,7 @@
             display: none;
         }
 
-        .vizdiv {
+        .vizdiv, #colorViz, .title {
             display: none;
         }
     }
@@ -124,3 +124,7 @@
     }
 
 }
+
+html {
+    scroll-padding-top: 130px; /* height of sticky header */
+  }
