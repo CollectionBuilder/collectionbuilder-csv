@@ -2,7 +2,7 @@
 # generic fallback item page layout
 # displays image or icon depending on "image_thumb"
 layout: item/item-page-base
-custom-foot: transcript/js/transcript-js.html
+custom-foot: transcript/js/transcript-js.html;/transcript/js/docready-js.html
 ---
 {% assign children = site.data[site.metadata] | where_exp: 'item','item.parentid == page.objectid' %}
 {% assign items = site.data.transcripts[page.objectid] %}
@@ -46,7 +46,7 @@ endcapture -%}
 
     </div>
     {% if page.image_small or page.image_thumb %}
-    <div class="col-md-3 meta">
+    <div class="col-md-3 meta{% if av == 'vimeo' or av == 'youtube'%} d-none d-md-block{% endif %}">
       <img class="img-thumbnail timeline-thumb" src="{{page.image_small | default: page.image_thumb }}" alt="{page.title}">
     </div>
     {% endif %}
@@ -64,8 +64,8 @@ endcapture -%}
       {% assign my_integer = forloop.length %}
       {% assign my_float = my_integer | times: 1.0 %}
       {% assign rect-width = 100 | divided_by: my_float %}
-      <a href="{{ forloop.index | prepend: page.objectid | prepend: '#' }}">
-        <rect x="{{forloop.index0 | times: rect-width }}%" y="20" width="{{rect-width}}%" height="50" data-bs-toggle="tooltip" data-placement="top" class="{%- assign tags = item.tags | split: ";" | compact | where_exp: 'item', 'item != " "' %}{% for tag in tags %}{{tag | slugify }} {% endfor %}" data-bs-title="{{ item.words }}{% if item.tags %}(Subjects: {{ item.tags | replace: ';', ', ' }}){%endif%}"></rect>
+      <a  onclick="scrollToLine('{{-forloop.index-}}');">
+        <rect id="rect{{-forloop.index-}}" x="{{forloop.index0 | times: rect-width }}%" y="20" width="{{rect-width}}%" height="50" data-bs-toggle="tooltip" data-placement="top" class="nothingdoing {%- assign tags = item.tags | split: ";" | compact | where_exp: 'item', 'item != " "' %}{% for tag in tags %}{{tag | slugify }} {% endfor %}" data-bs-title="{{ item.words }}{% if item.tags %}(Subjects: {{ item.tags | replace: ';', ', ' }}){%endif%}"></rect>
       </a>{%endfor%}</svg>
   </div>{% endif %}
 </div>
@@ -76,7 +76,7 @@ endcapture -%}
     <div class="col {% unless site.data.filters %}d-none{% endunless %}">
       <select id="filters" title="Filter by Topic" aria-label="Topic filtering dropdown select option"
         class="filters form-select" onchange="filterLines()">
-        <option value="#" class="reset" selected="selected reset">Filter by Topic</option>
+        <option value="all" class="reset" selected="selected reset">Filter by Topic</option>
         <option value="all" selected="selected">On All Topics</option>
         {% assign filters = site.data.filters %}
         {% for filter in filters %}
@@ -94,12 +94,12 @@ endcapture -%}
                 aria-describedby="goButton" id="quicksearch">
               <div class="input-group-append">
                 <button class="btn btn-primary rounded-right border-light input-group-text" type="submit" title="Search"
-                  alt="Search" id="goButton" onclick="searchLines();">Go</button>
+                  alt="Search" id="goButton" onclick="var searchval = document.getElementById('quicksearch').value; searchLines(searchval);">Go</button>
               </div>
             </div>
           </div>
           <div class="col-md-6">
-            <button class="reset btn btn-sm btn-outline-primary mt-1" href="#" data-filter="">Reset Filters</button>
+            <button class="reset btn btn-sm btn-outline-primary mt-1" onclick="vizFilter('all');">Reset Filters</button>
           </div>
         </div>
       </div>
@@ -107,7 +107,7 @@ endcapture -%}
     <div id="filtersearch" class="col-12 d-none mt-2 small">
       <h5 id="linecount" class="d-none small ms-3"><span id="numberof"></span></h5>
 
-      <select class=" mb-2 form-select" id="searchResults" onchange="scrollToLine();">
+      <select class=" mb-2 form-select" id="searchResults" onchange="scrollToLine(this.value);">
 
       </select>
     </div>
