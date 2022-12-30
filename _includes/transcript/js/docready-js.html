@@ -1,0 +1,39 @@
+<script>
+(function(){
+    // init bootstrap tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+
+let url = new URL(window.location);
+let params = url.searchParams;
+var dataFilter = url.searchParams.get('q');
+var codeFilter = url.searchParams.get('filter');
+var hashfilter = decodeURIComponent(location.hash.substr(1));//.replace(/%20/g, " ");
+ if(dataFilter) { 
+     // code to be executed if a hash is contained in the url
+document.getElementById('quicksearch').value = dataFilter;
+document.getElementById('goButton').click();
+params.delete('filter'); 
+document.getElementById('quicksearch').scrollIntoView();
+
+ //$(hashfilterclass).addClass('active');
+ }
+else if (codeFilter) { 
+    // code to be executed if a filter is contained in the url search parameters
+document.getElementById('filters').value = codeFilter;
+filterLines();
+vizFilter(codeFilter);
+document.getElementById('colorViz').scrollIntoView();
+params.delete('q');
+ }
+ else if(hashfilter) { 
+     // code to be executed if an anchor (#) is contained in the url
+     document.getElementById(hashfilter).classList.add('featured');
+     params.delete('q'); params.delete('filter'); 
+ }
+ else{
+ };
+})();
+</script>
