@@ -2,85 +2,34 @@
             const url = new URL(window.location);
             const params = url.searchParams;
 
-    function codeFilter(x) {
-              console.log(x);
-              $("rect").removeClass (function (index, className) {
-    return (className.match (/(^|\s)primary-\S+/g) || []).join(' ');
-});    
-               $("rect").addClass("black");
-              $("circle").addClass("black");
-              $("tr").addClass("black");
-              $("div.contentsdiv").addClass("hidden");
-              $("div.vizdiv").addClass("hidden");
-              $('rect.' + x).toggleClass("black").addClass("primary-" + x);
-              $('circle.' + x).toggleClass("black");
-              $('tr.' + x).toggleClass("black");
-              $("tr").not('.black').closest('div.contentsdiv').removeClass("hidden");
-              $("rect").not('.black').closest('div.vizdiv').removeClass("hidden");
-              //Add another parameter. 
-              params.set('filter', x);
-              console.log(params.toString());
-              var p = params.toString();
-              window.history.replaceState({}, '', location.pathname + '?' + p);
-          }
+            function resetVals(){
+     params.delete('filter');
+     window.history.replaceState({}, '', location.pathname);
+     var rects = document.getElementsByTagName('rect');
+     for (i = 0; i < rects.length; i++) {
+      rects[i].classList.remove('dark');
+     }
+}
 
-          function vizFilter(x) {
-  $("rect").removeClass (function (index, className) {
-    return (className.match (/(^|\s)primary-\S+/g) || []).join(' ');
-});    
-              $("rect").addClass("dark");            
-              $('rect.' + x).toggleClass("dark").addClass("primary-" + x);
-              $("rect").not('.dark').closest('div.vizdiv').removeClass("hidden");
-          }
+ function vizFilter(x) {
+  var rects = document.getElementsByTagName('rect');
+  params.set('filter', x);
+    var p = params.toString();
+    window.history.replaceState({}, '', location.pathname + '?' + p);
+  for (i = 0; i < rects.length; i++) {
+    var classString = rects[i].classList;
+        classString.add('dark');
+        classString.forEach(item=>{
+    if(item.startsWith('primary')) {
+      classString.remove(item) ;}});
+    if (x == "all"){
+      classString.remove('dark');
+      resetVals();
+    } else if (classString.contains(x)){
+      classString.remove('dark');          
+      classString.add("primary-" + x);  
+    } else if (x == "darkforall"){ }
+        }
+    }
 
-          function interviewFilter(x) { 
-              $("table").removeClass("hidden");
-              $("svg").removeClass("hidden");
-              $("table").not('.' + x).toggleClass("hidden");
-              $("svg.chart").not('.' + x).toggleClass("hidden");
-              $("h3").not('.' + x).toggleClass("hidden");
-              //Add another parameter. 
-              params.set('id', x);
-              console.log(params.toString());
-              var p = params.toString();
-              window.history.replaceState({}, '', location.pathname + '?' + p);
-          }
-  
-          $(".legend").click(function () {
-              var cFilter = $(this).attr("data-id");
-              codeFilter(cFilter);
-          });
-          $("h3.toggle_int").click(function () {
-              var intFilter = $(this).attr("data-id");
-              interviewFilter(intFilter);
-          });
-          $("#reset").click(function () {
-              $("rect").removeClass("black");
-              $("circle").removeClass("black");
-              $("tr").removeClass("black");
-              $("table").removeClass("hidden");
-              $("svg").removeClass("hidden");
-              $("h3").removeClass("hidden");
-              $("div").removeClass("hidden");
-              params.set('id', '');
-              params.set('filter', '');
-              window.history.replaceState({}, '', location.pathname);
-          });
-  
-          $(document).ready(function () {
-          let url = new URL(window.location);
-          let params = url.searchParams;
-          var itemfilter = url.searchParams.get('id');
-          var datafilter = url.searchParams.get('filter');
-          if (datafilter) {
-              codeFilter(datafilter);
-          }
-          if (itemfilter) {
-              interviewFilter(itemfilter);
-          }
-          // init tooltips
-          $(function () {
-              $('[data-toggle="tooltip"]').tooltip()
-          });
-      });
   </script>

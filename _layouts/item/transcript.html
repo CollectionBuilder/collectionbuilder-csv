@@ -39,7 +39,7 @@ endcapture -%}
           data-bs-toggle="modal" data-bs-target="#bio-modal">Click for bio</a>{% endif %}</h2>
       {% if page.bio %}{% include transcript/item/bio-modal.html %}{% endif %}
       <p class="meta">{%if page.location%}<span class="me-3"><b>Location:</b>  {{page.location}}</span>{%endif%}{%if
-        page.date%}<b>Date :</b>{{page.date | date: "%B %d, %Y" }}{%endif%}
+        page.date%}<b>Date:</b> {{page.date | date: "%B %d, %Y" }}{%endif%}
         {%if page.interviewer %} <br>Interviewer: {{page.interviewer}}{%endif%}</p>
       {% include transcript/item/download-buttons.html %}
       {% include transcript/item/metadata-modal.html %}
@@ -65,7 +65,7 @@ endcapture -%}
       {% assign my_float = my_integer | times: 1.0 %}
       {% assign rect-width = 100 | divided_by: my_float %}
       <a  onclick="scrollToLine('{{-forloop.index-}}');">
-        <rect id="rect{{-forloop.index-}}" x="{{forloop.index0 | times: rect-width }}%" y="20" width="{{rect-width}}%" height="50" data-bs-toggle="tooltip" data-placement="top" class="nothingdoing {%- assign tags = item.tags | split: ";" | compact | where_exp: 'item', 'item != " "' %}{% for tag in tags %}{{tag | slugify }} {% endfor %}" data-bs-title="{{ item.words }}{% if item.tags %}(Subjects: {{ item.tags | replace: ';', ', ' }}){%endif%}"></rect>
+        <rect id="rect{{-forloop.index-}}" x="{{forloop.index0 | times: rect-width }}%" y="20" width="{{rect-width}}%" height="50" data-bs-toggle="tooltip" data-placement="top" class="{%- assign tags = item.tags | split: ";" | compact | where_exp: 'item', 'item != " "' %}{% for tag in tags %}{{tag | slugify }} {% endfor %}" data-bs-title="{{ item.words }}{% if item.tags %}(Subjects: {{ item.tags | replace: ';', ', ' }}){%endif%}"></rect>
       </a>{%endfor%}</svg>
   </div>{% endif %}
 </div>

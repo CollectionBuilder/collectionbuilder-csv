@@ -6,6 +6,8 @@
   .{{ n.tag | slugify  }}.primary-{{ n.tag | slugify  }}{ fill: {% cycle '#e6194b !important','#3cb44b !important','#ffe119 !important','#4363d8 !important','#f58231 !important','#911eb4 !important','#46f0f0 !important','#f032e6 !important','#bcf60c !important','#fabebe !important','#008080 !important','#e6beff !important','#9a6324 !important','#fffac8 !important','#800000 !important','#aaffc3 !important','#808000 !important','#ffd8b1 !important','#000075 !important','#808080 !important','#ffffff !important'%};}
   {% endfor %}
 
+ 
+
     .black {
       fill: black;
     }
@@ -13,6 +15,8 @@
     .dark {
       fill: black !important;
     }
+
+    .primary-hilite {fill: red !important;}
     
     tr.black,
     .hidden {

@@ -26,9 +26,11 @@
           itemcontents.classList.remove("text-muted");
           searchResults += '<option class=text-truncate" style="max-width: 250px;" value="'+ i +'">Line ' + i + ' -- ' + itemcontents.innerHTML.substring(0,125) + '...</option>';
           itemcontents.innerHTML = itemcontents.innerHTML.replace(input, "<span class='text-danger'>" + input + "</span>");
-          var rectal = "rect" + i;
-          document.querySelector("#rect1").classList.add("rect-primary");
-          document.querySelector("#rect1").classList.remove("dark");
+          var rightnum = i + 1;
+          var rectal = "rect" + rightnum;
+          console.log(rectal);
+          document.getElementById(rectal).classList.add("hilite");
+          vizFilter('hilite');
           } else { 
         }
       }
@@ -38,7 +40,6 @@
      document.getElementById("searchResults").innerHTML = searchResults;
      document.getElementById("linecount").classList.remove("d-none");
      document.getElementById("filtersearch").classList.remove("d-none");
-     vizFilter("darkforall");
     }
   }
 
@@ -64,14 +65,16 @@
       var prevLine = i - 1;
       var nextLine = i + 1;
         if (!lines[prevLine].classList.contains(filterClass)){
-        searchResults += '<option class="text-truncate" style="max-width: 250px;" value="'+ i +'">Line ' + i + ' to  ';
+        searchResults += '<option class="text-truncate" style="max-width: 250px;" value="'+ i +'">Line ' + i ;
           var startLine = itemcontents.innerHTML.substring(0,125);
+          var startNumber = i;
         }
         else if (lines[nextLine].classList.contains(filterClass) && lines[prevLine].classList.contains(filterClass) ){
           searchResults += '';
         } 
         else if (!lines[nextLine].classList.contains(filterClass)){
-          searchResults +=  'Line ' + i + ' -- ' + startLine + '...</option>';
+          var lineTotal = i - startNumber + 1;
+          searchResults +=  ' to Line ' + i + ' (' + lineTotal +  ' lines total) -- ' + startLine + '...</option>';
         } 
       }
       else {
@@ -141,6 +144,8 @@ function resetVals(){
      var rects = svgContainer.getElementsByTagName('rect');
      for (i = 0; i < rects.length; i++) {
       rects[i].classList.remove('dark');
+      rects[i].classList.remove('rect-hilite');
+
      }
 }
 
