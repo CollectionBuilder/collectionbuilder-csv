@@ -33,7 +33,7 @@ custom-foot: transcript/js/visualization-js.html;/transcript/js/docready-viz-js.
       {% assign my_integer = forloop.length %}
       {% assign my_float = my_integer | times: 1.0 %}
       {% assign rect-width = 100 | divided_by: my_float  %}
-      <a href="{{ forloop.index | prepend: transcript-name | prepend: '.html#' | prepend: transcript-name | prepend: '/transcripts/' | relative_url }}">
+      <a href="{{ forloop.index | prepend: transcript-name | prepend: '.html#' | prepend: transcript-name | prepend: '/items/' | relative_url }}">
         <rect x="{{forloop.index0 | times: rect-width }}%" y="20" width="{{rect-width}}%" height="50" data-bs-toggle="tooltip" data-bs-placement="top" class="{%- assign tags = item.tags | split: ";" | compact | where_exp: 'item', 'item != " "' %}{% for tag in tags %}{{tag | slugify }} {% endfor %}" data-bs-title="{{ item.words }}{% if item.tags %}(Subjects: {{ item.tags | replace: ';', ', ' }}){%endif%}"></rect>
       </a>{%endfor%}</svg>
   </div>{%endfor%}
