@@ -3,7 +3,7 @@
     <div class="card-body">
         <dl>
             <dt>Preferred Citation:</dt>
-            <dd>"{{ child.title }}", {{ site.title }}, {{ site.organization-name }}</dd>
+            <dd>"{{ child.title | default: page.title }}", {{ site.title }}, {{ site.organization-name }}</dd>
             <dt>Reference Link:</dt>
             <dd>{{ page.url | absolute_url }}#{{ child.title | slugify }}</dd>
         </dl>
