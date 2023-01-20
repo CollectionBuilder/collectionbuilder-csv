@@ -9,7 +9,7 @@
             Download
         </button>
         <ul class="dropdown-menu">
-            {% if page.object_location %}<li><a target="_blank" rel="noopener" href="{{ page.object_location | relative_url }}" class="dropdown-item">{{page.title}} ({{ page.format | split: '/' | last | upcase }})</a></li>{% endif %}
+            {% if page.object_location %}<li><a target="_blank" rel="noopener" href="{{ page.object_location | relative_url }}" class="dropdown-item">{{ page.title }} ({{ page.format | split: '/' | last | upcase }})</a></li>{% endif %}
             {% for child in children %}
             {% unless child.object_location == nil %}
             <li>

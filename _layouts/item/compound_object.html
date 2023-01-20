@@ -1,24 +1,18 @@
 ---
 layout: item/item-page-base
-item-meta: true
 gallery: true
 custom-foot: js/modal-hash-js.html
 ---
 {% assign children = site.data[site.metadata] | where_exp: 'item','item.parentid == page.objectid' %}
 
 <div class="row">
-       <div class="col-md-10 col-12 mx-auto">
+    <div class="col-md-10 col-12 mx-auto">
         <div class="mb-4 ">
-            <div class="row row-cols-2 row-cols-lg-4 g-2">
-                {% for child in children %}
-                <div class="col">
-                    {% include item/compound-item-thumb.html %}
-                </div>
-                {% endfor %}
-            </div>
+            
+            {% include item/child/compound-item-thumbs.html %}
 
             <div class="my-2">
-                {% include item/compound-download-buttons.html %}
+                {% include item/child/compound-item-download-buttons.html %}
             </div>
         </div>
     </div>
