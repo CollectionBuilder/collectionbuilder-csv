@@ -1,0 +1,46 @@
+{% comment %}
+
+    creates a gallery of thumbnails images or icons for each child item in a compound object. Thumb is based on display_template or format of the child item.
+    Each child item is given a popup modal with full information
+
+{% endcomment %}
+<div class="row row-cols-2 row-cols-lg-4 g-2">
+    {% for child in children %}
+    <div class="col">
+        <div class="card h-100">
+            <div class="my-auto">
+                <div class="card-body text-center" id="{{ child.objectid }}Card">
+                
+                    {% if child.title %}<div class="small text-dark mb-2">{{ child.title | truncatewords: 4 }}</div>{% endif %}
+                    
+                    <div class="mb-2">
+                        {% if child.image_thumb or child.image_small %}
+                        <img class="img-thumbnail compound-thumb" src="{{ child.image_thumb | default: child.image_small | relative_url }}" alt="{{ child.title | escape }}">
+                        {% else %}
+                        <svg class="bi text-body compound-thumb" fill="currentColor" aria-hidden="true">
+                            {%- assign icon_template = child.display_template | default: item.format -%}
+                            <use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#{% if icon_template contains 'image' %}icon-image{% elsif icon_template contains 'pdf' %}icon-pdf{% elsif icon_template contains 'audio' %}icon-audio{% elsif icon_template contains 'video' %}icon-video{% else %}icon-default{% endif %}" />
+                        </svg>
+                        <span class="visually-hidden">{{ child.title | escape }} - {{ child.format }}</span>
+                        {% endif %}
+                    </div>
+
+                    <!-- child object modal button -->
+                    <a id="item-{{ forloop.index }}"
+                        role="button"
+                        data-bs-toggle="modal"
+                        href="#{{ child.objectid }}"
+                        onclick="window.location.hash='{{ child.objectid }}'"
+                        class="btn btn-sm btn-outline-secondary small stretched-link">
+                        {{ child.display_template | upcase | default: "Item" }} + Info
+                    </a>
+
+                    <!-- child object modal -->
+                
+                    {% include item/child/modal.html %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>

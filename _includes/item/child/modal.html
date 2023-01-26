@@ -1,14 +1,9 @@
-<!-- Button trigger modal -->
-<p class="text-center mb-5">
-    <a id="item-{{ forloop.index }}" onclick="window.location.hash='{{ child.objectid }}'" type="button"
-        class="btn btn-sm btn-outline-secondary small stretched-link" data-bs-toggle="modal"
-        data-bs-target="#{{ child.objectid }}Modal">{{child.display_template | upcase | default: "Item" }} + Info</a>
-</p>
 <!-- Modal -->
-<div class="modal fade" id="{{ child.objectid }}Modal" tabindex="-1" role="dialog"
+<div class="modal fade" id="{{ child.objectid }}" tabindex="-1" role="dialog"
     aria-labelledby="{{ child.objectid }}ModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document" style="max-width: 90% !important;">
+    <div class="modal-dialog" style="max-width: 90% !important;">
         <div class="modal-content">
+
             <div class="w-100 text-right mb-0">
                 <button type="button" class="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"
                     onclick="history.pushState('', '', window.location.pathname)"></button>
@@ -90,6 +85,7 @@
                     {% endif %}
                 </div>
             </div>
+
         </div>
     </div>
 </div>
