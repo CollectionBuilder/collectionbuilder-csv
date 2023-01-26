@@ -24,14 +24,12 @@ item-meta: true
             {% include item/metadata.html %}
 
         </div>
-    </div>
 
-    <div class="row justify-content-end mt-4">
-        <div class="col-md-5">
+        <div class="col-md-5 py-4">
             {% include item/citation-box.html %}
         </div>
         {% if page.rights or page.rightsstatement %}
-        <div class="col-md-5">
+        <div class="col-md-5 py-4">
             {% include item/rights-box.html %}
         </div>
         {% endif %}
