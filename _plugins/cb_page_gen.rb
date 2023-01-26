@@ -37,7 +37,7 @@ module CollectionBuilderPageGenerator
       dir_default = 'items' # where to output pages
       extension_default = 'html' # extension, usually html
       filter_default = 'objectid' # value to filter records on, filters on objectid by default
-      filter_condition_default = '!record["parentid"]' # expression to filter records on, off by default
+      filter_condition_default = '!record["parentid"]' # expression to filter records on, default filters rows with a parentid
       #
       ######
 
