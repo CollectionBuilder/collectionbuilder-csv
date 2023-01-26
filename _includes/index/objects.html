@@ -18,7 +18,7 @@
       {% when 'pdf' %}
       <a class="text-dark" href="{{ 'pdf' | prepend: '/browse.html#' | relative_url }}">PDF{% if count > 1 %}s{% endif %} <svg class="bi icon-sprite text-body" fill="currentColor" aria-hidden="true"><use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#icon-pdf"/></svg></a><br>
       {% when 'record' %}
-      <a class="text-dark" href="{{ 'record' | prepend: '/browse.html#' | relative_url }}">Record{% if count > 1 %}s{% endif %} <svg class="bi icon-sprite text-body" fill="currentColor" aria-hidden="true"><use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#icon-default"/></svg></a><br>
+      <a class="text-dark" href="{{ 'record' | prepend: '/browse.html#' | relative_url }}">Record{% if count > 1 %}s{% endif %} <svg class="bi icon-sprite text-body" fill="currentColor" aria-hidden="true"><use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#icon-record"/></svg></a><br>
       {% when 'compound_object' %}
       <a class="text-dark" href="{{ 'compound_object' | prepend: '/browse.html#' | relative_url }}">Compound Object{% if count > 1 %}s{% endif %} <svg class="bi icon-sprite text-body" fill="currentColor" aria-hidden="true"><use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#icon-compound-object"/></svg></a><br>
       {% when 'multiple' %}

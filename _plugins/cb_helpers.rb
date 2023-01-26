@@ -97,6 +97,15 @@ module CollectionBuilderHelperGenerator
       if !theme_icons['icon-pdf']
         theme_icons['icon-pdf'] = "file-richtext"
       end
+      if !theme_icons['icon-record']
+        theme_icons['icon-record'] = "file-text"
+      end
+      if !theme_icons['icon-compound-object']
+        theme_icons['icon-compound-object'] = "collection"
+      end
+      if !theme_icons['icon-multiple']
+        theme_icons['icon-multiple'] = "postcard"
+      end
       if !theme_icons['icon-default']
         theme_icons['icon-default'] = "file-earmark"
       end
