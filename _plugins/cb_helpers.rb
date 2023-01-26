@@ -89,7 +89,7 @@ module CollectionBuilderHelperGenerator
         theme_icons['icon-image'] = "image"
       end
       if !theme_icons['icon-audio']
-        theme_icons['icon-audio'] = "file-play"
+        theme_icons['icon-audio'] = "soundwave"
       end
       if !theme_icons['icon-video']
         theme_icons['icon-video'] = "film"
