@@ -5,24 +5,15 @@
 layout: item/item-page-base
 gallery: true
 ---
-<div class="row">
-    <div class="col-md-10 col-12 mx-auto">
-        <div class="card mb-4 text-center">
 
-            {% include item/image-gallery.html %}
-            
-            <div class="my-2">
+<div class="card mb-4 text-center">
 
-                {% include item/download-buttons.html %}
+    {% include item/image-gallery.html %}
+    
+    <div class="my-2">
 
-            </div>
+        {% include item/download-buttons.html %}
 
-        </div>
     </div>
 
-    <div class="col-md-10 mx-auto col-12" id="metadata">
-
-        {% include item/metadata.html %}
-        
-    </div>
 </div>
