@@ -58,8 +58,14 @@ module CollectionBuilderHelperGenerator
             if featured_item_src.nil? 
               puts color_text("Error cb_helpers: Item for featured image with objectid '#{featured_image}' does not have an image url in metadata. Please check 'featured-image' in '_data/theme.yml' and choose an item that has 'object_location' or 'image_small'", :yellow)
             end
+            # use item title as alt
             featured_item_alt = featured_record[0]['title'] || site.config['title']
-            featured_item_link = "/items/" + featured_image + ".html"
+            # figure out item link
+            if featured_record[0]['parentid']
+              featured_item_link = "/items/" + featured_record[0]['parentid'] + ".html#" + featured_image
+            else
+              featured_item_link = "/items/" + featured_image + ".html"
+            end
           end
         else
           puts color_text("Error cb_helpers: configured metadata '#{site.config['metadata']}' not found in '_data'.", :yellow)
