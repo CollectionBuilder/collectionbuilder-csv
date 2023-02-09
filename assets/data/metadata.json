@@ -9,7 +9,7 @@
         {% for f in fields %}{% if item[f] %}{{ f | jsonify }}: {{ item[f] | jsonify }},{% endif %}
         {% endfor %}{% if item.image_thumb %}"object_thumb": "{{ item.image_thumb | absolute_url }}",{% endif %}
         "object_location": "{{ item.object_location | absolute_url }}",
-        "reference_url": {% if item.parentid %}{{ '/items/' | append: item.parentid | append: '.html#' | append: item.objectid | relative_url | jsonify }}{% else %}{{ '/items/' | append: item.objectid | append: '.html' | relative_url | jsonify }}{% endif %}
+        "reference_url": {% if item.parentid %}{{ '/items/' | append: item.parentid | append: '.html#' | append: item.objectid | absolute_url | jsonify }}{% else %}{{ '/items/' | append: item.objectid | append: '.html' | absolute_url | jsonify }}{% endif %}
     }{% unless forloop.last %},{% endunless %}
     {% endfor %}
 ] }
