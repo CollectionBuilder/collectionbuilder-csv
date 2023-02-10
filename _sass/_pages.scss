@@ -28,6 +28,17 @@
     height: 110px;
     max-width: 90%;
 }
+// compound object big modal class
+@media (min-width:576px){
+    .modal-xxl{ max-width:90%; } 
+}
+@media (min-width:992px){
+    .modal-xxl{ max-width:90%; } 
+}
+@media (min-width:1200px){ 
+    .modal-xxl{ max-width: 90%;  }
+}
+
 
 /* browse */
 

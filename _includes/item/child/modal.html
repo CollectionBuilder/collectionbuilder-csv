@@ -1,33 +1,40 @@
 <!-- Modal -->
 <div class="modal fade" id="{{ child.objectid }}" tabindex="-1" role="dialog"
     aria-labelledby="{{ child.objectid }}ModalLabel" aria-hidden="true">
-    <div class="modal-dialog" style="max-width: 90% !important;">
-        <div class="modal-content">
-
-            <div class="w-100 text-right mb-0">
-                <button type="button" class="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"
-                    onclick="history.pushState('', '', window.location.pathname)"></button>
-            </div>
-            <div class="modal-header ">
+    <div class="modal-dialog modal-xxl">
+        <div class="modal-content text-start">
+           
+            <div class="modal-header ">    
 
                 <div class="modal-title w-100" id="{{ child.objectid }}ModalLabel">
                     <div class="row">
-                        <div class="col-1 col-md-2 text-right">
+                        <div class="col-12 text-end">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                            onclick="history.pushState('', '', window.location.pathname)"></button>
+                        </div>
+                        <div class="col-1 col-md-2">
                             <button
-                                onclick="document.getElementById('item-{% if forloop.index == 1 %}{{forloop.length}}{% else %}{{forloop.index | minus: 1 }}{% endif %}').click();window.location.hash='item-{% if forloop.index == 1 %}{{forloop.length}}{% else %}{{forloop.index | minus: 1 }}{% endif %}'"
-                                class="btn btn-outline-dark btn-sm">{% include feature/icon.html icon="arrow-left"
-                                label="Left arrow" %} <span class="d-none d-md-inline">Previous Item</span></button>
+                                onclick="document.getElementById('item-{% if forloop.index == 1 %}{{ forloop.length }}{% else %}{{ forloop.index | minus: 1 }}{% endif %}').click(); window.location.hash = 'item-{% if forloop.index == 1 %}{{ forloop.length }}{% else %}{{ forloop.index | minus: 1 }}{% endif %}'"
+                                class="btn btn-outline-dark btn-sm">
+                                {% include feature/icon.html icon="arrow-left"
+                                label="Left arrow" %}
+                                <span class="d-none d-md-inline">Previous Item</span>
+                            </button>
                         </div>
                         <div class="col-9 col-md-8 text-center">
-                            <h5>{{page.title}} <span class="d-none d-md-inline">-</span><span
-                                    class="d-md-none"><br></span> Item {{forloop.index}} of {{children | size }}</h5>
+                            <h3 class="h5">{{ page.title }} 
+                                <span class="d-none d-md-inline">-</span><span class="d-md-none"><br></span>
+                                Item {{ forloop.index }} of {{ children | size }}
+                            </h3>
                         </div>
-                        <div class="col-1 col-md-2 text-left">
+                        <div class="col-1 col-md-2 text-end">
                             <button
-                                onclick="document.getElementById('item-{% if forloop.index == forloop.length %}1{% else %}{{forloop.index | plus: 1 }}{% endif %}').click();window.location.hash='item-{% if forloop.index == forloop.length %}1{% else %}{{forloop.index | plus: 1 }}{% endif %}'"
-                                class="ms-md-5 btn btn-outline-dark btn-sm"><span class="d-none d-md-inline">Next
-                                    Item</span> {% include feature/icon.html icon="arrow-right" label="Right arrow"
-                                %}</button>
+                                onclick="document.getElementById('item-{% if forloop.index == forloop.length %}1{% else %}{{ forloop.index | plus: 1 }}{% endif %}').click();window.location.hash='item-{% if forloop.index == forloop.length %}1{% else %}{{ forloop.index | plus: 1 }}{% endif %}'"
+                                class="ms-md-5 btn btn-outline-dark btn-sm">
+                                <span class="d-none d-md-inline">Next Item</span>
+                                {% include feature/icon.html icon="arrow-right" label="Right arrow"
+                                %}
+                            </button>
                         </div>
                     </div>
                 </div>
