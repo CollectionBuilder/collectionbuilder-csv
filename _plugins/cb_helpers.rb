@@ -118,6 +118,15 @@ module CollectionBuilderHelperGenerator
       if !theme_icons['icon-back-to-top']
         theme_icons['icon-back-to-top'] = "arrow-up-square"
       end
+      if !theme_icons['arrow-left']
+        theme_icons['arrow-left'] = "arrow-left"
+      end
+      if !theme_icons['arrow-right']
+        theme_icons['arrow-right'] = "arrow-right"
+      end
+      if !theme_icons['arrow-down']
+        theme_icons['arrow-down'] = "arrow-down"
+      end
       # process icons
       icon_set = { }
       theme_icons.each do |i|

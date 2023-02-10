@@ -115,4 +115,4 @@ font-cdn: # add font stylesheet, e.g. <link href="https://fonts.googleapis.com/c
 #   icon-compound-object: collection 
 #   icon-multiple: postcard
 #   icon-default: file-earmark # fall back icon
-
+#   icon-back-to-top: arrow-up-square
