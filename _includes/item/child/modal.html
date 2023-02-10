@@ -16,8 +16,9 @@
                             <button
                                 onclick="document.getElementById('item-{% if forloop.index == 1 %}{{ forloop.length }}{% else %}{{ forloop.index | minus: 1 }}{% endif %}').click(); window.location.hash = 'item-{% if forloop.index == 1 %}{{ forloop.length }}{% else %}{{ forloop.index | minus: 1 }}{% endif %}'"
                                 class="btn btn-outline-dark btn-sm">
-                                {% include feature/icon.html icon="arrow-left"
-                                label="Left arrow" %}
+                                <svg class="bi icon-sprite" role="img" aria-label="Previous Item">
+                                    <use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#arrow-left"/>
+                                </svg>
                                 <span class="d-none d-md-inline">Previous Item</span>
                             </button>
                         </div>
@@ -32,8 +33,9 @@
                                 onclick="document.getElementById('item-{% if forloop.index == forloop.length %}1{% else %}{{ forloop.index | plus: 1 }}{% endif %}').click();window.location.hash='item-{% if forloop.index == forloop.length %}1{% else %}{{ forloop.index | plus: 1 }}{% endif %}'"
                                 class="ms-md-5 btn btn-outline-dark btn-sm">
                                 <span class="d-none d-md-inline">Next Item</span>
-                                {% include feature/icon.html icon="arrow-right" label="Right arrow"
-                                %}
+                                <svg class="bi icon-sprite" role="img" aria-label="Next Item">
+                                    <use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#arrow-right"/>
+                                </svg>
                             </button>
                         </div>
                     </div>
