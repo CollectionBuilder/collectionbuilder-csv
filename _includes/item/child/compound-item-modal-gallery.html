@@ -1,7 +1,10 @@
 {% comment %}
 
-    creates a gallery of thumbnails images or icons for each child item in a compound object. Thumb is based on display_template or format of the child item.
-    Each child item is given a popup modal with full information
+    Creates a gallery of thumbnails images or icons for each child item in a compound object. The thumb defaults to image_thumb or image_small, otherwise an icon is added based on the display_template or format of the child item.
+    
+    Each child item is given a popup modal with full display and metadata information. The display is choose based on the display_template of the child item.
+
+    This include requires the Liquid object "child" to be present! The item display requires the compound object item includes in "item/child/".
 
 {% endcomment %}
 <div class="row row-cols-2 row-cols-lg-4 g-2">
@@ -36,8 +39,98 @@
                     </a>
 
                     <!-- child object modal -->
-                
-                    {% include item/child/modal.html %}
+                    <div class="modal fade" id="{{ child.objectid }}" tabindex="-1" role="dialog" aria-labelledby="{{ child.objectid }}ModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-xxl">
+                            <div class="modal-content text-start">
+
+                                <div class="modal-header ">
+                                    <div class="modal-title w-100" id="{{ child.objectid }}ModalLabel">
+                                        <div class="row">
+                                            <div class="col-12 text-end">
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                                                onclick="history.pushState('', '', window.location.pathname)"></button>
+                                            </div>
+                                            <div class="col-1 col-md-2">
+                                                <button
+                                                    onclick="document.getElementById('item-{% if forloop.index == 1 %}{{ forloop.length }}{% else %}{{ forloop.index | minus: 1 }}{% endif %}').click(); window.location.hash = 'item-{% if forloop.index == 1 %}{{ forloop.length }}{% else %}{{ forloop.index | minus: 1 }}{% endif %}'"
+                                                    class="btn btn-outline-dark btn-sm">
+                                                    <svg class="bi icon-sprite" role="img" aria-label="Previous Item">
+                                                        <use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#arrow-left"/>
+                                                    </svg>
+                                                    <span class="d-none d-md-inline">Previous Item</span>
+                                                </button>
+                                            </div>
+                                            <div class="col-9 col-md-8 text-center">
+                                                <h3 class="h5">{{ page.title }} 
+                                                    <span class="d-none d-md-inline">-</span><span class="d-md-none"><br></span>
+                                                    Item {{ forloop.index }} of {{ children | size }}
+                                                </h3>
+                                            </div>
+                                            <div class="col-1 col-md-2 text-end">
+                                                <button
+                                                    onclick="document.getElementById('item-{% if forloop.index == forloop.length %}1{% else %}{{ forloop.index | plus: 1 }}{% endif %}').click();window.location.hash='item-{% if forloop.index == forloop.length %}1{% else %}{{ forloop.index | plus: 1 }}{% endif %}'"
+                                                    class="ms-md-5 btn btn-outline-dark btn-sm">
+                                                    <span class="d-none d-md-inline">Next Item</span>
+                                                    <svg class="bi icon-sprite" role="img" aria-label="Next Item">
+                                                        <use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#arrow-right"/>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div class="card mb-4 text-center">
+                                                <div class="m-2">
+                                                    <p>
+                                                        {% if child.display_template == 'image' %}
+                                                            {% include item/child/image-gallery.html %}
+                                                        {% elsif child.display_template == 'video' %}
+                                                            {% if child.object_location contains 'vimeo' or child.object_location contains 'youtu' %}
+                                                                {% include item/child/video-embed.html %}
+                                                            {% else %}
+                                                                {% include item/child/video-player.html %}
+                                                            {% endif %}
+                                                        {% elsif child.display_template == 'audio' %}
+                                                            <div class="my-auto">
+                                                                {% include item/child/audio-player.html %}
+                                                            </div>
+                                                        {% elsif child.display_template == 'panorama' %}
+                                                            {% include item/child/panorama.html %}
+                                                        {% else %}
+                                                            {% include item/child/item-thumb.html %}
+                                                        {% endif %}
+                                                    </p>
+                                                </div>
+                                                <div class="my-2">
+                                                    {% include item/child/download-buttons.html %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            {% include item/child/metadata.html %}
+                                        </div>
+                                    </div>
+                                    <div class="row justify-content-end mt-4">
+                                        <div class="col-md-5">
+                                            {% include item/child/citation-box.html %}
+                                        </div>
+                                        {% if child.rights or child.rightsstatement %}
+                                        <div class="col-md-5">
+                                            {% include item/child/rights-box.html %}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end child modal -->
+
                 </div>
             </div>
         </div>
