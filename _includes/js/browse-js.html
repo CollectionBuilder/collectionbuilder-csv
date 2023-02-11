@@ -32,7 +32,7 @@ function makeCard(obj) {
         imgSrc = obj.img;
     // else add an icon based on display_template or format
     } else {
-        thumbIcon = getIcon(obj.template,obj.format)
+        thumbIcon = getIcon(obj.template,obj.format,"thumb");
     }
 
     // start card
@@ -68,20 +68,9 @@ function makeCard(obj) {
     card += '</p>';
     // media type
     if(obj.template && obj.template != "") {
+        mediaIcon = getIcon(obj.template,obj.format);
         card += '<p class="card-text"><small><a class="btn btn-sm btn-outline-secondary" href="{{ "/browse.html" | relative_url }}#' + encodeURIComponent(obj.template) + '">' + 
-        obj.template.toUpperCase() + ' <svg class="bi icon-sprite"><use xlink:href="{{ "/assets/lib/cb-icons.svg" | relative_url }}#';
-        if(obj.template.includes('image')){
-            card += 'icon-image';
-        } else if(obj.template.includes('audio')){
-            card += 'icon-audio';
-        } else if(obj.template.includes('video')){
-            card += 'icon-video';
-        } else if(obj.template.includes('pdf')){
-            card += 'icon-pdf';
-        } else {
-            card += 'icon-default';
-        }
-        card += '"/></svg></a></small></p>';
+        obj.template.toUpperCase() + ' ' + mediaIcon + '</a></small></p>';
     }
     // view button
     card += '<hr><a href="' + itemHref + '" class="btn btn-sm btn-light" title="link to ' + obj.title + '">View Full Record</a>';
