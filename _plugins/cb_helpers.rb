@@ -2,7 +2,7 @@
 
 #########
 #
-# CollectionBuilder Helpers Generator
+# CollectionBuilder Helpers Generator, v1.1-csv
 #
 # Jekyll plugin to generate theme variables for the template.
 # 
