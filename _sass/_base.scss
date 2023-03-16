@@ -80,6 +80,9 @@ a {
     right: 22px; 
     z-index: 99;
     font-size: 40px; 
+    @include media-query($on-palm) {
+    bottom: 5px;
+    right: 5px;}
 }
 
 /* feature include tweaks */

@@ -1,0 +1,70 @@
+---
+layout: default
+custom-foot: transcript/js/visualization-js.html;/transcript/js/docready-viz-js.html
+---
+
+{% assign transcripts = site.data.transcripts | sort %}
+{%- assign items = site.data[site.metadata] %}
+{% include transcript/style/filter-style.html %}
+
+<div class="container p-4 p-md-5">
+  {{ content }}
+
+  <div class="row">
+    {%for n in site.data.filters %}
+    <div class="col-md-2 col-4 ">
+      <svg class="legend" width="100%" height="25px" data-id="{{n.tag | slugify }}" style="cursor:pointer;" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="On {{ n.description | escape }}" onclick="vizFilter('{{n.tag | slugify }}')">
+        <circle cx="25" cy="10" r="10"  class="{{n.tag | slugify}}"></circle><text x="38" y="15">{{n.tag}}</text>
+      </svg>
+    </div>
+    {%endfor%}
+
+  </div><br />
+  <br />
+  <button id="reset" class="btn btn-lg btn-secondary float-right" onclick="vizFilter('all');">Reset</button>
+  <br />
+  <br />
+  {% for transcript in transcripts %}{%assign transcript-name = transcript[0] %}
+  {% assign transcript_item = items | where_exp: 'item', 'item.objectid == transcript-name' | first %}
+  <div class="vizdiv">
+    <h3 x="0" y="0" data-id="{{transcript-name}}" class="mt-4 {{transcript-name}}"><a class="text-dark darklink" href="{% if item.parentid == nil %}{{ '/items/' | append: transcript_item.objectid | append: '.html' | relative_url }}{% elsif transcript_item.parentid %}{{ '/items/' | append: transcript_item.parentid | append: '.html' | relative_url }}#{{item.objectid }}{% endif %}">{{transcript_item.title}}</a></h3>
+    <svg class="chart {{transcript-name}}" width="100%" height="100px" style="overflow: visible">
+      {% for item in transcript[1] %}
+      {% assign my_integer = forloop.length %}
+      {% assign my_float = my_integer | times: 1.0 %}
+      {% assign rect-width = 100 | divided_by: my_float  %}
+      <a href="{{ forloop.index | prepend: transcript-name | prepend: '.html#' | prepend: transcript-name | prepend: '/items/' | relative_url }}">
+        <rect x="{{forloop.index0 | times: rect-width }}%" y="20" width="{{rect-width}}%" height="50" data-bs-toggle="tooltip" data-bs-placement="top" class="{%- assign tags = item.tags | split: ";" | compact | where_exp: 'item', 'item != " "' %}{% for tag in tags %}{{tag | slugify }} {% endfor %}" data-bs-title="{{ item.words }}{% if item.tags %}(Subjects: {{ item.tags | replace: ';', ', ' }}){%endif%}"></rect>
+      </a>{%endfor%}</svg>
+  </div>{%endfor%}
+
+</div>
+<br />
+<hr /><br />
+<div class="container d-none">
+  <h2>Contents</h2>
+
+
+  {% for transcript in site.data.transcripts %}{%assign transcript-name = transcript[0] %}
+  {%capture audiovideo-id %}{%for item in site.transcripts%}{%if item.objectid == transcript-name %}{{item.audiovideo-id}}{%endif%}{%endfor%}{% endcapture %}
+  {%capture avlink %}{%for item in site.transcripts%}{%if item.objectid == transcript-name %}timestamp/{{item.av_source}}.html{%endif%}{%endfor%}{% endcapture %}
+  {% for item in transcript[1] %}
+  {% if forloop.first %}
+  <div class="contentsdiv">
+    <h3 class="my-4 {{transcript-name}}"><a href="{{transcript-name | prepend: '/transcripts/' | append: '.html' | relative_url }}">{{transcript-name | capitalize}}</a></h3>
+    <div id="contents-container" class="my-4 border {{transcript-name}} {%cycle 'bg-light','' %}">{%endif%}
+      <div id="{{ forloop.index }}" class="{%- assign tags = item.tags | split: ";" | compact | where_exp: 'item', 'item != " "' %}{% for tag in tags %}{{tag | slugify }} {% endfor %} row">
+        <div class="line col-2"><a href="{{ forloop.index | prepend: transcript-name | prepend: '.html#' | prepend: transcript-name | prepend: '/transcripts/' | relative_url }}">{{transcript-name}}-{{ forloop.index }}</a></div>
+        <div class="col-10 col-md-8 words">
+          <div id="spoken">{%if item.speaker%}{{item.speaker | remove: ":"}}: {%endif%}{{item.words}}</div>
+        </div>
+        <div class="col-md-2 timestamp d-md-block d-none">{%if item.timestamp%}
+          <a target="_blank" href="{{ forloop.index | prepend: transcript-name | prepend: '.html#' | prepend: transcript-name | prepend: '/transcripts/' | relative_url }}">{{item.timestamp}}</a>{% endif %}<br />{{item.tags | replace: ";", "<br>"}}</div>
+        </div>
+
+      {% if forloop.last%}</div>
+  </div>{%endif%}
+  {% endfor %}{% endfor %}
+
+
+</div>

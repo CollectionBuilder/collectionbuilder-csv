@@ -1,0 +1,52 @@
+<script>
+    // establish the element past which the scroll event happens
+    var triggerElement = document.getElementById('contents-container');
+    var topheight = document.getElementById('object-meta').clientHeight;
+    window.onscroll = function(){
+        //TOP
+        if(triggerElement.getBoundingClientRect().top <= 0){
+            
+            console.log("height is" + topheight);
+            document.getElementById("scroll-to-top").style.display = "block";
+            triggerElement.setAttribute('style', 'margin-top:' + topheight + 'px');
+               document.getElementById('object-meta').classList.add('iframe-wrapper');
+                }
+        //BOTTOM
+        else {
+            document.getElementById("scroll-to-top").style.display = "none";
+               document.getElementById('object-meta').classList.remove('iframe-wrapper');
+              triggerElement.removeAttribute('style');
+    
+        }
+    }
+    
+        // When the user scrolls down from the top of the document, show the button
+       /* window.onscroll = function () {
+            if (document.body.scrollTop > 1000 || document.documentElement.scrollTop > 500) {
+                document.getElementById("scroll-to-top").style.display = "block";
+               document.getElementById('object-meta').classList.add('iframe-wrapper');
+               
+    
+    
+    
+            } else {
+                document.getElementById("scroll-to-top").style.display = "none";
+               document.getElementById('object-meta').classList.remove('iframe-wrapper');
+    
+    
+            }
+        }*/
+        // scroll to top function
+        function scrollToTop() {
+            window.scroll({
+                top: 0, 
+                left: 0, 
+                behavior: 'smooth'
+            });
+        }
+    </script>
+<button id="scroll-to-top" type="button" class="btn btn-link" onclick="scrollToTop();" title="Back to Top" aria-label="Back to Top">
+    <svg class="bi icon-sprite" role="img" aria-label="Up Arrow">
+        <use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#icon-back-to-top"/>
+    </svg>
+</button>

@@ -1,0 +1,27 @@
+{% comment %}
+
+    Bootstrap Modal, https://getbootstrap.com/docs/4.5/components/modal/
+
+    E.G. --> {% include feature/modal.html button="More Info" color="info" title="Information" text="Example text" %}
+
+    Options: 
+    - "button" = text of button to trigger modal
+    - "color" = color of modal button (primary, secondary, success, danger, warning, info, light, dark)
+    - "title" = header text for modal pop up
+    - "text" = body text for modal pop up, can use markdown formatting (tip: use a Liquid capture to add more complex content)
+
+{%- endcomment -%}
+<!-- Modal -->
+<div class="modal fade" id="bio-modal" tabindex="-1" role="dialog" aria-labelledby="bio-modal-ModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="{{ include.button | slugify }}ModalLabel">Biography</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" >
+            {{ page.bio | markdownify }}
+            </div>
+        </div>
+    </div>
+</div>

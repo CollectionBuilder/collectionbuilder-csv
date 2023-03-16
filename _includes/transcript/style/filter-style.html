@@ -1,0 +1,25 @@
+<!-- list of colors provided by https://sashat.me/2017/01/11/list-of-20-simple-distinct-colors/ -->
+<style>
+    {% for n in site.data.filters %}
+  .{{ n.tag | slugify }} { fill: {% cycle '#e6194b','#3cb44b','#ffe119','#4363d8','#f58231','#911eb4','#46f0f0','#f032e6','#bcf60c','#fabebe','#008080','#e6beff','#9a6324','#fffac8','#800000','#aaffc3','#808000','#ffd8b1','#000075','#808080','#ffffff'%};}
+
+  .{{ n.tag | slugify  }}.primary-{{ n.tag | slugify  }}{ fill: {% cycle '#e6194b !important','#3cb44b !important','#ffe119 !important','#4363d8 !important','#f58231 !important','#911eb4 !important','#46f0f0 !important','#f032e6 !important','#bcf60c !important','#fabebe !important','#008080 !important','#e6beff !important','#9a6324 !important','#fffac8 !important','#800000 !important','#aaffc3 !important','#808000 !important','#ffd8b1 !important','#000075 !important','#808080 !important','#ffffff !important'%};}
+  {% endfor %}
+
+ 
+
+    .black {
+      fill: black;
+    }
+
+    .dark {
+      fill: black !important;
+    }
+
+    .primary-hilite {fill: red !important;}
+    
+    tr.black,
+    .hidden {
+      display: none;
+    }
+  </style>

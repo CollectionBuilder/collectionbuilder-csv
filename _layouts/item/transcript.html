@@ -1,0 +1,131 @@
+---
+# generic fallback item page layout
+# displays image or icon depending on "image_thumb"
+layout: item/item-page-base
+custom-foot: transcript/js/transcript-js.html;/transcript/js/docready-js.html
+---
+{% assign children = site.data[site.metadata] | where_exp: 'item','item.parentid == page.objectid' %}
+{% assign items = site.data.transcripts[page.objectid] %}
+{%- comment -%} find all words used in the subject metadata {%- endcomment -%}
+{%- assign min-count = 1 -%}
+{%- assign raw-subjects = items | map: "tags" | compact | join: ";" | split: ";" -%}
+{%- capture subjects -%}{% for s in raw-subjects %}{% if s != "" %}{{- s | strip | downcase -}};{% endif %}{%- endfor
+-%}{%-
+endcapture -%}
+{%- assign subjects = subjects | split: ";" -%}
+{%- assign uniqueSubjects = subjects | uniq | sort -%}
+
+{% if page.object_location contains 'vimeo' %}
+{% assign av = "vimeo" %}
+{% assign vimeo_id = page.object_location | split: '/' | last %}
+{%- elsif page.object_location contains 'youtu' -%}
+{% assign av = "youtube" %}
+{% assign youtube_id = page.object_location | split: '/' | last %}
+{% if youtube_id contains 'v=' %}{% assign youtube_id = youtube_id | split: 'v=' | last | split: '&' | first %}
+{% elsif youtube_id contains '?' %}{% assign youtube_id = youtube_id | split: '?' | first %}{% endif %}
+{%- elsif page.object_location contains 'mp3' -%}
+{% assign av = "mp3" %}
+{%- elsif page.object_location contains 'soundcloud' -%}
+{% assign av = "soundcloud" %}
+{% assign soundcloud_id = page.object_location | split: '.com/' | last %}
+{%endif%}
+
+
+{% include transcript/style/filter-style.html %}
+<div id="object-meta">
+  <div class="my-2 row">
+    <div class="col">
+      <h2 class="title">{{ page.title}} {% if page.bio %}<a type="button" class="btn btn-sm btn-outline-dark meta ms-3"
+          data-bs-toggle="modal" data-bs-target="#bio-modal">Click for bio</a>{% endif %}</h2>
+      {% if page.bio %}{% include transcript/item/bio-modal.html %}{% endif %}
+      <p class="meta">{%if page.location%}<span class="me-3"><b>Location:</b>  {{page.location}}</span>{%endif%}{%if
+        page.date%}<b>Date:</b> {{page.date | date: "%B %d, %Y" }}{%endif%}
+        {%if page.interviewer %} <br>Interviewer: {{page.interviewer}}{%endif%}</p>
+      {% include transcript/item/download-buttons.html %}
+      {% include transcript/item/metadata-modal.html %}
+
+    </div>
+    {% if page.image_small or page.image_thumb %}
+    <div class="col-md-3 meta{% if av == 'vimeo' or av == 'youtube'%} d-none d-md-block{% endif %}">
+      <img class="img-thumbnail timeline-thumb" src="{{page.image_small | default: page.image_thumb }}" alt="{page.title}">
+    </div>
+    {% endif %}
+  </div>
+  {% if av %}
+  <div class="interview-object mt-3 px-3">
+    {% include
+    transcript/player/{{av}}.html %}
+  </div>{% endif %}
+  {% if site.data.filters %}
+  <div class="vizdiv">
+    <h3 class="mt-3 mb-0 meta">Topics:</h3>
+    <svg id="colorViz" class="chart" width="100%" height="100px" style="overflow: visible">
+      {% for item in items %}
+      {% assign my_integer = forloop.length %}
+      {% assign my_float = my_integer | times: 1.0 %}
+      {% assign rect-width = 100 | divided_by: my_float %}
+      <a  onclick="scrollToLine('{{-forloop.index-}}');">
+        <rect id="rect{{-forloop.index-}}" x="{{forloop.index0 | times: rect-width }}%" y="20" width="{{rect-width}}%" height="50" data-bs-toggle="tooltip" data-placement="top" class="{%- assign tags = item.tags | split: ";" | compact | where_exp: 'item', 'item != " "' %}{% for tag in tags %}{{tag | slugify }} {% endfor %}" data-bs-title="{{ item.words }}{% if item.tags %}(Subjects: {{ item.tags | replace: ';', ', ' }}){%endif%}"></rect>
+      </a>{%endfor%}</svg>
+  </div>{% endif %}
+</div>
+<div id="filters-content" class="pe-md-5">
+  <div class="row my-3 sticky-top bg-white border-bottom border-left border-right d-print-none py-3 w-md-75"
+    id="filters-search" style="z-index: 0;">
+
+    <div class="col {% unless site.data.filters %}d-none{% endunless %}">
+      <select id="filters" title="Filter by Topic" aria-label="Topic filtering dropdown select option"
+        class="filters form-select" onchange="filterLines()">
+        <option value="all" class="reset" selected="selected reset">Filter by Topic</option>
+        <option value="all" selected="selected">On All Topics</option>
+        {% assign filters = site.data.filters %}
+        {% for filter in filters %}
+        {% assign tag = filter.tag | slugify %}
+        {%if uniqueSubjects contains tag %}<option value="{{ tag }}">{{filter.description | capitalize}} ({{filter.tag}})</option>{%endif%}
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col">
+      <div id="transcriptsearch" class="bg-lightr">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="input-group fs-5">
+              <input type="text" class="form-control" placeholder="Search..." aria-label="Search"
+                aria-describedby="goButton" id="quicksearch">
+              <div class="input-group-append">
+                <button class="btn btn-primary rounded-right border-light input-group-text" type="submit" title="Search"
+                  alt="Search" id="goButton" onclick="var searchval = document.getElementById('quicksearch').value; searchLines(searchval);">Go</button>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <button class="reset btn btn-sm btn-outline-primary mt-1" onclick="vizFilter('all');">Reset Filters</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="filtersearch" class="col-12 d-none mt-2 small">
+      <h5 id="linecount" class="d-none small ms-3"><span id="numberof"></span></h5>
+
+      <select class=" mb-2 form-select" id="searchResults" onchange="scrollToLine(this.value);">
+
+      </select>
+    </div>
+  </div>
+
+
+  <div id="contents-container" class="pe-5">
+    {% for item in items %}
+    {% assign prev_index = forloop.index0 | times: 1 | minus: 1 %}
+    {% assign prev_speaker = items[prev_index].speaker %}
+    {% assign mod = forloop.index | plus: 1 | modulo: 5 %}
+    <div id="{{page.objectid}}{{ forloop.index }}" class="{%- assign tags = item.tags | split: ";" | compact | where_exp: 'item' , 'item != " "' %}{% for tag in tags %}{{tag | slugify }} {% endfor %} row line my-1">
+      <p class="words col-md-10 col-lg-8 col-print-12 pr-0">
+        {% unless item.speaker == prev_speaker %}{%if item.speaker %}<span class="fw-bold pe-3 pb-3">{{item.speaker | remove: ":"}}:</span>{% endif %}{% endunless %}{{item.words}}
+      </p>
+      <div class="col-12 col-md-2 timestamp mb-3 small text-center">{%if item.timestamp%}{% if av %}{% capture avlink %}transcript/timestamp/{{av | downcase }}.html{% endcapture %}<a href="{% include {{avlink}} %}">{{item.timestamp}}</a>{% else %}{{item.timestamp}}{% endif %}{% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>

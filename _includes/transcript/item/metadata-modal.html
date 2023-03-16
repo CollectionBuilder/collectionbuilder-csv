@@ -1,0 +1,14 @@
+
+<div class="modal fade" id="metadata-modal" tabindex="-1" role="dialog" aria-labelledby="metadata-modal-ModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="{{ include.button | slugify }}ModalLabel">Item Information</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" >
+                {% include transcript/item/metadata.html %}
+            </div>
+        </div>
+    </div>
+</div>

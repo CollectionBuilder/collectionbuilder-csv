@@ -1,0 +1,35 @@
+<script>
+            const url = new URL(window.location);
+            const params = url.searchParams;
+
+            function resetVals(){
+     params.delete('filter');
+     window.history.replaceState({}, '', location.pathname);
+     var rects = document.getElementsByTagName('rect');
+     for (i = 0; i < rects.length; i++) {
+      rects[i].classList.remove('dark');
+     }
+}
+
+ function vizFilter(x) {
+  var rects = document.getElementsByTagName('rect');
+  params.set('filter', x);
+    var p = params.toString();
+    window.history.replaceState({}, '', location.pathname + '?' + p);
+  for (i = 0; i < rects.length; i++) {
+    var classString = rects[i].classList;
+        classString.add('dark');
+        classString.forEach(item=>{
+    if(item.startsWith('primary')) {
+      classString.remove(item) ;}});
+    if (x == "all"){
+      classString.remove('dark');
+      resetVals();
+    } else if (classString.contains(x)){
+      classString.remove('dark');          
+      classString.add("primary-" + x);  
+    } else if (x == "darkforall"){ }
+        }
+    }
+
+  </script>

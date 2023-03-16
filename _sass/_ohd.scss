@@ -1,0 +1,134 @@
+/* 
+    SCSS from the Oral History as Data project
+*/
+
+
+.grey {
+    color: grey;
+}
+
+.grey-small {
+    color: grey;
+    height: 3px;
+    line-height: 2px;
+    overflow: hidden;
+}
+
+.line.grey-small {
+
+    .timestamp,
+    .linenum {
+        display: none;
+    }
+
+    .words {
+        display: inline;
+        font-size: 3px;
+        padding: 0px 5px;
+    }
+}
+
+.iframe-wrapper {
+    position: fixed;
+    right: 10px;
+    height: 200px;
+    width: 370px;
+    transition: all 1s linear;
+
+    .meta {
+        display: none;
+    }
+
+    @include media-query($on-palm) {
+        bottom: 0px;
+        left: 0px;
+        height: auto;
+        width: 300px;
+
+        .meta {
+            display: none;
+        }
+
+        .vizdiv, #colorViz, .title {
+            display: none;
+        }
+    }
+}
+
+.anchored-highlight p.words {
+    background: aquamarine;
+}
+
+.featured {
+    display: block;
+    float: none;
+    clear: both;
+}
+
+.linenum {
+    font-size: 11px;
+    float: left;
+    width: auto;
+}
+
+.words {
+    @include media-query($on-palm) {
+        min-width: 250px;
+    }
+}
+
+.filteroptions,
+.searchinput {
+    font-size: 24px;
+
+    @include media-query($on-palm) {
+        font-size: 18px;
+    }
+}
+
+.toggle_int:hover {
+    color: pink
+}
+
+.toggle_int small {
+    font-size: 12px;
+}
+
+.darklink:hover{
+    text-decoration: underline;
+}
+
+.featured {
+    background-color: #dbf1fd !important;
+    color: black !important;
+}
+
+.btn-outline-dark:hover {
+    background-color: #212529 !important;
+}
+
+
+@media print {
+
+    html,
+    body {
+        height: 100%;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: visible;
+        display: block;
+        font-size: 1.2rem;
+    }
+
+    .transcript-content {
+        height: auto;
+        min-height: 5000px;
+        overflow: visible;
+        display: block;
+    }
+
+}
+
+html {
+    scroll-padding-top: 130px; /* height of sticky header */
+  }
