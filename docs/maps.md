@@ -2,6 +2,8 @@
 
 Powered by Leaflet.js, https://github.com/Leaflet/Leaflet
 
+Following best practices listed in the Leaflet guide to accessibility, https://leafletjs.com/examples/accessibility/
+
 With plugins: 
 
 - search, https://github.com/naomap/leaflet-fusesearch
