@@ -9,6 +9,7 @@ With plugins:
 - search, https://github.com/naomap/leaflet-fusesearch
 - cluster, https://github.com/Leaflet/Leaflet.markercluster
 - cluster plugin (for search and cluster to work together), https://github.com/ghybs/Leaflet.MarkerCluster.Freezable
+- full screen, https://github.com/Leaflet/Leaflet.fullscreen
 
 Set base configuration in `_data/theme.yml` map section, including:
 
