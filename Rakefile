@@ -105,13 +105,17 @@ task :generate_derivatives, [:thumbs_size, :small_size, :density, :missing, :com
       thumb_filename = File.join(thumb_image_dir, "#{base_filename}_th.jpg")
       if args.missing == 'false' || !File.exists?(thumb_filename)
         puts "Creating: #{thumb_filename}"
-        image = MiniMagick::Image.open(filename)
-        image.format "jpg" if file_type == :pdf
-        image.density args.density if file_type == :pdf
-        image.resize args.thumbs_size
-        image.flatten
-        image.write thumb_filename
-        image_optim.optimize_image!(thumb_filename)
+        begin
+          image = MiniMagick::Image.open(filename)
+          image.format "jpg" if file_type == :pdf
+          image.density args.density if file_type == :pdf
+          image.resize args.thumbs_size
+          image.flatten
+          image.write thumb_filename
+          image_optim.optimize_image!(thumb_filename)
+        rescue => e
+          puts "Error creating thumbnail: #{e.message}"
+        end
       else
         puts "Skipping: #{thumb_filename} already exists"
       end
@@ -120,13 +124,17 @@ task :generate_derivatives, [:thumbs_size, :small_size, :density, :missing, :com
       small_filename = File.join([small_image_dir, "#{base_filename}_sm.jpg"])
       if args.missing == 'false' or !File.exists?(small_filename)
         puts "Creating: #{small_filename}";
-        image = MiniMagick::Image.open(filename)
-        image.format "jpg" if file_type == :pdf
-        image.density args.density if file_type == :pdf
-        image.resize args.small_size
-        image.flatten
-        image.write small_filename
-        image_optim.optimize_image!(small_filename)
+        begin
+          image = MiniMagick::Image.open(filename)
+          image.format "jpg" if file_type == :pdf
+          image.density args.density if file_type == :pdf
+          image.resize args.small_size
+          image.flatten
+          image.write small_filename
+          image_optim.optimize_image!(small_filename)
+        rescue => e
+          puts "Error creating small image: #{e.message}"
+        end
       else
         puts "Skipping: #{small_filename} already exists"
       end
