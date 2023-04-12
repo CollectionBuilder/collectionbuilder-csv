@@ -31,6 +31,7 @@ The following configuration options are available:
 | small_size | the dimensions of the generated small images | 800x800 |
 | density | the pixel density used to generate PDF thumbnails | 300 |
 | missing | whether to only generate derivatives that don't already exist | true |
+| compress_originals | Optimize the original image files | false |
 
 You can configure any or all of these options by specifying them in the rake command like so:
 

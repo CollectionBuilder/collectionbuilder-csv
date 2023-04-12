@@ -1,6 +1,7 @@
 # CollectionBuilder-CSV helper tasks
 
 require 'csv'
+require 'image_optim'
 require 'mini_magick'
 
 ###############################################################################
@@ -54,6 +55,7 @@ task :generate_derivatives, [:thumbs_size, :small_size, :density, :missing, :im_
     :small_size => "800x800",
     :density => "300",
     :missing => "true",
+    :compress_originals => "false",
   )
 
   # set the folder locations
@@ -104,6 +106,15 @@ task :generate_derivatives, [:thumbs_size, :small_size, :density, :missing, :im_
       # Get the lowercase filename without any leading path and extension.
       base_filename = File.basename(filename)[0..-(extname.length + 1)].downcase
 
+      # Initialize ImageOptim.
+      image_optim = ImageOptim.new(:svgo => false)
+
+      # Optimize the image.
+      if args.compress_originals == 'true'
+        puts "Optimizing: #{filename}"
+        image_optim.optimize_image!(filename)
+      end
+
       # Generate the thumb image.
       thumb_filename=File.join([thumb_image_dir, "#{base_filename}_th.jpg"])
       if args.missing == 'false' or !File.exists?(thumb_filename)
@@ -116,6 +127,7 @@ task :generate_derivatives, [:thumbs_size, :small_size, :density, :missing, :im_
         image.resize args.thumbs_size
         image.flatten
         image.write thumb_filename
+        image_optim.optimize_image!(thumb_filename)
       else
         puts "Skipping: #{thumb_filename} already exists"
       end
@@ -128,6 +140,7 @@ task :generate_derivatives, [:thumbs_size, :small_size, :density, :missing, :im_
         image.resize args.small_size
         image.flatten
         image.write small_filename
+        image_optim.optimize_image!(small_filename)
       else
         puts "Skipping: #{small_filename} already exists"
       end
