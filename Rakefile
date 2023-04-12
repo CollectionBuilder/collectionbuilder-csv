@@ -49,7 +49,7 @@ task :generate_derivatives, [:thumbs_size, :small_size, :density, :missing, :im_
 
   # set default arguments 
   args.with_defaults(
-    :thumbs_size => "400x400",
+    :thumbs_size => "300x300",
     :small_size => "800x800",
     :density => "300",
     :missing => "true",
