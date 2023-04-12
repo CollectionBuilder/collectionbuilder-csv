@@ -1,27 +1,27 @@
-# Rake 
+# Rake
 
-[Rake](https://github.com/ruby/rake) is a task automation tool written in Ruby. 
+[Rake](https://github.com/ruby/rake) is a task automation tool written in Ruby.
 It is a standard part of all Ruby installs, so if you are using Jekyll, you have it.
 Adding a `Rakefile` allows you to add commands to automate repetitive tasks.
 
-CollectionBuilder-CSV provides a `Rakefile` with tasks to help set up and deploy your digital collection. 
-This allows you to run `rake` commands inside this repository: 
+CollectionBuilder-CSV provides a `Rakefile` with tasks to help set up and deploy your digital collection.
+This allows you to run `rake` commands inside this repository:
 
 ## deploy
 
-`rake deploy`, runs Jekyll command `JEKYLL_ENV=production jekyll build` which includes analytics and additional machine markup in build. 
-Production build will take considerably longer than `jekyll s`. 
+`rake deploy`, runs Jekyll command `JEKYLL_ENV=production jekyll build` which includes analytics and additional machine markup in build.
+Production build will take considerably longer than `jekyll s`.
 
 ## generate_derivatives
 
-`rake generate_derivatives`, automates creating a small and thumb image from all images and PDFs contained within the "objects/" directory in this repository. 
-It outputs the derivatives to "objects/small" and "objects/thumbs". 
+`rake generate_derivatives`, automates the creation of optimized, small and thumbnail images from all images and PDFs contained in the "objects/" directory in this repository.
+It outputs the derivatives to "objects/small" and "objects/thumbs".
 Please ensure you have the requirements installed and available on the commandline before running!
 
 Requirements:
 
 - **ImageMagick**, [download](https://imagemagick.org/script/download.php)
-- **Ghostscript**, [download AGPL version](https://www.ghostscript.com/download/gsdnld.html) 
+- **Ghostscript**, [download AGPL version](https://www.ghostscript.com/download/gsdnld.html)
 
 The following configuration options are available:
 
