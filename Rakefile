@@ -39,7 +39,7 @@ end
 ###############################################################################
 
 desc "Generate derivative image files from collection objects"
-task :generate_derivatives, [:thumbs_size, :small_size, :density, :missing, :im_executable] do |t, args|
+task :generate_derivatives, [:thumbs_size, :small_size, :density, :missing, :compress_originals] do |t, args|
 
   # set default arguments 
   args.with_defaults(
