@@ -1,6 +1,7 @@
 # CollectionBuilder-CSV helper tasks
 
 require 'csv'
+require 'mini_magick'
 
 ###############################################################################
 # TASK: deploy
@@ -53,7 +54,6 @@ task :generate_derivatives, [:thumbs_size, :small_size, :density, :missing, :im_
     :small_size => "800x800",
     :density => "300",
     :missing => "true",
-    :im_executable => "magick",
   )
 
   # set the folder locations
@@ -101,13 +101,6 @@ task :generate_derivatives, [:thumbs_size, :small_size, :density, :missing, :im_
         next
       end
 
-      # Define the file-type-specific ImageMagick command prefix.
-      cmd_prefix =
-        case file_type
-        when :image then "#{args.im_executable} #{filename}"
-        when :pdf then "#{args.im_executable} -density #{args.density} #{filename}[0]"
-        end
-
       # Get the lowercase filename without any leading path and extension.
       base_filename = File.basename(filename)[0..-(extname.length + 1)].downcase
 
@@ -115,7 +108,14 @@ task :generate_derivatives, [:thumbs_size, :small_size, :density, :missing, :im_
       thumb_filename=File.join([thumb_image_dir, "#{base_filename}_th.jpg"])
       if args.missing == 'false' or !File.exists?(thumb_filename)
         puts "Creating: #{thumb_filename}";
-        system("#{cmd_prefix} -resize #{args.thumbs_size} -flatten #{thumb_filename}")
+        image = MiniMagick::Image.open(filename)
+        case file_type
+        when :pdf then image.format "jpg"
+        when :pdf then image.density {args.density}
+        end
+        image.resize args.thumbs_size
+        image.flatten
+        image.write thumb_filename
       else
         puts "Skipping: #{thumb_filename} already exists"
       end
@@ -124,7 +124,10 @@ task :generate_derivatives, [:thumbs_size, :small_size, :density, :missing, :im_
       small_filename = File.join([small_image_dir, "#{base_filename}_sm.jpg"])
       if args.missing == 'false' or !File.exists?(small_filename)
         puts "Creating: #{small_filename}";
-        system("#{cmd_prefix} -resize #{args.small_size} -flatten #{small_filename}")
+        image = MiniMagick::Image.open(filename)
+        image.resize args.small_size
+        image.flatten
+        image.write small_filename
       else
         puts "Skipping: #{small_filename} already exists"
       end

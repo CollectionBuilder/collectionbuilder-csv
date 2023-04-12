@@ -31,7 +31,6 @@ The following configuration options are available:
 | small_size | the dimensions of the generated small images | 800x800 |
 | density | the pixel density used to generate PDF thumbnails | 300 |
 | missing | whether to only generate derivatives that don't already exist | true |
-| im_executable | ImageMagick executable name | magick |
 
 You can configure any or all of these options by specifying them in the rake command like so:
 
@@ -50,11 +49,4 @@ For example, if you only wanted to set `density` to `70`, you can do:
 
 ```
 rake generate_derivatives[,,70]
-```
-
-The task assumes you are using ImageMagick 7. 
-If you have legacy ImageMagick (i.e. 6), which is common from Linux repositories, you need to set the `im_executable` configuration option to `convert`:
-
-```
-rake generate_derivatives[,,,,convert]
 ```
