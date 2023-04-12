@@ -101,6 +101,11 @@ task :generate_derivatives, [:thumbs_size, :small_size, :density, :missing, :com
         image_optim.optimize_image!(filename)
       end
 
+      # Configure MiniMagick.
+      MiniMagick.configure do |config|
+        config.cli = :imagemagick # or :graphicsmagick or :imagemagick7
+      end
+
       # Generate the thumb image.
       thumb_filename = File.join(thumb_image_dir, "#{base_filename}_th.jpg")
       if args.missing == 'false' || !File.exists?(thumb_filename)
