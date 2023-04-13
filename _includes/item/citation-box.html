@@ -1,10 +1,10 @@
 <div class="card mb-2">
-    <div class="card-header">Source</div>
+    <div class="card-header">{{ site.data.translations['includesItemCitationBox']['title'][site.lang] }}</div>
     <div class="card-body">
         <dl>
-            <dt>Preferred Citation:</dt>
+            <dt>{{ site.data.translations['includesItemCitationBox']['preferredCitation'][site.lang] }}:</dt>
             <dd>"{{ page.title }}", {{ site.title }}, {{ site.organization-name }}</dd>
-            <dt>Reference Link:</dt>
+            <dt>{{ site.data.translations['includesItemCitationBox']['referenceLink'][site.lang] }}:</dt>
             <dd>{{ page.url | absolute_url }}</dd>
         </dl>
     </div>

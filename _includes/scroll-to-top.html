@@ -16,8 +16,8 @@
         });
     }
 </script>
-<button id="scroll-to-top" type="button" class="btn btn-link" onclick="scrollToTop();" title="Back to Top" aria-label="Back to Top">
-    <svg class="bi icon-sprite" role="img" aria-label="Up Arrow">
+<button id="scroll-to-top" type="button" class="btn btn-link" onclick="scrollToTop();" title="{{ site.data.translations['includesScrollToTop']['backToTop'][site.lang] }}" aria-label="Back to Top">
+    <svg class="bi icon-sprite" role="img" aria-label="{{ site.data.translations['includesScrollToTop']['upArrow'][site.lang] }}">
         <use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#icon-back-to-top"/>
     </svg>
 </button>

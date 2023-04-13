@@ -10,21 +10,22 @@
       {{ count }}
       {% case t %}
       {% when 'image' %} 
-      <a class="text-dark" href="{{ 'image' | prepend: '/browse.html#' | relative_url }}">Images <svg class="bi icon-sprite text-body" fill="currentColor" aria-hidden="true"><use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#icon-image"/></svg></a><br>
+      <a class="text-dark" href="{{ 'image' | prepend: '/browse.html#' | relative_url }}">{{ site.data.translations['includesIndexObjects']['images'][site.lang] }} <svg class="bi icon-sprite text-body" fill="currentColor" aria-hidden="true"><use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#icon-image"/></svg></a><br>
       {% when 'audio' %}
-      <a class="text-dark" href="{{ 'audio' | prepend: '/browse.html#' | relative_url }}">Audio <svg class="bi icon-sprite text-body" fill="currentColor" aria-hidden="true"><use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#icon-audio"/></svg></a><br>
+      <a class="text-dark" href="{{ 'audio' | prepend: '/browse.html#' | relative_url }}">{{ site.data.translations['includesIndexObjects']['audio'][site.lang] }} <svg class="bi icon-sprite text-body" fill="currentColor" aria-hidden="true"><use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#icon-audio"/></svg></a><br>
       {% when 'video' %}
-      <a class="text-dark" href="{{ 'video' | prepend: '/browse.html#' | relative_url }}">Videos <svg class="bi icon-sprite text-body" fill="currentColor" aria-hidden="true"><use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#icon-video"/></svg></a><br>
+      <a class="text-dark" href="{{ 'video' | prepend: '/browse.html#' | relative_url }}">{{ site.data.translations['includesIndexObjects']['videos'][site.lang] }} <svg class="bi icon-sprite text-body" fill="currentColor" aria-hidden="true"><use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#icon-video"/></svg></a><br>
       {% when 'pdf' %}
-      <a class="text-dark" href="{{ 'pdf' | prepend: '/browse.html#' | relative_url }}">PDFs <svg class="bi icon-sprite text-body" fill="currentColor" aria-hidden="true"><use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#icon-pdf"/></svg></a><br>
+      <a class="text-dark" href="{{ 'pdf' | prepend: '/browse.html#' | relative_url }}">{{ site.data.translations['includesIndexObjects']['pdfs'][site.lang] }} <svg class="bi icon-sprite text-body" fill="currentColor" aria-hidden="true"><use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#icon-pdf"/></svg></a><br>
       {% when 'record' %}
-      <a class="text-dark" href="{{ 'record' | prepend: '/browse.html#' | relative_url }}">Records <svg class="bi icon-sprite text-body" fill="currentColor" aria-hidden="true"><use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#icon-default"/></svg></a><br>
+      <a class="text-dark" href="{{ 'record' | prepend: '/browse.html#' | relative_url }}">{{ site.data.translations['includesIndexObjects']['records'][site.lang] }} <svg class="bi icon-sprite text-body" fill="currentColor" aria-hidden="true"><use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#icon-default"/></svg></a><br>
       {% else %}
-      <a class="text-dark" href="{{ 'file' | prepend: '/browse.html#' | relative_url }}">Files <svg class="bi icon-sprite text-body" fill="currentColor" aria-hidden="true"><use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#icon-default"/></svg></a><br>
+      <a class="text-dark" href="{{ 'file' | prepend: '/browse.html#' | relative_url }}">{{ site.data.translations['includesIndexObjects']['files'][site.lang] }} <svg class="bi icon-sprite text-body" fill="currentColor" aria-hidden="true"><use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#icon-default"/></svg></a><br>
       {%- endcase -%}
       {%- endif -%}
       {%- endfor -%}
-      <a class="btn btn-sm btn-outline-secondary mt-2" href="{{ '/data.html' | relative_url }}">View table</a>
+      <a class="btn btn-sm btn-outline-secondary mt-2" href="{{ '/data.html' | relative_url }}">
+        {{ site.data.translations['includesIndexObjects']['viewTable'][site.lang] }}</a>
     </p>
   </div>
 </div>

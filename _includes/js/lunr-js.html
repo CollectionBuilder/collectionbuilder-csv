@@ -1,8 +1,10 @@
 {%- assign fields = site.data.config-search -%}
 {%- assign index_fields = fields | where: 'index','true' -%}
+{%- assign results_label = site.data.translations['includesJsLunrJs']['results'][site.lang] -%}
 <script src="{{ '/assets/lib/lunr.min.js' | relative_url }}"></script>
 <script src="{{ '/assets/js/lunr-store.js' | relative_url }}"></script>
 <script>
+var results_label = {{ results_label | jsonify }};
 /* initialize lunr */
 var idx = lunr(function () {
   /* add index fields from config */
@@ -44,7 +46,7 @@ function lunr_search () {
       })
     });*/
   resultdiv.innerHTML = "";
-  var newresults = '<tr><td><h4 class="mt-3">' + result.length + ' Result(s) found</h4></td></tr>';
+  var newresults = '<tr><td><h4 class="mt-3">' + result.length + ' ' + results_label + '</h4></td></tr>';
   for (var item in result) {
     var ref = result[item].ref;
     var searchitem =

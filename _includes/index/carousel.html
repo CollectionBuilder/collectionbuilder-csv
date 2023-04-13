@@ -47,11 +47,11 @@
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#imageCarousel" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
+                <span class="visually-hidden">{{ site.data.translations['includesIndexCarousel']['prev'][site.lang] }}</span>
             </button>
             <button class="carousel-control-next" type="button" data-bs-target="#imageCarousel" data-bs-slide="next">
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
+                <span class="visually-hidden">{{ site.data.translations['includesIndexCarousel']['next'][site.lang] }}</span>
             </button>
         </div>
             
@@ -80,7 +80,7 @@
         // calculate item link
         itemLink = '{{ '/items/' | relative_url }}' + carouselItems[i][1] + '.html';
         // create indicator 
-        indicator = `<button type="button" data-bs-target="#imageCarousel" data-bs-slide-to="${i.toString()}" ${ i == 0 ? 'class="active" aria-current="true" ' : '' }aria-label="Slide ${i.toString()}"></button>`;
+        indicator = `<button type="button" data-bs-target="#imageCarousel" data-bs-slide-to="${i.toString()}" ${ i == 0 ? 'class="active" aria-current="true" ' : '' }aria-label="{{ site.data.translations['includesIndexCarousel']['slide'][site.lang] }} ${i.toString()}"></button>`;
         // create slide
         slide = `<div class="carousel-item py-2${ i == 0 ? ' active' : '' }">
             <img class="d-block h-100 mx-auto lazyload" alt="image highlight" data-src="${itemImg}">

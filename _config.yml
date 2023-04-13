@@ -28,6 +28,8 @@ description: "CollectionBuilder-CSV is a template for creating digital collectio
 keywords: idaho;history;inland northwest
 # creator of the digital collection, to appear in meta tags; we typically use our GitHub usernames but feel free to just use your name
 author: CollectionBuilder
+# language of the website (en or de are currently the only supported languages and you have to adjust the language in the _data folder and in the pages folder accordingly)
+lang: en
 
 ##########
 # COLLECTION SETTINGS

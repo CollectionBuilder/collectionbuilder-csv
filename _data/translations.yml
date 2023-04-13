@@ -1,0 +1,308 @@
+includesFeatureAudio:
+  audioNotSupported:
+    en: "Your browser does not support the audio element."
+    de: "Ihr Browser unterstützt das Audio-Element nicht."
+includesFeatureNavMenu:
+  techLinkLabel:
+    en: "Tech"
+    de: "Tech"
+includesFeaturePdf:
+  pdfNotRendering:
+    en: 'The PDF is not rendering in your browser.'
+    de: 'Das PDF wird in Ihrem Browser nicht angezeigt.'
+  pdfDownload:
+    en: 'Download PDF'
+    de: 'PDF herunterladen'
+includesFeatureVideo:
+  videoNotSupported:
+    en: "Your browser does not support the embedded video."
+    de: "Ihr Browser unterstützt das eingebettete Video nicht."
+includesHeadItemMeta:
+  itemFrom:
+    en: "Item from"
+    de: "Objekt von"
+includesIndexCarousel:
+  previous:
+    en: "Previous"
+    de: "Vorherige"
+  next:
+    en: "Next"
+    de: "Nächste"
+  slide:
+    en: "Slide"
+    de: "Slide"
+includesIndexDataDownload:
+  title:
+    en: "Collection as Data <small>(click to download)</small>"
+    de: "Sammlung als Daten <small>(zum Herunterladen klicken)</small>"
+  metadata:
+    en: "Metadata"
+    de: "Metadaten"
+  subjects:
+    en: "Subjects"
+    de: "Themen"
+  geodata:
+    en: "Geodata"
+    de: "Geodaten"
+  locations:
+    en: "Locations"
+    de: "Orte"
+  timeline:
+    en: "Timeline"
+    de: "Zeitachse"
+  facets:
+    en: "Facets"
+    de: "Facetten"
+  sourceCode:
+    en: "Source Code"
+    de: "Quellcode"
+includesIndexDescription:
+  title:
+    en: "Description"
+    de: "Beschreibung"
+  learnMore:
+    en: "Learn more"
+    de: "Mehr erfahren"
+includesIndexObjects:
+  images:
+    en: "Images"
+    de: "Bilder"
+  audio:
+    en: "Audio"
+    de: "Audio"
+  videos:
+    en: "Videos"
+    de: "Videos"
+  pdfs:
+    en: "PDFs"
+    de: "PDFs"
+  records:
+    en: "Records"
+    de: "Datensätze"
+  files:
+    en: "Files"
+    de: "Dateien"
+  viewTable:
+    en: "View Table"
+    de: "Tabelle anzeigen"
+includesIndexTime:
+  title:
+    en: "Time Span"
+    de: "Zeitspanne"
+  from:
+    en: "from"
+    de: "von"
+  to:
+    en: "to"
+    de: "bis"
+  viewTimeline:
+    en: "View Timeline"
+    de: "Zeitachse anzeigen"
+includesItemAudioPlayer:
+  audioNotSupported:
+    en: "Your browser does not support the audio element."
+    de: "Ihr Browser unterstützt das Audio-Element nicht."
+includesItemBreadcrumbs:
+  home:
+    en: "Home"
+    de: "Startseite"
+  items:
+    en: "Items"
+    de: "Objekte"
+includesItemBrowseButtons:
+  previous:
+    en: "Previous"
+    de: "Vorheriges"
+  next:
+    en: "Next"
+    de: "Nächstes"
+  backToBrowse:
+    en: "Back to Browse"
+    de: "Zurück zur Übersicht"
+includesItemCitationBox:
+  title:
+    en: "Source"
+    de: "Quelle"
+  preferredCitation:
+    en: "Preferred Citation"
+    de: "Bevorzugte Zitation"
+  referenceLink:
+    en: "Reference Link"
+    de: "Referenzlink"
+includesItemDownloadButton:
+  download:
+    en: "Download"
+    de: "Herunterladen"
+includesItemImageGallery:
+  clickToViewFullScreen:
+    en: "Click to view full screen"
+    de: "Klicken Sie, um den Vollbildmodus zu aktivieren"
+includesItemRightsBox:
+  title:
+    en: "Rights"
+    de: "Rechte"
+  rights:
+    en: "Rights"
+    de: "Rechte"
+  rightsstatement:
+    en: "Standardized Rights"
+    de: "Rechteerklärung"
+includesItemVideoPlayer:
+  videoNotSupported:
+    en: "Your browser does not support the embedded video."
+    de: "Ihr Browser unterstützt das eingebettete Video nicht."
+includesJsBrowseJs:
+  viewFullRecord:
+    en: "View Full Record"
+    de: "Vollständigen Datensatz anzeigen"
+includesJsLunrJs:
+  results:
+    en: "Result(s) found"
+    de: "Ergebnisse"
+includesCollectionBanner:
+  downloadButton:
+    en: "Download Data"
+    de: "Daten herunterladen"
+  title:
+    en: "Collection Data"
+    de: "Sammlungsdaten"
+  description:
+    en: "The collection data is available for download in a variety of formats."
+    de: "Die Sammlungsdaten können in verschiedenen Formaten heruntergeladen werden."
+  completeMetadata:
+    en: "Complete Metadata"
+    de: "Vollständige Metadaten"
+  completeMetadataDescription:
+    en: "All metadata fields for all collection items, available as a CSV spreadsheet (usable in Excel, Google Sheets, and similar programs) or JSON file (often used with web applications)."
+    de: "Alle Metadatenfelder für alle Sammlungsobjekte, als CSV-Tabelle (verwendbar in Excel, Google Sheets und ähnlichen Programmen) oder JSON-Datei (oft mit Webanwendungen verwendet)."
+  metadata:
+    en: "Metadata"
+    de: "Metadaten"
+  metadataFacets:
+    en: "Metadata Facets"
+    de: "Metadaten Facetten"
+  metadataFacetsDescription:
+    en: "List of unique values and their count for specific metadata fields, useful for understanding content of the fields."
+    de: "Liste der eindeutigen Werte und ihrer Anzahl für bestimmte Metadatenfelder, die für das Verständnis des Inhalts der Felder nützlich ist."
+  subjectMetadata:
+    en: "Subject Metadata"
+    de: "Metadaten Themen"
+  subjectMetadataDescription:
+    en: "Unique values and counts of subject metadata, useful for further analyzing the content of this collection."
+    de: "Eindeutige Werte und Zählungen von Themenmetadaten, die für die weitere Analyse des Inhalts dieser Sammlung nützlich sind."
+  subjects:
+    en: "Subjects"
+    de: "Themen"
+  locations:
+    en: "Locations"
+    de: "Orte"
+  locationsDescription:
+    en: "Unique values and counts of location metadata, useful for further visualization and analysis of this collection's place names."
+    de: "Eindeutige Werte und Zählungen von Ortsmetadaten, die für die weitere Visualisierung und Analyse der Ortsnamen dieser Sammlung nützlich sind."
+  geodataDescription:
+    en: 'Metadata for all collection items that have geographic coordinates in <a href="https://en.wikipedia.org/wiki/GeoJSON" target="_blank" rel="noopener">GeoJSON</a> format, useful for further exploration and analysis of this collection through a geographical lense.'
+    de: 'Metadaten für alle Sammlungsobjekte, die geographische Koordinaten im <a href="https://de.wikipedia.org/wiki/GeoJSON" target="_blank" rel="noopener">GeoJSON</a>-Format haben, die für die weitere Exploration und Analyse dieser Sammlung durch eine geographische Linse nützlich sind.'
+  geodata:
+    en: "Geodata"
+    de: "Geodaten"
+  timeline:
+    en: "Timeline"
+    de: "Zeitachse"
+  timelineDescription:
+    en: 'A time-focused JSON data export designed for use with <a href="https://timeline.knightlab.com/" target="_blank" rel="noopener">TimelineJS</a>.'
+    de: 'Ein zeitbezogener JSON-Datenexport, der für die Verwendung mit <a href="https://timeline.knightlab.com/" target="_blank" rel="noopener">TimelineJS</a> konzipiert ist.'
+  websiteSourceCode:
+    en: "Website Source Code"
+    de: "Quellcode der Website"
+  websiteSourceCodeDescription:
+    en: 'GitHub repository containing source code for this project built with <a href="https://github.com/CollectionBuilder/collectionbuilder-csv" target="_blank" rel="noopener">CollectionBuilder-CSV</a>.'
+    de: 'GitHub-Repository mit dem Quellcode für dieses Projekt, das mit <a href="https://github.com/CollectionBuilder/collectionbuilder-csv" target="_blank" rel="noopener">CollectionBuilder-CSV</a>.'
+  sourceCode:
+    en: "Source Code"
+    de: "Quellcode"
+includesFooter:
+  home:
+    en: "Home"
+    de: "Startseite"
+  builtWith:
+    en: "built with"
+    de: "erstellt mit"
+  lastUpdated:
+    en: "Last updated"
+    de: "Zuletzt aktualisiert"
+includesNavSearchLunr:
+  search:
+    en: "Search"
+    de: "Suche"
+  searchBox:
+    en: "Search Box"
+    de: "Suchefeld"
+includesScrollToTop:
+  backToTop:
+    en: "Back to Top"
+    de: "Zurück nach oben"
+  upArrow:
+    en: "Up Arrow"
+    de: "Pfeil nach oben"
+layoutsBrowse:
+  search:
+    en: "Search"
+    de: "Suche"
+  filter:
+    en: "Filter"
+    de: "Filter"
+  filterItems:
+    en: "Filter Items"
+    de: "Objekte filtern"
+  reset:
+    en: "Reset"
+    de: "Zurücksetzen"
+  sortBy:
+    en: "Sort by"
+    de: "Sortieren nach"
+  random:
+    en: "Random"
+    de: "Zufällig"
+  loading:
+    en: "Loading"
+    de: "Laden"
+layoutsData:
+  link:
+    en: "Link"
+    de: "Link"
+layoutsHomeInfographic:
+  sampleItems:
+    en: "Sample Items"
+    de: "Beispielobjekte"
+  topSubjects:
+    en: "Top Subjects"
+    de: "Top-Themen"
+  locations:
+    en: "Locations"
+    de: "Orte"
+layoutsSearch:
+  searchOptions:
+    en: "Search Options"
+    de: "Suchoptionen"
+  lunrSearchOptions:
+    en: "Lunr Search Options"
+    de: "Lunr-Suchoptionen"
+  options:
+    en: '<p>These advanced options can be added to your query in the search box to refine your results:</p> <ul> <li>Search a specific field: use the field name, colon, then your query, e.g. <code>title:foo</code>, <code>date:1911</code>, <code>subject:tree</code>. In this collection you can use {{ fields | join: ", " }}.</li> <li>Wildcards: add <code>*</code> to match any character(s), e.g. <code>foo*</code>, <code>*oo</code>. This is helpful for using a root to find words with all related endings.</li> <li>Fuzzy match: add <code>~</code> plus a number at the end of your query to specify a higher level of fuzziness in search, e.g. <code>foo~1</code>. This can help with misspellings.</li> <li>Boost term: add <code>^</code> plus a number to boost the relevance of a term in your query, e.g. <code>foo^10</code>. This can help reduce clutter of unrelated results if one of your terms is most important.</li> </ul>'
+    de: '<p>Diese erweiterten Optionen können im Suchfeld zu Ihrer Anfrage hinzugefügt werden, um Ihre Ergebnisse zu verfeinern:</p> <ul> <li>Suchen Sie ein bestimmtes Feld: Verwenden Sie den Feldnamen, einen Doppelpunkt und dann Ihre Anfrage, z.B. <code>Titel:foo</code>, <code>Datum:1911</code>, <code>Thema:Baum</code>. In dieser Sammlung können Sie {{ fields | join: ", " }}.</li> <li>Wildcards: Fügen Sie <code>*</code> hinzu, um beliebige Zeichen zu finden, z.B. <code>foo*</code>, <code>*oo</code>. Dies ist hilfreich, wenn Sie einen Wortstamm verwenden, um Wörter mit allen verwandten Endungen zu finden.</li> <li>Unscharfe Übereinstimmung: Fügen Sie <code>~</code> plus eine Zahl am Ende Ihrer Abfrage hinzu, um eine höhere Unschärfe bei der Suche anzugeben, z.B. <code>foo~1</code>. Dies kann bei Rechtschreibfehlern helfen.</li> <li>Boost term: Fügen Sie <code>^</code> plus eine Zahl hinzu, um die Relevanz eines Begriffs in Ihrer Anfrage zu erhöhen, z.B. <code>foo^10</code>. Dies kann dazu beitragen, das Durcheinander von nicht verwandten Ergebnissen zu reduzieren, wenn einer Ihrer Begriffe am wichtigsten ist.</li> </ul>'
+  search:
+    en: "Search"
+    de: "Suche"
+  searchTerm:
+    en: "Enter your search term..."
+    de: "Geben Sie Ihren Suchbegriff ein..."
+  lunrSearchDescription:
+    en: '<p class="text-muted">Unscharfe Suche unterstützt von <a href="https://lunrjs.com/" target="_blank" rel="noopener">Lunr.js</a>. <em>Das Laden großer Sammlungen kann eine Sekunde dauern!</em></p>'
+    de: '<p class="text-muted">Unscharfe Suche angetrieben von <a href="https://lunrjs.com/" target="_blank" rel="noopener">Lunr.js</a>. <em>Kann eine Sekunde dauern, um große Sammlungen zu laden!</em></p>'
+  googleSearchDescription:
+    en: <p class="text-muted">Alternatively, try <a href="{{ '/search/google.html' | relative_url }}">Google CSE</a> site search.</p>
+    de: <p class="text-muted">Alternativ dazu können Sie die <a href="{{ '/search/google.html'' | relative_url }}">Google CSE</a> die Site-Suche.</p>
+layoutsTimeline:
+  year:
+    en: "Year"
+    de: "Jahr"
