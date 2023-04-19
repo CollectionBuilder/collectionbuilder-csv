@@ -36,13 +36,13 @@ The following configuration options are available:
 You can configure any or all of these options by specifying them in the rake command like so:
 
 ```
-rake generate_derivatives[<thumb_size>,<small_size>,<density>,<missing>]
+rake generate_derivatives[<thumb_size>,<small_size>,<density>,<missing>,<compress_originals>]
 ```
 
 Here's an example of overriding all of the option values:
 
 ```
-rake generate_derivatives[100x100,300x300,70,false]
+rake generate_derivatives[100x100,300x300,70,false,false]
 ```
 
 It's also possible to specify individual options that you want to override, leaving the others at their defaults.
