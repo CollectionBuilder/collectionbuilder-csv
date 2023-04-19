@@ -107,11 +107,13 @@ task :generate_derivatives, [:thumbs_size, :small_size, :density, :missing, :com
         puts "Creating: #{thumb_filename}"
         begin
           image = MiniMagick::Image.open(filename)
-          image.format "jpg" if file_type == :pdf
-          image.density args.density if file_type == :pdf
-          image.resize args.thumbs_size
-          image.flatten
-          image.write thumb_filename
+          image.format("jpg") if file_type == :pdf
+          image.combine_options do |i|
+            i.density(args.density)
+            i.resize(args.thumbs_size)
+            i.flatten
+          end
+          image.write(thumb_filename)
           image_optim.optimize_image!(thumb_filename)
         rescue => e
           puts "Error creating thumbnail: #{e.message}"
@@ -126,11 +128,13 @@ task :generate_derivatives, [:thumbs_size, :small_size, :density, :missing, :com
         puts "Creating: #{small_filename}";
         begin
           image = MiniMagick::Image.open(filename)
-          image.format "jpg" if file_type == :pdf
-          image.density args.density if file_type == :pdf
-          image.resize args.small_size
-          image.flatten
-          image.write small_filename
+          image.format("jpg") if file_type == :pdf
+          image.combine_options do |i|
+            i.density(args.density)
+            i.resize(args.small_size)
+            i.flatten
+          end
+          image.write(small_filename)
           image_optim.optimize_image!(small_filename)
         rescue => e
           puts "Error creating small image: #{e.message}"
