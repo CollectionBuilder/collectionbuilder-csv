@@ -23,9 +23,69 @@
     function rightArrowPressed() {
         location.href = document.getElementById("next-page-button").href;
     }
+
+    function leftModalArrowPressed() {
+  // Get the modal element.
+  var modalshow = document.querySelector(".modal.show");
+  // If the modal exists, get the prev button element.
+  if (modalshow) {
+    const prevButton = modalshow.querySelector(".prev-child-button");
+    // If the prev button exists, click it.
+    if (prevButton) {
+      prevButton.click();
+    }
+  }
+}
     
+    function rightModalArrowPressed() {
+        // Get the modal element.
+  var  modalshow = document.querySelector(".modal.show");
+  // If the modal exists, get the prev button element.
+  if (modalshow) {
+    const nextButton = modalshow.querySelector(".next-child-button");
+    // If the prev button exists, click it.
+    if (nextButton) {
+        nextButton.click();
+    }
+  }
+    }
+    
+    function isModalShown() {
+  // Get the modal element.
+  const modal = document.querySelector(".modal");
+
+  // Check if the modal has the "show" class.
+  return modal && modal.classList.contains("show");
+}
+
+function isSpotlightModalShown() {
+  // Get the modal element.
+  const spotlight = document.getElementById("spotlight");
+  // Check if the modal has the "show" class.
+  return spotlight && spotlight.classList.contains("show");
+}
+
+
     document.onkeydown = function(evt) {
-        evt = evt || window.event;
+        if (isModalShown()) {
+            console.log("modal shown");
+  // The modal is shown.
+  evt = evt || window.event;
+        switch (evt.keyCode) {
+            case 37:
+                leftModalArrowPressed();
+                break;
+            case 39:
+                rightModalArrowPressed();
+                break;
+        } 
+} else if (isSpotlightModalShown()) {
+
+
+}
+  else {
+  // The modal is not shown.
+  evt = evt || window.event;
         switch (evt.keyCode) {
             case 37:
                 leftArrowPressed();
@@ -34,5 +94,7 @@
                 rightArrowPressed();
                 break;
         }
+}
+      
     };
 </script>

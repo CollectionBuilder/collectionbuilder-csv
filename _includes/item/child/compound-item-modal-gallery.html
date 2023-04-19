@@ -36,7 +36,7 @@
                         onclick="window.location.hash='{{ child.objectid }}'"
                         class="btn btn-sm btn-outline-secondary small stretched-link">
                         {{ child.display_template | upcase | default: "Item" }} + Info
-                    </a>
+                    </a> 
 
                     <!-- child object modal -->
                     <div class="modal fade" id="{{ child.objectid }}" tabindex="-1" role="dialog" aria-labelledby="{{ child.objectid }}ModalLabel" aria-hidden="true">
@@ -53,7 +53,7 @@
                                             <div class="col-1 col-md-2">
                                                 <button
                                                     onclick="document.getElementById('item-{% if forloop.index == 1 %}{{ forloop.length }}{% else %}{{ forloop.index | minus: 1 }}{% endif %}').click(); window.location.hash = 'item-{% if forloop.index == 1 %}{{ forloop.length }}{% else %}{{ forloop.index | minus: 1 }}{% endif %}'"
-                                                    class="btn btn-outline-dark btn-sm">
+                                                    class="btn btn-outline-dark btn-sm prev-child-button">
                                                     <svg class="bi icon-sprite" role="img" aria-label="Previous Item">
                                                         <use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#arrow-left"/>
                                                     </svg>
@@ -69,7 +69,7 @@
                                             <div class="col-1 col-md-2 text-end">
                                                 <button
                                                     onclick="document.getElementById('item-{% if forloop.index == forloop.length %}1{% else %}{{ forloop.index | plus: 1 }}{% endif %}').click();window.location.hash='item-{% if forloop.index == forloop.length %}1{% else %}{{ forloop.index | plus: 1 }}{% endif %}'"
-                                                    class="ms-md-5 btn btn-outline-dark btn-sm">
+                                                    class="ms-md-5 btn btn-outline-dark btn-sm next-child-button">
                                                     <span class="d-none d-md-inline">Next Item</span>
                                                     <svg class="bi icon-sprite" role="img" aria-label="Next Item">
                                                         <use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#arrow-right"/>
