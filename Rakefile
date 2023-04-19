@@ -35,7 +35,7 @@ def prompt_user_for_confirmation(message)
 end
 
 def process_and_optimize_image(filename, file_type, output_filename, size, density)
-  if filename == output_filename
+  if filename == output_filename && file_type == :image
     puts "Optimizing: #{filename}"
     begin
       image_optim = ImageOptim.new(:svgo => false)
@@ -43,6 +43,8 @@ def process_and_optimize_image(filename, file_type, output_filename, size, densi
     rescue => e
       puts "Error optimizing #{filename}: #{e.message}"
     end
+  if filename == output_filename && file_type == :pdf
+    puts "Skipping: #{filename}"
   else
     puts "Creating: #{output_filename}"
     begin
