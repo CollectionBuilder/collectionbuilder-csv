@@ -34,6 +34,32 @@ def prompt_user_for_confirmation(message)
   response
 end
 
+def process_and_optimize_image(filename, file_type, output_filename, size, density)
+  if filename == output_filename
+    puts "Optimizing: #{filename}"
+    image_optim = ImageOptim.new(:svgo => false)
+    image_optim.optimize_image!(filename)
+  else
+    puts "Creating: #{output_filename}"
+    begin
+      image = MiniMagick::Image.open(filename)
+      image.format("jpg") if file_type == :pdf
+      image.combine_options do |i|
+        i.density(density) if file_type == :pdf
+        i.resize(size)
+        i.flatten
+      end
+      image.write(output_filename)
+      image_optim = ImageOptim.new(:svgo => false)
+      image_optim.optimize_image!(output_filename)
+      # image.data = image_optim.optimize_image_data(image.data)
+      # image.write(output_filename)
+    rescue => e
+      puts "Error creating #{filename}: #{e.message}"
+    end
+  end
+end
+
 ###############################################################################
 # TASK: generate_derivatives
 ###############################################################################
@@ -78,7 +104,7 @@ task :generate_derivatives, [:thumbs_size, :small_size, :density, :missing, :com
     # Iterate over all files in the objects directory.
     Dir.glob(File.join(objects_dir, '*')).each do |filename|
       # Skip subdirectories and the README.md file.
-      next if File.directory?(filename) || File.basename(filename) == "README.md"
+      next if File.directory?(filename) || File.basename(filename) == "README.md" || File.basename(filename) == "object_list.csv"
 
       # Determine the file type and skip if unsupported.
       extname = File.extname(filename).downcase
@@ -92,10 +118,7 @@ task :generate_derivatives, [:thumbs_size, :small_size, :density, :missing, :com
       # Get the lowercase filename without any leading path and extension.
       base_filename = File.basename(filename, ".*").downcase
 
-      # Initialize ImageOptim.
-      image_optim = ImageOptim.new(:svgo => false)
-
-      # Optimize the image.
+      # Optimize the original image.
       if args.compress_originals == 'true'
         puts "Optimizing: #{filename}"
         image_optim.optimize_image!(filename)
@@ -104,20 +127,7 @@ task :generate_derivatives, [:thumbs_size, :small_size, :density, :missing, :com
       # Generate the thumb image.
       thumb_filename = File.join(thumb_image_dir, "#{base_filename}_th.jpg")
       if args.missing == 'false' || !File.exists?(thumb_filename)
-        puts "Creating: #{thumb_filename}"
-        begin
-          image = MiniMagick::Image.open(filename)
-          image.format("jpg") if file_type == :pdf
-          image.combine_options do |i|
-            i.density(args.density)
-            i.resize(args.thumbs_size)
-            i.flatten
-          end
-          image.write(thumb_filename)
-          image_optim.optimize_image!(thumb_filename)
-        rescue => e
-          puts "Error creating thumbnail: #{e.message}"
-        end
+        process_and_optimize_image(filename, file_type, thumb_filename, args.thumbs_size, args.density)
       else
         puts "Skipping: #{thumb_filename} already exists"
       end
@@ -125,20 +135,7 @@ task :generate_derivatives, [:thumbs_size, :small_size, :density, :missing, :com
       # Generate the small image.
       small_filename = File.join([small_image_dir, "#{base_filename}_sm.jpg"])
       if args.missing == 'false' or !File.exists?(small_filename)
-        puts "Creating: #{small_filename}";
-        begin
-          image = MiniMagick::Image.open(filename)
-          image.format("jpg") if file_type == :pdf
-          image.combine_options do |i|
-            i.density(args.density)
-            i.resize(args.small_size)
-            i.flatten
-          end
-          image.write(small_filename)
-          image_optim.optimize_image!(small_filename)
-        rescue => e
-          puts "Error creating small image: #{e.message}"
-        end
+        process_and_optimize_image(filename, file_type, small_filename, args.small_size, args.density)
       else
         puts "Skipping: #{small_filename} already exists"
       end
