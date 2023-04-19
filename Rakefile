@@ -43,7 +43,7 @@ def process_and_optimize_image(filename, file_type, output_filename, size, densi
     puts "Creating: #{output_filename}"
     begin
       image = MiniMagick::Image.open(filename)
-      image.format("jpg") if file_type == :pdf
+      image.format("jpg")
       image.combine_options do |i|
         i.density(density) if file_type == :pdf
         i.resize(size)
