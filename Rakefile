@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # CollectionBuilder-CSV helper tasks
 
 require 'csv'
@@ -9,10 +11,10 @@ require 'fileutils'
 # TASK: deploy
 ###############################################################################
 
-desc "Build site with production env"
+desc 'Build site with production env'
 task :deploy do
-  ENV["JEKYLL_ENV"] = "production"
-  exec("bundle exec jekyll build")
+  ENV['JEKYLL_ENV'] = 'production'
+  exec('bundle exec jekyll build')
 end
 
 ###############################################################################
@@ -24,12 +26,13 @@ def prompt_user_for_confirmation(message)
   loop do
     print "#{message} (Y/n): "
     $stdout.flush
-    response = case STDIN.gets.chomp.downcase
-               when "", "y" then true
-               when "n" then false
+    response = case $stdin.gets.chomp.downcase
+               when '', 'y' then true
+               when 'n' then false
                end
-    break if response != nil
-    puts "Please enter \"y\" or \"n\""
+    break unless response.nil?
+
+    puts 'Please enter "y" or "n"'
   end
   response
 end
@@ -38,27 +41,27 @@ def process_and_optimize_image(filename, file_type, output_filename, size, densi
   if filename == output_filename && file_type == :image
     puts "Optimizing: #{filename}"
     begin
-      image_optim = ImageOptim.new(:svgo => false)
+      image_optim = ImageOptim.new(svgo: false)
       image_optim.optimize_image!(filename)
-    rescue => e
+    rescue StandardError => e
       puts "Error optimizing #{filename}: #{e.message}"
     end
-  if filename == output_filename && file_type == :pdf
+  elsif filename == output_filename && file_type == :pdf
     puts "Skipping: #{filename}"
   else
     puts "Creating: #{output_filename}"
     begin
       image = MiniMagick::Image.open(filename)
-      image.format("jpg")
+      image.format('jpg')
       image.combine_options do |i|
         i.density(density) if file_type == :pdf
         i.resize(size)
         i.flatten
       end
       image.write(output_filename)
-      image_optim = ImageOptim.new(:svgo => false)
+      image_optim = ImageOptim.new(svgo: false)
       image_optim.optimize_image!(output_filename)
-    rescue => e
+    rescue StandardError => e
       puts "Error creating #{filename}: #{e.message}"
     end
   end
@@ -68,59 +71,60 @@ end
 # TASK: generate_derivatives
 ###############################################################################
 
-desc "Generate derivative image files from collection objects"
-task :generate_derivatives, [:thumbs_size, :small_size, :density, :missing, :compress_originals] do |t, args|
-
-  # set default arguments 
+desc 'Generate derivative image files from collection objects'
+task :generate_derivatives, [:thumbs_size, :small_size, :density, :missing, :compress_originals] do |_t, args|
+  # set default arguments
   args.with_defaults(
-    :thumbs_size => "300x300",
-    :small_size => "800x800",
-    :density => "300",
-    :missing => "true",
-    :compress_originals => "false",
+    thumbs_size: '300x300',
+    small_size: '800x800',
+    density: '300',
+    missing: 'true',
+    compress_originals: 'false'
   )
 
   # set the folder locations
-  objects_dir = "objects"
-  thumb_image_dir = "objects/thumbs"
-  small_image_dir = "objects/small"
+  objects_dir = 'objects'
+  thumb_image_dir = 'objects/thumbs'
+  small_image_dir = 'objects/small'
 
   # Ensure that the output directories exist.
   [thumb_image_dir, small_image_dir].each do |dir|
-    Dir.mkdir(dir) unless Dir.exists?(dir)
+    Dir.mkdir(dir) unless Dir.exist?(dir)
   end
 
   # support these file types
   EXTNAME_TYPE_MAP = {
     '.tiff' => :image,
-    '.tif' => :image,  
+    '.tif' => :image,
     '.jpg' => :image,
     '.png' => :image,
     '.pdf' => :pdf
-  }
+  }.freeze
 
   # CSV output
-  list_name = File.join(objects_dir, "object_list.csv")
-  field_names = "object_location,image_small,image_thumb".split(",")
-  CSV.open(list_name, "w") do |csv|
+  list_name = File.join(objects_dir, 'object_list.csv')
+  field_names = 'object_location,image_small,image_thumb'.split(',')
+  CSV.open(list_name, 'w') do |csv|
     csv << field_names
 
     # Iterate over all files in the objects directory.
     Dir.glob(File.join(objects_dir, '*')).each do |filename|
       # Skip subdirectories and the README.md file.
-      next if File.directory?(filename) || File.basename(filename) == "README.md" || File.basename(filename) == "object_list.csv"
+      if File.directory?(filename) || File.basename(filename) == 'README.md' || File.basename(filename) == 'object_list.csv'
+        next
+      end
 
       # Determine the file type and skip if unsupported.
       extname = File.extname(filename).downcase
       file_type = EXTNAME_TYPE_MAP[extname]
-      if !file_type
+      unless file_type
         puts "Skipping file with unsupported extension: #{filename}"
-        csv << ["/" + filename, nil, nil]
+        csv << ["/#{filename}", nil, nil]
         next
       end
 
       # Get the lowercase filename without any leading path and extension.
-      base_filename = File.basename(filename, ".*").downcase
+      base_filename = File.basename(filename, '.*').downcase
 
       # image_optim.optimize_images(Dir['*.png']) do |unoptimized, optimized|
       #   if optimized
@@ -140,7 +144,7 @@ task :generate_derivatives, [:thumbs_size, :small_size, :density, :missing, :com
 
       # Generate the thumb image.
       thumb_filename = File.join(thumb_image_dir, "#{base_filename}_th.jpg")
-      if args.missing == 'false' || !File.exists?(thumb_filename)
+      if args.missing == 'false' || !File.exist?(thumb_filename)
         process_and_optimize_image(filename, file_type, thumb_filename, args.thumbs_size, args.density)
       else
         puts "Skipping: #{thumb_filename} already exists"
@@ -148,12 +152,12 @@ task :generate_derivatives, [:thumbs_size, :small_size, :density, :missing, :com
 
       # Generate the small image.
       small_filename = File.join([small_image_dir, "#{base_filename}_sm.jpg"])
-      if args.missing == 'false' or !File.exists?(small_filename)
+      if (args.missing == 'false') || !File.exist?(small_filename)
         process_and_optimize_image(filename, file_type, small_filename, args.small_size, args.density)
       else
         puts "Skipping: #{small_filename} already exists"
       end
-      csv << ["/"+filename,"/"+small_filename,"/"+thumb_filename]
+      csv << ["/#{filename}", "/#{small_filename}", "/#{thumb_filename}"]
     end
   end
   puts "\e[32mSee '#{list_name}' for list of objects and derivatives created.\e[0m"

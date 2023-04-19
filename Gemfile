@@ -1,8 +1,12 @@
-source "https://rubygems.org"
+# frozen_string_literal: true
 
-gem "image_optim"
-gem "image_optim_pack"
-gem "jekyll"
-gem "mini_magick"
+source 'https://rubygems.org'
 
-gem "webrick", "~> 1.7"
+gem 'image_optim'
+gem 'image_optim_pack'
+gem 'jekyll'
+gem 'mini_magick'
+
+gem 'webrick', '~> 1.7'
+
+gem 'rubocop', require: false
