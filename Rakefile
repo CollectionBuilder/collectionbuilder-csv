@@ -38,11 +38,11 @@ def prompt_user_for_confirmation(message)
 end
 
 def process_and_optimize_image(filename, file_type, output_filename, size, density)
+  image_optim = ImageOptim.new(svgo: false)
   if filename == output_filename && file_type == :image
     puts "Optimizing: #{filename}"
     begin
-      image_optim = ImageOptim.new(svgo: false)
-      image_optim.optimize_image!(filename)
+      image_optim.optimize_image!(output_filename)
     rescue StandardError => e
       puts "Error optimizing #{filename}: #{e.message}"
     end
@@ -59,7 +59,6 @@ def process_and_optimize_image(filename, file_type, output_filename, size, densi
         i.flatten
       end
       image.write(output_filename)
-      image_optim = ImageOptim.new(svgo: false)
       image_optim.optimize_image!(output_filename)
     rescue StandardError => e
       puts "Error creating #{filename}: #{e.message}"
@@ -129,7 +128,7 @@ task :generate_derivatives, [:thumbs_size, :small_size, :density, :missing, :com
       # Optimize the original image.
       if args.compress_originals == 'true'
         puts "Optimizing: #{filename}"
-        image_optim.optimize_image!(filename)
+        process_and_optimize_image(filename, file_type, filename, nil, nil)
       end
 
       # Generate the thumb image.
