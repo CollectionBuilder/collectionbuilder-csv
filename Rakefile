@@ -126,16 +126,6 @@ task :generate_derivatives, [:thumbs_size, :small_size, :density, :missing, :com
       # Get the lowercase filename without any leading path and extension.
       base_filename = File.basename(filename, '.*').downcase
 
-      # image_optim.optimize_images(Dir['*.png']) do |unoptimized, optimized|
-      #   if optimized
-      #     puts "#{unoptimized} => #{optimized}"
-      #   end
-      # end
-
-      # image_optim.optimize_images!(Dir['*.*'])
-
-      # image_optim.optimize_images_data(datas)
-
       # Optimize the original image.
       if args.compress_originals == 'true'
         puts "Optimizing: #{filename}"
