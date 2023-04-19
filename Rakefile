@@ -52,8 +52,6 @@ def process_and_optimize_image(filename, file_type, output_filename, size, densi
       image.write(output_filename)
       image_optim = ImageOptim.new(:svgo => false)
       image_optim.optimize_image!(output_filename)
-      # image.data = image_optim.optimize_image_data(image.data)
-      # image.write(output_filename)
     rescue => e
       puts "Error creating #{filename}: #{e.message}"
     end
@@ -117,6 +115,16 @@ task :generate_derivatives, [:thumbs_size, :small_size, :density, :missing, :com
 
       # Get the lowercase filename without any leading path and extension.
       base_filename = File.basename(filename, ".*").downcase
+
+      # image_optim.optimize_images(Dir['*.png']) do |unoptimized, optimized|
+      #   if optimized
+      #     puts "#{unoptimized} => #{optimized}"
+      #   end
+      # end
+
+      # image_optim.optimize_images!(Dir['*.*'])
+
+      # image_optim.optimize_images_data(datas)
 
       # Optimize the original image.
       if args.compress_originals == 'true'
