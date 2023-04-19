@@ -37,8 +37,12 @@ end
 def process_and_optimize_image(filename, file_type, output_filename, size, density)
   if filename == output_filename
     puts "Optimizing: #{filename}"
-    image_optim = ImageOptim.new(:svgo => false)
-    image_optim.optimize_image!(filename)
+    begin
+      image_optim = ImageOptim.new(:svgo => false)
+      image_optim.optimize_image!(filename)
+    rescue => e
+      puts "Error optimizing #{filename}: #{e.message}"
+    end
   else
     puts "Creating: #{output_filename}"
     begin
