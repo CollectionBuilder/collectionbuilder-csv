@@ -50,10 +50,14 @@
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
                                                 onclick="history.pushState('', '', window.location.pathname)"></button>
                                             </div>
+                                            {% capture next_index %}{% if forloop.index == forloop.length %}0{% else %}{{ forloop.index0 | plus: 1 }}{% endif %}{% endcapture %}
+                                            {% assign next_index = next_index | times: 1 %}
+                                            {% capture prev_index %}{% if forloop.index0 == 0 %}{{ forloop.length | minus: 1 }}{% else %}{{ forloop.index0 | minus: 1 }}{% endif %}{% endcapture %}
+                                            {% assign prev_index = prev_index | times: 1 %}
+                                            {% capture next_item_id %}{{ children[next_index].objectid }}{% endcapture %}
+                                            {% capture prev_item_id %}{{ children[prev_index].objectid }}{% endcapture %}
                                             <div class="col-1 col-md-2">
-                                                <button
-                                                    onclick="document.getElementById('item-{% if forloop.index == 1 %}{{ forloop.length }}{% else %}{{ forloop.index | minus: 1 }}{% endif %}').click(); window.location.hash = 'item-{% if forloop.index == 1 %}{{ forloop.length }}{% else %}{{ forloop.index | minus: 1 }}{% endif %}'"
-                                                    class="btn btn-outline-dark btn-sm prev-child-button">
+                                                <button data-bs-target="#{{ prev_item_id }}" data-bs-toggle="modal" onclick="window.location.hash='{{ prev_item_id }}'" class="btn btn-outline-dark btn-sm prev-child-button" >
                                                     <svg class="bi icon-sprite" role="img" aria-label="Previous Item">
                                                         <use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#arrow-left"/>
                                                     </svg>
@@ -67,9 +71,7 @@
                                                 </h3>
                                             </div>
                                             <div class="col-1 col-md-2 text-end">
-                                                <button
-                                                    onclick="document.getElementById('item-{% if forloop.index == forloop.length %}1{% else %}{{ forloop.index | plus: 1 }}{% endif %}').click();window.location.hash='item-{% if forloop.index == forloop.length %}1{% else %}{{ forloop.index | plus: 1 }}{% endif %}'"
-                                                    class="ms-md-5 btn btn-outline-dark btn-sm next-child-button">
+                                                <button  data-bs-target="#{{ next_item_id }}" data-bs-toggle="modal" onclick="window.location.hash='{{ next_item_id }}'" class="ms-md-5 btn btn-outline-dark btn-sm next-child-button">
                                                     <span class="d-none d-md-inline">Next Item</span>
                                                     <svg class="bi icon-sprite" role="img" aria-label="Next Item">
                                                         <use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#arrow-right"/>
