@@ -106,6 +106,9 @@ module CollectionBuilderHelperGenerator
       if !theme_icons['icon-record']
         theme_icons['icon-record'] = "file-text"
       end
+      if !theme_icons['icon-panorama']
+        theme_icons['icon-panorama'] = "image-alt"
+      end
       if !theme_icons['icon-compound-object']
         theme_icons['icon-compound-object'] = "collection"
       end
