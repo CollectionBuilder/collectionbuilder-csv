@@ -51,14 +51,22 @@ def process_and_optimize_image(filename, file_type, output_filename, size, densi
   else
     puts "Creating: #{output_filename}"
     begin
-      image = MiniMagick::Image.open(filename)
-      image.format('jpg')
-      image.combine_options do |i|
-        i.density(density) if file_type == :pdf
-        i.resize(size)
-        i.flatten
+      if file_type == :pdf
+        inputfile = filename + "[0]"
+        magick = MiniMagick::Tool::Convert.new 
+        magick.density(density)
+        magick << inputfile
+        magick.resize(size)
+        magick.flatten
+        magick << output_filename
+        magick.call
+      else
+        image = MiniMagick::Image.open(filename)
+        image.format('jpg')
+        image.resize(size)
+        image.flatten
+        image.write(output_filename)
       end
-      image.write(output_filename)
       image_optim.optimize_image!(output_filename)
     rescue StandardError => e
       puts "Error creating #{filename}: #{e.message}"
