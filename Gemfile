@@ -2,8 +2,10 @@
 
 source 'https://rubygems.org'
 
-gem 'image_optim'
-gem 'image_optim_pack'
+unless Gem.win_platform?
+  gem 'image_optim'
+  gem 'image_optim_pack'
+end
 gem 'jekyll'
 gem 'mini_magick'
 gem 'rake'

@@ -14,7 +14,7 @@ Production build will take considerably longer than `jekyll s`.
 
 ## generate_derivatives
 
-`rake generate_derivatives`, automates the creation of optimized, small and thumbnail images from all images and PDFs contained in the "objects/" directory in this repository.
+`rake generate_derivatives`, automates the creation of optimized, small and thumbnail images from all images and PDFs contained in the "objects/" directory in this repository. (Note: Optimization is not supported for Windows users.)
 It outputs the derivatives to "objects/small" and "objects/thumbs".
 Please ensure you have the requirements installed and available on the commandline before running!
 
