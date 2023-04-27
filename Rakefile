@@ -3,11 +3,9 @@
 # CollectionBuilder-CSV helper tasks
 
 require 'csv'
-unless Gem.win_platform?
-  require 'image_optim'
-end
-require 'mini_magick'
 require 'fileutils'
+require 'image_optim' unless Gem.win_platform?
+require 'mini_magick'
 
 ###############################################################################
 # TASK: deploy
@@ -16,7 +14,7 @@ require 'fileutils'
 desc 'Build site with production env'
 task :deploy do
   ENV['JEKYLL_ENV'] = 'production'
-  exec('bundle exec jekyll build')
+  system('bundle', 'exec', 'jekyll', 'build')
 end
 
 ###############################################################################
@@ -40,9 +38,7 @@ def prompt_user_for_confirmation(message)
 end
 
 def process_and_optimize_image(filename, file_type, output_filename, size, density)
-  unless Gem.win_platform?
-    image_optim = ImageOptim.new(svgo: false)
-  end
+  image_optim = ImageOptim.new(svgo: false) unless Gem.win_platform?
   if filename == output_filename && file_type == :image && !Gem.win_platform?
     puts "Optimizing: #{filename}"
     begin
@@ -56,8 +52,8 @@ def process_and_optimize_image(filename, file_type, output_filename, size, densi
     puts "Creating: #{output_filename}"
     begin
       if file_type == :pdf
-        inputfile = filename + "[0]"
-        magick = MiniMagick::Tool::Convert.new 
+        inputfile = "#{filename}[0]"
+        magick = MiniMagick::Tool::Convert.new
         magick.density(density)
         magick << inputfile
         magick.resize(size)
@@ -71,9 +67,7 @@ def process_and_optimize_image(filename, file_type, output_filename, size, densi
         image.flatten
         image.write(output_filename)
       end
-      unless Gem.win_platform?
-        image_optim.optimize_image!(output_filename)
-      end
+      image_optim.optimize_image!(output_filename) unless Gem.win_platform?
     rescue StandardError => e
       puts "Error creating #{filename}: #{e.message}"
     end
@@ -102,16 +96,17 @@ task :generate_derivatives, [:thumbs_size, :small_size, :density, :missing, :com
 
   # Ensure that the output directories exist.
   [thumb_image_dir, small_image_dir].each do |dir|
-    Dir.mkdir(dir) unless Dir.exist?(dir)
+    FileUtils.mkdir_p(dir) unless Dir.exist?(dir)
   end
 
   # support these file types
   EXTNAME_TYPE_MAP = {
-    '.tiff' => :image,
-    '.tif' => :image,
+    '.jpeg' => :image,
     '.jpg' => :image,
+    '.pdf' => :pdf,
     '.png' => :image,
-    '.pdf' => :pdf
+    '.tif' => :image,
+    '.tiff' => :image
   }.freeze
 
   # CSV output
