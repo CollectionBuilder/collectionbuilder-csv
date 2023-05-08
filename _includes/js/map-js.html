@@ -161,10 +161,10 @@
         {% endif %}{% endfor %}
         popupTemplateOneOff += '</p><div class="text-center"><a class="btn btn-light" href="' + itemHref + '" >View Item</a></div>';
         markerOneOff.bindPopup(popupTemplateOneOff).openPopup();
+        markerOneOff.getPopup().on('remove', function () {
+            map.removeLayer(markerOneOff);
+        });
     }
-    markerOneOff.getPopup().on('remove', function () {
-  map.removeLayer(markerOneOff);
-});
 
 })();
 
