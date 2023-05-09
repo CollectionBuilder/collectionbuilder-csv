@@ -1,0 +1,12 @@
+{% comment %}
+
+    Embed PDF so that it directly loads on the item page.
+    Please note that embedding large PDFs will slow your user's accessing the page.
+    Size is controlled using Bootstrap Custom ratios, https://getbootstrap.com/docs/5.3/helpers/ratio/#custom-ratios
+
+{% endcomment %}
+<div class="ratio" style="--bs-aspect-ratio: 115%;">
+    <object title="PDF file of {{ page.title }}" data="{{ page.object_location | relative_url }}" type="application/pdf" width="100%" >
+        <p>The PDF is not rendering in your browser, please use the button below to download the PDF.</p>
+    </object>
+</div>
