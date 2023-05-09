@@ -42,7 +42,7 @@ function makeCard(obj) {
         card += '<a href="' + itemHref + '"> <img class="card-img-top lazyload" src="' + placeholder + '" data-src="' + imgSrc + '" alt="Image of ' + obj.title + '"></a>';
     }
     // title
-    card += '<div class="card-body text-center"> <h4 class="card-title"><a href="' + itemHref + '" class="text-dark">' + obj.title + '</a></h4>';
+    card += '<div class="card-body text-center"> <h3 class="card-title h4"><a href="' + itemHref + '" class="text-dark">' + obj.title + '</a></h3>';
     // icon thumb for item without image
     if(thumbIcon){
         card += '<p><a href="' + itemHref + '">' + thumbIcon + '</a></p>';
