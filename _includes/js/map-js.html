@@ -113,7 +113,7 @@
     }
 
     /* add objects from geoJson features */
-    L.geoJson(geodata, {
+    var mapFeatures = L.geoJson(geodata, {
         onEachFeature: objectPopups,
         pointToLayer: objectMarkers
     }){% if site.data.theme.map-cluster != true %}.addTo(map);{% else %};
@@ -130,40 +130,26 @@
         document.querySelector('input.search-input').value = "";
     });{% endif %}
     
+    /* show popup if id in URL query */ 
     if (markerFilter != "") {
-        var found = geodata.features.filter(function(item) { return item.properties.id === markerFilter; });
-        var coords = found[0].geometry.coordinates[1] + ', ' + found[0].geometry.coordinates[0];
-        console.log('found', coords);
-
-        var markerOneOff = L.marker([found[0].geometry.coordinates[1], found[0].geometry.coordinates[0]]).addTo(map);
-        /* create pop up */
-        var itemHref = '{{ "/items/" | relative_url }}' + found[0].properties.id + '.html';
-        if (found[0].properties.img) {
-            var thumbSrc = '<img class="map-thumb" src="' + found[0].properties.img + '" alt="item thumbnail">';
-        } else if (found[0].properties.format.includes("image")) {
-            var thumbSrc = '<svg class="bi text-body map-thumb" fill="currentColor"><use xlink:href="{{ "/assets/lib/bootstrap-icons.svg" | relative_url }}#{{ site.data.theme.icon-image | default: "file-image" }}"/></svg><span class="sr-only">Image File</span>';
-        } else if (found[0].properties.format.includes("audio")) {
-            var thumbSrc = '<svg class="bi text-body map-thumb" fill="currentColor"><use xlink:href="{{ "/assets/lib/bootstrap-icons.svg" | relative_url }}#{{ site.data.theme.icon-audio | default: "file-play" }}"/></svg><span class="sr-only">Audio File</span>';
-        } else if (found[0].properties.format.includes("video")) {
-            var thumbSrc = '<svg class="bi text-body map-thumb" fill="currentColor"><use xlink:href="{{ "/assets/lib/bootstrap-icons.svg" | relative_url }}#{{ site.data.theme.icon-video | default: "film" }}"/></svg><span class="sr-only">Video File</span>';
-        } else if (found[0].properties.format.includes("pdf")) {
-            var thumbSrc = '<svg class="bi text-body map-thumb" fill="currentColor"><use xlink:href="{{ "/assets/lib/bootstrap-icons.svg" | relative_url }}#{{ site.data.theme.icon-pdf | default: "file-richtext" }}"/></svg><span class="sr-only">Video File</span>';
-        } else {
-            var thumbSrc = '<svg class="bi text-body map-thumb" fill="currentColor"><use xlink:href="{{ "/assets/lib/bootstrap-icons.svg" | relative_url }}#{{ site.data.theme.icon-default | default: "file-earmark" }}"/></svg><span class="sr-only">File Icon</span>';
-        }
-        var popupTemplateOneOff = '<h4><a class="text-dark" href="' + itemHref + '">' +
-            found[0].properties.title + '</a></h4><div class="text-center"><a href="' + itemHref + 
-            '" >' + thumbSrc + '</a></div><p>';
-        {% for f in fields %}{% if f.display_name %}
-        if (found[0].properties[{{ f.field | escape | jsonify }}]) {
-            popupTemplateOneOff += '<strong>{{ f.display_name }}:</strong> ' + found[0].properties[{{ f.field | escape | jsonify }}] + '<br>'; 
-        }
-        {% endif %}{% endfor %}
-        popupTemplateOneOff += '</p><div class="text-center"><a class="btn btn-light" href="' + itemHref + '" >View Item</a></div>';
-        markerOneOff.bindPopup(popupTemplateOneOff).openPopup();
-        markerOneOff.getPopup().on('remove', function () {
-            map.removeLayer(markerOneOff);
+        {% if site.data.theme.map-cluster == true %}
+        markers.eachLayer(layer => {
+            if (layer.feature.properties.id === markerFilter) {
+                layer.openPopup();
+                /* uncluster clusters, then show */ 
+                if (markers.getVisibleParent(layer).getChildCount()) {
+                    markers.getVisibleParent(layer).spiderfy();
+                    layer.openPopup();
+                } 
+            }
         });
+        {% else %}
+        mapFeatures.eachLayer(layer => {
+            if (layer.feature.properties.id === markerFilter) {
+                layer.openPopup();
+            }
+        });
+        {% endif %}
     }
 
 })();
