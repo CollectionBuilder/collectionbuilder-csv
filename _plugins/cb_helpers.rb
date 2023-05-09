@@ -29,8 +29,12 @@ module CollectionBuilderHelperGenerator
       #####
 
       # get featured image config from "theme.yml"
-      featured_image = site.data['theme']['featured-image'] || "/assets/img/collectionbuilder-logo.png"
-      
+      if site.data["theme"]
+        featured_image = site.data['theme']['featured-image'] || "/assets/img/collectionbuilder-logo.png"
+      else 
+        featured_image = "/assets/img/collectionbuilder-logo.png"
+        puts color_text("Error cb_helpers: your project does not contain a '_data/theme.yml'. The template will use default values.", :yellow)
+      end
       if featured_image.include? "/"
         # if featured image is a link
         featured_item_src = featured_image
@@ -89,7 +93,11 @@ module CollectionBuilderHelperGenerator
       lib_icons = site.static_files.select { |file| file.path.include? '/assets/lib/icons/' }
       lib_icon_names = lib_icons.map { |i| i.basename }
       # get icons configured in theme.yml
-      theme_icons = site.data['theme']['icons'] || { }
+      if site.data["theme"]
+        theme_icons = site.data['theme']['icons'] || { }
+      else
+        theme_icons = { } 
+      end
       # set default values for icons used in template in case nothing is configured
       if !theme_icons['icon-image']
         theme_icons['icon-image'] = "image"
