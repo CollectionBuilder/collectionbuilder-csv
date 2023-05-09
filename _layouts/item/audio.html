@@ -1,34 +1,25 @@
 ---
-# audio item layout with thumb and audio player
+# audio item layout with audio player and thumb 
 # Uses <audio> element to embed audio file from object_location as src.
 layout: item/item-page-base
 ---
-<div class="row">
-    <div class="col-md-6">
-        <div class="card mb-4 text-center">
-            <div class="m-2">
 
-                {% include item/item-thumb.html %}
-            
-            </div>
-            <div class="m-2">
+<div class="card mb-4 text-center">
+    <div class="card-body">
 
-                {% include item/audio-player.html %}
-                
-            </div>
-            
-            <div class="my-2">
+        {% include item/audio-player.html %}
 
-                {% include item/download-buttons.html %}
+        <div class="mt-2">
 
-            </div>
+            {% include item/item-thumb.html %}
+        
+        </div>
+        
+        <div class="mt-2">
+
+            {% include item/download-buttons.html %}
 
         </div>
-    </div>
 
-    <div class="col-md-6">
-
-        {% include item/metadata.html %}
-        
     </div>
 </div>

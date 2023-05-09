@@ -1,0 +1,14 @@
+{% comment %}
+
+    Adds button links for child items, if item has date to Timeline, if item has lat/long to Map, if item has object_location to download object.
+    Styled as a Bootstrap btn-group.
+
+{%- endcomment -%}
+<div class="btn-group my-2" role="group" aria-label="Button group">
+    {% if child.date %}{%- capture year -%}{% if child.date contains "-" %}{{ child.date | split: "-" | first }}{% elsif child.date contains "/" %}{{ child.date | split: "/" | last }}{% else %}{{ child.date }}{% endif %}{%- endcapture -%}
+    <a href="{{ year | strip | prepend: '/timeline.html#y' | relative_url }}" class="btn btn-outline-primary">View on Timeline</a>{% endif %}
+    {% if child.latitude and child.longitude %}
+    <a href="{{ '/map.html?location=' | append: page.latitude  | append: ',' | append: page.longitude | append: '&marker=' | append: page.objectid | relative_url }}" class="btn btn-outline-primary">View on Map</a>{% endif %}
+    {% if child.display_template == 'record' & child.object_location %}<a target="_blank" rel="noopener" href="{{ child.object_location | relative_url }}" class="btn btn-outline-primary">Link to Object</a>{% else %}
+    <a target="_blank" rel="noopener" href="{{ child.object_location | relative_url }}" class="btn btn-outline-primary">Download {{ child.format | split: '/' | last | upcase }}</a>{% endif %}
+</div>

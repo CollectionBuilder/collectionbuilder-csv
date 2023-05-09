@@ -2,7 +2,7 @@
 
 #########
 #
-# CollectionBuilder Helpers Generator
+# CollectionBuilder Helpers Generator, v1.1-csv
 #
 # Jekyll plugin to generate theme variables for the template.
 # 
@@ -53,6 +53,8 @@ module CollectionBuilderHelperGenerator
             # use object_location for image items, image_small for others
             if featured_record[0]['format'] and featured_record[0]['format'].include? 'image'
               featured_item_src = featured_record[0]['object_location'] || featured_record[0]['image_small']
+            elsif featured_record[0]['display_template'] and featured_record[0]['display_template'].include? 'image'
+              featured_item_src = featured_record[0]['object_location'] || featured_record[0]['image_small']
             else
               featured_item_src = featured_record[0]['image_small']
             end
@@ -60,8 +62,14 @@ module CollectionBuilderHelperGenerator
             if featured_item_src.nil? 
               puts color_text("Error cb_helpers: Item for featured image with objectid '#{featured_image}' does not have an image url in metadata. Please check 'featured-image' in '_data/theme.yml' and choose an item that has 'object_location' or 'image_small'", :yellow)
             end
+            # use item title as alt
             featured_item_alt = featured_record[0]['title'] || site.config['title']
-            featured_item_link = "/items/" + featured_image + ".html"
+            # figure out item link
+            if featured_record[0]['parentid']
+              featured_item_link = "/items/" + featured_record[0]['parentid'] + ".html#" + featured_image
+            else
+              featured_item_link = "/items/" + featured_image + ".html"
+            end
           end
         else
           puts color_text("Error cb_helpers: configured metadata '#{site.config['metadata']}' not found in '_data'.", :yellow)
@@ -95,7 +103,7 @@ module CollectionBuilderHelperGenerator
         theme_icons['icon-image'] = "image"
       end
       if !theme_icons['icon-audio']
-        theme_icons['icon-audio'] = "file-play"
+        theme_icons['icon-audio'] = "soundwave"
       end
       if !theme_icons['icon-video']
         theme_icons['icon-video'] = "film"
@@ -103,11 +111,32 @@ module CollectionBuilderHelperGenerator
       if !theme_icons['icon-pdf']
         theme_icons['icon-pdf'] = "file-richtext"
       end
+      if !theme_icons['icon-record']
+        theme_icons['icon-record'] = "file-text"
+      end
+      if !theme_icons['icon-panorama']
+        theme_icons['icon-panorama'] = "image-alt"
+      end
+      if !theme_icons['icon-compound-object']
+        theme_icons['icon-compound-object'] = "collection"
+      end
+      if !theme_icons['icon-multiple']
+        theme_icons['icon-multiple'] = "postcard"
+      end
       if !theme_icons['icon-default']
         theme_icons['icon-default'] = "file-earmark"
       end
       if !theme_icons['icon-back-to-top']
         theme_icons['icon-back-to-top'] = "arrow-up-square"
+      end
+      if !theme_icons['arrow-left']
+        theme_icons['arrow-left'] = "arrow-left"
+      end
+      if !theme_icons['arrow-right']
+        theme_icons['arrow-right'] = "arrow-right"
+      end
+      if !theme_icons['arrow-down']
+        theme_icons['arrow-down'] = "arrow-down"
       end
       # process icons
       icon_set = { }

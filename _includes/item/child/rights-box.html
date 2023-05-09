@@ -1,0 +1,17 @@
+{% comment %}
+
+    Adds a box to highlight rights information if child item has a "rights" or "rightsstatement" field.
+
+{%- endcomment -%}
+<div class="card mb-2">
+    <div class="card-header">Rights</div>
+    <div class="card-body">
+        <dl>
+            {% if child.rights %}<dt>Rights:</dt>
+            <dd>{{ child.rights }}</dd>{% endif %}
+            {% if child.rightsstatement %}<dt>Standardized Rights:</dt>
+            <dd><a target="_blank" rel="noopener" href="{{ child.rightsstatement }}">{{ child.rightsstatement }}</a>
+            </dd>{% endif %}
+        </dl>
+    </div>
+</div>

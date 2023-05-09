@@ -21,10 +21,10 @@
 {%- assign carousel-max = include.max | default: 9 -%}
 {%- assign btn-color = include.btn-color | default: "primary" -%}
 {%- assign btn-text = include.btn-text | default: "View Item" -%}
-{% if include.carousel-type == "small" %}
-{%- assign carousel-items = site.data[site.metadata] | where_exp: 'item','item.objectid' | where_exp: "item","item.image_small" -%}
+{% if site.data.theme.carousel-child-objects == true %}
+{%- assign carousel-items = site.data[site.metadata] | where_exp: 'item','item.objectid' | where_exp: "item","item.image_small != nil or item.image_thumb != nil"-%}
 {% else %}
-{%- assign carousel-items = site.data[site.metadata] | where_exp: 'item','item.objectid' | where_exp: "item","item.image_thumb" -%}
+{%- assign carousel-items = site.data[site.metadata] | where_exp: 'item','item.objectid and item.parentid == nil' | where_exp: "item","item.image_small != nil or item.image_thumb != nil" -%}
 {% endif %}
 
 {%- comment -%}
@@ -64,7 +64,7 @@
     /* add item data */
     // title,objectid,image_thumb/small
     var carouselItems = [ {% for c in carousel-items %}[ {{ c.title | escape | jsonify }}, "{{ c.objectid }}", 
-    {% if include.carousel-type == "small" %}{{ c.image_small | relative_url | jsonify }}{% else %}{{ c.image_thumb | relative_url | jsonify }}{% endif %} ]{% unless forloop.last %}, {% endunless %}{% endfor %}];
+    {% if c.image_small %}{{ c.image_small | relative_url | jsonify }}{% else %}{{ c.image_thumb | relative_url | jsonify }}{% endif %},"{{ c.parentid }}", ]{% unless forloop.last %}, {% endunless %}{% endfor %}];
     /* shuffle items */
     carouselItems.sort(function() { return 0.5 - Math.random() });
 
@@ -78,7 +78,10 @@
         // calculate item image location
         itemImg = carouselItems[i][2];
         // calculate item link
-        itemLink = '{{ '/items/' | relative_url }}' + carouselItems[i][1] + '.html';
+        if (carouselItems[i][3]){
+        itemLink = '{{ '/items/' | relative_url }}' + carouselItems[i][3] + '.html#' + carouselItems[i][1];}
+        else {
+        itemLink = '{{ '/items/' | relative_url }}' + carouselItems[i][1] + '.html';}   
         // create indicator 
         indicator = `<button type="button" data-bs-target="#imageCarousel" data-bs-slide-to="${i.toString()}" ${ i == 0 ? 'class="active" aria-current="true" ' : '' }aria-label="Slide ${i.toString()}"></button>`;
         // create slide

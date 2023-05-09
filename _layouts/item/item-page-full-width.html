@@ -1,0 +1,37 @@
+---
+# base layout for full page item display_template layouts
+# adds breadcrumbs and title at top; citation box, rights box, and browse buttons at bottom
+layout: default
+# item-meta adds rich meta markup in HTML <head> element to the page on production build for better SEO
+item-meta: true
+---
+{% if page.display_template == "compound_object" %}{% assign children = site.data[site.metadata] | where_exp: 'item','item.parentid == page.objectid' %}{% endif %}
+<div class="container-fluid py-3">
+
+    {% include item/breadcrumbs.html %}
+    <div class="my-0 h5 small">{{ page.display_template | replace: "_", " " | upcase }} {% if page.display_template == "compound_object" %} ({{ children | size }} Items){% endif %}</div>
+    <h2 class="mb-3">{{ page.title }} 
+        {% unless page.display_template == 'record' %}<a href="#metadata" class="ms-5 btn btn-sm btn-outline-dark small">Item Info 
+            <svg class="bi icon-sprite" role="img" aria-label="Jump to Item Info">
+                <use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#arrow-down"/>
+            </svg>
+        </a>{% endunless %}
+    </h2>
+
+    {{ content }}
+
+    <div class="row justify-content-end mt-4">
+        <div class="col-md-5">
+            {% include item/citation-box.html %}
+        </div>
+        {% if page.rights or page.rightsstatement %}
+        <div class="col-md-5">
+            {% include item/rights-box.html %}
+        </div>
+        {% endif %}
+    </div>
+
+    {%- if site.data.theme.browse-buttons == true -%}
+        {% include item/browse-buttons.html %}
+    {%- endif -%}
+</div>

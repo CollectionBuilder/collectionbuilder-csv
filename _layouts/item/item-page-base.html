@@ -8,17 +8,33 @@ item-meta: true
 <div class="container py-3">
 
     {% include item/breadcrumbs.html %}
+    <div class="my-0 h5 small">{{ page.display_template | replace: "_", " " | upcase }} {% if page.display_template == "compound_object" or page.display_template == "multiple" %}{% assign children = site.data[site.metadata] | where_exp: 'item','item.parentid == page.objectid' %} ({{ children | size }} Items){% endif %}</div>
+    <h2 class="mb-3">{{ page.title }} 
+        {% unless page.display_template == 'record' %}<a href="#metadata" class="ms-5 btn btn-sm btn-outline-dark small">Item Info 
+            <svg class="bi icon-sprite" role="img" aria-label="Jump to Item Info">
+                <use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#arrow-down"/>
+            </svg>
+        </a>{% endunless %}
+    </h2>
 
-    <h2 class="mb-4">{{ page.title }}</h2>
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-10">
 
-    {{ content }}
+        {{ content }}
 
-    <div class="row justify-content-end mt-4">
-        <div class="col-md-5">
+        </div>
+
+        <div class="col-12 col-md-10" id="metadata">
+
+            {% include item/metadata.html %}
+
+        </div>
+
+        <div class="col-md-5 py-4">
             {% include item/citation-box.html %}
         </div>
         {% if page.rights or page.rightsstatement %}
-        <div class="col-md-5">
+        <div class="col-md-5 py-4">
             {% include item/rights-box.html %}
         </div>
         {% endif %}

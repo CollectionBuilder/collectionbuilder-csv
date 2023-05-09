@@ -1,0 +1,17 @@
+{% comment %}
+
+    Add a thumbnail image or icon based on format for a child item, with a object_location link (if available).
+
+{% endcomment %}
+{% if child.object_location %}<a href="{{ child.object_location | relative_url }}" target="_blank" rel="noopener">{% endif %}
+    {% if child.image_thumb or child.image_small %}
+    <img class="img-thumbnail" src="{{ child.image_small | default: child.image_thumb | relative_url }}" alt="{{ child.title | escape }}">
+    {% else %}
+    <svg class="bi text-body" fill="currentColor" aria-hidden="true">
+        {%- assign icon_template = child.display_template | default: child.format -%}
+        <use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#{% if icon_template contains 'image' %}icon-image{% elsif icon_template contains 'pdf' %}icon-pdf{% elsif icon_template contains 'audio' %}icon-audio{% elsif icon_template contains 'video' %}icon-video{% elsif icon_template contains 'record' %}icon-record{% else %}icon-default{% endif %}"/>
+    </svg>
+    <span class="visually-hidden">{{ child.title | escape }} - {{ child.format }}</span>
+    {% endif %}
+{% if child.object_location %}</a>{% endif %}
+

@@ -1,0 +1,27 @@
+{% comment %}
+
+    Adds a panorama image viewer using Pannellum for child modals.
+    Default is set for equirectangular projection types.
+    https://pannellum.org/documentation/reference/
+
+{%- endcomment -%}
+<link rel="stylesheet" href="{{ '/assets/lib/pannellum/pannellum.css' | relative_url }}">
+<div id="panorama" class="ratio ratio-4x3 my-4"></div>
+<script src="{{ '/assets/lib/pannellum/pannellum.js' | relative_url }}"></script>
+<script>
+pannellum.viewer('panorama', {
+    "type": "equirectangular",
+    "panorama": "{{ child.object_location | relative_url }}",
+    "autoLoad": false,
+        /*
+     * Uncomment the next line to print the coordinates of mouse clicks
+     * to the browser's developer console, which makes it much easier
+     * to figure out where to place hot spots. Always remove it when
+     * finished, though.
+     */
+    "hotSpotDebug": false,
+    "hotSpots": [
+      
+    ]
+});
+</script>

@@ -3,27 +3,18 @@
 # displays image or icon depending on "image_thumb"
 layout: item/item-page-base
 ---
-<div class="row">
-    <div class="col-md-6">
-        <div class="card mb-4 text-center">
-            <div class="m-2">
-                <p>
-                    {% include item/item-thumb.html %}
-                </p>
-            </div>
-            
-            <div class="my-2">
 
-                {% include item/download-buttons.html %}
+<div class="card mb-4 text-center">
+    <div class="card-body">
+        
+        <p>
+            {% include item/item-thumb.html %}
+        </p>
+        <div class="mt-2">
 
-            </div>
+            {% include item/download-buttons.html %}
 
         </div>
-    </div>
 
-    <div class="col-md-6">
-
-        {% include item/metadata.html %}
-        
     </div>
 </div>

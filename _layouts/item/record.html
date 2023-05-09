@@ -1,33 +1,18 @@
 ---
-# basic metadata only record
-# download button is replaced with "Object Link"
+# basic layout intended for metadata only type item, designed for linking to external source
 layout: item/item-page-base
 ---
-<div class="row">
-    <div class="col-md-6">
-        <div class="card mb-4 text-center">
-            <div class="m-2">
-                <p>
-                    {% include item/item-thumb.html %}
-                </p>
-            </div>
-            
-            <div class="my-2">
 
-                {% if page.object_location %}<a target="_blank" rel="noopener" href="{{ page.object_location | relative_url }}" class="m-2 btn btn-outline-primary">Object Link</a>{% endif %}
-                {% if page.date %}{%- capture year -%}{% if page.date contains "-" %}{{ page.date | split: "-" | first }}{% elsif page.date contains "/" %}{{ page.date | split: "/" | last }}{% else %}{{ page.date }}{% endif %}{%- endcapture -%}
-                <a href="{{ year | strip | prepend: '/timeline.html#y' | relative_url }}" class="m-2 btn btn-outline-primary">View on Timeline</a>{% endif %}
-                {% if page.latitude and page.longitude %}
-                <a href="{{ '/map.html#' | append: page.latitude  | append: ',' | append: page.longitude | relative_url}}" class="m-2 btn btn-outline-primary">View on Map</a>{% endif %}
+<div class="mb-4 text-center">
 
-            </div>
-
+    <div class="my-2">
+        <div class="btn-group" role="group" aria-label="Button group">
+            {% if page.date %}{%- capture year -%}{% if page.date contains "-" %}{{ page.date | split: "-" | first }}{% elsif page.date contains "/" %}{{ page.date | split: "/" | last }}{% else %}{{ page.date }}{% endif %}{%- endcapture -%}
+            <a href="{{ year | strip | prepend: '/timeline.html#y' | relative_url }}" class="ml-2 btn btn-outline-primary">View on Timeline</a>{% endif %}
+            {% if page.latitude and page.longitude %}
+            <a href="{{ '/map.html?location=' | append: page.latitude  | append: ',' | append: page.longitude | append: '&marker=' | append: page.objectid | relative_url }}" class="ml-2 btn btn-outline-primary">View on Map</a>{% endif %}
+            {% if page.object_location %}<a target="_blank" rel="noopener" href="{{ page.object_location | relative_url }}" class="btn btn-outline-primary">Link to Object</a>{% endif %}
         </div>
     </div>
 
-    <div class="col-md-6">
-
-        {% include item/metadata.html %}
-        
-    </div>
 </div>
