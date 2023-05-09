@@ -10,11 +10,11 @@ custom-foot: js/modal-hash-js.html
 <div class="mb-4 text-center">
 
     {% for child in children %}
-    <div id="{{ child.objectid }}">
-        <div class="spotlight gallery-img" data-download="true" data-src="{{ child.object_location | relative_url }}">
-            <p><img src="{{ child.image_small | relative_url }}" alt="{% if page.title != child.title %}{{ child.title | escape }}{% else %}{{ page.title | escape }} [{{ forloop.index }}]{% endif %}" class="img-fluid"></p>
-            {% if page.title != child.title %}<p class="text-secondary"><small>{{ child.title }}</small></p>{% endif %}
-        </div>
+    <div id="{{ child.objectid }}" class="mb-4">
+        <a class="spotlight gallery-img" data-download="true" href="{{ child.object_location | relative_url }}">
+            <img src="{{ child.image_small | relative_url }}" alt="{% if page.title != child.title %}{{ child.title | escape }}{% else %}{{ page.title | escape }} [{{ forloop.index }}]{% endif %}" class="img-fluid mb-2">
+            {% if page.title != child.title %}<div><small class="text-dark">{{ child.title }}</small></div>{% endif %}
+        </a>
     </div>
     {% endfor %}
 
