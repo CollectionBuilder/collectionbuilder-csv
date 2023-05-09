@@ -19,11 +19,11 @@
 <script>
   function leftArrowPressed() {
     location.href = document.getElementById("prev-page-button").href;
-  }
+  };
 
   function rightArrowPressed() {
     location.href = document.getElementById("next-page-button").href;
-  }
+  };
 
   function leftModalArrowPressed() {
     // Get the modal element.
@@ -36,7 +36,7 @@
         prevButton.click();
       }
     }
-  }
+  };
 
   function rightModalArrowPressed() {
     // Get the modal element.
@@ -49,7 +49,7 @@
         nextButton.click();
       }
     }
-  }
+  };
 
   function isModalShown() {
     // Get the modal element.
@@ -57,14 +57,14 @@
 
     // Check if the modal has the "show" class.
     return modal && modal.classList.contains("show");
-  }
+  };
 
   function isSpotlightModalShown() {
     // Get the modal element.
     const spotlight = document.getElementById("spotlight");
     // Check if the modal has the "show" class.
     return spotlight && spotlight.classList.contains("show");
-  }
+  };
 
 
   document.onkeydown = function (evt) {
@@ -72,18 +72,15 @@
 
 
     } else if (isModalShown()) {
-      console.log("modal shown");
       // The modal is shown.
       evt = evt || window.event;
       switch (evt.keyCode) {
         case 37:
           leftModalArrowPressed();
-          break;
-          console.log('left                modal!');
+            break;
         case 39:
           rightModalArrowPressed();
-          break;
-          console.log('righmodal!');
+            break;
       }
     }
     else {
@@ -92,10 +89,10 @@
       switch (evt.keyCode) {
         case 37:
           leftArrowPressed();
-          break;
+            break;
         case 39:
           rightArrowPressed();
-          break;
+            break;
       }
     }
 
