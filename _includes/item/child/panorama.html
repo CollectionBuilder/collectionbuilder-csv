@@ -6,15 +6,7 @@
 
 {%- endcomment -%}
 <link rel="stylesheet" href="{{ '/assets/lib/pannellum/pannellum.css' | relative_url }}">
-<style>
-    .panorama {
-        width: 100%;
-        height: 800px;
-    }
-</style>
-<div class="my-4">
-    <div id="panorama" class="panorama my-4"></div>
-</div>
+<div id="panorama" class="ratio ratio-4x3 my-4"></div>
 <script src="{{ '/assets/lib/pannellum/pannellum.js' | relative_url }}"></script>
 <script>
 pannellum.viewer('panorama', {
