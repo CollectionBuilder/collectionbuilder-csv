@@ -1,3 +1,10 @@
+{% comment %}
+
+    Adds a panorama image viewer using Pannellum for child modals.
+    Default is set for equirectangular projection types.
+    https://pannellum.org/documentation/reference/
+
+{%- endcomment -%}
 <style>
     .panorama {
         width: 100%;
@@ -5,9 +12,8 @@
     }
 </style>
 <div class="my-4">
-<div id="panorama" class="panorama my-4"></div>
+    <div id="panorama" class="panorama my-4"></div>
 </div>
-<!-- https://pannellum.org/documentation/reference/ -->
 <script src="{{ '/assets/lib/pannellum/pannellum.js' | relative_url }}"></script>
 <script>
 pannellum.viewer('panorama', {
