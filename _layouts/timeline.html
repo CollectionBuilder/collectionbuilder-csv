@@ -5,7 +5,7 @@ custom-foot: js/timeline-js.html
 ---
 {%- assign field = site.data.theme.timeline-field | default: "date" -%}
 {% if site.data.theme.timeline-child-objects == false %}
-{%- assign items = site.data[site.metadata] | where_exp: 'item','item.parentid == nil' -%}
+{%- assign items = site.data[site.metadata] | where_exp: 'item','item.objectid and item.parentid == nil' -%}
 {% else %}
 {%- assign items = site.data[site.metadata] | where_exp: 'item','item.objectid' -%}
 {% endif %}

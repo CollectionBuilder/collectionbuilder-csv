@@ -21,10 +21,10 @@
 {%- assign carousel-max = include.max | default: 9 -%}
 {%- assign btn-color = include.btn-color | default: "primary" -%}
 {%- assign btn-text = include.btn-text | default: "View Item" -%}
-{% if site.data.theme.carousel-child-objects == false %}
-{%- assign carousel-items = site.data[site.metadata] | where_exp: 'item','item.parentid == nil' | where_exp: "item","item.image_small != nil or item.image_thumb != nil"-%}
+{% if site.data.theme.carousel-child-objects == true %}
+{%- assign carousel-items = site.data[site.metadata] | where_exp: 'item','item.objectid' | where_exp: "item","item.image_small != nil or item.image_thumb != nil"-%}
 {% else %}
-{%- assign carousel-items = site.data[site.metadata] | where_exp: 'item','item.objectid' | where_exp: "item","item.image_small != nil or item.image_thumb != nil" -%}
+{%- assign carousel-items = site.data[site.metadata] | where_exp: 'item','item.objectid and item.parentid == nil' | where_exp: "item","item.image_small != nil or item.image_thumb != nil" -%}
 {% endif %}
 
 {%- comment -%}

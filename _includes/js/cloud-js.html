@@ -4,10 +4,10 @@
     Requires CB's array_count_uniq.rb plugin!
 
 {%- endcomment -%}
-{% if site.data.theme.browse-child-objects == false %}
-{%- assign items = site.data[site.metadata] | where_exp: 'item','item.parentid == nil' -%}
-{% else %}
+{% if site.data.theme.browse-child-objects == true %}
 {%- assign items = site.data[site.metadata] | where_exp: 'item','item.objectid' -%}
+{% else %}
+{%- assign items = site.data[site.metadata] | where_exp: 'item','item.objectid and item.parentid == nil' -%}
 {% endif %}
 {%- assign termsMin = include.min | plus: 0 | default: 1 -%}
 {%- assign cloud_id = include.id | default: "cloud" -%}
