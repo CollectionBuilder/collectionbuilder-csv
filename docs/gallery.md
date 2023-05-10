@@ -6,6 +6,6 @@ Used to add full screen view to item pages, potentially with support for multipl
 
 Add assets and basic initialization to any page by adding front matter `gallery: true`. 
 
-The items to include in the gallery require a `div` around each individual image with `class="spotlight gallery-img"` plus `data-src=` with the link to higher quality image.
+The items to include in the gallery require a `a` around each individual image with `class="spotlight gallery-img"` plus `href=` with the link to higher quality image.
 
 This is currently automatically added to item pages for objects with images.

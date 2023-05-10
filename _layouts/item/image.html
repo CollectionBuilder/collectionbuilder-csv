@@ -6,24 +6,14 @@ layout: item/item-page-base
 gallery: true
 ---
 
-<div class="row">
-    <div class="col-md-6">
-        <div class="card mb-4 text-center">
+<div class="card mb-4 text-center">
 
-            {% include item/image-gallery.html %}
-            
-            <div class="my-2">
+    {% include item/image-gallery.html %}
+    
+    <div class="card-body">
 
-                {% include item/download-buttons.html %}
+        {% include item/download-buttons.html %}
 
-            </div>
-
-        </div>
     </div>
 
-    <div class="col-md-6">
-
-        {% include item/metadata.html %}
-        
-    </div>
 </div>

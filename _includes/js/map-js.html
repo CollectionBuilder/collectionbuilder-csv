@@ -1,4 +1,9 @@
-{%- assign items = site.data[site.metadata] | where_exp: 'item','item.objectid' | where_exp: 'item','item.latitude != nil and item.longitude != nil' -%}
+{% if site.data.theme.map-child-objects == false %}
+{%- assign items = site.data[site.metadata] | where_exp: 'item','item.objectid and item.parentid == nil' -%}
+{% else %}
+{%- assign items = site.data[site.metadata] | where_exp: 'item','item.objectid' -%}
+{% endif %}
+{%- assign items = items | where_exp: 'item','item.latitude != nil and item.longitude != nil' -%}
 {%- assign fields = site.data.config-map -%}
 <!-- load leaflet dependencies -->
 <script src="{{ '/assets/lib/leaflet/leaflet.js' | relative_url }}"></script>
@@ -19,21 +24,19 @@
         {% if item.image_thumb %}"img": {{ item.image_thumb | relative_url | jsonify }},{% endif %}
         {% if item.display_template %}"template": {{ item.display_template | escape | jsonify }}, {%- endif -%}
         {% if item.format %}"format": {{ item.format | escape | jsonify }}, {%- endif -%}
-        "title": {{ item.title | escape | jsonify }}, 
+        "title": {{ item.title | escape | jsonify }}, "link": "{% if item.parentid %}{{ item.parentid }}.html#{{ item.objectid }}{% else %}{{ item.objectid }}.html{% endif %}",
         "id": {{ item.objectid | jsonify }} 
     } }{% unless forloop.last %}, {% endunless %}{% endfor %}
     ]};
 
-    /* init map and set zoom */
-    if (window.location.hash) {
-        /* if url has a hash, it is split by comma into coordinates that set the view */
-        var hashfilter = decodeURIComponent(location.hash.substr(1));
-        var latitudeHash = hashfilter.split(',')[0]
-        var longitudeHash = hashfilter.split(',')[1]
-        var map = L.map('map').setView([latitudeHash,longitudeHash],16);
-    } else {
-        var map = L.map('map').setView([{{ site.data.theme.latitude | default: 46.727485 }},{{ site.data.theme.longitude | default: -117.014185 }}],{{ site.data.theme.zoom-level | default: 5 }});
-    }
+    /* check for url parameters and set initial view options */ 
+    let url = new URL(window.location);
+    var mapCenter = url.searchParams.get('location') ? url.searchParams.get('location').split(',') : [{{ site.data.theme.latitude | default: 46.727485 }}, {{ site.data.theme.longitude | default: -117.014185 }}];
+    var mapZoom = url.searchParams.get('location') ? 16 : {{ site.data.theme.zoom-level | default: 5 }};
+    var markerFilter = url.searchParams.get('marker') ? url.searchParams.get('marker') : "";
+
+    /* init map, set center and zoom */
+    var map = L.map('map').setView(mapCenter, mapZoom);
 
     /* add map layer options */
     var Esri_WorldStreetMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
@@ -112,17 +115,17 @@
         {% if site.data.theme.map-search == true %}/* bind feature for search */
         feature.layer = layer;{% endif %}
         // find item link
-        var itemHref = '{{ "/items/" | relative_url }}' + feature.properties.id + '.html';
+        var itemHref = '{{ "/items/" | relative_url }}' + feature.properties.link;
         // find image
         var thumbImg;
         if (feature.properties.img) {
             thumbImg = '<img class="map-thumb" src="' + feature.properties.img + '" alt="item thumbnail">';
         } else {
-            thumbImg = getIcon(feature.properties.template,feature.properties.format)
+            thumbImg = getIcon(feature.properties.template,feature.properties.format,"thumb")
         }
         // set up popup content
-        var popupTemplate = '<h4><a class="text-dark" href="' + itemHref + '">' +
-            feature.properties.title + '</a></h4><div class="text-center"><a href="' + itemHref + 
+        var popupTemplate = '<h2 class="h4"><a class="text-dark" href="' + itemHref + '">' +
+            feature.properties.title + '</a></h2><div class="text-center"><a href="' + itemHref + 
             '" >' + thumbImg + '</a></div><p>';
         {% for f in fields %}{% if f.display_name %}
         if (feature.properties[{{ f.field | escape | jsonify }}]) {
@@ -139,7 +142,7 @@
     }
 
     /* add objects from geoJson features */
-    L.geoJson(geodata, {
+    var mapFeatures = L.geoJson(geodata, {
         onEachFeature: objectPopups,
         pointToLayer: objectMarkers
     }){% if site.data.theme.map-cluster != true %}.addTo(map);{% else %};
@@ -155,6 +158,27 @@
         markers.enableClustering();
         document.querySelector('input.search-input').value = "";
     });{% endif %}
+    
+    /* show popup if id in URL query */ 
+    if (markerFilter != "") {
+        {% if site.data.theme.map-cluster == true %}
+        markers.eachLayer(layer => {
+            if (layer.feature.properties.id === markerFilter) {
+                /* uncluster clusters, then show */ 
+                if (markers.getVisibleParent(layer)["_childCount"]) {
+                    markers.getVisibleParent(layer).spiderfy();
+                } 
+                layer.openPopup();
+            }
+        });
+        {% else %}
+        mapFeatures.eachLayer(layer => {
+            if (layer.feature.properties.id === markerFilter) {
+                layer.openPopup();
+            }
+        });
+        {% endif %}
+    }
 
 })();
 

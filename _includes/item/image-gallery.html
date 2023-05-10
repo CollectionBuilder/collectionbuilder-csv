@@ -4,7 +4,7 @@
     Ensure dependencies are added by including `gallery: true` in the layout front matter calling this include.
 
 {%- endcomment -%}
-<div class="spotlight gallery-img" data-download="true" data-src="{{ page.object_location | relative_url }}">
-    <img src="{{ page.image_small | relative_url }}" alt="item thumbnail for {{ page.title | escape }}" class="img-fluid">
-    <p><small>{{ site.data.translations['includesItemImageGallery']['image'][site.lang] }}</small></p>
-</div>
+<a class="spotlight gallery-img" data-download="true" href="{{ page.object_location | relative_url }}">
+    <img src="{{ page.image_small | relative_url }}" alt="{{ page.title | escape }}" class="img-fluid">
+    <div><small class="text-dark">{{ site.data.translations['includesItemImageGallery']['image'][site.lang] }}</small></div>
+</a>

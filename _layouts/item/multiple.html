@@ -1,0 +1,26 @@
+---
+# layout for "multiple" display template
+# creates large images with a gallery feature
+layout: item/item-page-base
+gallery: true
+---
+{% assign children = site.data[site.metadata] | where_exp: 'item','item.parentid == page.objectid' %}
+
+<div class="mb-4 text-center">
+
+    {% for child in children %}
+    <div id="{{ child.objectid }}" class="mb-4">
+        <a class="spotlight gallery-img" data-download="true" href="{{ child.object_location | relative_url }}">
+            <img src="{{ child.image_small | relative_url }}" alt="{% if page.title != child.title %}{{ child.title | escape }}{% else %}{{ page.title | escape }} [{{ forloop.index }}]{% endif %}" class="img-fluid mb-2">
+            {% if page.title != child.title %}<div><small class="text-dark">{{ child.title }}</small></div>{% endif %}
+        </a>
+    </div>
+    {% endfor %}
+
+    <div class="my-2">
+
+        {% include item/child/compound-item-download-buttons.html %}
+
+    </div>
+
+</div>

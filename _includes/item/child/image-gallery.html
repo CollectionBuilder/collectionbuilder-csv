@@ -1,0 +1,10 @@
+{% comment %}
+
+    Adds child image in a Spotlight gallery markup.
+    Ensure dependencies are added by including `gallery: true` in the layout front matter calling this include.
+
+{%- endcomment -%}
+<a class="spotlight gallery-img" data-download="true" href="{{ child.object_location | relative_url }}">
+    <img src="{{ child.image_small | relative_url }}" alt="{{ child.title | escape }}" class="img-fluid">
+    <div><small class="text-dark">Click to view full screen</small></div>
+</a>

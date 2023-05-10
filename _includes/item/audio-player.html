@@ -1,4 +1,10 @@
+{% comment %}
+
+    Adds html audio element with source listed in object_location.
+    Provides a fallback to download the file.
+
+{%- endcomment -%}
 <audio controls class="w-100">
     <source src="{{ page.object_location | relative_url }}">
-    {{ site.data.translations['includesItemAudioPlayer']['audioNotSupported'][site.lang] }}
+    {{ site.data.translations['includesItemAudioPlayer']['audioNotSupported'][site.lang] }} <a href="{{ page.object_location | relative_url }}">Download</a>.
 </audio>

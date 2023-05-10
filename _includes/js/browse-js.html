@@ -1,4 +1,9 @@
+{% if site.data.theme.browse-child-objects == true %}
 {%- assign items = site.data[site.metadata] | where_exp: 'item','item.objectid' -%}
+{% else %}
+{%- assign items = site.data[site.metadata] | where_exp: 'item','item.objectid and item.parentid == nil' -%}
+{% endif %}
+
 {%- assign fields = site.data.config-browse -%}
 {%- assign viewFullRecord = site.data.translations['includesJsBrowseJs']['viewFullRecord'][site.lang] -%}
 
@@ -8,12 +13,12 @@ var viewFullRecord = {{ viewFullRecord | jsonify}};
 
 /* add items */
 var items = [
-    {% for i in items %}
-    { {% for f in fields %}{% if i[f.field] %}{{ f.field | escape | jsonify }}:{{ i[f.field] | strip | jsonify }}, {%- endif -%}{%- endfor -%}
-        {% if i.image_thumb %}"img": {{ i.image_thumb | relative_url | jsonify }}, {%- endif -%} 
-        {% if i.display_template %}"template": {{ i.display_template | jsonify }}, {%- endif -%}
-        {% if i.format %}"format": {{ i.format | jsonify }}, {%- endif -%}
-        "title":{{ i.title | strip | escape | jsonify }}, "id":{{ i.objectid | jsonify }} }{% unless forloop.last %},{% endunless %}{%- endfor -%}
+    {% for item in items %}
+    { {% for f in fields %}{% if item[f.field] %}{{ f.field | escape | jsonify }}:{{ item[f.field] | strip | jsonify }}, {%- endif -%}{%- endfor -%}
+        {% if item.image_thumb %}"img": {{ item.image_thumb | relative_url | jsonify }}, {%- endif -%} 
+        {% if item.display_template %}"template": {{ item.display_template | replace: "_"," " | jsonify }}, {%- endif -%}
+        {% if item.format %}"format": {{ item.format | jsonify }}, {%- endif -%}
+        "title":{{ item.title | strip | escape | jsonify }}, "link": "{% if item.parentid %}{{ item.parentid }}.html#{{ item.objectid }}{% else %}{{ item.objectid }}.html{% endif %}", "id":{{ item.objectid | jsonify }} }{% unless forloop.last %},{% endunless %}{%- endfor -%}
 ];
 
 {% include js/get-icon.js %}
@@ -23,7 +28,7 @@ function makeCard(obj) {
     // placeholder image for lazyload
     var placeholder = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'%3E%3C/svg%3E";
     // find item link
-    var itemHref = "{{ '/items/' | relative_url }}" + obj.id + ".html";
+    var itemHref = "{{ '/items/' | relative_url }}" + obj.link;
     // find image
     var imgSrc, thumbIcon;
     // if there is a thumb in the csv display it
@@ -31,7 +36,7 @@ function makeCard(obj) {
         imgSrc = obj.img;
     // else add an icon based on display_template or format
     } else {
-        thumbIcon = getIcon(obj.template,obj.format)
+        thumbIcon = getIcon(obj.template,obj.format,"thumb");
     }
 
     // start card
@@ -41,7 +46,7 @@ function makeCard(obj) {
         card += '<a href="' + itemHref + '"> <img class="card-img-top lazyload" src="' + placeholder + '" data-src="' + imgSrc + '" alt="Image of ' + obj.title + '"></a>';
     }
     // title
-    card += '<div class="card-body text-center"> <h4 class="card-title"><a href="' + itemHref + '" class="text-dark">' + obj.title + '</a></h4>';
+    card += '<div class="card-body text-center"> <h3 class="card-title h4"><a href="' + itemHref + '" class="text-dark">' + obj.title + '</a></h3>';
     // icon thumb for item without image
     if(thumbIcon){
         card += '<p><a href="' + itemHref + '">' + thumbIcon + '</a></p>';
@@ -66,21 +71,10 @@ function makeCard(obj) {
     {% endunless %}{% endfor %}
     card += '</p>';
     // media type
-    if(obj.format && obj.format != "") {
-        card += '<p class="card-text"><small><a class="btn btn-sm btn-outline-secondary" href="{{ "/browse.html" | relative_url }}#' + encodeURIComponent(obj.format) + '">' + 
-        obj.format.split("/").pop().toUpperCase() + ' <svg class="bi icon-sprite"><use xlink:href="{{ "/assets/lib/cb-icons.svg" | relative_url }}#';
-        if(obj.format.includes('image')){
-            card += 'icon-image';
-        } else if(obj.format.includes('audio')){
-            card += 'icon-audio';
-        } else if(obj.format.includes('video')){
-            card += 'icon-video';
-        } else if(obj.format.includes('pdf')){
-            card += 'icon-pdf';
-        } else {
-            card += 'icon-default';
-        }
-        card += '"/></svg></a></small></p>';
+    if(obj.template && obj.template != "") {
+        mediaIcon = getIcon(obj.template,obj.format);
+        card += '<p class="card-text"><small><a class="btn btn-sm btn-outline-secondary" href="{{ "/browse.html" | relative_url }}#' + encodeURIComponent(obj.template) + '">' + 
+        obj.template.toUpperCase() + ' ' + mediaIcon + '</a></small></p>';
     }
     // view button
     card += '<hr><a href="' + itemHref + '" class="btn btn-sm btn-light" title="link to ' + obj.title + '">' + viewFullRecord + '</a>';

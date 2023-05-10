@@ -1,0 +1,139 @@
+{% comment %}
+
+    Creates a gallery of thumbnails images or icons for each child item in a compound object. The thumb defaults to image_thumb or image_small, otherwise an icon is added based on the display_template or format of the child item.
+    
+    Each child item is given a popup modal with full display and metadata information. The display is choose based on the display_template of the child item.
+
+    This include requires the Liquid object "child" to be present! The item display requires the compound object item includes in "item/child/".
+
+{% endcomment %}
+<div class="row row-cols-2 row-cols-lg-4 g-2">
+    {% for child in children %}
+    <div class="col">
+        <div class="card h-100">
+            <div class="my-auto">
+                <div class="card-body text-center" id="{{ child.objectid }}Card">
+                
+                    {% if child.title %}<div class="small text-dark mb-2">{{ child.title | truncatewords: 4 }}</div>{% endif %}
+                    
+                    <div class="mb-2">
+                        {% if child.image_thumb or child.image_small %}
+                        <img class="img-thumbnail compound-thumb" src="{{ child.image_thumb | default: child.image_small | relative_url }}" alt="{{ child.title | escape }}">
+                        {% else %}
+                        <svg class="bi text-body compound-thumb" fill="currentColor" aria-hidden="true">
+                            {%- assign icon_template = child.display_template | default: item.format -%}
+                            <use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#{% if icon_template contains 'image' %}icon-image{% elsif icon_template contains 'pdf' %}icon-pdf{% elsif icon_template contains 'audio' %}icon-audio{% elsif icon_template contains 'video' %}icon-video{% else %}icon-default{% endif %}" />
+                        </svg>
+                        <span class="visually-hidden">{{ child.title | escape }} - {{ child.format }}</span>
+                        {% endif %}
+                    </div>
+
+                    <!-- child object modal button -->
+                    <a id="item-{{ forloop.index }}"
+                        role="button"
+                        data-bs-toggle="modal"
+                        href="#{{ child.objectid }}"
+                        onclick="window.location.hash='{{ child.objectid }}'"
+                        class="btn btn-sm btn-outline-secondary small stretched-link">
+                        {{ child.display_template | upcase | default: "Item" }} <svg class="bi icon-sprite text-body" fill="currentColor" aria-hidden="true"><use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#icon-{{ child.display_template | default: 'file'}}"/></svg>
+                    </a> 
+
+                    <!-- child object modal -->
+                    <div class="modal fade" id="{{ child.objectid }}" tabindex="-1" role="dialog" aria-labelledby="{{ child.objectid }}ModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-xxl">
+                            <div class="modal-content text-start">
+
+                                <div class="modal-header ">
+                                    <div class="modal-title w-100" id="{{ child.objectid }}ModalLabel">
+                                        <div class="row">
+                                            <div class="col-12 text-end">
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                                                onclick="history.pushState('', '', window.location.pathname)"></button>
+                                            </div>
+                                            {% capture next_index %}{% if forloop.index == forloop.length %}0{% else %}{{ forloop.index0 | plus: 1 }}{% endif %}{% endcapture %}
+                                            {% assign next_index = next_index | times: 1 %}
+                                            {% capture prev_index %}{% if forloop.index0 == 0 %}{{ forloop.length | minus: 1 }}{% else %}{{ forloop.index0 | minus: 1 }}{% endif %}{% endcapture %}
+                                            {% assign prev_index = prev_index | times: 1 %}
+                                            {% capture next_item_id %}{{ children[next_index].objectid }}{% endcapture %}
+                                            {% capture prev_item_id %}{{ children[prev_index].objectid }}{% endcapture %}
+                                            <div class="col-1 col-md-2">
+                                                <button data-bs-target="#{{ prev_item_id }}" data-bs-toggle="modal" onclick="window.location.hash='{{ prev_item_id }}'" class="btn btn-outline-dark btn-sm prev-child-button" >
+                                                    <svg class="bi icon-sprite" role="img" aria-label="Previous Item">
+                                                        <use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#arrow-left"/>
+                                                    </svg>
+                                                    <span class="d-none d-md-inline">Previous Item</span>
+                                                </button>
+                                            </div>
+                                            <div class="col-9 col-md-8 text-center">
+                                                <h3 class="h5">{{ page.title }} 
+                                                    <span class="d-none d-md-inline">-</span><span class="d-md-none"><br></span>
+                                                    Item {{ forloop.index }} of {{ children | size }}
+                                                </h3>
+                                            </div>
+                                            <div class="col-1 col-md-2 text-end">
+                                                <button  data-bs-target="#{{ next_item_id }}" data-bs-toggle="modal" onclick="window.location.hash='{{ next_item_id }}'" class="ms-md-5 btn btn-outline-dark btn-sm next-child-button">
+                                                    <span class="d-none d-md-inline">Next Item</span>
+                                                    <svg class="bi icon-sprite" role="img" aria-label="Next Item">
+                                                        <use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#arrow-right"/>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div class="card mb-4 text-center">
+                                                <div class="m-2">
+                                                    {% if child.display_template == 'image' %}
+                                                        {% include item/child/image-gallery.html %}
+                                                    {% elsif child.display_template == 'video' %}
+                                                        {% if child.object_location contains 'vimeo' or child.object_location contains 'youtu' %}
+                                                            {% include item/child/video-embed.html %}
+                                                        {% else %}
+                                                            {% include item/child/video-player.html %}
+                                                        {% endif %}
+                                                    {% elsif child.display_template == 'audio' %}
+                                                        <div class="my-auto">
+                                                            {% include item/child/audio-player.html %}
+                                                        </div>
+                                                    {% elsif child.display_template == 'panorama' %}
+                                                        {% include item/child/panorama.html %}
+                                                    {% else %}
+                                                        {% include item/child/item-thumb.html %}
+                                                    {% endif %}
+                                                </div>
+                                                <div class="my-2">
+                                                    {% include item/child/download-buttons.html %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            {% include item/child/metadata.html %}
+                                        </div>
+                                    </div>
+                                    <div class="row justify-content-center mt-4">
+                                        <div class="col-md-5 py-4">
+                                            {% include item/child/citation-box.html %}
+                                        </div>
+                                        {% if child.rights or child.rightsstatement %}
+                                        <div class="col-md-5 py-4">
+                                            {% include item/child/rights-box.html %}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end child modal -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>

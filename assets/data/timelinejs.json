@@ -2,6 +2,7 @@
 # generate time-focused json data suitable for TimelineJS.
 # includes all items in metadata that have a "date" field filled.
 # current using relative_url due to jekyll bug, should be absolute_url in production!
+# to just feature parent objects of compound objects, you will want to change the where_exp below to "where_exp: 'item','item.parentid == nil'"
 ---
 {%- assign items = site.data[site.metadata] | where_exp: 'item','item.objectid' | where_exp: 'item', 'item.date' -%}
 {
@@ -21,7 +22,7 @@
         "media": {
           "url": "{{ item.image_small | default: item.image_thumb | default: item.object_location | relative_url }}",
           "caption": {{ item.title | jsonify }},
-          "link": "{{ '/items/' | append: item.objectid | append: '.html' | relative_url }}"
+          "link": {% if item.parentid %}{{ '/items/' | append: item.parentid | append: '.html#' | append: item.objectid | relative_url | jsonify }}{% else %}{{ '/items/' | append: item.objectid | append: '.html' | relative_url | jsonify }}{% endif %}
         },
         "start_date": { 
           {% if item.date contains '-' %}{% assign dates = item.date | strip | split: '-' %}

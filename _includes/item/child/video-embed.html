@@ -1,0 +1,18 @@
+{% comment %}
+
+    Adds an iframe video embed from a YouTube or Vimeo link given in child item's object_location. 
+
+{%- endcomment -%}
+{% if child.object_location contains 'vimeo' %}
+{% assign vimeo_id = child.object_location | split: '/' | last %}
+<div class="ratio ratio-16x9">
+    <iframe title="video embed {{ child.title | escape }}" src="https://player.vimeo.com/video/{{ vimeo_id }}" allowfullscreen></iframe>
+</div>
+{%- elsif child.object_location contains 'youtu' -%}
+{% assign youtube_id = child.object_location | split: '/' | last %}
+{% if youtube_id contains 'v=' %}{% assign youtube_id = youtube_id | split: 'v=' | last | split: '&' | first %}
+{% elsif youtube_id contains '?' %}{% assign youtube_id = youtube_id | split: '?' | first %}{% endif %}
+<div class="ratio ratio-16x9">
+    <iframe title="video embed {{ child.title | escape }}" src="https://www.youtube-nocookie.com/embed/{{ youtube_id }}?rel=0&modestbranding=1" allowfullscreen></iframe>
+</div>
+{% endif %}
