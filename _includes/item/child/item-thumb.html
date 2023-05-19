@@ -5,7 +5,7 @@
 {% endcomment %}
 {% if child.object_location %}<a href="{{ child.object_location | relative_url }}" target="_blank" rel="noopener">{% endif %}
     {% if child.image_thumb or child.image_small %}
-    <img class="img-thumbnail" src="{{ child.image_small | default: child.image_thumb | relative_url }}" alt="{{ child.title | escape }}">
+    <img class="img-thumbnail" src="{{ child.image_small | default: child.image_thumb | relative_url }}" alt="{{ child.alt_text | default: child.title | escape }}">
     {% else %}
     <svg class="bi text-body" fill="currentColor" aria-hidden="true">
         {%- assign icon_template = child.display_template | default: child.format -%}
