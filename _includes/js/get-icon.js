@@ -40,6 +40,9 @@ function getIcon(objectTemplate,objectFormat,svgType) {
     if (svgType == "thumb") {
         // svg sprite as thumb
         return '<svg class="bi text-body" fill="currentColor" role="img"><title>' + iconTitle + '</title><use xlink:href="{{ "/assets/lib/cb-icons.svg" | relative_url }}#' + iconId + '"/></svg>';
+    } else if (svgType == "hidden") {
+        // svg as sprite with aria-hidden
+        return '<svg class="bi icon-sprite" aria-hidden="true"><use xlink:href="{{ "/assets/lib/cb-icons.svg" | relative_url }}#' + iconId + '"/></svg>';
     } else {
         // svg as sprite
         return '<svg class="bi icon-sprite" aria-label="' + iconTitle + '"><use xlink:href="{{ "/assets/lib/cb-icons.svg" | relative_url }}#' + iconId + '"/></svg>';
