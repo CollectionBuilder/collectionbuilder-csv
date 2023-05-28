@@ -68,7 +68,7 @@ function makeCard(obj) {
     card += '</p>';
     // media type
     if(obj.template && obj.template != "") {
-        mediaIcon = getIcon(obj.template,obj.format);
+        mediaIcon = getIcon(obj.template,obj.format,"hidden");
         card += '<p class="card-text"><small><a class="btn btn-sm btn-outline-secondary" href="{{ "/browse.html" | relative_url }}#' + encodeURIComponent(obj.template) + '">' + 
         obj.template.toUpperCase() + ' ' + mediaIcon + '</a></small></p>';
     }
