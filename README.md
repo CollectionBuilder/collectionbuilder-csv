@@ -1,4 +1,9 @@
-# CollectionBuilder-CSV
+# CollectionBuilder-CSV 
+
+# demo-site branch
+
+> This `demo-site` branch of collectionbuilder-gh contains objects and metadata used to generate a demonstration version on GitHub Pages. 
+> If starting a new project please use main/main branch instead.
 
 CollectionBuilder-CSV is a robust and flexible "stand alone" template for creating digital collection and exhibit websites using Jekyll and a metadata CSV.
 Driven by your collection metadata, the template generates engaging visualizations to browse and explore your objects.
