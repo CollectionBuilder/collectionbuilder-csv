@@ -12,3 +12,4 @@ To update demo-site from main:
 - checkout the branch: `git checkout demo-site`
 - make sure it is up-to-date: `git pull`
 - bring in master: `git merge main`
+- push to github: `git push`
