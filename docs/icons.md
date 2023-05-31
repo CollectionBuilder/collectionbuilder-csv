@@ -1,6 +1,7 @@
 # Icons
 
 The template includes [Bootstrap Icons](https://icons.getbootstrap.com/) 1.5.0 for use in pages. 
+The full icon set is in "assets/lib/icons".
 
 ## Full Bootstrap SVG Sprites
 
@@ -57,19 +58,24 @@ The theme icons are added to a SVG Sprite file "/assets/lib/cb-icons.svg" (which
 
 Configuring the theme icons is *optional*. 
 If desired, the default icons can be overridden or new icons can be added using the `icons` object in "_data/theme.yml". 
-The values look like:
+The default values look like:
 
 ```
 icons: 
   icon-image: image
-  icon-audio: file-play
+  icon-audio: soundwave
   icon-video: film
-  icon-pdf: file-richtext
-  icon-default: file-earmark
+  icon-pdf: file-pdf
+  icon-record: file-text
+  icon-panorama: image-alt
+  icon-compound-object: collection 
+  icon-multiple: postcard
+  icon-default: file-earmark # fall back icon
+  icon-back-to-top: arrow-up-square
 ```
 
 The icon key (e.g. `icon-image`) will become the id of the SVG sprite symbol. 
-The value must match a Bootstrap icon svg found in "assets/lib/icons" folder.
+The value must match a Bootstrap icon svg found in "assets/lib/icons/" folder.
 Adding new keys will add additional icons to the SVG sprite file.
 
 All theme icons configured in `icons` (plus the default ones) can be used in several ways:
@@ -77,3 +83,6 @@ All theme icons configured in `icons` (plus the default ones) can be used in sev
 - To add a full svg inline, use the Liquid variable `site.data.theme_icons` plus the icon key plus `.inline`. E.g. `{{ site.data.theme_icons.icon-image.inline }}`.
 - To add an icon svg sprite symbol, use the Liquid variable  `site.data.theme_icons` plus the icon key plus `.symbol`. E.g. `{{ site.data.theme_icons.icon-image.symbol }}`.
 - Use the external svg sprite link markup using with href to the "cb-icons.svg" file and hash for the icon key. E.g. `<svg class="bi text-body" fill="currentColor"><use xlink:href="{{ "/assets/lib/cb-icons.svg" | relative_url }}#icon-image"/></svg>`
+
+The "cb_helpers" plugin contains built in SVGs for the default icon options.
+This means if you are not customizing the icons or using feature/icon.html include, the "assets/lib/icons/" folder can be removed if desired.
