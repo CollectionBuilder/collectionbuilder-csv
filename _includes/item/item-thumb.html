@@ -5,7 +5,7 @@
 {% endcomment %}
 {% if page.object_location %}<a href="{{ page.object_location | relative_url }}" target="_blank" rel="noopener">{% endif %}
     {% if page.image_thumb or page.image_small %}
-    <img class="img-thumbnail" src="{{ page.image_small | default: page.image_thumb | relative_url }}" alt="{{ page.alt_text | default: page.title | escape }}">
+    <img class="img-thumbnail" src="{{ page.image_small | default: page.image_thumb | relative_url }}" alt="{{ page.alt_text | default: page.description | default: page.title | escape }}">
     {% else %}
     <svg class="bi text-body" fill="currentColor" aria-hidden="true">
         {%- assign icon_template = page.display_template | default: page.format -%}

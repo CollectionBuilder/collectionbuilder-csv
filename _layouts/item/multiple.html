@@ -11,7 +11,7 @@ gallery: true
     {% for child in children %}
     <div id="{{ child.objectid }}" class="mb-4">
         <a class="spotlight gallery-img" data-download="true" title="{% if page.title != child.title %}{{ child.title | escape }}{% else %}{{ page.title | escape }} [{{ forloop.index }}]{% endif %}" href="{{ child.object_location | relative_url }}">
-            <img src="{{ child.image_small | relative_url }}" alt="{{ child.alt_text | default: child.title | default: page.title | escape }}" class="img-fluid mb-2">
+            <img src="{{ child.image_small | relative_url }}" alt="{{ child.alt_text | default: child.description | default: child.title | default: page.title | escape }}" class="img-fluid mb-2">
             {% if page.title != child.title %}<div><small class="text-dark">{{ child.title }}</small></div>{% endif %}
         </a>
     </div>
