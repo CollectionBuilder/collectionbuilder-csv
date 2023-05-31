@@ -9,9 +9,13 @@ See general documentation: <https://collectionbuilder.github.io/cb-docs/docs/met
 
 ## Object Download and Display images
 
+These metadata values are optional, but provide representations of the items in site visualizations and item pages for your users:
+
 - `object_location`: a full URL to download the full quality digital object or relative path if items are contained with in the project. This file is not used for display on the website, except in the case of image galleries on item pages.
 - `image_small`: a full URL to a small image representation of the object or relative path if items are contained with in the project. If this field is filled, the image will be displayed to represent the item on Item pages or in features added to content pages.
 - `image_thumb`: a full URL to a thumb image representation of the object or relative path if items are contained with in the project. If this field is filled, the image will be displayed to represent the item on visualization pages.
+- `alt_text`: an appropriate textual description of the image_small/image_thumb representation of the item. This value will be used as the `alt` value of the image element. If no alt_text is provided, the template will fall back to using the item description or title value, which in many cases is not ideal. Using the alt_text field allows you to provide more carefully crafted alt text depending on the item contents and type.
+- `object_transcript`: a text transcript of the item's content, most commonly used with video and audio items. The transcript can be added in two ways: 1. adding the full text as the value directly in the field. This is a straight forward way to keep transcript data directly in your metadata. Keep in mind that spreadsheet software typically has limits on the number of characters per cell, so this won't work well with larger transcripts. 2. add the filename of a transcript text file (.txt, .md, or .html) contained in the "objects" folder. The value in "object_transcript" must start with "objects/", e.g. `objects/transcript1.txt`. The transcript text will be retrieved from the file and rendered as Markdown.
 - `format`: object's MIME media type. If an object does not have an image_thumb, format is used by template logic to switch between different icons.
 
 Each object will likely have an object_location value, the link where the digital file can be downloaded (or potentially accessed in a different platform). 
@@ -30,6 +34,7 @@ For example if some images are in the "objects" folder, use a relative path, e.g
 The relative path will be converted into a full URL during build.
 Do not include the `baseurl` value that you set in "_config.yml", since this will be added by the template.
 
-## Object Template
+## Display Template
 
-- `display_template`: a template type used in logic to set up different Item page features. If blank the object will default to a generic item page. Default supported options: `image`,`pdf`, `video`, `audio`,  `record`, `item`. See docs/item-pages.md for details.
+- `display_template`: a template type used in logic to set up different Item page features. If blank the object will default to a generic item page. Default supported options: `image`,`pdf`, `video`, `audio`, `panorama`, `record`, `item`, `multiple`, and `compound_object`. See docs/item-pages.md for details.
+- `parentid`: used to designate child items in the "multiple" and "compound_object" templates, a unique string matching the objectid of the parent item. See docs/compound_objects.md for details.

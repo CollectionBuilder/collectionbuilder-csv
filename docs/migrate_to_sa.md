@@ -1,6 +1,6 @@
-# Migrate Older CollectionBuilder Projects to New SA
+# Migrate Older CollectionBuilder Projects to New CSV
 
-CollectionBuilder-CSV introduces a new CSV centered approach to managing the links to collection object downloads and image representations. 
+CollectionBuilder-CSV introduces a new metadata centered approach to managing the links to collection object downloads and image representations. 
 Rather than embedding the various API options inside the project template, the collection metadata CSV has fields for "object_location", "image_small", and "image_thumb".
 Thus the work of figuring out the API or locations of digital objects is pushed into the metadata, rather than the Liquid includes in the template code. 
 
@@ -8,7 +8,7 @@ This approach enables greater flexibility to adapt to multiple content sources w
 We hope this better leverages and acknowledges librarian's skill in metadata and spreadsheet data, creating a more accessible and agile approach to customization.
 
 Migrating an existing CollectionBuilder project to the new template is relatively straightforward, involving generating the new fields from your existing metadata values.
-CB-SA provides recipes to generate the fields which can be used to create new project or migrate existing ones.
+CB-CSV provides recipes to generate the fields which can be used to create new project or migrate existing ones.
 Other configuration options are backwards compatible (_config.yml, _data/theme.yml, _data/config-metadata.csv, etc), but can also be updated to simplify or access new options.
 
 ## Migrating Configurations
