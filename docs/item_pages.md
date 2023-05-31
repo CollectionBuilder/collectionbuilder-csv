@@ -13,6 +13,7 @@ This page object is passed to the layout matching the `display_template` value s
 
 The `display_template` layouts provide templates for presenting different item types.
 The files are found in "_layouts/item/".
+Look for comments in each layout's front matter for information.
 
 Each display_template layout is typically constructed of modular item page components (found in "_includes/item/") and arranged using Bootstrap.
 This simplifies customization and creation of different item pages depending on collection needs.
@@ -30,28 +31,24 @@ Default supported options include: `image`,`pdf`, `video`, `audio`, `panorama`, 
 - `multiple`: a record for a object that includes multiple images (such as a postcard) that are listed separately in the metadata. Multiples use their own set of conventions, see "docs/compound_objects.md" for details.
 
 Each of these layouts in turn is generally given `layout: item-page-base`, so that the custom features of the display templates will share the same standard page layout.
-If you want to change the basic structure of all items pages (breadcrumbs and title at top, citation and rights at button), edit the "_layouts/item/item-page-base". 
-If you create a new custom template type you can use `layout: item-page-base` to inherit the styles, or you can skip to `layout: default` to have a completely custom page.
+If you want to change the basic structure of all items pages (breadcrumbs and title at top, citation and rights at button), edit the "_layouts/item/item-page-base.html" or the relevant item includes. 
+
+To create a new custom template, create a ".html" file in the "_layouts/item/" folder. 
+Add front matter to the top of the file (i.e. `---` front matter lines `---`).
+You can use `layout: item-page-base` to inherit the default styles, or you can skip to `layout: page` or `layout: default` to have a completely custom page.
 
 ## Item Page Components
 
 Components intended for use in Item page layouts can be found in "_includes/item".
 They can be included in the layouts following the pattern `{% include item/component-name.html %}`.
+Look for information about each include in the comments at the top of the file.
 
-The components use Liquid to pull metadata into the content elements. 
+The components use Liquid to pull item metadata into the content elements. 
 Since the metadata is provided with the page object, fields can be accessed following the pattern `{{ page.field_name }}`.
 
-Below are the default item includes:
+Compound object display_template types use a specialized subset of includes in "_includes/item/child", which make use of the pattern {{ child.field_name }} to pull child item metadata rows, in to the parent Item page.
 
-### audio-player
-
-Uses `<audio>` element to embed audio file from object_location as src.
-Use this option if you are directly exposing audio files on the web, such as on a static server.
-
-### breadcrumbs
-
-Adds Bootstrap styled breadcrumbs to page.
-By default the crumbs are: Home (index.html) / Items (browse.html) / current page title (from the metadata, truncated to 10 words max).
+Below are a few notes on special item components:
 
 ### browse-buttons
 
@@ -68,25 +65,11 @@ The item order follows the order in the metadata CSV, so pre-sort the CSV to the
 
 Requires "cb_page_gen" plugin, which provides values for `page.previous_item` and `page.next_item`.
 
-### citation-box
-
-Add a "Preferred Citation" automatically generated using the item title (metadata title), collection (site.title), organization (site.organization-name), and a link to the item page.
-The include can be edited to change the format or fields as necessary.
-
-### download-buttons
-
-Add download button with text based on format field.
-Plus add hash link to Timeline if there is a date, and hash link to Map if there is latitude and longitude.
-
 ### image-gallery
 
 For image items, a zoomable, full screen gallery view is added using [Spotlight gallery](https://github.com/nextapps-de/spotlight).
 Ensure dependencies are added by including `gallery: true` in the layout front matter.
 See "docs/gallery.md" for more details.
-
-### item-thumb
-
-Add a thumbnail image or icon (based on display_template or format) for an item, with a `object_location` link (if available).
 
 ### metadata 
 
@@ -99,29 +82,6 @@ Fields with "true" in the "browse_link" column in config-metadata will generate 
 Values in "browse_link" fields will be split on semicolon `;` as multi-valued fields before adding links.
 These often mirror the "btn" links on the Browse config-browse. 
 Keep in mind that for the browse links to be useful, the field must also be available to filter on the Browse page--so the field should also appear in "config-browse.csv" (displayed, btn, or hidden). 
-
-### rights-box
-
-A "Rights" box is automatically generated if either "rights" or "rightsstatement" field is in the metadata.
-The layout assumes that "rightsstatement" is a link only, e.g. most likely from rightsstatements.org or Creative Commons, a value such as "http://rightsstatements.org/vocab/NoC-US/1.0/".
-If your collection uses different field names for these values, either modify the field names in the metadata CSV, or edit the Rights box in the item layout. 
-
-### video-embed
-
-Adds an iframe embed for YouTube or Vimeo videos given a link in `object_location`.
-For items without a YouTube or Vimeo link, falls back to an thumb/icon and link.
-
-For items that are YouTube videos, please fill in the object_location field with the YouTube share link or watch link (e.g. `https://youtu.be/dbKNr3wuiuQ` or `https://www.youtube.com/watch?v=dbKNr3wuiuQ`).
-In most cases you will want to ensure the youtubeid is the end of URL (e.g. `dbKNr3wuiuQ`, and does *not* end with other query strings such as `?t=51` or `&feature=youtu.be`). 
-The template will parse the `object_location` link to find the youtube id and set up a iframe embed using the modest branding and privacy options. 
-
-For items that are Vimeo videos, please fill in the object_location field with the full Vimeo link, e.g. `https://vimeo.com/330826859`.
-The template will parse the `object_location` link to find the vimeo id and set up a iframe embed using the modest branding and privacy options. 
-
-### video-player
-
-Uses `<video>` element to embed a video file from `object_location` as src.
-Use this option if you are directly exposing video files on the web, such as on a static server.
 
 ## Item Meta Markup
 
