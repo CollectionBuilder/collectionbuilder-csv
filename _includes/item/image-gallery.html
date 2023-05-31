@@ -5,6 +5,6 @@
 
 {%- endcomment -%}
 <a class="spotlight gallery-img" data-download="true" title="{{ page.title | escape }}" href="{{ page.object_location | relative_url }}">
-    <img src="{{ page.image_small | relative_url }}" alt="{{ page.alt_text | default: page.description | default: page.title | escape }}" class="img-fluid">
+    <img src="{{ page.image_small | relative_url }}" alt="{{ page.image_alt_text | default: page.description | default: page.title | escape }}" class="img-fluid">
     <div><small class="text-dark">Click to view full screen</small></div>
 </a>
