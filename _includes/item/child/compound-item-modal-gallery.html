@@ -18,7 +18,7 @@
                     
                     <div class="mb-2">
                         {% if child.image_thumb or child.image_small %}
-                        <img class="img-thumbnail compound-thumb" src="{{ child.image_thumb | default: child.image_small | relative_url }}" alt="{{ child.title | escape }}">
+                        <img class="img-thumbnail compound-thumb" src="{{ child.image_thumb | default: child.image_small | relative_url }}" alt="{{ child.image_alt_text | default: child.description | default: child.title | escape }}">
                         {% else %}
                         <svg class="bi text-body compound-thumb" fill="currentColor" aria-hidden="true">
                             {%- assign icon_template = child.display_template | default: item.format -%}

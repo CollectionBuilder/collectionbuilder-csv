@@ -21,7 +21,7 @@
         <div class="p-2 text-center text-white bg-dark bg-opacity-75">
             {% if site.organization-logo-nav %}
             <a class="d-none d-md-block" href="{{ site.organization-link }}" target="_blank" rel="noopener">
-                <img id="home-banner-logo" src="{{ site.organization-logo-nav | relative_url }}" alt="{{ site.organization-name }} home" >
+                <img id="home-banner-logo" src="{{ site.organization-logo-nav | relative_url }}" alt="{{ site.organization-name | escape }} home" >
             </a>{% endif %}
             <h1 class="display-4">{{ site.title }}</h1>
             {% if site.tagline %}<p class="mb-0">{{ site.tagline }}</p>{% endif %}
@@ -42,7 +42,7 @@
         {% if site.organization-logo-banner %}
         <div class="col-md-3 d-none d-lg-block text-end">
             <a class="btn btn-outline-light" href="{{ site.organization-link }}" target="_blank" rel="noopener">
-                <img class="img-fluid" src="{{ site.organization-logo-banner | relative_url }}" title="{{ site.organization-name }}" alt="{{ site.organization-name }} home" >
+                <img class="img-fluid" src="{{ site.organization-logo-banner | relative_url }}" title="{{ site.organization-name }}" alt="{{ site.organization-name | escape }} home" >
             </a>
         </div>
         {% endif %}

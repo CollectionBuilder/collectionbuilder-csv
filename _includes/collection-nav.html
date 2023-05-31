@@ -6,7 +6,7 @@
 
         {% if site.organization-logo-nav %}<span class="d-lg-none text-end">
             <a href="{{ site.organization-link }}" target="_blank" rel="noopener">
-                <img class="img-fluid" id="mobile-nav-image" src="{{ site.organization-logo-nav | relative_url }}" title="{{ site.organization-name }}" alt="{{ site.organization-name }} home" >
+                <img class="img-fluid" id="mobile-nav-image" src="{{ site.organization-logo-nav | relative_url }}" title="{{ site.organization-name }}" alt="{{ site.organization-name | escape }} home" >
             </a>
         </span>{% endif %}
         
