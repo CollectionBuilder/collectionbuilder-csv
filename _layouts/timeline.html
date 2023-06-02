@@ -4,10 +4,10 @@ layout: page
 custom-foot: js/timeline-js.html
 ---
 {%- assign field = site.data.theme.timeline-field | default: "date" -%}
-{% if site.data.theme.timeline-child-objects == false %}
-{%- assign items = site.data[site.metadata] | where_exp: 'item','item.objectid and item.parentid == nil' -%}
-{% else %}
+{% if site.data.theme.timeline-child-objects == true %}
 {%- assign items = site.data[site.metadata] | where_exp: 'item','item.objectid' -%}
+{% else %}
+{%- assign items = site.data[site.metadata] | where_exp: 'item','item.objectid and item.parentid == nil' -%}
 {% endif %}
 {%- assign items = items | where_exp: 'item','item[field]' -%}
 {%- assign raw-dates = items | map: field | compact | uniq -%}
