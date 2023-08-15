@@ -1,7 +1,11 @@
 {% comment %}
 
-    Adds button links for child items, if item has date to Timeline, if item has lat/long to Map, if item has object_location to download object.
-    Styled as a Bootstrap btn-group.
+    Adds child modal button links, styled as a Bootstrap btn-group. 
+    Features: 
+    - View Transcript -- if the item has the field "object_transcript", this button is added along with a Bootstrap collapse containing the transcript content. If the value of "object_transcript" starts with objects/ it will look for the matching transcript file in the objects fold, otherwise it will use the value directly. Both will be rendered in Markdown. 
+    - View on Timeline -- if the item has a "date" value, links to Timeline page.
+    - View on Map -- if item has "latitude" and "longitude" value, links to location on map.
+    - Download -- if the item has "object_location" value, adds a download button along with the item format, or if the value is a YouTube or Vimeo link adds a "View on" link.  
 
 {%- endcomment -%}
 <div class="btn-group my-2" role="group" aria-label="Item options">
