@@ -2,7 +2,7 @@
 {%- assign types = "image;audio;video;pdf;panorama;record;compound_object;multiple" | split: ";" -%}
 <div class="card mb-3" >
   <div class="card-body">
-    <h5 class="card-title">Objects</h5>
+    <h2 class="card-title h5">Objects</h2>
     <p class="card-text">
       {% for t in types %}
       {%- assign count = templates | where_exp: 'item','item contains t' | size -%}
