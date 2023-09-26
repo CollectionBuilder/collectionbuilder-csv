@@ -1,0 +1,67 @@
+{% comment %}
+
+    Mini Leaflet Map item feature.
+    This include adds a small leaflet map.
+    
+    E.G> --> {% include feature/mini-map.html latitude="46.725562" longitude="-117.009633" %}
+
+    Options: 
+    - "objectid" = feature a specific item from your metadata that has lat long. Using this option will set the map center and add a single marker to the map.
+    - "latitude" = center of map, required if not using objectid
+    - "longitude" = center of map, required if not using objectid 
+    - "height" = height of the mini map in px (default 400px)
+    - "map-zoom" = provide a zoom level, default 10
+    - "map-link" = true/false, add a button link to the collection's default full map page (default false)
+    - "basemap" = set basemap option, Esri_WorldStreetMap, Esri_NatGeoWorldMap, Esri_WorldImagery. default Esri_WorldImagery.
+
+{% endcomment %}
+{% capture map_id %}mini-map_{{ include.latitude | slugify }}{% endcapture %}
+{% assign map-item = site.data[site.metadata] | where: "objectid", include.objectid | first %}
+<style>
+#{{ map_id }} { height: {{ include.height | default: '400px' }}; z-index: 98; }
+</style>
+<div id="{{ map_id }}"></div>
+{% if include.map-link == true %}
+<a href="{{ '/map.html' | relative_url }}?location={{ map-item.latitude | default: include.latitude }},{{ map-item.longitude | default: include.longitude }}{%if include.objectid %}&marker={{ include.objectid }}{% endif %}" class="btn btn-outline-primary my-3">View on Full Map</a>{% endif %}
+<!-- load leaflet dependencies -->
+<link rel="stylesheet" href="{{ '/assets/lib/leaflet/leaflet.css' | relative_url }}">
+<link rel="stylesheet" href="{{ '/assets/lib/leaflet/leaflet.fullscreen.css' | relative_url }}">
+<script src="{{ '/assets/lib/leaflet/leaflet.js' | relative_url }}"></script>
+<script src="{{ '/assets/lib/leaflet/Leaflet.fullscreen.min.js' | relative_url }}"></script>
+
+<script>
+    // initial start point
+    var mapCenter = [{{ map-item.latitude | default: include.latitude }}, {{ map-item.longitude | default: include.longitude }}];
+    var mapZoom = {{ include.map-zoom | default: 10 }};
+    /* init map, set center and zoom */
+    var map = L.map('{{ map_id }}').setView(mapCenter, mapZoom);
+
+    /* add map layer options */
+    var Esri_WorldStreetMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012'
+    });
+    var Esri_NatGeoWorldMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Tiles &copy; Esri &mdash; National Geographic, Esri, DeLorme, NAVTEQ, UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC',
+        maxZoom: 16
+    });
+    var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+    });
+    /* add base map switcher */
+    var baseMaps = {
+        "Esri World StreetMap": Esri_WorldStreetMap,
+        "Esri National Geo": Esri_NatGeoWorldMap,
+        "Esri Imagery": Esri_WorldImagery
+    };
+    L.control.layers(baseMaps).addTo(map);
+    /* load base map */
+    {{ include.basemap | default: 'Esri_WorldImagery' }}.addTo(map);
+    /* add fullscreen control */ 
+    map.addControl(new L.Control.Fullscreen());
+
+    {% if include.objectid %}
+    /* add marker */ 
+    L.marker(mapCenter).addTo(map)
+    .bindPopup('{{ map-item.title | escape }}');{% endif %}
+
+</script>
