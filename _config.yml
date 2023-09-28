@@ -60,7 +60,7 @@ organization-logo-nav: https://cdil.lib.uidaho.edu/assets/img/logo.png
 #
 # leave these blank or comment out to NOT include google code
 # if present, used to add analytics during "production" build only
-# google-analytics-id: "UA-74844011-1"
+# google-analytics-id: "G-XXXXXXXXX"
 # google-cse-id: "002151703305773322890:1pu3smhw1t8"
 
 ##########
@@ -77,7 +77,7 @@ noindex: true
 # (this is done automatically by gh-pages build)
 #
 # ignore stuff
-exclude: [docs/, Rakefile, README.md, LICENSE]
+exclude: [docs/, Rakefile, README.md, LICENSE, CITATION.cff, CODE_OF_CONDUCT.md, CONTRIBUTING.md, SECURITY.md]
 # compress CSS output
 sass:
   style: compressed

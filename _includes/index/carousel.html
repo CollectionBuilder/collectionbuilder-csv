@@ -34,9 +34,9 @@
     #imageCarousel .carousel-item { height: {{ include.height | remove: 'px' | strip | default: '300' }}px; }
 </style>
 <div class="card mb-3">
-    {% if include.header %}<h5 class="card-header">{{ include.header }}</h5>{% endif %}
+    {% if include.header %}<h2 class="card-header h5">{{ include.header }}</h2>{% endif %}
     <div class="card-body">
-        {% if include.title %}<h5 class="card-title">{{ include.title }}</h5>{% endif %}
+        {% if include.title %}<h2 class="card-title h5">{{ include.title }}</h2>{% endif %}
         
         <div id="imageCarousel" class="carousel slide bg-dark rounded mb-3" data-bs-ride="carousel">
             <div id="carouselIndicators" class="carousel-indicators">
@@ -88,7 +88,7 @@
         slide = `<div class="carousel-item py-2${ i == 0 ? ' active' : '' }">
             <img class="d-block h-100 mx-auto lazyload" alt="${carouselItems[i][4]}" data-src="${itemImg}">
             <div class="carousel-caption">
-                <h5 class="carousel-item-title text-white py-2">${carouselItems[i][0]}</h5>
+                <h3 class="carousel-item-title text-white py-2 h6">${carouselItems[i][0]}</h3>
                 <a target="_blank" href="${itemLink}" class="btn btn-sm btn-{{ btn-color }}">{{ btn-text }}</a>
             </div></div>`;
         slides += slide;

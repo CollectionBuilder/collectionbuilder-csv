@@ -111,7 +111,7 @@ task :generate_derivatives, [:thumbs_size, :small_size, :density, :missing, :com
 
   # CSV output
   list_name = File.join(objects_dir, 'object_list.csv')
-  field_names = 'object_location,image_small,image_thumb'.split(',')
+  field_names = 'filename,object_location,image_small,image_thumb'.split(',')
   CSV.open(list_name, 'w') do |csv|
     csv << field_names
 
@@ -127,7 +127,7 @@ task :generate_derivatives, [:thumbs_size, :small_size, :density, :missing, :com
       file_type = EXTNAME_TYPE_MAP[extname]
       unless file_type
         puts "Skipping file with unsupported extension: #{filename}"
-        csv << ["/#{filename}", nil, nil]
+        csv << ["#{File.basename(filename)}", "/#{filename}", nil, nil]
         next
       end
 
@@ -155,7 +155,7 @@ task :generate_derivatives, [:thumbs_size, :small_size, :density, :missing, :com
       else
         puts "Skipping: #{small_filename} already exists"
       end
-      csv << ["/#{filename}", "/#{small_filename}", "/#{thumb_filename}"]
+      csv << ["#{File.basename(filename)}", "/#{filename}", "/#{small_filename}", "/#{thumb_filename}"]
     end
   end
   puts "\e[32mSee '#{list_name}' for list of objects and derivatives created.\e[0m"

@@ -30,18 +30,20 @@
 {% endcomment %}
 {% assign termsField = include.field | default: "subject" %}
 {% assign termsMax = include.max | default: 5 %}
-{% if site.data.theme.browse-child-objects == false %}
-{%- assign terms = site.data[site.metadata] | where_exp: 'item','item.parentid == nil' | map: termsField | join: ";" -%}{% else %}
-{%- assign terms = site.data[site.metadata] | where_exp: 'item','item.objectid' | map: termsField | join: ";" -%}{% endif %}
+{% if site.data.theme.browse-child-objects == true %}
+{%- assign terms = site.data[site.metadata] | where_exp: 'item','item.objectid' | map: termsField | join: ";" -%}
+{% else %}
+{%- assign terms = site.data[site.metadata] | where_exp: 'item','item.parentid == nil' | map: termsField | join: ";" -%}
+{%- endif -%}
 {%- assign uniqTerms = terms | downcase | split: ";" | array_count_uniq -%}
 {% capture topTerms %}
 {% for i in uniqTerms limit: termsMax %}{{ i[0] }};{% endfor %}{% endcapture %}
 {% assign topTerms = topTerms | split: ";" %}
 {%- endif -%}
 <div class="card mb-3">
-    {% if include.header %}<h5 class="card-header">{{ include.header }}</h5>{% endif %}
+    {% if include.header %}<h2 class="card-header h5">{{ include.header }}</h2>{% endif %}
     <div class="card-body">
-        {% if include.title %}<h5 class="card-title">{{ include.title }}</h5>{% endif %}
+        {% if include.title %}<h2 class="card-title h5">{{ include.title }}</h2>{% endif %}
         <p class="card-text">
             {% for s in topTerms %}
             <a class="btn btn-sm btn-{{ include.btn-color | default: 'primary' }} m-1" href="{{ s | strip | url_param_escape | prepend: '/browse.html#' | relative_url }}">{{ s | strip }}</a>{% endfor %}

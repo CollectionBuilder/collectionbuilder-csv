@@ -6,7 +6,7 @@
 # only generated during production environment build
 #####
 gateway-baseurl: http://gateway.institution.org/oai/
-admin-email: libstatic.uidaho@gmail.com
+admin-email: collectionbuilder.team@gmail.com
 permalink: /oai.xml
 ---
 {%- if jekyll.environment == "production" -%}
