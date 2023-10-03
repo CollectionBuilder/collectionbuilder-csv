@@ -57,14 +57,21 @@ module CollectionBuilderPageGenerator
         filter = data_config['filter'] || filter_default
         filter_condition = data_config['filter_condition'] || filter_condition_default
 
-        # check if data file exists, if not provide error message and skip
+        # check if data value uses .csv extension, if so provide error message and skip. This avoids common CB error.
+        if data_file.split('.')[1] == "csv"
+          puts color_text("Error cb_page_gen: metadata value '#{data_file}' includes '.csv' extension. Please remove the extension from _config.yml 'metadata' or page_gen 'data' value. Pages are NOT being generated from '#{data_file}'!", :red)
+          next
+        end
+        # check if data file exists, if not provide error message and skip. This supports nested key yml or json data sources
         if !site.data.key? data_file.split('.')[0]
-          puts color_text("Error cb_page_gen: Data value '#{data_file}' does not match any site data. Please check _config.yml 'metadata' or page_gen 'data' value. Common issues are spelling error or including an extension such as .csv (no extension should be used!). Item pages are NOT being generated from '#{data_file}'!", :red)
+          puts color_text("Error cb_page_gen: Data value '#{data_file}' does not match any site data. Please check _config.yml 'metadata' or page_gen 'data' value. Common issues are spelling errors. Pages are NOT being generated from '#{data_file}'!", :red)
           next
         end
 
         # Get the records to generate pages from
-        # this splits on . to support a nested key in yml or json
+        # note: this splits on . to support a nested key in yml or json for page gen.
+        # however, CB template and other plugins do not support nested yml or json for metadata items. 
+        # items described in unnested yml or json will work for both page gen and CB template pages.
         records = nil
         data_file.split('.').each do |level|
           if records.nil?
