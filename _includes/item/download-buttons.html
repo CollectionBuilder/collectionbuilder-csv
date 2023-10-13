@@ -21,9 +21,10 @@
 {% if page.object_transcript %}
 <div class="collapse mt-3" id="collapseTranscript">
     <div class="card card-body text-start">
-        {% assign transcript_type = page.object_transcript | slice: 0,8 %}
-        {% if transcript_type == 'objects/' %}
-        {% assign transcript = site.pages | where: 'path',page.object_transcript | first %}
+        {% assign transcript_type = page.object_transcript | slice: 0,1 %}
+        {% if transcript_type == '/' %}
+        {% assign transcript_location = page.object_transcript | remove_first: '/' %}
+        {% assign transcript = site.pages | where: 'path', transcript_location | first %}
         {{ transcript.content | markdownify }}
         {% else %}
         {{ page.object_transcript | markdownify }}
