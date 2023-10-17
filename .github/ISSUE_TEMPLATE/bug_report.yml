@@ -11,10 +11,10 @@ body:
       required: false
   - type: textarea
     attributes:
-      label: Reproduction / Steps To Reproduce
+      label: Steps To Reproduce
       description: Link to a repository with steps to reproduce the behavior.
       placeholder: |
-        As you can see in this code example/repostitory
+        As you can see in this code example/repository
         1. Using this component...
         2. With these properties...
         3. Click '...'
@@ -24,7 +24,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Bug Reports with a repository with a full reproduction can be anwswered far quicker, so please consider including as much information as possible to let us help you quicker!
+        Bug Reports with a link to a repository or specific example can be answered far quicker, so please consider including as much information as possible!
   - type: textarea
     attributes:
       label: Anything else?
