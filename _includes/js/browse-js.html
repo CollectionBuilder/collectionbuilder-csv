@@ -59,7 +59,7 @@ function makeCard(obj) {
     var btns = obj[{{ f.field | jsonify }}].split(";");
     for (var i = 0, len = btns.length; i < len; i++) {
         if(btns[i] != "") {
-        card += '<a class="btn btn-sm btn-secondary m-1 text-wrap" href="{{ '/browse.html' | relative_url }}#' + encodeURIComponent(btns[i].trim()) + '">' + btns[i].trim() + '</a>';
+        card += '<a class="btn btn-sm btn-secondary m-1 text-wrap" href="{{ page.url | relative_url }}#' + encodeURIComponent(btns[i].trim()) + '">' + btns[i].trim() + '</a>';
         }
     }
     {% else %}
@@ -72,7 +72,7 @@ function makeCard(obj) {
     // media type
     if(obj.template && obj.template != "") {
         mediaIcon = getIcon(obj.template,obj.format,"hidden");
-        card += '<p class="card-text"><small><a class="btn btn-sm btn-outline-secondary" href="{{ "/browse.html" | relative_url }}#' + encodeURIComponent(obj.template) + '">' + 
+        card += '<p class="card-text"><small><a class="btn btn-sm btn-outline-secondary" href="{{ page.url | relative_url }}#' + encodeURIComponent(obj.template) + '">' + 
         obj.template.toUpperCase() + ' ' + mediaIcon + '</a></small></p>';
     }
     // view button
