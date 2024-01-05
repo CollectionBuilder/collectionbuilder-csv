@@ -1,0 +1,33 @@
+---
+layout: page
+---
+
+{{ content }}
+
+
+{%- if page.cloud-fields == "site.data.theme.subjects-fields" -%}
+  {% assign fields = site.data.theme.subjects-fields %}
+  {% assign min = site.data.theme.subjects-min | default: 1 %}
+  {% assign stopwords = site.data.theme.subjects-stopwords %}
+{%- elsif page.cloud-fields == "site.data.theme.locations-fields" -%}
+  {% assign fields = site.data.theme.locations-fields %}
+  {% assign min = site.data.theme.locations-min | default: 1 %}
+  {% assign stopwords = site.data.theme.locations-stopwords %}
+{%- else -%}
+  {% assign fields = page.cloud-fields | default: "subjects" %}
+  {% assign min = page.cloud-min | default: 1 %}
+  {% assign stopwords = page.cloud-stopwords %}
+{%- endif -%}
+
+{% assign list_id = "list-div-" | append: fields | slugify %}
+<div class="dropdown">
+  <button class="btn btn-secondary mt-1 dropdown-toggle" type="button" id="browseSortButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Sort by <span id="sortFilter">Count</span>
+  </button>
+  <div class="dropdown-menu browse-sort-menu" aria-labelledby="browseSortButton">
+      <button class="dropdown-item list-sort-item active" onclick="changeSortMethod('count')">Count</button>
+      <button class="dropdown-item list-sort-item" onclick="changeSortMethod('term')">Term</button>
+  </div>
+</div>
+<div id="{{ list_id }}" class="text-center my-4 bg-{{ page.background | default: 'light' }} border rounded p-2"></div>
+{% include js/list-js.html id=list_id fields=fields min=min stopwords=stopwords %}
