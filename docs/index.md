@@ -21,6 +21,7 @@ color_theme.md
 
 item_pages.md
 cloud.md
+list.md
 data.md
 maps.md
 navbar.md
