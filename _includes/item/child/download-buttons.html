@@ -1,14 +1,34 @@
 {% comment %}
 
-    Adds button links for child items, if item has date to Timeline, if item has lat/long to Map, if item has object_location to download object.
-    Styled as a Bootstrap btn-group.
+    Adds child modal button links, styled as a Bootstrap btn-group. 
+    Features: 
+    - View Transcript -- if the item has the field "object_transcript", this button is added along with a Bootstrap collapse containing the transcript content. If the value of "object_transcript" starts with objects/ it will look for the matching transcript file in the objects fold, otherwise it will use the value directly. Both will be rendered in Markdown. 
+    - View on Timeline -- if the item has a "date" value, links to Timeline page.
+    - View on Map -- if item has "latitude" and "longitude" value, links to location on map.
+    - Download -- if the item has "object_location" value, adds a download button along with the item format, or if the value is a YouTube or Vimeo link adds a "View on" link.  
 
 {%- endcomment -%}
-<div class="btn-group my-2" role="group" aria-label="Button group">
+<div class="btn-group my-2" role="group" aria-label="Item options">
+    {% if child.object_transcript %}<button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTranscript{{ child.objectid }}" aria-expanded="false" aria-controls="collapseExample">View Transcript</button>{% endif %}
     {% if child.date %}{%- capture year -%}{% if child.date contains "-" %}{{ child.date | split: "-" | first }}{% elsif child.date contains "/" %}{{ child.date | split: "/" | last }}{% else %}{{ child.date }}{% endif %}{%- endcapture -%}
     <a href="{{ year | strip | prepend: '/timeline.html#y' | relative_url }}" class="btn btn-outline-primary">View on Timeline</a>{% endif %}
     {% if child.latitude and child.longitude %}
     <a href="{{ '/map.html?location=' | append: page.latitude  | append: ',' | append: page.longitude | append: '&marker=' | append: page.objectid | relative_url }}" class="btn btn-outline-primary">View on Map</a>{% endif %}
-    {% if child.display_template == 'record' & child.object_location %}<a target="_blank" rel="noopener" href="{{ child.object_location | relative_url }}" class="btn btn-outline-primary">Link to Object</a>{% else %}
-    <a target="_blank" rel="noopener" href="{{ child.object_location | relative_url }}" class="btn btn-outline-primary">Download {{ child.format | split: '/' | last | upcase }}</a>{% endif %}
+    {% if child.object_location %}<a target="_blank" rel="noopener" href="{{ child.object_location | relative_url }}" class="btn btn-outline-primary">
+        {% if child.display_template == 'video' and child.object_location contains 'vimeo' %}View on Vimeo{% elsif child.display_template == 'video' and child.object_location contains 'youtu' %}View on YouTube{% elsif child.display_template == 'record'%}Link to Object{% else %}Download {{ child.format | split: '/' | last | default: page.display_template | upcase }}{% endif %}
+    </a>{% endif %}
 </div>
+{% if child.object_transcript %}
+<div class="collapse mt-3" id="collapseTranscript{{ child.objectid }}">
+    <div class="card card-body text-start">
+        {% assign transcript_type = child.object_transcript | slice: 0,1 %}
+        {% if transcript_type == '/' %}
+        {% assign transcript_location = child.object_transcript | remove_first: '/' %}
+        {% assign transcript = site.pages | where: 'path', transcript_location | first %}
+        {{ transcript.content | markdownify }}
+        {% else %}
+        {{ child.object_transcript | markdownify }}
+        {% endif %}
+    </div>
+</div>
+{% endif %}

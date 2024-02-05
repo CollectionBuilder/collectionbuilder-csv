@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: CollectionBuilder Documentation
+    url: https://collectionbuilder.github.io/cb-docs/
+    about: Learn more about CollectionBuilder and how to use it.
+  - name: CollectionBuilder Discussions
+    url: https://github.com/orgs/CollectionBuilder/discussions
+    about: Ask questions, provide feedback, post ideas, and share with the CollectionBuilder community. This is the best place to get help!
+  - name: CollectionBuilder Community
+    url: https://collectionbuilder.github.io/community/
+    about: Join the CollectionBuilder community and contribute to the project.

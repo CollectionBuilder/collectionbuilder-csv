@@ -1,0 +1,20 @@
+{% comment %}
+
+    Embed Universal Viewer to load item from an IIIF manifest file, https://github.com/UniversalViewer/universalviewer 
+    This include assumes that Item's object_location field is a relative link or direct url to a IIIF manifest json file. e.g. https://wellcomelibrary.org/iiif/b18035723/manifest 
+    If you are using an external manifest url, you may encounter CORS policy error if the server hosting the manifest is not set up correctly--one workaround is to download the json file, add to your "objects" folder, and use a relative link, e.g. "objects/book-manifest1.json". You do not need the images, just the manifest file!
+
+{% endcomment %}
+<!-- add IIIF Universal Viewer assets from CDN -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/universalviewer@4.0.0/dist/uv.css"/>
+<script src="https://cdn.jsdelivr.net/npm/universalviewer@4.0.0/dist/umd/UV.js"></script>
+<!-- add div for viewer -->
+<div class="uv" id="uv" style="width: 100%; height: 668px;"></div>
+<script>
+    // initialize Universal Viewer
+    var uvOptions = {
+        manifest: {{ page.object_location | relative_url | jsonify }}
+        // add options here!
+    };
+    var iiif_viewer = UV.init("uv", uvOptions);
+</script>

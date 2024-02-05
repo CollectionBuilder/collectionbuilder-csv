@@ -2,7 +2,7 @@
 {%- assign types = "image;audio;video;pdf;panorama;record;compound_object;multiple" | split: ";" -%}
 <div class="card mb-3" >
   <div class="card-body">
-    <h5 class="card-title">Objects</h5>
+    <h2 class="card-title h5">Objects</h2>
     <p class="card-text">
       {% for t in types %}
       {%- assign count = templates | where_exp: 'item','item contains t' | size -%}
@@ -18,7 +18,11 @@
       {% when 'pdf' %}
       <a class="text-dark" href="{{ 'pdf' | prepend: '/browse.html#' | relative_url }}">{{ site.data.translations['includesIndexObjects']['pdfs'][site.lang] }} <svg class="bi icon-sprite text-body" fill="currentColor" aria-hidden="true"><use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#icon-pdf"/></svg></a><br>
       {% when 'record' %}
-      <a class="text-dark" href="{{ 'record' | prepend: '/browse.html#' | relative_url }}">{{ site.data.translations['includesIndexObjects']['records'][site.lang] }} <svg class="bi icon-sprite text-body" fill="currentColor" aria-hidden="true"><use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#icon-default"/></svg></a><br>
+      <a class="text-dark" href="{{ 'record' | prepend: '/browse.html#' | relative_url }}">{{ site.data.translations['includesIndexObjects']['records'][site.lang] }} <svg class="bi icon-sprite text-body" fill="currentColor" aria-hidden="true"><use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#icon-record"/></svg></a><br>
+      {% when 'compound_object' %}
+      <a class="text-dark" href="{{ 'compound%20object' | prepend: '/browse.html#' | relative_url }}">{{ site.data.translations['includesIndexObjects']['compoundObjects'][site.lang] }} <svg class="bi icon-sprite text-body" fill="currentColor" aria-hidden="true"><use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#icon-compound-object"/></svg></a><br>
+      {% when 'multiple' %}
+      <a class="text-dark" href="{{ 'multiple' | prepend: '/browse.html#' | relative_url }}">{{ site.data.translations['includesIndexObjects']['multiples'][site.lang] }} <svg class="bi icon-sprite text-body" fill="currentColor" aria-hidden="true"><use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#icon-multiple"/></svg></a><br>
       {% else %}
       <a class="text-dark" href="{{ 'file' | prepend: '/browse.html#' | relative_url }}">{{ site.data.translations['includesIndexObjects']['files'][site.lang] }} <svg class="bi icon-sprite text-body" fill="currentColor" aria-hidden="true"><use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#icon-default"/></svg></a><br>
       {%- endcase -%}

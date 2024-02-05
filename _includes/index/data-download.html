@@ -1,7 +1,7 @@
 {%- assign stubs = site.data.config-nav | map: 'stub' | join: ';' -%}
 <div class="card mb-3">
     <div class="card-body">
-        <h5 class="card-title">{{ site.data.translations['includesIndexDataDownload']['title'][site.lang] }}</h5>
+        <h2 class="card-title h5">{{ site.data.translations['includesIndexDataDownload']['title'][site.lang] }}</h2>
         <p class="card-text text-center">
             <a class="btn btn-sm btn-secondary m-2" href="{{ '/assets/data/metadata.csv' | relative_url }}" target="_blank">{{ site.data.translations['includesIndexDataDownload']['metadata'][site.lang] }} CSV</a>
             <a class="btn btn-sm btn-secondary m-2" href="{{ '/assets/data/metadata.json' | relative_url }}" target="_blank">{{ site.data.translations['includesIndexDataDownload']['metadata'][site.lang] }} JSON</a>

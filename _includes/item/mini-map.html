@@ -1,0 +1,59 @@
+{% comment %}
+
+    Adds a Leaflet map featuring a single marker based on the item's lat long.
+
+    Options:
+    - "map-marker" = true/false, add a marker using the item's lat long and title (default true)
+    - "map-height" = height of the mini map in px (default 400px)
+    - "map-zoom" = provide a zoom level, default 10
+    - "map-link" = true/false, add a button link to the collection's default full map page (default false)
+
+{% endcomment %}
+
+<style>
+#mini-map { height: {{ include.map-height | default: '400px' }}; z-index: 98; }
+</style>
+<div id="mini-map"></div>
+{% if include.map-link == true %}
+<a href="{{ '/map.html?location=' | append: page.latitude  | append: ',' | append: page.longitude | append: '&marker=' | append: page.objectid | relative_url }}" class="btn btn-outline-primary my-3">View on Full Map</a>{% endif %}
+<!-- load leaflet dependencies -->
+<link rel="stylesheet" href="{{ '/assets/lib/leaflet/leaflet.css' | relative_url }}">
+<link rel="stylesheet" href="{{ '/assets/lib/leaflet/leaflet.fullscreen.css' | relative_url }}">
+<script src="{{ '/assets/lib/leaflet/leaflet.js' | relative_url }}"></script>
+<script src="{{ '/assets/lib/leaflet/Leaflet.fullscreen.min.js' | relative_url }}"></script>
+
+<script>
+    // initial start point
+    var mapCenter = [{{ page.latitude }}, {{ page.longitude }}];
+    var mapZoom = {{ include.map-zoom | default: 10 }};
+    /* init map, set center and zoom */
+    var map = L.map('mini-map').setView(mapCenter, mapZoom);
+
+    /* add map layer options */
+    var Esri_WorldStreetMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012'
+    });
+    var Esri_NatGeoWorldMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Tiles &copy; Esri &mdash; National Geographic, Esri, DeLorme, NAVTEQ, UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC',
+        maxZoom: 16
+    });
+    var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+    });
+    /* add base map switcher */
+    var baseMaps = {
+        "Esri World StreetMap": Esri_WorldStreetMap,
+        "Esri National Geo": Esri_NatGeoWorldMap,
+        "Esri Imagery": Esri_WorldImagery
+    };
+    L.control.layers(baseMaps).addTo(map);
+    /* load base map */
+    Esri_WorldImagery.addTo(map);
+    /* add fullscreen control */ 
+    map.addControl(new L.Control.Fullscreen());
+    {% unless include.map-marker == false %}
+    /* add marker */ 
+    L.marker(mapCenter).addTo(map)
+    .bindPopup('{{ page.title | escape }}');{% endunless %}
+
+</script>

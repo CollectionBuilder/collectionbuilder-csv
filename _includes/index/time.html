@@ -1,14 +1,14 @@
-{% if site.data.theme.timeline-child-objects == false %}
-{%- assign date-items = site.data[site.metadata] | where_exp: 'item','item.parentid == nil' -%}
-{% else %}
+{% if site.data.theme.timeline-child-objects == true %}
 {%- assign date-items = site.data[site.metadata] | where_exp: 'item','item.objectid' -%}
+{% else %}
+{%- assign date-items = site.data[site.metadata] | where_exp: 'item','item.parentid == nil' -%}
 {% endif %}
 {%- assign raw-dates = date-items | map: 'date' | compact | uniq -%}
 {%- capture clean-years -%}{% for date in raw-dates %}{% if date contains "-" %}{{ date | strip | split: "-" | first }}{% elsif date contains "/" %}{{ date | strip | split: "/" | last }}{% else %}{{ date | strip }}{% endif %}{% unless forloop.last %};{% endunless %}{%- endfor -%}{%- endcapture -%}
 {%- assign date-range = clean-years | remove: " " | split: ";" | uniq | sort  -%}
 <div class="card mb-3">
   <div class="card-body">
-    <h5 class="card-title">{{ site.data.translations['includesIndexTime']['title'][site.lang] }}</h5>
+    <h2 class="card-title h5">{{ site.data.translations['includesIndexTime']['title'][site.lang] }}</h5>
     <p class="card-text h5">{{ site.data.translations['includesIndexTime']['from'][site.lang] }} {{ date-range | first }} {{ site.data.translations['includesIndexTime']['to'][site.lang] }} {{ date-range | last }}
       <br><a href="{{ '/timeline.html' | relative_url }}" class="btn btn-sm btn-outline-secondary mt-2">{{ site.data.translations['includesIndexTime']['viewTimeline'][site.lang] }}</a>
     </p>
