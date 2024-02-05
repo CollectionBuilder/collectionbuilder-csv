@@ -2,29 +2,24 @@
 
 ## Built-in clouds
 
-For simplicity, the default CB theme has two pre-configured cloud visualization pages pre-configured named "Subjects" and "Locations". 
-These can be configured using variables in the "_data/theme.yml" to generate clouds from any field(s) in your metadata (not necessarily just a "subject" or "location" field). 
+For simplicity, the default CB theme has a pre-configured cloud visualization page pre-configured named "Locations". 
+These can be configured using variables in the "_data/theme.yml" to generate clouds from any field(s) in your metadata (not necessarily just a "location" field). 
 The theme options look like:
 
 ```
-# Subject page
-subjects-fields: subject;creator # set of fields separated by ; to be featured in the cloud
-subjects-min: 1 # min size for subject cloud, too many terms = slow load time!
-subjects-stopwords: # set of subjects separated by ; that will be removed from display, e.g. boxers;boxing
-
 # Locations page
 locations-fields: location # set of fields separated by ; to be featured in the cloud
 locations-min: 1 # min size for subject cloud, too many terms = slow load time!
 locations-stopwords: # set of subjects separated by ; that will be removed from display, e.g. boxers;boxing
 ```
 
-The files "pages/subjects.md" and "pages/locations.md" pull in these values to create the default cloud pages.
+The file "pages/locations.md" pulls in these values to create the default cloud page.
 The settings also create matching data outputs in the "/assets/data/" folder.
 
-If `subjects-fields` or `locations-fields` is blank or commented out, the template will not build out the related cloud page or data, which saves build time. 
+If `locations-fields` is blank or commented out, the template will not build out the related cloud page or data, which saves build time. 
 If you are developing a particularly large collection, you can comment out these options to make rebuild much quicker. 
 
-Keep in mind these page stubs (`/subjects.html`, `/locations.html`) will also have to be present in "config-nav.csv" to show up in your navigation, and to have the data files to show up in data download options. 
+Keep in mind this page stub (`/locations.html`) will also have to be present in "config-nav.csv" to show up in your navigation, and to have the data files to show up in data download options. 
 
 ## Cloud Layout and Front matter
 
