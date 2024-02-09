@@ -8,11 +8,11 @@
 # URL VARIABLES
 #
 # site domain, full URL to the production location of your collection
-url: 
+url:  https://Stadt-Geschichte-Basel.github.io
 # path to location on the domain if necessary e.g. /digital/hjccc
-baseurl: 
+baseurl: /forschung.stadtgeschichtebasel.ch
 # location of code, the full url to your github repository
-source-code: https://github.com/CollectionBuilder/collectionbuilder-csv
+source-code: https://github.com/Stadt-Geschichte-Basel/forschung.stadtgeschichtebasel.ch
 
 ##########
 # SITE SETTINGS
