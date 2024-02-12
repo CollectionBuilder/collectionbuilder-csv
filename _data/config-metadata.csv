@@ -1,14 +1,21 @@
 field,display_name,browse_link,external_link,dc_map,schema_map
-title,Title,,,DCTERMS.title,headline
-creator,Creator,,,DCTERMS.creator,creator
-date,Date Created,,,DCTERMS.date,dateCreated
-description,Description,,,DCTERMS.description,description
-subject,Subjects,true,,DCTERMS.subject,keywords
-location,Location,,,,contentLocation
-latitude,Latitude,,,,
-longitude,Longitude,,,,
-source,Source,,,,
-identifier,Source Identifier,,,,
-type,Type,,,DCTERMS.type,
-format,Format,,,,encodingFormat
-rightsstatement,,,,DCTERMS.rights,license
+objectid,Identifikator,,,DCTERMS.identifier,identifier
+title,Titel,,,DCTERMS.title,headline
+subject,Thema,true,,DCTERMS.subject,keywords
+description,Beschreibung,,,DCTERMS.description,description
+creator,Ersteller:in,,,DCTERMS.creator,creator
+publisher,Rechteinhaber:in,true,,DCTERMS.publisher,publisher
+date,Datum,,,DCTERMS.date,dateCreated
+era,Epoche,true,,DCTERMS.temporal,
+type,Typ,,,DCTERMS.type,
+format,Format,,,DCTERMS.format,encodingFormat
+extent,Umfang,,,DCTERMS.extent,
+source,Quelle,,,DCTERMS.source,
+language,Sprache,true,,DCTERMS.language,inLanguage
+relation,Zugeordnete Ressource,,,,
+rights,Rechte,,,DCTERMS.rights,usageInfo
+license,Lizenz,,true,DCTERMS.license,license
+iiif,IIIF-Manifest,,,,
+hasVersion,Version,,,DCTERMS.hasVersion,version
+isPartOf,Teil von,true,,DCTERMS.isPartOf,isPartOf
+isReferencedBy,Referenziert durch,,,DCTERMS.isReferencedBy,

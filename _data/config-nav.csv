@@ -1,9 +1,9 @@
 display_name,stub,dropdown_parent
 Home,/,
-Browse,/browse.html,
-Subjects,/subjects.html,
-Locations,/locations.html,
-Map,/map.html,
-Timeline,/timeline.html,
-Data,/data.html,
-About,/about.html,
+Sammlung,/browse.html,
+Themen,/subjects.html,
+Zeitachse,/timeline.html
+Daten,
+Sammlung,/data.html,Daten
+Zenodo,https://zenodo.org/communities/stadt-geschichte-basel/,Daten
+Bibliografie,https://www.zotero.org/groups/5004193/stadt.geschichte.basel/,Daten
