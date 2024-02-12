@@ -39,3 +39,7 @@ Everything in "_site" should be copied over to your web server into the correct 
 During production build, Jekyll will generate `relative_url` and `absolute_url` using the `url` and `baseurl` values set in _config.yml. 
 Keep in mind that because CollectionBuilder makes use of `absolute_url` for many assets and links, the site built using `rake deploy` will only work correctly if it is copied to the correct location on your web server.
 It will not work in the "_site" folder, since the links point to locations on your server.
+
+## Benchmarking Build Time
+
+To benchmark the build time, you can use the `rake benchmark_build` command. This is useful for comparing the build time of the site in different environments, or after making changes to the site that may affect build time.
