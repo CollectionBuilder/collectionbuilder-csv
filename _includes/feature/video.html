@@ -27,7 +27,7 @@
     {% capture raw_src %}{{ include.objectid }}{% endcapture %}
 {%- else -%}
     {%- assign item = site.data[site.metadata] | where: "objectid", include.objectid | first -%}
-    {% capture video_caption %}{% if include.caption %}{{ include.caption }}{% else %}<a href="{{ '/items/' | append: item.objectid | append: '.html' | relative_url}}">{{ item.title }}</a>{% endif %}{% endcapture %}
+    {% capture video_caption %}{% if include.caption %}{{ include.caption }}{% else %}<a href="{{ '/items/' | relative_url }}{% if item.parentid %}{{ item.parentid }}.html#{{ item.objectid }}{% else %}{{ item.objectid }}.html{% endif %}">{{ item.title }}</a>{% endif %}{% endcapture %}
     {% capture raw_src %}{{ item.object_location }}{% endcapture %}
 {%- endif -%}
 {%- if raw_src contains 'vimeo' -%}
