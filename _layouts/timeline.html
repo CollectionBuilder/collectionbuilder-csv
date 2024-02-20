@@ -49,7 +49,7 @@ custom-foot: js/timeline-js.html
                     {%- assign inYear = items | where_exp: 'item', 'item[field] contains year' -%}
                     {% for item in inYear %}
                     <div class="col-lg-4 col-md-6">
-                        <a href="{% if item.parentid == nil %}{{ '/items/' | append: item.objectid | append: '.html' | relative_url }}{% elsif item.parentid %}{{ '/items/' | append: item.parentid | append: '.html' | relative_url }}#{{item.objectid }}{% endif %}" >
+                        <a href="{{ '/items/' | relative_url }}{% if item.parentid %}{{ item.parentid }}.html#{{ item.objectid }}{% else %}{{ item.objectid }}.html{% endif %}" >
                             {% if item.image_thumb %}
                             <img class="lazyload img-thumbnail timeline-thumb" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'%3E%3C/svg%3E" data-src="{{ item.image_thumb | relative_url }}" alt="{{ item.image_alt_text | default: item.description | default: item.title | escape }}" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ item.title | escape }}">
                             {% else %}

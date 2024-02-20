@@ -21,17 +21,19 @@ Please ensure you have the requirements installed and available on the commandli
 Requirements:
 
 - **ImageMagick**, [download](https://imagemagick.org/script/download.php)
-- **Ghostscript**, [download AGPL version](https://www.ghostscript.com/download/gsdnld.html)
+- **Ghostscript**, [download AGPL version](https://www.ghostscript.com/download/gsdnld.html) (required for processing PDF items)
 
 The following configuration options are available:
 
 | option | description | default value |
 | --- | --- | --- |
-| thumbs_size | the dimensions of the generated thumbnail images | 300x300 |
-| small_size | the dimensions of the generated small images | 800x800 |
+| thumbs_size | the max dimensions of the generated thumbnail images, using ImageMagick resizing syntax | 450x |
+| small_size | the max dimensions of the generated small images, using ImageMagick resizing syntax | 800x800 |
 | density | the pixel density used to generate PDF thumbnails | 300 |
 | missing | whether to only generate derivatives that don't already exist | true |
 | compress_originals | Optimize the original image files | false |
+
+The default image sizes are based on the max pixel width of the images where they will appear in the base CollectionBuilder features (e.g. the width of thumb is based on the card image top featured on the Browse page).
 
 You can configure any or all of these options by specifying them in the rake command like so:
 

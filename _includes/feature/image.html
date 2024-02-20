@@ -34,7 +34,7 @@
         {%- capture image_link -%}{{ links[forloop.index0] | default: image_src }}{%- endcapture -%}
     {% else %}
         {%- assign figure = site.data[site.metadata] | where: "objectid", i | first -%}
-        {%- capture image_link -%}{{ '/items/' | append: figure.objectid | append: '.html' | relative_url }}{% endcapture %}
+        {%- capture image_link -%}{{ '/items/' | relative_url }}{% if figure.parentid %}{{ figure.parentid }}.html#{{ figure.objectid }}{% else %}{{ figure.objectid }}.html{% endif %}{% endcapture %}
         {%- capture image_caption -%}{{ captions[forloop.index0] | default: figure.title }}{%- endcapture -%}
         {%- capture image_alt -%}{{ alts[forloop.index0] | default: figure.image_alt_text | default: figure.description | default: figure.title }}{%- endcapture -%}
         {%- capture image_src -%}{{ figure.image_small | default: figure.object_location | relative_url }}{% endcapture %}

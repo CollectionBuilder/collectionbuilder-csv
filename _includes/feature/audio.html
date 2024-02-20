@@ -24,7 +24,7 @@
 {%- capture audio_caption -%}{{ include.caption }}{%- endcapture -%}
 {% else %}
 {%- assign item = site.data[site.metadata] | where: "objectid", include.objectid | first -%}
-{%- capture audio_link -%}{{ '/items/' | append: item.objectid | append: '.html' | relative_url }}{%- endcapture -%}
+{%- capture audio_link -%}{{ '/items/' | relative_url }}{% if item.parentid %}{{ item.parentid }}.html#{{ item.objectid }}{% else %}{{ item.objectid }}.html{% endif %}{%- endcapture -%}
 {%- capture src -%}{{ item.object_location | relative_url }}{% endcapture %}
 {%- capture audio_caption -%}{% if include.caption %}{{ include.caption }}{% else %}{{ item.title }}{% endif %}{%- endcapture -%}
 {% endif %}
