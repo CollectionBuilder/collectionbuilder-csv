@@ -4,31 +4,25 @@
 */
 
 @font-face {
-	font-display: swap;
-	font-family: 'Euclid Circular B';
-	src: url('/assets/fonts/EuclidCircularB-Regular.woff2') format('woff2'),
-		url('/assets/fonts/EuclidCircularB-Regular.woff') format('woff'),
-		url('/assets/fonts/EuclidCircularB-Regular.otf') format('opentype');
-	font-style: normal;
-	font-weight: 400;
+    font-display: swap;
+    font-family: 'Euclid Circular B';
+    src: url('/assets/fonts/EuclidCircularB-Regular-WebS.woff2') format('woff2');
+    font-style: normal;
+    font-weight: 400;
 }
 
 @font-face {
-	font-display: swap;
-	font-family: 'Euclid Circular B';
-	src: url('/assets/fonts/EuclidCircularB-Medium.woff2') format('woff2'),
-		url('/assets/fonts/EuclidCircularB-Medium.woff') format('woff'),
-		url('/assets/fonts/EuclidCircularB-Medium.otf') format('opentype');
-	font-style: normal;
-	font-weight: 500;
+    font-display: swap;
+    font-family: 'Euclid Circular B';
+    src: url('/assets/fonts/EuclidCircularB-Medium-WebS.woff2') format('woff2');
+    font-style: normal;
+    font-weight: 500;
 }
 
 @font-face {
-	font-display: swap;
-	font-family: 'Euclid Circular B';
-	src: url('/assets/fonts/EuclidCircularB-Semibold.woff2') format('woff2'),
-		url('/assets/fonts/EuclidCircularB-Semibold.woff') format('woff'),
-		url('/assets/fonts/EuclidCircularB-Semibold.otf') format('opentype');
-	font-style: normal;
-	font-weight: 600;
+    font-display: swap;
+    font-family: 'Euclid Circular B';
+    src: url('/assets/fonts/EuclidCircularB-Semibold-WebS.woff2') format('woff2');
+    font-style: normal;
+    font-weight: 600;
 }

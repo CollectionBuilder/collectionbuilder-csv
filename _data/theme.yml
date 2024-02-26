@@ -98,8 +98,9 @@ bootswatch: # leave blank or comment out for plain bootstrap
 base-font-size: 1em
 text-color: "#191919"
 link-color: "#0d6efd"
-base-font-family: "Euclid Circular B" # comment out for bootstrap defaults. e.g. Roboto
-font-cdn: # add font stylesheet, e.g. <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+base-font-family: "'Euclid Circular B', sans-serif;" # comment out for bootstrap defaults. e.g. Roboto
+font-cdn: "<link rel='preload' href='/assets/fonts/EuclidCircularB-Regular-WebS.woff2' as='font' type='font/woff2' crossorigin><link rel='preload' href='/assets/fonts/EuclidCircularB-Medium-WebS.woff2' as='font' type='font/woff2' crossorigin><link rel='preload' href='/assets/fonts/EuclidCircularB-Semibold-WebS.woff2' as='font' type='font/woff2' crossorigin>
+" # add font stylesheet, e.g. <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
 
 # THEME ICONS [optional!]
 # default icons can be overridden or new icons can be added using "icons" object
