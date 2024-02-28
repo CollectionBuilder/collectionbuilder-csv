@@ -44,6 +44,8 @@ metadata: sgb-metadata
 #     dir: 'items'
 #     extension: 'html' 
 #     filter: 'objectid'  
+# Set an email address to report faulty data or other issues with the site
+report-email: info@stadtgeschichtebasel.ch
 
 ##########
 # Site/Organization Branding 

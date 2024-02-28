@@ -17,6 +17,7 @@
     {% if page.object_location %}<a target="_blank" rel="noopener" href="{{ page.object_location | relative_url }}" class="btn btn-outline-primary">
         {% if page.display_template == 'video' and page.object_location contains 'vimeo' %}View on Vimeo{% elsif page.display_template == 'video' and page.object_location contains 'youtu' %}View on YouTube{% elsif page.display_template == 'record'%}Link to Object{% else %}Download {{ page.format | split: '/' | last | default: page.display_template | upcase }}{% endif %}
     </a>{% endif %}
+    <a class="btn btn-outline-secondary" href="mailto:{{ site.report-email }}?subject=Faulty metadata report for {{ page.title | escape }}&body=Please describe the issue with the metadata for {{ page.title | escape }}. %0D%0A%0D%0APage URL: {{ site.url | append: page.url | url_encode }}">Report faulty metadata</a>
 </div>
 {% if page.object_transcript %}
 <div class="collapse mt-3" id="collapseTranscript">
