@@ -6,5 +6,5 @@
 {%- endcomment -%}
 <audio controls class="w-100">
     <source src="{{ page.object_location | relative_url }}">
-    Your browser does not support the audio element. Please <a href="{{ page.object_location | relative_url }}">download the audio file</a>.
+    {{ site.data.translations['includesItemAudioPlayer']['audioNotSupported'][site.lang] }} <a href="{{ page.object_location | relative_url }}">Download</a>.
 </audio>

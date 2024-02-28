@@ -1,11 +1,11 @@
 {% if page.subject %}<meta name="keywords" content="{{ page.subject | escape }}" >{% endif %}
-{% if page.description %}<meta name="description" content="Item from {{ site.title | escape }}: {{ page.description | truncatewords: 25 | escape }}">{% endif %}
+{% if page.description %}<meta name="description" content="{{ site.data.translations['includesHeadItemMeta']['itemFrom'][site.lang] }} {{ site.title | escape }}: {{ page.description | truncatewords: 25 | escape }}">{% endif %}
 <!-- DC meta -->
 <link rel="schema.DCTERMS" href="http://purl.org/dc/terms/" />
 {%- assign dc-fields = site.data.config-metadata | where_exp: 'item', 'item.dc_map != nil' -%}
-{% for f in dc-fields %}{% if page[f.field] %}<meta name="{{ f.dc_map | xml_escape }}" content="{{ page[f.field] | truncatewords: 25 | xml_escape }}" xml:lang="en" />
+{% for f in dc-fields %}{% if page[f.field] %}<meta name="{{ f.dc_map | xml_escape }}" content="{{ page[f.field] | truncatewords: 25 | xml_escape }}" xml:lang="{{ site.lang }}" />
 {% endif %}{% endfor %}
-{% if site.organization-name %}<meta name="DCTERMS.publisher" content="{{ site.organization-name | escape }}" xml:lang="en" />{% endif %}
+{% if site.organization-name %}<meta name="DCTERMS.publisher" content="{{ site.organization-name | escape }}" xml:lang="{{ site.lang }}" />{% endif %}
 <!-- Open Graph meta -->
 <meta property="og:title" content="{{ page.title | escape }}" />
 <meta property="og:type" content="website" />
@@ -15,7 +15,7 @@
 <meta property="og:image:alt" content="{{ page.title | escape }}" />{% endif %}
 <meta property="og:site_name" content="{{ site.title | escape }}" />
 <meta property="og:url" content="{{ page.url | absolute_url }}" />
-<meta property="og:locale" content="en_US" />
+<meta property="og:locale" content="{{ site.lang }}" />
 <!-- schema.org JSON-LD -->
 <script type="application/ld+json">
 { 

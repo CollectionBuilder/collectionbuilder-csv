@@ -6,9 +6,9 @@
 
 {%- endcomment -%}
 <div class="text-center">
-  <a class="btn btn-secondary" href="{{ page.previous_item | relative_url }}" id="prev-page-button">&laquo; Previous</a>
-  <a class="btn btn-secondary" href="{{ '/browse.html' | relative_url }}">Back to Browse</a>
-  <a class="btn btn-secondary" href="{{ page.next_item | relative_url }}" id="next-page-button">Next &raquo;</a>
+    <a class="btn btn-secondary" href="{{ page.previous_item | relative_url }}" id="prev-page-button">&laquo; {{ site.data.translations['includesItemBrowseButtons']['previous'][site.lang] }}</a>
+    <a class="btn btn-secondary" href="{{ '/browse.html' | relative_url }}" >{{ site.data.translations['includesItemBrowseButtons']['backToBrowse'][site.lang] }}</a>
+    <a class="btn btn-secondary" href="{{ page.next_item | relative_url }}" id="next-page-button">{{ site.data.translations['includesItemBrowseButtons']['next'][site.lang] }} &raquo;</a>
 </div>
 <div id="item-nav">
   <div class="d-none d-md-block">

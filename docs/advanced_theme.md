@@ -32,3 +32,11 @@ These setting will be passed to `/assets/css/cb.scss` which in turn passes the v
 ## Theme icons 
 
 See "docs/icons.md" for details.
+
+## Theme language
+
+To change the language of the GUI elements, follow these steps
+
+- Change `lang` in `_config.yml`. Use the ISO 639-1 code for the language you want to use. Note that currently only German, i.e. `de`, is supported. If you need support for another language, you will have to add it yourself.
+- Adjust all variables in `_data` to the new language. This will ensure that any dynamic content is displayed correctly.
+- Change all pages in `pages` to the new language. This will ensure that all static content is displayed correctly.

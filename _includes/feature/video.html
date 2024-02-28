@@ -49,7 +49,7 @@
             {% else %}
             <video width="320" height="240" controls>
                 <source src="{{ video_src }}">
-                Your browser does not support the video tag.
+                {{ site.data.translations['includesFeatureVideo']['videoNotSupported'][site.lang] }}
             </video>
             {%- endif -%}
         </div>

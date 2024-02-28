@@ -3,21 +3,24 @@
 layout: page
 ---
 {%- assign items = site.data[site.metadata] | where_exp: 'item','item.objectid' -%}
+{% assign sampleItems = site.data.translations['layoutsHomeInfographic']['sampleItems'][site.lang] %}
+{% assign topSubjects = site.data.translations['layoutsHomeInfographic']['topSubjects'][site.lang] %}
+{% assign locations = site.data.translations['layoutsHomeInfographic']['locations'][site.lang] %}
 <div class="row">
 
   <div class="col-md-8">
 
     {% include index/description.html %}
-    {% include index/carousel.html title="Sample Items" %}
+    {% include index/carousel.html title=sampleItems %}
     
   </div>
   <div class="col-md-4">  
 
     {% include index/time.html %}
 
-    {% include index/featured-terms.html field="subject" title="Top Subjects" btn-color="primary" %}
+    {% include index/featured-terms.html field="subject" title=topSubjects btn-color="primary" %}
 
-    {% include index/featured-terms.html field="location" title="Locations" btn-color="outline-secondary" %}
+    {% include index/featured-terms.html field="location" title=locations btn-color="outline-secondary" %}
     
     {% include index/objects.html %}
 
