@@ -1,6 +1,6 @@
 ---
 title: Timeline
-layout: timeline
+layout: timeline_edtf
 permalink: /timeline.html
 ---
 

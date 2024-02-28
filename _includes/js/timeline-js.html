@@ -6,10 +6,20 @@
         return new bootstrap.Tooltip(tooltipTriggerEl)
     })
 
-    // highlight year if hash
-    if(window.location.hash) {
-        var hashfilter = decodeURIComponent(location.hash.substr(1));
-        document.querySelector("tr#" + hashfilter).classList.add("table-info");
-    }
+    // Highlight years based on query parameters
+    var queryParams = new URLSearchParams(window.location.search);
+    
+    queryParams.forEach(function(value, key) {
+        var years = key.split('y');
+        years.forEach(function(year) {
+            if (year) {
+                var tableRow = document.querySelector("tr#y" + year);
+                if (tableRow) {
+                    tableRow.classList.add("table-info");
+                }
+            }
+        });
+    });
 })();
 </script>
+
