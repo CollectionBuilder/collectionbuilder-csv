@@ -1,0 +1,660 @@
+_includes:
+  cb:
+    credits.html:
+      title:
+        en: "Technical Credits - CollectionBuilder"
+        es: "Créditos Técnicos - CollectionBuilder"
+        de: "Technische Credits - CollectionBuilder"
+      content:
+        en: |
+          <p>This digital collection is built with <a href="https://collectionbuilder.github.io/" target="_blank" rel="noopener">CollectionBuilder</a>, an open source framework for creating digital collection and exhibit websites that is developed by faculty librarians at the University of Idaho Library following the <a href="https://lib-static.github.io" target="_blank" rel="noopener">Lib-Static</a> methodology.</p>
+          <p>Using the <a href="https://github.com/CollectionBuilder/collectionbuilder-csv" target="_blank" rel="noopener">CollectionBuilder-CSV</a> template and the static website generator <a href="https://jekyllrb.com/" target="_blank" rel="noopener">Jekyll</a>, this project creates an engaging interface to explore driven by metadata.</p>
+        es: |
+          <p>Esta colección digital está construida con <a href="https://collectionbuilder.github.io/" target="_blank" rel="noopener">CollectionBuilder</a>, un marco de código abierto para crear sitios web de colecciones digitales y exhibiciones que es desarrollado por bibliotecarios docentes en la Biblioteca de la Universidad de Idaho siguiendo la metodología <a href="https://lib-static.github.io" target="_blank" rel="noopener">Lib-Static</a>.</p>
+          <p>Usando la plantilla <a href="https://github.com/CollectionBuilder/collectionbuilder-csv" target="_blank" rel="noopener">CollectionBuilder-CSV</a> y el generador de sitios web estáticos <a href="https://jekyllrb.com/" target="_blank" rel="noopener">Jekyll</a>, este proyecto crea una interfaz atractiva para explorar impulsada por metadatos.</p>
+        de: |
+          <p>Diese digitale Sammlung wurde mit <a href="https://collectionbuilder.github.io/" target="_blank" rel="noopener">CollectionBuilder</a> erstellt, einem Open-Source-Framework zur Erstellung von Websites für digitale Sammlungen und Ausstellungen, das von Fachbibliothekaren der Universitätsbibliothek Idaho entwickelt wurde und der <a href="https://lib-static.github.io" target="_blank" rel="noopener">Lib-Static</a>-Methodik folgt.</p>
+          <p>Mit der Vorlage <a href="https://github.com/CollectionBuilder/collectionbuilder-csv" target="_blank" rel="noopener">CollectionBuilder-CSV</a> und dem statischen Website-Generator <a href="https://jekyllrb.com/" target="_blank" rel="noopener">Jekyll</a> erstellt dieses Projekt eine ansprechende Benutzeroberfläche, die durch Metadaten gesteuert wird.</p>
+      more:
+        en: "More Information Available"
+        es: "Más información disponible"
+        de: "Weitere Informationen verfügbar"
+      technical:
+        en: "Technical Specifications"
+        es: "Especificaciones Técnicas"
+        de: "Technische Spezifikationen"
+      grant:
+        en: "IMLS Support"
+        es: "Apoyo de IMLS"
+        de: "IMLS-Unterstützung"
+  feature:
+    accordion.html:
+    alert.html:
+    audio.html:
+      error:
+        en: "Your browser does not support the audio element."
+        es: "Su navegador no admite el elemento de audio."
+        de: "Ihr Browser unterstützt das Audio-Element nicht."
+    blockquote.html:
+    button.html:
+    card.html:
+    cloud.html:
+    icon.html:
+    image.html:
+      click:
+        en: "click to see item"
+        es: "haga clic para ver el elemento"
+        de: "klicken Sie, um das Element zu sehen"
+    jumbotron.html:
+    mini-map.html:
+    modal.html:
+    nav-menu.html:
+      contents:
+        en: "Contents"
+        es: "Contenidos"
+        de: "Inhalt"
+      tech:
+        en: "Tech"
+        es: "Técnico"
+        de: "Technisch"
+    pdf.html:
+      error:
+        en: "Your browser does not support the PDF viewer."
+        es: "Su navegador no admite el visor de PDF."
+        de: "Ihr Browser unterstützt den PDF-Viewer nicht."
+      download:
+        en: "Download PDF"
+        es: "Descargar PDF"
+        de: "PDF herunterladen"
+    timelinejs.html:
+    video.html:
+      error:
+        en: "Your browser does not support the video tag."
+        es: "Su navegador no admite la etiqueta de video."
+        de: "Ihr Browser unterstützt das Video-Tag nicht."
+  head:
+    analytics.html:
+    head.html:
+    item-meta.html:
+    page-meta.html:
+  index:
+    carousel.html:
+      view-item:
+        en: "View Item"
+        es: "Ver Elemento"
+        de: "Element anzeigen"
+    data-download.html:
+      title:
+        en: "Collection as Data <small>(click to download)</small>"
+        es: "Colección como Datos <small>(haga clic para descargar)</small>"
+        de: "Sammlung als Daten <small>(klicken Sie, um herunterzuladen)</small>"
+      metadata:
+        en: "Metadata"
+        es: "Metadatos"
+        de: "Metadaten"
+      subjects:
+        en: "Subjects"
+        es: "Temas"
+        de: "Themen"
+      geodata:
+        en: "Geodata"
+        es: "Geodatos"
+        de: "Geodaten"
+      locations:
+        en: "Locations"
+        es: "Ubicaciones"
+        de: "Standorte"
+      timeline:
+        en: "Timeline"
+        es: "Línea de tiempo"
+        de: "Zeitachse"
+      facets:
+        en: "Facets"
+        es: "Facetas"
+        de: "Facetten"
+      source-code:
+        en: "Source Code"
+        es: "Código Fuente"
+        de: "Quellcode"
+    description.html:
+      title:
+        en: "Description"
+        es: "Descripción"
+        de: "Beschreibung"
+      learn-more:
+        en: "Learn More &raquo;"
+        es: "Aprende más &raquo;"
+        de: "Erfahren Sie mehr &raquo;"
+    featured-terms.html:
+    objects.html:
+      title:
+        en: "Objects"
+        es: "Objetos"
+        de: "Objekte"
+      image:
+        en: "Image(s)"
+        es: "Imagen(es)"
+        de: "Bild(er)"
+      audio:
+        en: "Audio File(s)"
+        es: "Archivo(s) de Audio"
+        de: "Audiodatei(en)"
+      video:
+        en: "Video File(s)"
+        es: "Archivo(s) de Video"
+        de: "Videodatei(en)"
+      pdf:
+        en: "PDF File(s)"
+        es: "Archivo(s) PDF"
+        de: "PDF-Datei(en)"
+      panorama:
+        en: "Panorama(s)"
+        es: "Panorama(s)"
+        de: "Panorama(s)"
+      record:
+        en: "Record(s)"
+        es: "Registro(s)"
+        de: "Datensatz(e)"
+      compound_object:
+        en: "Compound Object(s)"
+        es: "Objeto(s) Compuesto(s)"
+        de: "Verbundobjekt(e)"
+      multiple:
+        en: "Multiple"
+        es: "Múltiple"
+        de: "Mehrere"
+      file:
+        en: "File(s)"
+        es: "Archivo(s)"
+        de: "Datei(en)"
+      view_table:
+        en: "View table"
+        es: "Ver tabla"
+        de: "Tabelle anzeigen"
+    time.html:
+      title:
+        en: "Time Span"
+        es: "Período de Tiempo"
+        de: "Zeitspanne"
+      view-timeline:
+        en: "View Timeline"
+        es: "Ver Línea de Tiempo"
+        de: "Zeitachse anzeigen"
+  item:
+    child:
+      audio-player.html:
+        error:
+          en: "Your browser does not support the audio player."
+          es: "Su navegador no admite el reproductor de audio."
+          de: "Ihr Browser unterstützt den Audioplayer nicht."
+        download:
+          en: "Download Audio File"
+          es: "Descargar Archivo de Audio"
+          de: "Audiodatei herunterladen"
+      citation-box.html:
+        title:
+          en: "Source"
+          es: "Fuente"
+          de: "Quelle"
+        preferred-citation:
+          en: "Preferred Citation"
+          es: "Cita Preferida"
+          de: "Bevorzugte Zitierung"
+        reference-link:
+          en: "Reference Link"
+          es: "Enlace de Referencia"
+          de: "Referenzlink"
+      compound-item-download-buttons.html:
+        timeline:
+          en: "View on Timeline"
+          es: "Ver en la Línea de Tiempo"
+          de: "In der Zeitachse anzeigen"
+        map:
+          en: "View on Map"
+          es: "Ver en el Mapa"
+          de: "Auf der Karte anzeigen"
+        download:
+          en: "Download"
+          es: "Descargar"
+          de: "Herunterladen"
+      compound-item-modal-gallery.html:
+        previous:
+          en: "Previous Item"
+          es: "Elemento Anterior"
+          de: "Vorheriges Element"
+        next:
+          en: "Next Item"
+          es: "Siguiente Elemento"
+          de: "Nächstes Element"
+      download-buttons.html:
+        timeline:
+          en: "View on Timeline"
+          es: "Ver en la Línea de Tiempo"
+          de: "In der Zeitachse anzeigen"
+        map:
+          en: "View on Map"
+          es: "Ver en el Mapa"
+          de: "Auf der Karte anzeigen"
+        vimeo:
+          en: "View on Vimeo"
+          es: "Ver en Vimeo"
+          de: "Auf Vimeo ansehen"
+        youtube:
+          en: "View on YouTube"
+          es: "Ver en YouTube"
+          de: "Auf YouTube ansehen"
+        link-to-object:
+          en: "Link to Object"
+          es: "Enlace al Objeto"
+          de: "Link zum Objekt"
+        download:
+          en: "Download"
+          es: "Descargar"
+          de: "Herunterladen"
+      image-gallery.html:
+        full-screen:
+          en: "Click to view full screen"
+          es: "Haga clic para ver a pantalla completa"
+          de: "Klicken Sie, um den Vollbildmodus anzuzeigen"
+      item-thumb.html:
+      metadata.html:
+      panorama.html:
+      rights-box.html:
+        rights:
+          en: "Rights"
+          es: "Derechos"
+          de: "Rechte"
+        rights-statement:
+          en: "Standardized Rights"
+          es: "Derechos Estandarizados"
+          de: "Standardisierte Rechte"
+      video-embed.html:
+      video-player.html:
+        error:
+          en: "Your browser does not support the video tag."
+          es: "Su navegador no admite la etiqueta de video."
+          de: "Ihr Browser unterstützt das Video-Tag nicht."
+        download:
+          en: "Download the video file"
+          es: "Descargar el archivo de video"
+          de: "Video-Datei herunterladen"
+    3d-model-viewer.html:
+      load-model:
+        en: "Load 3D Model"
+        es: "Cargar Modelo 3D"
+        de: "3D-Modell laden"
+    audio.html:
+      error:
+        en: "Your browser does not support the audio player."
+        es: "Su navegador no admite el reproductor de audio."
+        de: "Ihr Browser unterstützt den Audioplayer nicht."
+      download:
+        en: "Download Audio File"
+        es: "Descargar Archivo de Audio"
+        de: "Audiodatei herunterladen"
+    breadcrumbs.html:
+      home:
+        en: "Home"
+        es: "Inicio"
+        de: "Startseite"
+      items:
+        en: "Items"
+        es: "Elementos"
+        de: "Objekte"
+    browse-buttons.html:
+      previous:
+        en: "Previous"
+        es: "Anterior"
+        de: "Vorherige"
+      back-to-browse:
+        en: "Back to Browse"
+        es: "Volver a Navegar"
+        de: "Zurück zum Durchsuchen"
+      next:
+        en: "Next"
+        es: "Siguiente"
+        de: "Nächste"
+    citation-box.html:
+      title:
+        en: "Source"
+        es: "Fuente"
+        de: "Quelle"
+      preferred-citation:
+        en: "Preferred Citation"
+        es: "Cita Preferida"
+        de: "Bevorzugte Zitierung"
+      reference-link:
+        en: "Reference Link"
+        es: "Enlace de Referencia"
+        de: "Referenzlink"
+    download-buttons.html:
+      transcript:
+        en: "View Transcript"
+        es: "Ver Transcripción"
+        de: "Transkript anzeigen"
+      timeline:
+        en: "View on Timeline"
+        es: "Ver en la Línea de Tiempo"
+        de: "In der Zeitachse anzeigen"
+      map:
+        en: "View on Map"
+        es: "Ver en el Mapa"
+        de: "Auf der Karte anzeigen"
+      vimeo:
+        en: "View on Vimeo"
+        es: "Ver en Vimeo"
+        de: "Auf Vimeo ansehen"
+      youtube:
+        en: "View on YouTube"
+        es: "Ver en YouTube"
+        de: "Auf YouTube ansehen"
+      link-to-object:
+        en: "Link to Object"
+        es: "Enlace al Objeto"
+        de: "Link zum Objekt"
+      download:
+        en: "Download"
+        es: "Descargar"
+        de: "Herunterladen"
+    iiif-manifest-universal-viewer.html:
+    image-gallery.html:
+      full-screen:
+        en: "Click to view full screen"
+        es: "Haga clic para ver a pantalla completa"
+        de: "Klicken Sie, um den Vollbildmodus anzuzeigen"
+    item-thumb.html:
+    metadata.html:
+    mini-map.html:
+    panorama.html:
+    pdf-embed.html:
+      error:
+        en: "The PDF is not rendering in your browser, please use the button below to download the PDF."
+        es: "El PDF no se está renderizando en su navegador, por favor use el botón de abajo para descargar el PDF."
+        de: "Das PDF wird in Ihrem Browser nicht gerendert. Bitte verwenden Sie die Schaltfläche unten, um das PDF herunterzuladen."
+    rights-box.html:
+      rights:
+        en: "Rights"
+        es: "Derechos"
+        de: "Rechte"
+      rights-statement:
+        en: "Standardized Rights"
+        es: "Derechos Estandarizados"
+        de: "Standardisierte Rechte"
+    video-embed.html:
+    video-player.html:
+      error:
+        en: "Your browser does not support the video tag."
+        es: "Su navegador no admite la etiqueta de video."
+        de: "Ihr Browser unterstützt das Video-Tag nicht."
+      download:
+        en: "Download the video file"
+        es: "Descargar el archivo de video"
+        de: "Video-Datei herunterladen"
+  js:
+    browse-js.html:
+      view-full-record:
+        en: "View Full Record"
+        es: "Ver Registro Completo"
+        de: "Vollständigen Datensatz anzeigen"
+    cloud-js.html:
+    get-icon.js:
+    lunr-js.html:
+      results-found:
+        en: "Result(s) found"
+        es: "Resultado(s) encontrado(s)"
+        de: "Ergebnis(se) gefunden"
+    map-js.html:
+      view-item:
+        en: "View Item"
+        es: "Ver Elemento"
+        de: "Element anzeigen"
+    modal-hash-js.html:
+    table-js.html:
+    timeline-js.html:
+  collection-banner.html:
+    featured-items:
+      en: "Featured Image"
+      es: "Imagen Destacada"
+      de: "Hervorgehobenes Bild"
+  collection-nav.html:
+  data-download-modal.html:
+    download-data:
+      en: "Download Data"
+      es: "Descargar Datos"
+      de: "Daten herunterladen"
+    title:
+      en: "Collection Data"
+      es: "Datos de la Colección"
+      de: "Sammlungsdaten"
+    description:
+      en: "Download this collection's data in a variety of reusable formats."
+      es: "Descargue los datos de esta colección en una variedad de formatos reutilizables."
+      de: "Laden Sie die Daten dieser Sammlung in einer Vielzahl wiederverwendbarer Formate herunter."
+    complete-metadata:
+      en: "Complete Metadata"
+      es: "Metadatos Completos"
+      de: "Vollständige Metadaten"
+    metadata-description:
+      en: "All metadata fields for all collection items, available as a CSV spreadsheet (usable in Excel, Google Sheets, and similar programs) or JSON file (often used with web applications)."
+      es: "Todos los campos de metadatos para todos los elementos de la colección, disponibles como una hoja de cálculo CSV (utilizable en Excel, Google Sheets y programas similares) o un archivo JSON (a menudo utilizado con aplicaciones web)."
+      de: "Alle Metadatenfelder für alle Sammlungsobjekte, verfügbar als CSV-Tabelle (verwendbar in Excel, Google Sheets und ähnlichen Programmen) oder JSON-Datei (oft in Webanwendungen verwendet)."
+    metadata:
+      en: "Metadata"
+      es: "Metadatos"
+      de: "Metadaten"
+    metadata-facets:
+      en: "Metadata Facets"
+      es: "Facetas de Metadatos"
+      de: "Metadaten-Facetten"
+    facets-description:
+      en: "List of unique values and their count for specific metadata fields, useful for understanding content of the fields."
+      es: "Lista de valores únicos y su recuento para campos de metadatos específicos, útil para comprender el contenido de los campos."
+      de: "Liste der eindeutigen Werte und ihrer Anzahl für bestimmte Metadatenfelder, nützlich zum Verständnis des Inhalts der Felder."
+    facets:
+      en: "Facets"
+      es: "Facetas"
+      de: "Facetten"
+    subject-metadata:
+      en: "Subject Metadata"
+      es: "Metadatos de Temas"
+      de: "Themen-Metadaten"
+    subject-metadata-description:
+      en: "Unique values and counts of subject metadata, useful for further analyzing the content of this collection."
+      es: "Valores únicos y recuentos de metadatos de temas, útiles para analizar más a fondo el contenido de esta colección."
+      de: "Einzigartige Werte und Zählungen von Themenmetadaten, die nützlich sind, um den Inhalt dieser Sammlung weiter zu analysieren."
+    subject:
+      en: "Subjects"
+      es: "Temas"
+      de: "Themen"
+    location:
+      en: "Locations"
+      es: "Ubicaciones"
+      de: "Standorte"
+    location-description:
+      en: "Unique values and counts of location metadata, useful for further visualization and analysis of this collection's place names."
+      es: "Valores únicos y recuentos de metadatos de ubicación, útiles para la visualización y el análisis adicionales de los nombres de lugares de esta colección."
+      de: "Einzigartige Werte und Zählungen von Standortmetadaten, die nützlich sind für die weitere Visualisierung und Analyse der Ortsnamen dieser Sammlung."
+    geojson-description:
+      en: "Metadata for all collection items that have geographic coordinates in <a href='https://en.wikipedia.org/wiki/GeoJSON' target='_blank' rel='noopener'>GeoJSON</a> format, useful for further exploration and analysis of this collection through a geographical lense."
+      es: "Metadatos para todos los elementos de la colección que tienen coordenadas geográficas en formato <a href='https://es.wikipedia.org/wiki/GeoJSON' target='_blank' rel='noopener'>GeoJSON</a>, útiles para la exploración y el análisis adicionales de esta colección a través de una lente geográfica."
+      de: "Metadaten für alle Sammlungsobjekte, die geografische Koordinaten im <a href='https://de.wikipedia.org/wiki/GeoJSON' target='_blank' rel='noopener'>GeoJSON</a>-Format haben, nützlich für die weitere Erkundung und Analyse dieser Sammlung durch eine geografische Linse."
+    timeline:
+      en: "Timeline"
+      es: "Línea de Tiempo"
+      de: "Zeitachse"
+    timeline-description:
+      en: "A time-focused JSON data export designed for use with <a href='https://timeline.knightlab.com/' target='_blank' rel='noopener'>TimelineJS</a>."
+      es: "Una exportación de datos JSON centrada en el tiempo diseñada para su uso con <a href='https://timeline.knightlab.com/' target='_blank' rel='noopener'>TimelineJS</a>."
+      de: "Ein zeitlich fokussierter JSON-Datenexport, der für die Verwendung mit <a href='https://timeline.knightlab.com/' target='_blank' rel='noopener'>TimelineJS</a> entwickelt wurde."
+    source-code:
+      en: "Source Code"
+      es: "Código Fuente"
+      de: "Quellcode"
+    source-code-description:
+      # en: "GitHub repository containing source code for this project built with <a href="https://github.com/CollectionBuilder/collectionbuilder-csv" target="_blank" rel="noopener">CollectionBuilder-CSV</a>."
+      en: "GitHub repository containing source code for this project built with <a href='https://github.com/CollectionBuilder/collectionbuilder-csv' target='_blank' rel='noopener'>CollectionBuilder-CSV</a>."
+      es: "Repositorio de GitHub que contiene el código fuente de este proyecto construido con <a href='https://github.com/CollectionBuilder/collectionbuilder-csv' target='_blank' rel='noopener'>CollectionBuilder-CSV</a>."
+      de: "GitHub-Repository, das den Quellcode für dieses Projekt enthält, das mit <a href='https://github.com/CollectionBuilder/collectionbuilder-csv' target='_blank' rel='noopener'>CollectionBuilder-CSV</a> erstellt wurde."
+  foot.html:
+  footer.html:
+    built-with:
+      en: "built with"
+      es: "construido con"
+      de: "erstellt mit"
+    last-updated:
+      en: "Last Updated"
+      es: "Última Actualización"
+      de: "Zuletzt aktualisiert"
+  nav-search-lunr.html:
+    search:
+      en: "Search"
+      es: "Buscar"
+      de: "Suche"
+  scroll-to-top.html:
+    en: "Back to Top"
+    es: "Volver al Principio"
+    de: "Zurück nach oben"
+  _layouts:
+    item:
+      audio.html:
+      compound-object.html:
+      image.html:
+      item-page-base.html:
+        items:
+          en: "Items"
+          es: "Elementos"
+          de: "Objekte"
+        item-info:
+          en: "Item Information"
+          es: "Información del Elemento"
+          de: "Elementinformationen"
+        jump-to:
+          en: "Jump to item information"
+          es: "Ir a la información del elemento"
+          de: "Springe zu den Elementinformationen"
+      item-page-full-width.html:
+        item-info:
+          en: "Item Information"
+          es: "Información del Elemento"
+          de: "Elementinformationen"
+        jump-to:
+          en: "Jump to item information"
+          es: "Ir a la información del elemento"
+          de: "Springe zu den Elementinformationen"
+      item.html:
+      multiple.html:
+      panorama.html:
+      pdf.html:
+      record.html:
+      video.html:
+    about.html:
+    browse.html:
+      search:
+        en: "Search"
+        es: "Buscar"
+        de: "Suche"
+      reset:
+        en: "Reset"
+        es: "Restablecer"
+        de: "Zurücksetzen"
+      sort-by:
+        en: "Sort by"
+        es: "Ordenar por"
+        de: "Sortieren nach"
+      random:
+        en: "Random"
+        es: "Aleatorio"
+        de: "Zufällig"
+      title:
+        en: "Title"
+        es: "Título"
+        de: "Titel"
+      loading:
+        en: "Loading"
+        es: "Cargando"
+        de: "Laden"
+    cloud.html:
+    data.html:
+      link:
+        en: "Link"
+        es: "Enlace"
+        de: "Link"
+    default.html:
+      skip-to-content:
+        en: "Skip to main content"
+        es: "Saltar al contenido principal"
+        de: "Zum Hauptinhalt springen"
+    home-infographic.html:
+      sample-items:
+        en: "Sample Items"
+        es: "Elementos de Muestra"
+        de: "Beispielobjekte"
+      top-subjects:
+        en: "Top Subjects"
+        es: "Temas Principales"
+        de: "Top-Themen"
+      locations:
+        en: "Locations"
+        es: "Ubicaciones"
+        de: "Standorte"
+    map.html:
+    page-full-width.html:
+    page-narrow.html:
+    page.html:
+    search.html:
+      search-options:
+        en: "Search Options"
+        es: "Opciones de Búsqueda"
+        de: "Suchoptionen"
+      lunr-search-options:
+        en: "Lunr Search Options"
+        es: "Opciones de Búsqueda Lunr"
+        de: "Lunr-Suchoptionen"
+      close:
+        en: "Close"
+        es: "Cerrar"
+        de: "Schließen"
+      description:
+        en: "These advanced options can be added to your query in the search box to refine your results:"
+        es: "Estas opciones avanzadas se pueden agregar a su consulta en el cuadro de búsqueda para refinar sus resultados:"
+        de: "Diese erweiterten Optionen können Ihrer Abfrage im Suchfeld hinzugefügt werden, um Ihre Ergebnisse zu verfeinern:"
+      field-name:
+        en: "Search a specific field: use the field name, colon, then your query, e.g. <code>title:foo</code>, <code>date:1911</code>, <code>subject:tree</code>. In this collection you can use (( fields | join: \", \" ))."
+        es: "Buscar un campo específico: use el nombre del campo, dos puntos y luego su consulta, por ejemplo <code>título:foo</code>, <code>fecha:1911</code>, <code>tema:árbol</code>. En esta colección puede usar (( fields | join: \", \" ))."
+        de: "Suchen Sie ein bestimmtes Feld: Verwenden Sie den Feldnamen, Doppelpunkt und dann Ihre Abfrage, z.B. <code>titel:foo</code>, <code>datum:1911</code>, <code>thema:baum</code>. In dieser Sammlung können Sie (( fields | join: \", \" )) verwenden."
+      wildcards:
+        en: "Wildcards: add <code>*</code> to match any character(s), e.g. <code>foo*</code>, <code>*oo</code>. This is helpful for using a root to find words with all related endings."
+        es: "Comodines: agregue <code>*</code> para hacer coincidir cualquier carácter(es), por ejemplo <code>foo*</code>, <code>*oo</code>. Esto es útil para usar una raíz para encontrar palabras con todos los finales relacionados."
+        de: "Platzhalter: Fügen Sie <code>*</code> hinzu, um beliebige Zeichen zu finden, z.B. <code>foo*</code>, <code>*oo</code>. Dies ist hilfreich, um eine Wurzel zu verwenden, um Wörter mit allen verwandten Endungen zu finden."
+      fuzzy-match:
+        en: "Fuzzy match: add <code>~</code> plus a number at the end of your query to specify a higher level of fuzziness in search, e.g. <code>foo~1</code>. This can help with misspellings."
+        es: "Coincidencia difusa: agregue <code>~</code> más un número al final de su consulta para especificar un mayor nivel de imprecisión en la búsqueda, por ejemplo <code>foo~1</code>. Esto puede ayudar con los errores de ortografía."
+        de: "Ungefähre Übereinstimmung: Fügen Sie Ihrer Abfrage <code>~</code> plus eine Zahl hinzu, um ein höheres Maß an Unschärfe in der Suche anzugeben, z.B. <code>foo~1</code>. Dies kann bei Rechtschreibfehlern helfen."
+      boost-term:
+        en: "Boost term: add <code>^</code> plus a number to boost the relevance of a term in your query, e.g. <code>foo^10</code>. This can help reduce clutter of unrelated results if one of your terms is most important."
+        es: "Término de impulso: agregue <code>^</code> más un número para aumentar la relevancia de un término en su consulta, por ejemplo <code>foo^10</code>. Esto puede ayudar a reducir el desorden de resultados no relacionados si uno de sus términos es el más importante."
+        de: "Begriff verstärken: Fügen Sie <code>^</code> plus eine Zahl hinzu, um die Relevanz eines Begriffs in Ihrer Abfrage zu erhöhen, z.B. <code>foo^10</code>. Dies kann helfen, das Durcheinander von nicht verwandten Ergebnissen zu reduzieren, wenn einer Ihrer Begriffe am wichtigsten ist."
+      enter-term:
+        en: "Enter your search term..."
+        es: "Ingrese su término de búsqueda..."
+        de: "Geben Sie Ihren Suchbegriff ein..."
+      search:
+        en: "Search"
+        es: "Buscar"
+        de: "Suche"
+      powered-by:
+        en: "Fuzzy search powered by <a href='https://lunrjs.com/' target='_blank' rel='noopener'>Lunr.js</a>. <em>May take a second to load large collections!</em>"
+        es: "Búsqueda difusa proporcionada por <a href='https://lunrjs.com/' target='_blank' rel='noopener'>Lunr.js</a>. <em>¡Puede tardar un segundo en cargar colecciones grandes!</em>"
+        de: "Unscharfe Suche bereitgestellt von <a href='https://lunrjs.com/' target='_blank' rel='noopener'>Lunr.js</a>. <em>Kann einen Moment dauern, um große Sammlungen zu laden!</em>"
+      google-search:
+        en: "Alternatively, try site search by"
+        es: "Alternativamente, intente la búsqueda del sitio por"
+        de: "Versuchen Sie alternativ die Websuche durch"
+    timeline.html:
+      years:
+        en: "Years"
+        es: "Años"
+        de: "Jahre"
+
+
+

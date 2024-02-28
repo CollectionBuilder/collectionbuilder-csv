@@ -5,22 +5,22 @@ custom-foot: js/lunr-js.html
 ---
 {%- assign fields = site.data.config-search | where: 'index',true | map: 'field' -%}
 <!-- Button trigger modal -->
-<button type="button" class="btn btn-outline-primary float-end" data-bs-toggle="modal" data-bs-target="#operators">Search Options</button>
+<button type="button" class="btn btn-outline-primary float-end" data-bs-toggle="modal" data-bs-target="#operators">{{ site.data.translations['_includes']['_layouts']['search.html']['search-options'][site.lang] | default: 'Search Options' }}</button>
 <!-- Modal -->
 <div class="modal fade" id="operators" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalLabel">Lunr Search Options</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title" id="modalLabel">{{ site.data.translations['_includes']['_layouts']['search.html']['lunr-search-options'][site.lang] | default: 'Lunr Search Options' }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ site.data.translations['_includes']['_layouts']['search.html']['close'][site.lang] | default: 'Close' }}"></button>
             </div>
             <div class="modal-body">
-                <p>These advanced options can be added to your query in the search box to refine your results:</p> 
+                <p>{{ site.data.translations['_includes']['_layouts']['search.html']['description'][site.lang] | default: 'These advanced options can be added to your query in the search box to refine your results:' }}</p>
                 <ul>
-                    <li>Search a specific field: use the field name, colon, then your query, e.g. <code>title:foo</code>, <code>date:1911</code>, <code>subject:tree</code>. In this collection you can use {{ fields | join: ", " }}.</li>
-                    <li>Wildcards: add <code>*</code> to match any character(s), e.g. <code>foo*</code>, <code>*oo</code>. This is helpful for using a root to find words with all related endings.</li>
-                    <li>Fuzzy match: add <code>~</code> plus a number at the end of your query to specify a higher level of fuzziness in search, e.g. <code>foo~1</code>. This can help with misspellings.</li>
-                    <li>Boost term: add <code>^</code> plus a number to boost the relevance of a term in your query, e.g. <code>foo^10</code>. This can help reduce clutter of unrelated results if one of your terms is most important.</li>
+                    <li>{{ site.data.translations['_includes']['_layouts']['search.html']['field-name'][site.lang] | default: 'Search a specific field: use the field name, colon, then your query, e.g. <code>title:foo</code>, <code>date:1911</code>, <code>subject:tree</code>. In this collection you can use (( fields | join: ", " )).' }}</li>
+                    <li>{{ site.data.translations['_includes']['_layouts']['search.html']['wildcards'][site.lang] | default: 'Wildcards: add <code>*</code> to match any character(s), e.g. <code>foo*</code>, <code>*oo</code>. This is helpful for using a root to find words with all related endings.' }}</li>
+                    <li>{{ site.data.translations['_includes']['_layouts']['search.html']['furry-match'][site.lang] | default: 'Fuzzy match: add <code>~</code> plus a number at the end of your query to specify a higher level of fuzziness in search, e.g. <code>foo~1</code>. This can help with misspellings.' }}</li>
+                    <li>{{ site.data.translations['_includes']['_layouts']['search.html']['boost-term'][site.lang] | default: 'Boost term: add <code>^</code> plus a number to boost the relevance of a term in your query, e.g. <code>foo^10</code>. This can help reduce clutter of unrelated results if one of your terms is most important.' }}</li>
                 </ul>
             </div>
         </div>
@@ -32,9 +32,9 @@ custom-foot: js/lunr-js.html
 <div class="ms-3 mt-3">
     <form class="" role="search" id="lunrSearch" onsubmit="lunr_search(); return false;">
         <div class="input-group input-group-lg">
-            <input id="lunrSearchBox" class="form-control " type="text" placeholder="Enter your search term..." >
+            <input id="lunrSearchBox" class="form-control " type="text" placeholder="{{ site.data.translations['_includes']['_layouts']['search.html']['enter-term'][site.lang] | default: 'Enter your search term...' }}" >
             <button class="btn btn-success" type="submit">
-                Search
+                {{ site.data.translations['_includes']['_layouts']['search.html']['search'][site.lang] | default: 'Search' }}
             </button>
         </div>
     </form>
@@ -43,6 +43,6 @@ custom-foot: js/lunr-js.html
 </div>
 
 <div class="mt-3">
-    <p class="text-muted">Fuzzy search powered by <a href="https://lunrjs.com/" target="_blank" rel="noopener">Lunr.js</a>. <em>May take a second to load large collections!</em></p>
-    {% if site.google-cse-id %}<p class="text-muted">Alternatively, try <a href="{{ '/search/google.html' | relative_url }}">Google CSE</a> site search.</p>{% endif %}
+    <p class="text-muted">{{ site.data.translations['_includes']['_layouts']['search.html']['powered-by'][site.lang] | default: 'Fuzzy search powered by <a href="https://lunrjs.com/" target="_blank" rel="noopener">Lunr.js</a>. <em>May take a second to load large collections!</em>' }}</p>
+    {% if site.google-cse-id %}<p class="text-muted">{{ site.data.translations['_includes']['_layouts']['search.html']['google-search'][site.lang] | default: 'Alternatively, try site search by' }} <a href="{{ '/search/google.html' | relative_url }}">Google CSE</a></p>{% endif %}
 </div>
