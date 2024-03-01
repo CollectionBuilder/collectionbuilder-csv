@@ -356,6 +356,18 @@ _includes:
         en: "Download"
         es: "Descargar"
         de: "Herunterladen"
+      subject:
+        en: "Report faulty metadata for"
+        es: "Informe de metadatos defectuosos para"
+        de: "Fehlerhafter Metadaten melden für"
+      body:
+        en: "Please describe the issue with the metadata for"
+        es: "Por favor, describa el problema con los metadatos para"
+        de: "Bitte beschreiben Sie das Problem mit den Metadaten für"
+      report:
+        en: "Report faulty metadata"
+        es: "Informe de metadatos defectuosos"
+        de: "Fehlerhafte Metadaten melden"
     iiif-manifest-universal-viewer.html:
     image-gallery.html:
       full-screen:
@@ -514,147 +526,165 @@ _includes:
     en: "Back to Top"
     es: "Volver al Principio"
     de: "Zurück nach oben"
-  _layouts:
-    item:
-      audio.html:
-      compound-object.html:
-      image.html:
-      item-page-base.html:
-        items:
-          en: "Items"
-          es: "Elementos"
-          de: "Objekte"
-        item-info:
-          en: "Item Information"
-          es: "Información del Elemento"
-          de: "Elementinformationen"
-        jump-to:
-          en: "Jump to item information"
-          es: "Ir a la información del elemento"
-          de: "Springe zu den Elementinformationen"
-      item-page-full-width.html:
-        item-info:
-          en: "Item Information"
-          es: "Información del Elemento"
-          de: "Elementinformationen"
-        jump-to:
-          en: "Jump to item information"
-          es: "Ir a la información del elemento"
-          de: "Springe zu den Elementinformationen"
-      item.html:
-      multiple.html:
-      panorama.html:
-      pdf.html:
-      record.html:
-      video.html:
-    about.html:
-    browse.html:
-      search:
-        en: "Search"
-        es: "Buscar"
-        de: "Suche"
-      reset:
-        en: "Reset"
-        es: "Restablecer"
-        de: "Zurücksetzen"
-      sort-by:
-        en: "Sort by"
-        es: "Ordenar por"
-        de: "Sortieren nach"
-      random:
-        en: "Random"
-        es: "Aleatorio"
-        de: "Zufällig"
-      title:
-        en: "Title"
-        es: "Título"
-        de: "Titel"
-      loading:
-        en: "Loading"
-        es: "Cargando"
-        de: "Laden"
-    cloud.html:
-    data.html:
-      link:
-        en: "Link"
-        es: "Enlace"
-        de: "Link"
-    default.html:
-      skip-to-content:
-        en: "Skip to main content"
-        es: "Saltar al contenido principal"
-        de: "Zum Hauptinhalt springen"
-    home-infographic.html:
-      sample-items:
-        en: "Sample Items"
-        es: "Elementos de Muestra"
-        de: "Beispielobjekte"
-      top-subjects:
-        en: "Top Subjects"
-        es: "Temas Principales"
-        de: "Top-Themen"
-      locations:
-        en: "Locations"
-        es: "Ubicaciones"
-        de: "Standorte"
-    map.html:
-    page-full-width.html:
-    page-narrow.html:
-    page.html:
-    search.html:
-      search-options:
-        en: "Search Options"
-        es: "Opciones de Búsqueda"
-        de: "Suchoptionen"
-      lunr-search-options:
-        en: "Lunr Search Options"
-        es: "Opciones de Búsqueda Lunr"
-        de: "Lunr-Suchoptionen"
-      close:
-        en: "Close"
-        es: "Cerrar"
-        de: "Schließen"
-      description:
-        en: "These advanced options can be added to your query in the search box to refine your results:"
-        es: "Estas opciones avanzadas se pueden agregar a su consulta en el cuadro de búsqueda para refinar sus resultados:"
-        de: "Diese erweiterten Optionen können Ihrer Abfrage im Suchfeld hinzugefügt werden, um Ihre Ergebnisse zu verfeinern:"
-      field-name:
-        en: "Search a specific field: use the field name, colon, then your query, e.g. <code>title:foo</code>, <code>date:1911</code>, <code>subject:tree</code>. In this collection you can use (( fields | join: \", \" ))."
-        es: "Buscar un campo específico: use el nombre del campo, dos puntos y luego su consulta, por ejemplo <code>título:foo</code>, <code>fecha:1911</code>, <code>tema:árbol</code>. En esta colección puede usar (( fields | join: \", \" ))."
-        de: "Suchen Sie ein bestimmtes Feld: Verwenden Sie den Feldnamen, Doppelpunkt und dann Ihre Abfrage, z.B. <code>titel:foo</code>, <code>datum:1911</code>, <code>thema:baum</code>. In dieser Sammlung können Sie (( fields | join: \", \" )) verwenden."
-      wildcards:
-        en: "Wildcards: add <code>*</code> to match any character(s), e.g. <code>foo*</code>, <code>*oo</code>. This is helpful for using a root to find words with all related endings."
-        es: "Comodines: agregue <code>*</code> para hacer coincidir cualquier carácter(es), por ejemplo <code>foo*</code>, <code>*oo</code>. Esto es útil para usar una raíz para encontrar palabras con todos los finales relacionados."
-        de: "Platzhalter: Fügen Sie <code>*</code> hinzu, um beliebige Zeichen zu finden, z.B. <code>foo*</code>, <code>*oo</code>. Dies ist hilfreich, um eine Wurzel zu verwenden, um Wörter mit allen verwandten Endungen zu finden."
-      fuzzy-match:
-        en: "Fuzzy match: add <code>~</code> plus a number at the end of your query to specify a higher level of fuzziness in search, e.g. <code>foo~1</code>. This can help with misspellings."
-        es: "Coincidencia difusa: agregue <code>~</code> más un número al final de su consulta para especificar un mayor nivel de imprecisión en la búsqueda, por ejemplo <code>foo~1</code>. Esto puede ayudar con los errores de ortografía."
-        de: "Ungefähre Übereinstimmung: Fügen Sie Ihrer Abfrage <code>~</code> plus eine Zahl hinzu, um ein höheres Maß an Unschärfe in der Suche anzugeben, z.B. <code>foo~1</code>. Dies kann bei Rechtschreibfehlern helfen."
-      boost-term:
-        en: "Boost term: add <code>^</code> plus a number to boost the relevance of a term in your query, e.g. <code>foo^10</code>. This can help reduce clutter of unrelated results if one of your terms is most important."
-        es: "Término de impulso: agregue <code>^</code> más un número para aumentar la relevancia de un término en su consulta, por ejemplo <code>foo^10</code>. Esto puede ayudar a reducir el desorden de resultados no relacionados si uno de sus términos es el más importante."
-        de: "Begriff verstärken: Fügen Sie <code>^</code> plus eine Zahl hinzu, um die Relevanz eines Begriffs in Ihrer Abfrage zu erhöhen, z.B. <code>foo^10</code>. Dies kann helfen, das Durcheinander von nicht verwandten Ergebnissen zu reduzieren, wenn einer Ihrer Begriffe am wichtigsten ist."
-      enter-term:
-        en: "Enter your search term..."
-        es: "Ingrese su término de búsqueda..."
-        de: "Geben Sie Ihren Suchbegriff ein..."
-      search:
-        en: "Search"
-        es: "Buscar"
-        de: "Suche"
-      powered-by:
-        en: "Fuzzy search powered by <a href='https://lunrjs.com/' target='_blank' rel='noopener'>Lunr.js</a>. <em>May take a second to load large collections!</em>"
-        es: "Búsqueda difusa proporcionada por <a href='https://lunrjs.com/' target='_blank' rel='noopener'>Lunr.js</a>. <em>¡Puede tardar un segundo en cargar colecciones grandes!</em>"
-        de: "Unscharfe Suche bereitgestellt von <a href='https://lunrjs.com/' target='_blank' rel='noopener'>Lunr.js</a>. <em>Kann einen Moment dauern, um große Sammlungen zu laden!</em>"
-      google-search:
-        en: "Alternatively, try site search by"
-        es: "Alternativamente, intente la búsqueda del sitio por"
-        de: "Versuchen Sie alternativ die Websuche durch"
-    timeline.html:
-      years:
-        en: "Years"
-        es: "Años"
-        de: "Jahre"
-
-
-
+_layouts:
+  item:
+    audio.html:
+    compound-object.html:
+    image.html:
+    item-page-base.html:
+      items:
+        en: "Items"
+        es: "Elementos"
+        de: "Objekte"
+      item-info:
+        en: "Item Information"
+        es: "Información del Elemento"
+        de: "Elementinformationen"
+      jump-to:
+        en: "Jump to item information"
+        es: "Ir a la información del elemento"
+        de: "Springe zu den Elementinformationen"
+    item-page-full-width.html:
+      item-info:
+        en: "Item Information"
+        es: "Información del Elemento"
+        de: "Elementinformationen"
+      jump-to:
+        en: "Jump to item information"
+        es: "Ir a la información del elemento"
+        de: "Springe zu den Elementinformationen"
+    item.html:
+    multiple.html:
+    panorama.html:
+    pdf.html:
+    record.html:
+    video.html:
+  about.html:
+  browse.html:
+    filter:
+      en: "Filter"
+      es: "Filtrar"
+      de: "Filter"
+    filter-items:
+      en: "Filter items"
+      es: "Filtrar elementos"
+      de: "Elemente filtern"
+    search:
+      en: "Search"
+      es: "Buscar"
+      de: "Suche"
+    reset:
+      en: "Reset"
+      es: "Restablecer"
+      de: "Zurücksetzen"
+    sort-by:
+      en: "Sort by"
+      es: "Ordenar por"
+      de: "Sortieren nach"
+    random:
+      en: "Random"
+      es: "Aleatorio"
+      de: "Zufällig"
+    title:
+      en: "Title"
+      es: "Título"
+      de: "Titel"
+    loading:
+      en: "Loading"
+      es: "Cargando"
+      de: "Laden"
+  cloud.html:
+  data.html:
+    link:
+      en: "Link"
+      es: "Enlace"
+      de: "Link"
+  default.html:
+    skip-to-content:
+      en: "Skip to main content"
+      es: "Saltar al contenido principal"
+      de: "Zum Hauptinhalt springen"
+  home-infographic.html:
+    sample-items:
+      en: "Sample Items"
+      es: "Elementos de Muestra"
+      de: "Beispielobjekte"
+    top-subjects:
+      en: "Top Subjects"
+      es: "Temas Principales"
+      de: "Top-Themen"
+    locations:
+      en: "Locations"
+      es: "Ubicaciones"
+      de: "Standorte"
+  list:
+    sort-by:
+      en: "Sort by"
+      es: "Ordenar por"
+      de: "Sortieren nach"
+    count:
+      en: "Count"
+      es: "Recuento"
+      de: "Anzahl"
+    term:
+      en: "Term"
+      es: "Término"
+      de: "Begriff"
+  map.html:
+  page-full-width.html:
+  page-narrow.html:
+  page.html:
+  search.html:
+    search-options:
+      en: "Search Options"
+      es: "Opciones de Búsqueda"
+      de: "Suchoptionen"
+    lunr-search-options:
+      en: "Lunr Search Options"
+      es: "Opciones de Búsqueda Lunr"
+      de: "Lunr-Suchoptionen"
+    close:
+      en: "Close"
+      es: "Cerrar"
+      de: "Schließen"
+    description:
+      en: "These advanced options can be added to your query in the search box to refine your results:"
+      es: "Estas opciones avanzadas se pueden agregar a su consulta en el cuadro de búsqueda para refinar sus resultados:"
+      de: "Diese erweiterten Optionen können Ihrer Abfrage im Suchfeld hinzugefügt werden, um Ihre Ergebnisse zu verfeinern:"
+    field-name:
+      en: "Search a specific field: use the field name, colon, then your query, e.g. <code>title:foo</code>, <code>date:1911</code>, <code>subject:tree</code>. In this collection you can use (( fields | join: \", \" ))."
+      es: "Buscar un campo específico: use el nombre del campo, dos puntos y luego su consulta, por ejemplo <code>título:foo</code>, <code>fecha:1911</code>, <code>tema:árbol</code>. En esta colección puede usar (( fields | join: \", \" ))."
+      de: "Suchen Sie ein bestimmtes Feld: Verwenden Sie den Feldnamen, Doppelpunkt und dann Ihre Abfrage, z.B. <code>titel:foo</code>, <code>datum:1911</code>, <code>thema:baum</code>. In dieser Sammlung können Sie (( fields | join: \", \" )) verwenden."
+    wildcards:
+      en: "Wildcards: add <code>*</code> to match any character(s), e.g. <code>foo*</code>, <code>*oo</code>. This is helpful for using a root to find words with all related endings."
+      es: "Comodines: agregue <code>*</code> para hacer coincidir cualquier carácter(es), por ejemplo <code>foo*</code>, <code>*oo</code>. Esto es útil para usar una raíz para encontrar palabras con todos los finales relacionados."
+      de: "Platzhalter: Fügen Sie <code>*</code> hinzu, um beliebige Zeichen zu finden, z.B. <code>foo*</code>, <code>*oo</code>. Dies ist hilfreich, um eine Wurzel zu verwenden, um Wörter mit allen verwandten Endungen zu finden."
+    fuzzy-match:
+      en: "Fuzzy match: add <code>~</code> plus a number at the end of your query to specify a higher level of fuzziness in search, e.g. <code>foo~1</code>. This can help with misspellings."
+      es: "Coincidencia difusa: agregue <code>~</code> más un número al final de su consulta para especificar un mayor nivel de imprecisión en la búsqueda, por ejemplo <code>foo~1</code>. Esto puede ayudar con los errores de ortografía."
+      de: "Ungefähre Übereinstimmung: Fügen Sie Ihrer Abfrage <code>~</code> plus eine Zahl hinzu, um ein höheres Maß an Unschärfe in der Suche anzugeben, z.B. <code>foo~1</code>. Dies kann bei Rechtschreibfehlern helfen."
+    boost-term:
+      en: "Boost term: add <code>^</code> plus a number to boost the relevance of a term in your query, e.g. <code>foo^10</code>. This can help reduce clutter of unrelated results if one of your terms is most important."
+      es: "Término de impulso: agregue <code>^</code> más un número para aumentar la relevancia de un término en su consulta, por ejemplo <code>foo^10</code>. Esto puede ayudar a reducir el desorden de resultados no relacionados si uno de sus términos es el más importante."
+      de: "Begriff verstärken: Fügen Sie <code>^</code> plus eine Zahl hinzu, um die Relevanz eines Begriffs in Ihrer Abfrage zu erhöhen, z.B. <code>foo^10</code>. Dies kann helfen, das Durcheinander von nicht verwandten Ergebnissen zu reduzieren, wenn einer Ihrer Begriffe am wichtigsten ist."
+    enter-term:
+      en: "Enter your search term..."
+      es: "Ingrese su término de búsqueda..."
+      de: "Geben Sie Ihren Suchbegriff ein..."
+    search:
+      en: "Search"
+      es: "Buscar"
+      de: "Suche"
+    powered-by:
+      en: "Fuzzy search powered by <a href='https://lunrjs.com/' target='_blank' rel='noopener'>Lunr.js</a>. <em>May take a second to load large collections!</em>"
+      es: "Búsqueda difusa proporcionada por <a href='https://lunrjs.com/' target='_blank' rel='noopener'>Lunr.js</a>. <em>¡Puede tardar un segundo en cargar colecciones grandes!</em>"
+      de: "Unscharfe Suche bereitgestellt von <a href='https://lunrjs.com/' target='_blank' rel='noopener'>Lunr.js</a>. <em>Kann einen Moment dauern, um große Sammlungen zu laden!</em>"
+    google-search:
+      en: "Alternatively, try site search by"
+      es: "Alternativamente, intente la búsqueda del sitio por"
+      de: "Versuchen Sie alternativ die Websuche durch"
+  timeline.html:
+    years:
+      en: "Years"
+      es: "Años"
+      de: "Jahre"

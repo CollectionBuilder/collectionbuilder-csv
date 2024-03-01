@@ -15,7 +15,7 @@ custom-foot: js/table-js.html
                 {% for f in fields %}
                 <th scope="col">{{ f }}</th>
                 {% endfor %}
-                <th>{{ site.data.translations['_includes']['_layouts']['data.html']['link'][site.lang] | default: 'Link' }}</th>
+                <th>{{ site.data.translations['_layouts']['data.html']['link'][site.lang] | default: 'Link' }}</th>
             </tr>
         </thead>
     </table>

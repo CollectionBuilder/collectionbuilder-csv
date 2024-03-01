@@ -1,6 +1,6 @@
 ---
 title: Datenschutzerklärung
-layout: about
+layout: page
 permalink: /datenschutzerklaerung.html
 ---
 

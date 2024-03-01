@@ -20,10 +20,10 @@ home-banner-image-position: center # Default is top
 # see _data/metadata-config.csv to define the metadata fields that will display.
 browse-buttons: true # true / false, adds previous/next arrows to items, but increases build time
 trigger-warning: true # true / false, adds trigger warning to item pages
-trigger-warning-text: "This collection may contain sensitive content." # optional, if you want to override the default trigger warning text
-trigger-warning-text-item: "This item may contain sensitive content." # optional, if you want to override the default trigger warning text for individual items
+trigger-warning-text: "Diese Sammlung enthält sensible Inhalte. <a href='/sensible-inhalte.html'>Klicken Sie hier</a>, um mehr zu erfahren." # optional, if you want to override the default trigger warning text
+trigger-warning-text-item: "Diese Ressource enthält sensible Inhalte. <a href='/sensible-inhalte.html'>Klicken Sie hier</a>, um mehr zu erfahren." #optional, if you want to override the default trigger warning text for individual items
 trigger-field: "subject" # field to trigger warning, e.g. "subject"
-trigger-terms: "Success,violence,sexuality,racism,discrimination" # set of subjects separated by , that will trigger warning, e.g. violence,sexuality,racism,discrimination
+trigger-terms: "Antisemitismus,Krieg,Rassismus" # set of subjects separated by , that will trigger warning, e.g. violence,sexuality,racism,discrimination
 
 
 ##########

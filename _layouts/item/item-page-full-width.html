@@ -12,8 +12,8 @@ item-meta: true
     {% include item/trigger-warning.html %}
     <div class="my-0 h5 small">{{ page.display_template | replace: "_", " " | upcase }} {% if page.display_template == "compound_object" %} ({{ children | size }} Items){% endif %}</div>
     <h2 class="mb-3">{{ page.title }} 
-        {% unless page.display_template == 'record' %}<a href="#metadata" class="ms-5 btn btn-sm btn-outline-dark small">{{ site.data.translations['_includes']['_layouts']['item']['item-page-full-width.html']['item-info'][site.lang] | default: 'Item Info'}} 
-            <svg class="bi icon-sprite" role="img" aria-label="{{ site.data.translations['_includes']['_layouts']['item']['item-page-full-width.html']['jump-to'][site.lang] | default: 'Jump to item info'}}">
+        {% unless page.display_template == 'record' %}<a href="#metadata" class="ms-5 btn btn-sm btn-outline-dark small">{{ site.data.translations['_layouts']['item']['item-page-full-width.html']['item-info'][site.lang] | default: 'Item Info'}} 
+            <svg class="bi icon-sprite" role="img" aria-label="{{ site.data.translations['_layouts']['item']['item-page-full-width.html']['jump-to'][site.lang] | default: 'Jump to item info'}}">
                 <use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#arrow-down"/>
             </svg>
         </a>{% endunless %}

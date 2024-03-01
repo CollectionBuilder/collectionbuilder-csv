@@ -3,9 +3,9 @@
 layout: page
 ---
 {%- assign items = site.data[site.metadata] | where_exp: 'item','item.objectid' -%}
-{%- assign sample_items = site.data.translations['_includes']['_layouts']['home-infographic.html']['sample-items'][site.lang] | default: 'Sample Items' -%}
-{%- assign top_subjects = site.data.translations['_includes']['_layouts']['home-infographic.html']['top-subjects'][site.lang] | default: 'Top Subjects' -%}
-{%- assign locations = site.data.translations['_includes']['_layouts']['home-infographic.html']['locations'][site.lang] | default: 'Locations' -%}
+{%- assign sample_items = site.data.translations['_layouts']['home-infographic.html']['sample-items'][site.lang] | default: 'Sample Items' -%}
+{%- assign top_subjects = site.data.translations['_layouts']['home-infographic.html']['top-subjects'][site.lang] | default: 'Top Subjects' -%}
+{%- assign locations = site.data.translations['_layouts']['home-infographic.html']['locations'][site.lang] | default: 'Locations' -%}
 
 <div class="row">
 
