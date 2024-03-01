@@ -8,9 +8,9 @@
 {%- assign date-range = clean-years | remove: " " | split: ";" | uniq | sort  -%}
 <div class="card mb-3">
   <div class="card-body">
-    <h2 class="card-title h5">Time Span</h2>
+    <h2 class="card-title h5">{{ site.data.translations['_includes']['index']['time.html']['title'][site.lang] | default: "Time Span" }}</h2>
     <p class="card-text h5">{{ date-range | first }} to {{ date-range | last }}
-      <br><a href="{{ '/timeline.html' | relative_url }}" class="btn btn-sm btn-outline-secondary mt-2">View Timeline</a>
+      <br><a href="{{ '/timeline.html' | relative_url }}" class="btn btn-sm btn-outline-secondary mt-2">{{ site.data.translations['_includes']['index']['time.html']['view-timeline'][site.lang] | default: "View Timeline" }}</a>
     </p>
   </div>
 </div>

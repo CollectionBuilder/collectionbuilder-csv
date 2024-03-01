@@ -8,10 +8,10 @@ item-meta: true
 <div class="container py-3">
 
     {% include item/breadcrumbs.html %}
-    <div class="my-0 h5 small">{{ page.display_template | replace: "_", " " | upcase }} {% if page.display_template == "compound_object" or page.display_template == "multiple" %}{% assign children = site.data[site.metadata] | where_exp: 'item','item.parentid == page.objectid' %} ({{ children | size }} Items){% endif %}</div>
+    <div class="my-0 h5 small">{{ page.display_template | replace: "_", " " | upcase }} {% if page.display_template == "compound_object" or page.display_template == "multiple" %}{% assign children = site.data[site.metadata] | where_exp: 'item','item.parentid == page.objectid' %} ({{ children | size }} {{ site.data.translations['_layouts']['item']['item-page-base.html']['items'][site.lang] | default: 'Items'}}){% endif %}</div>
     <h2 class="mb-3">{{ page.title }} 
-        {% unless page.display_template == 'record' %}<a href="#metadata" class="ms-5 btn btn-sm btn-outline-dark small">Item Info 
-            <svg class="bi icon-sprite" role="img" aria-label="Jump to Item Info">
+        {% unless page.display_template == 'record' %}<a href="#metadata" class="ms-5 btn btn-sm btn-outline-dark small">{{ site.data.translations['_layouts']['item']['item-page-base.html']['item-info'][site.lang] | default: 'Item Info'}} 
+            <svg class="bi icon-sprite" role="img" aria-label="{{ site.data.translations['_layouts']['item']['item-page-base.html']['jump-to'][site.lang] | default: 'Jump to item info'}}">
                 <use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#arrow-down"/>
             </svg>
         </a>{% endunless %}

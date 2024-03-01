@@ -7,6 +7,6 @@
 <div class="ratio ratio-16x9">
     <video width="320" height="240" controls>
         <source src="{{ page.object_location | relative_url }}">
-        Your browser does not support the video tag. Please <a href="{{ page.object_location | relative_url }}">download the video file</a>.
+        {{ site.data.translations['_includes']['item']['video-player.html']['error'][site.lang] | default: 'Your browser does not support the video tag.' }} <a href="{{ page.object_location | relative_url }}">{{ site.data.translations['_includes']['item']['video-player.html']['download'][site.lang] | default: 'Download the video file' }}</a>
     </video>
 </div>

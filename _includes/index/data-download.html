@@ -1,28 +1,28 @@
 {%- assign stubs = site.data.config-nav | map: 'stub' | join: ';' -%}
 <div class="card mb-3">
     <div class="card-body">
-        <h2 class="card-title h5">Collection as Data <small>(click to download)</small></h2>
+        <h2 class="card-title h5">{{ site.data.translations['_includes']['index']['data-download.html']['title'][site.lang] | default: "Collection as Data <small>(click to download)</small>" }}</h2>
         <p class="card-text text-center">
-            <a class="btn btn-sm btn-secondary m-2" href="{{ '/assets/data/metadata.csv' | relative_url }}" target="_blank">Metadata CSV</a>
-            <a class="btn btn-sm btn-secondary m-2" href="{{ '/assets/data/metadata.json' | relative_url }}" target="_blank">Metadata JSON</a>
+            <a class="btn btn-sm btn-secondary m-2" href="{{ '/assets/data/metadata.csv' | relative_url }}" target="_blank">{{ site.data.translations['_includes']['index']['data-download.html']['metadata'][site.lang] | default: "Metadata" }} CSV</a>
+            <a class="btn btn-sm btn-secondary m-2" href="{{ '/assets/data/metadata.json' | relative_url }}" target="_blank">{{ site.data.translations['_includes']['index']['data-download.html']['metadata'][site.lang] | default: "Metadata" }} JSON</a>
             {% if stubs contains "subject" %}
-            <a class="btn btn-sm btn-secondary m-2" href="{{ '/assets/data/subjects.json' | relative_url }}" target="_blank">Subjects JSON</a>
-            <a class="btn btn-sm btn-secondary m-2" href="{{ '/assets/data/subjects.csv' | relative_url }}" target="_blank">Subjects CSV</a>
+            <a class="btn btn-sm btn-secondary m-2" href="{{ '/assets/data/subjects.json' | relative_url }}" target="_blank">{{ site.data.translations['_includes']['index']['data-download.html']['subjects'][site.lang] | default: "Subjects" }} JSON</a>
+            <a class="btn btn-sm btn-secondary m-2" href="{{ '/assets/data/subjects.csv' | relative_url }}" target="_blank">{{ site.data.translations['_includes']['index']['data-download.html']['subjects'][site.lang] | default: "Subjects" }} CSV</a>
             {% endif %}
             {% if stubs contains "map" %}
-            <a class="btn btn-sm btn-secondary m-2" href="{{ '/assets/data/geodata.json' | relative_url }}" target="_blank">Geodata JSON</a>
+            <a class="btn btn-sm btn-secondary m-2" href="{{ '/assets/data/geodata.json' | relative_url }}" target="_blank">{{ site.data.translations['_includes']['index']['data-download.html']['geodata'][site.lang] | default: "Geodata" }} JSON</a>
             {% endif %}
             {% if stubs contains "location" %}
-            <a class="btn btn-sm btn-secondary m-2" href="{{ '/assets/data/locations.csv' | relative_url }}" target="_blank">Locations CSV</a>
-            <a class="btn btn-sm btn-secondary m-2" href="{{ '/assets/data/locations.json' | relative_url }}" target="_blank">Locations JSON</a>
+            <a class="btn btn-sm btn-secondary m-2" href="{{ '/assets/data/locations.csv' | relative_url }}" target="_blank">{{ site.data.translations['_includes']['index']['data-download.html']['locations'][site.lang] | default: "Locations" }} CSV</a>
+            <a class="btn btn-sm btn-secondary m-2" href="{{ '/assets/data/locations.json' | relative_url }}" target="_blank">{{ site.data.translations['_includes']['index']['data-download.html']['locations'][site.lang] | default: "Locations" }} JSON</a>
             {% endif %}
             {% if stubs contains "timeline" %}
-            <a class="btn btn-sm btn-secondary m-2" href="{{ '/assets/data/timelinejs.json' | relative_url }}" target="_blank">Timeline JSON</a>
+            <a class="btn btn-sm btn-secondary m-2" href="{{ '/assets/data/timelinejs.json' | relative_url }}" target="_blank">{{ site.data.translations['_includes']['index']['data-download.html']['timeline'][site.lang] | default: "Timeline" }} JSON</a>
             {% endif %}
             {% if site.data.theme.metadata-facets-fields %}
-            <a class="btn btn-sm btn-secondary m-2" href="{{ '/assets/data/facets.json' | relative_url }}" target="_blank">Facets JSON</a>
+            <a class="btn btn-sm btn-secondary m-2" href="{{ '/assets/data/facets.json' | relative_url }}" target="_blank">{{ site.data.translations['_includes']['index']['data-download.html']['facets'][site.lang] | default: "Facets" }} JSON</a>
             {% endif %}
-            <a class="btn btn-sm btn-secondary m-2" href="{{ site.source-code }}" rel="noopener" target="_blank">Source Code</a>
+            <a class="btn btn-sm btn-secondary m-2" href="{{ site.source-code }}" rel="noopener" target="_blank">{{ site.data.translations['_includes']['index']['data-download.html']['source-code'][site.lang] | default: "Source Code" }}</a>
         </p>
     </div>
 </div>

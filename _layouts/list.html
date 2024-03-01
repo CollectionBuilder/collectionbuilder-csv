@@ -1,0 +1,41 @@
+---
+# Term list layout
+# can be used by subjects and location page
+# can be used for any metadata field
+layout: page
+---
+
+{{ content }}
+
+{%- comment -%}
+
+    Figure out default "Subjects" and "Locations" page field values as configured in in "theme.yml", 
+    and set default values for field include.
+
+{%- endcomment -%}
+{%- if page.fields == "site.data.theme.subjects-fields" -%}
+  {% assign fields = site.data.theme.subjects-fields %}
+  {% assign min = site.data.theme.subjects-min | default: 1 %}
+  {% assign stopwords = site.data.theme.subjects-stopwords %}
+{%- elsif page.fields == "site.data.theme.locations-fields" -%}
+  {% assign fields = site.data.theme.locations-fields %}
+  {% assign min = site.data.theme.locations-min | default: 1 %}
+  {% assign stopwords = site.data.theme.locations-stopwords %}
+{%- else -%}
+  {% assign fields = page.fields | default: "subjects" %}
+  {% assign min = page.field-min | default: 1 %}
+  {% assign stopwords = page.field-stopwords %}
+{%- endif -%}
+
+{% assign list_id = "list-div-" | append: fields | slugify %}
+<div class="dropdown">
+    <button class="btn btn-secondary mt-1 dropdown-toggle" type="button" id="browseSortButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        {{ site.data.translations['_layouts']['list.html']['sort-by'][site.lang] | default: 'Sort by' }} <span id="sortFilter">{{ site.data.translations['_layouts']['list.html']['count'][site.lang] | default: 'Count' }}</span>
+    </button>
+    <div class="dropdown-menu browse-sort-menu" aria-labelledby="browseSortButton">
+        <button class="dropdown-item list-sort-item active" onclick="changeSortMethod('count')">{{ site.data.translations['_layouts']['list.html']['count'][site.lang] | default: 'Count' }}</button>
+        <button class="dropdown-item list-sort-item" onclick="changeSortMethod('term')">{{ site.data.translations['_layouts']['list.html']['term'][site.lang] | default: 'Term' }}</button>
+    </div>
+</div>
+<div id="{{ list_id }}" class="text-center my-4 bg-{{ page.background | default: 'light' }} border rounded p-2"></div>
+{% include js/list-js.html id=list_id fields=fields min=min stopwords=stopwords %}

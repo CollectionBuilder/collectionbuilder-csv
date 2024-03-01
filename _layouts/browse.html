@@ -10,9 +10,9 @@ custom-foot: js/browse-js.html
     <div class="col-md-8 text-center">
         <form role="search" id="lunrSearch" onsubmit="submitFilter(); return false;">
             <div class="input-group input-group-lg">
-                <input type="text" class="form-control" id="filterTextBox" placeholder="Filter ... " aria-label="Search"> 
-                <button class="btn btn-success" type="submit" title="Filter items" id="filterButton" >Search</button>
-                <button class="btn btn-outline-secondary filter" onclick="resetFilter(); return false;" data-filter="">Reset</button>
+                <input type="text" class="form-control" id="filterTextBox" placeholder="{{ site.data.translations['_layouts']['browse.html']['filter'][site.lang] | default: 'Filter' }} ..." aria-label="{{ site.data.translations['_layouts']['browse.html']['search'][site.lang] | default: 'Search' }}"> 
+                <button class="btn btn-success" type="submit" title="{{ site.data.translations['_layouts']['browse.html']['filter-items'][site.lang] | default: 'Filter items' }}" id="filterButton" >{{ site.data.translations['_layouts']['browse.html']['search'][site.lang] | default: 'Search' }}</button>
+                <button class="btn btn-outline-secondary filter" onclick="resetFilter(); return false;" data-filter="">{{ site.data.translations['_layouts']['browse.html']['reset'][site.lang] | default: 'Reset' }}</button>
             </div>
         </form>
         <div class="h2" id="numberOf"></div>
@@ -20,11 +20,11 @@ custom-foot: js/browse-js.html
     <div class="col-md-2">
         <div class="dropdown">
             <button class="btn btn-secondary mt-1 dropdown-toggle" type="button" id="browseSortButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Sort by <span id="sortFilter">Random</span>
+                {{ site.data.translations['_layouts']['browse.html']['sort-by'][site.lang] | default: 'Sort by' }} <span id="sortFilter">{{ site.data.translations['_layouts']['browse.html']['random'][site.lang] | default: 'Random' }}</span>
             </button>
             <div class="dropdown-menu browse-sort-menu" aria-labelledby="browseSortButton">
-                <button class="dropdown-item browse-sort-item active" data-filter="random">Random</button>
-                <button class="dropdown-item browse-sort-item" data-filter="title">Title</button>
+                <button class="dropdown-item browse-sort-item active" data-filter="random">{{ site.data.translations['_layouts']['browse.html']['random'][site.lang] | default: 'Random' }}</button>
+                <button class="dropdown-item browse-sort-item" data-filter="title">{{ site.data.translations['_layouts']['browse.html']['title'][site.lang] | default: 'Title' }}</button>
                 {% assign sort_options = site.data.config-browse | where_exp: 'i','i.sort_name != nil' %}
                 {% for o in sort_options %}
                 <button class="dropdown-item browse-sort-item" data-filter="{{ o.field | escape }}">{{ o.sort_name }}</button>
@@ -35,7 +35,7 @@ custom-foot: js/browse-js.html
 </div>
 
 <div id="loadingIcon" class="text-center">
-    <div class="spinner-border text-dark" role="status"><span class="visually-hidden">Loading...</span></div>
+    <div class="spinner-border text-dark" role="status"><span class="visually-hidden">{{ site.data.translations['_layouts']['browse.html']['loading'][site.lang] | default: 'Loading' }}...</span></div>
 </div>
 
 <div class="row" id="browseItems"></div>
