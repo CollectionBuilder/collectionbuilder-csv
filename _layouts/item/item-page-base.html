@@ -1,6 +1,6 @@
 ---
 # base layout for other item display_template layouts
-# adds breadcrumbs and title at top; citation box, rights box, and browse buttons at bottom
+# adds breadcrumbs, trigger-warning, and title at top; citation box, rights box, and browse buttons at bottom
 layout: default
 # item-meta adds rich meta markup to the page on production build
 item-meta: true
@@ -8,6 +8,7 @@ item-meta: true
 <div class="container py-3">
 
     {% include item/breadcrumbs.html %}
+    {% include item/trigger-warning.html %}
     <div class="my-0 h5 small">{{ page.display_template | replace: "_", " " | upcase }} {% if page.display_template == "compound_object" or page.display_template == "multiple" %}{% assign children = site.data[site.metadata] | where_exp: 'item','item.parentid == page.objectid' %} ({{ children | size }} {{ site.data.translations['_includes']['_layouts']['item']['item-page-base.html']['items'][site.lang] | default: 'Items'}}){% endif %}</div>
     <h2 class="mb-3">{{ page.title }} 
         {% unless page.display_template == 'record' %}<a href="#metadata" class="ms-5 btn btn-sm btn-outline-dark small">{{ site.data.translations['_includes']['_layouts']['item']['item-page-base.html']['item-info'][site.lang] | default: 'Item Info'}} 
