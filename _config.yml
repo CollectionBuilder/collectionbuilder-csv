@@ -56,14 +56,6 @@ organization-logo-banner: https://cdil.lib.uidaho.edu/storying-extinction/assets
 organization-logo-nav: https://cdil.lib.uidaho.edu/assets/img/logo.png
 
 ##########
-# GOOGLE SERVICES [optional!]
-#
-# leave these blank or comment out to NOT include google code
-# if present, used to add analytics during "production" build only
-# google-analytics-id: "G-XXXXXXXXX"
-# google-cse-id: "002151703305773322890:1pu3smhw1t8"
-
-##########
 # ROBOTS EXCLUDE
 #
 # set noindex to true if you do NOT want Google to index your site
