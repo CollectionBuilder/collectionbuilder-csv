@@ -1,7 +1,7 @@
 ---
-title: Site Search
+title: Suche
 layout: search
 permalink: /search/
 ---
 
-## Full metadata search:
+## Suche über die gesamten Metadaten:

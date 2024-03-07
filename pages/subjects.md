@@ -1,5 +1,5 @@
 ---
-title: Subjects
+title: Themen
 layout: list
 permalink: /subjects.html
 # Default subject page is configured in "_data/theme.yml"
@@ -7,6 +7,6 @@ permalink: /subjects.html
 fields: site.data.theme.subjects-fields
 ---
 
-## Browse Subjects
+## Themen durchsuchen
 
 
