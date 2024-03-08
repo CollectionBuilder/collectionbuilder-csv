@@ -4,6 +4,7 @@ layout: page
 custom-foot: js/timeline-js.html
 ---
 {%- assign field = site.data.theme.timeline-field | default: "date" -%}
+{%- assign years = site.data.translations['_layouts']['timeline_edtf.html']['years'][site.lang] | default: 'Years' -%}
 {% if site.data.theme.timeline-child-objects == true %}
 {%- assign items = site.data[site.metadata] | where_exp: 'item','item.objectid' -%}
 {% else %}
@@ -25,7 +26,7 @@ custom-foot: js/timeline-js.html
 {%- if navYears -%}
 <div class="dropdown float-end" id="year-nav">
     <button class="btn btn-primary dropdown-toggle" type="button" id="yearButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Year
+        {{ years }} 
     </button>
     <div class="dropdown-menu" aria-labelledby="yearButton">
         {% for y in navYears %}
@@ -36,7 +37,7 @@ custom-foot: js/timeline-js.html
 
 {{ content }}
 
-<h3><a href="#y{{ uniqueYears | first }}">{{ uniqueYears | first }}</a> to <a href="#y{{ uniqueYears | last }}">{{ uniqueYears | last }}</a></h3>
+<h3><a href="#y{{ uniqueYears | first }}">{{ uniqueYears | first }}</a> - <a href="#y{{ uniqueYears | last }}">{{ uniqueYears | last }}</a></h3>
 
 <table id="timeline" class="table table-striped">
     <tbody>

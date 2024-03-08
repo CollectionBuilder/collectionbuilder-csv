@@ -688,3 +688,8 @@ _layouts:
       en: "Years"
       es: "Años"
       de: "Jahre"
+  timeline_edtf.html:
+    years:
+      en: "Years"
+      es: "Años"
+      de: "Jahre"
