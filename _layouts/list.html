@@ -33,8 +33,8 @@ layout: page
         {{ site.data.translations['_layouts']['list.html']['sort-by'][site.lang] | default: 'Sort by' }} <span id="sortFilter">{{ site.data.translations['_layouts']['list.html']['count'][site.lang] | default: 'Count' }}</span>
     </button>
     <div class="dropdown-menu browse-sort-menu" aria-labelledby="browseSortButton">
-        <button class="dropdown-item list-sort-item active" onclick="changeSortMethod('count')">{{ site.data.translations['_layouts']['list.html']['count'][site.lang] | default: 'Count' }}</button>
-        <button class="dropdown-item list-sort-item" onclick="changeSortMethod('term')">{{ site.data.translations['_layouts']['list.html']['term'][site.lang] | default: 'Term' }}</button>
+        <button class="dropdown-item list-sort-item active" data-filter='count'>{{ site.data.translations['_layouts']['list.html']['count'][site.lang] | default: 'Count' }}</button>
+        <button class="dropdown-item list-sort-item" data-filter='term'>{{ site.data.translations['_layouts']['list.html']['term'][site.lang] | default: 'Term' }}</button>
     </div>
 </div>
 <div id="{{ list_id }}" class="text-center my-4 bg-{{ page.background | default: 'light' }} border rounded p-2"></div>

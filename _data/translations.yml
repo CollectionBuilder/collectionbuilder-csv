@@ -617,7 +617,7 @@ _layouts:
       en: "Locations"
       es: "Ubicaciones"
       de: "Standorte"
-  list:
+  list.html:
     sort-by:
       en: "Sort by"
       es: "Ordenar por"

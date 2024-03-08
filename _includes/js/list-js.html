@@ -57,25 +57,23 @@
         listGroup.innerHTML = items;
     }
 
-    /* toggle sorting method */
-    function changeSortMethod(sortMethod) {
-        currentSortMethod = sortMethod;
-        sortTerms(currentSortMethod);
-        makeList(terms);
-        document.getElementById('sortFilter').innerText = capitalizeFirstLetter(sortMethod);
-
-        // Remove 'active' class from all items
-        var items = document.querySelectorAll('.list-sort-item');
-        items.forEach(function(item) {
-            item.classList.remove('active');
+    /* add sort function on click of sort options */
+    var sortFilter = document.querySelector("#sortFilter");
+    var sortOptions = document.querySelectorAll(".list-sort-item");
+    sortOptions.forEach((button) => {
+        button.addEventListener("click", (event) => {
+            // get the sort field
+            var field = button.dataset.filter;
+            var display_name = button.textContent;
+            // switch active sort option
+            sortOptions.forEach((option) => { option.classList.remove("active"); } );
+            button.classList.add("active");
+            sortFilter.innerHTML = display_name;
+            // send to sort
+            sortTerms(field);
+            makeList(terms);
         });
-
-        // Add 'active' class to the selected item
-        var selected = document.querySelector('.list-sort-item[onclick="changeSortMethod(\'' + sortMethod + '\')"]');
-        if (selected) {
-            selected.classList.add('active');
-        }
-    }
+    }); 
 
     function capitalizeFirstLetter(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
