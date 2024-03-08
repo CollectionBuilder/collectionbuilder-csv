@@ -6,13 +6,13 @@
 {%- endcomment -%}
 
 {%- assign stubs = site.data.config-nav | map: 'stub' | join: ';' -%}
-<button type="button" class="btn btn-primary btn-lg float-md-end" data-bs-toggle="modal" data-bs-target="#dataModal">{{ site.data.translations['_includes']['data-download-modal.html']['download'][site.lang] | default: 'Download Data' }}</button>
+<button type="button" class="btn btn-primary btn-lg float-md-end" data-bs-toggle="modal" data-bs-target="#dataModal">{{ site.data.translations['_includes']['data-download-modal.html']['download-data'][site.lang] | default: 'Download Data' }}</button>
 <!-- Modal -->
 <div class="modal fade" id="dataModal" tabindex="-1" role="dialog" aria-labelledby="dataModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title" id="dataModalLabel">{{ site.data.translations['_includes']['data-download-modal.html']['title'][site.lang] | default: 'Collection Data' }}</h1>
+                <h1 class="modal-title" id="dataModalLabel"> {{ site.data.translations['_includes']['data-download-modal.html']['title'][site.lang] | default: 'Collection Data' }}</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
