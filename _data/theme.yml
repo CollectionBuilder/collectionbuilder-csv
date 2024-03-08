@@ -23,7 +23,9 @@ trigger-warning: true # true / false, adds trigger warning to item pages
 trigger-warning-text: "Diese Sammlung enthält sensible Inhalte. <a href='/sensible-inhalte.html'>Klicken Sie hier</a>, um mehr zu erfahren." # optional, if you want to override the default trigger warning text
 trigger-warning-text-item: "Diese Ressource enthält sensible Inhalte. <a href='/sensible-inhalte.html'>Klicken Sie hier</a>, um mehr zu erfahren." #optional, if you want to override the default trigger warning text for individual items
 trigger-field: "subject" # field to trigger warning, e.g. "subject"
-trigger-terms: "Antisemitismus,Krieg,Rassismus" # set of subjects separated by , that will trigger warning, e.g. violence,sexuality,racism,discrimination
+trigger-terms: "Ableismus,Abtreibungsgegner,Abtreibungsverbot,AIDS,Androgynie,Androzentrismus,Antifeminismus,Antisemitismus,Antiziganismus,Armut,Asyl,Ausbeutung,Beschneidung,Biologismus,Depression,Diskriminierung,Erotik,Essstörung,Ethnizität,Ethnozentrismus,Eurozentrismus,Faschismus,Female Genital Cutting,Female Genital Mutilation,Faschismus,Flucht,Frauenfeindlichkeit,Fundamentalismus,Gender Bias,Gender Pay Gap,Genozid,Geschlechterdifferenz,Geschlechterordnung,Geschlechterstereotyp,Gewalt,Gewalt gegen Frauen,Hass,Hermaphroditismus,Heteronormativität,HIV,Homofeindlichkeit,Konzentrationslager,Krieg,Marginalisierung,Menschenhandel,Misshandlung,Nationalsozialismus,Opfer,Pornografie,Prostitution,Rassismus,Rechtsextremismus,Schwangerschaftsabbruch,Sexarbeit,Sexismus,Sexualisierte Gewalt,Sexuelle Belästigung,Shoah,Sklaverei,Stigmatisierung,Sucht,Täter,Täterin,Terrorismus,Tod,Verfolgung,Vergewaltigung,Xenophobie,Zwang" # set of subjects separated by , that will trigger warning, e.g. violence,sexuality,racism,discrimination
+
+
 
 
 ##########
