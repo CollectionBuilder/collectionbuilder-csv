@@ -1,0 +1,32 @@
+<footer class="bg-dark mt-auto container-fluid">
+
+    <div class="row mb-2">
+
+        <div class="col-md-7 px-4 mt-3">
+            <p class="text-white"><small>{{ site.description }}</small></p>
+            <p class="text-white"><small>{{
+                    site.data.translations['_includes']['footer.html']['last-updated'][site.lang] |
+                    default: 'Last updated' }} {{ site.time | date: '%Y' }}</small></p>
+        </div>
+
+        <div class="col-md-5 mt-3 text-center">
+            {% if site.organization-logo-nav %} <p class="text-md-end">
+                <a href="{{ site.organization-link }}" target="_blank" rel="noopener">
+                    <img id="footer-logo" class="img-fluid" src="{{ site.organization-logo-nav | relative_url }}"
+                        alt="{{ site.organization-name | escape }} home">
+                </a>
+            </p>
+            {% endif %}
+            <p class="text-white text-md-end" id="footer-credits">
+                <small><em>{{ site.data.translations['_includes']['footer.html']['built-with'][site.lang] | default:
+                        'built with' }}</em>
+                    <a href="https://collectionbuilder.github.io/" target="_blank" rel="noopener"
+                        title="CollectionBuilder">
+                        <img src="{{ '/assets/img/collectionbuilder-logo.png' | relative_url }}" class="img-fluid"
+                            alt="CollectionBuilder">
+                    </a>
+                </small>
+            </p>
+        </div>
+    </div>
+</footer>
