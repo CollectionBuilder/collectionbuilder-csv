@@ -24,10 +24,16 @@
                 {%- assign navItems = site.data.config-nav | where_exp: 'item', 'item.dropdown_parent == nil' -%}
                 {% for nav in navItems %}
                 {% if nav.stub %}
+                {% if nav.external_link %}
+                <li class="nav-item">
+                    <a class="nav-link{% if page.url == nav.stub %} active{% endif %}" href="{{ nav.stub | absolute_url }}" target="_blank" rel="noopener noreferrer" nofollow>{{ nav.display_name }}</a>
+                </li>
+                {% else %}
                 <li class="nav-item">
                     <a class="nav-link{% if page.url == nav.stub %} active{% endif %}"
                         href="{{ nav.stub | relative_url }}">{{ nav.display_name }}</a>
                 </li>
+                {% endif %}
                 {%- else -%}
                 <li class="nav-item dropdown">
                     {% assign navChildren = site.data.config-nav | where_exp: 'item', 'item.dropdown_parent ==
@@ -38,8 +44,11 @@
                         nav.display_name }}</a>
                     <div class="dropdown-menu">
                         {% for c in navChildren %}
-                        <a class="dropdown-item {% if page.url == c.stub %}active{% endif %}"
-                            href="{{ c.stub | relative_url }}">{{ c.display_name }}</a>
+                        {% if c.external_link %}
+                        <a class="dropdown-item {% if page.url == c.stub %}active{% endif %}" href="{{ c.stub | relative_url }}" target="_blank" rel="noopener noreferrer" nofollow>{{ c.display_name }}</a>
+                        {% else %}
+                        <a class="dropdown-item {% if page.url == c.stub %}active{% endif %}" href="{{ c.stub | relative_url }}">{{ c.display_name }}</a>
+                        {% endif %}
                         {% endfor %}
                     </div>
                 </li>

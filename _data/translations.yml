@@ -679,10 +679,6 @@ _layouts:
       en: "Fuzzy search powered by <a href='https://lunrjs.com/' target='_blank' rel='noopener'>Lunr.js</a>. <em>May take a second to load large collections!</em>"
       es: "Búsqueda difusa proporcionada por <a href='https://lunrjs.com/' target='_blank' rel='noopener'>Lunr.js</a>. <em>¡Puede tardar un segundo en cargar colecciones grandes!</em>"
       de: "Unscharfe Suche bereitgestellt von <a href='https://lunrjs.com/' target='_blank' rel='noopener'>Lunr.js</a>. <em>Kann einen Moment dauern, um große Sammlungen zu laden!</em>"
-    google-search:
-      en: "Alternatively, try site search by"
-      es: "Alternativamente, intente la búsqueda del sitio por"
-      de: "Versuchen Sie alternativ die Websuche durch"
   timeline.html:
     years:
       en: "Years"

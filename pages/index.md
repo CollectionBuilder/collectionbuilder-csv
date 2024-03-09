@@ -1,13 +1,20 @@
 ---
-layout: browse
-title: Sammlung
+layout: page
+title: Startseite
 permalink: /
 ---
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.   
+{% include feature/alert.html text="Die Forschungsdatenplattform befindet sich noch in der Testphase. Wir arbeiten daran, die Sammlung zu erweitern und die Plattform zu verbessern. Wir freuen uns über Ihr Feedback und Ihre Anregungen. Schreiben Sie uns eine <a href='mailto:info@stadtgeschichtebasel.ch'>E-Mail</a>." color="warning" %}
 
-Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.   
+{% if site.data.theme.trigger-warning %}
+<div class="alert alert-danger alert-dismissible fade show" role="alert" id="trigger-warning">
+    {{ site.data.theme.trigger-warning-text | default: "This collection may contain sensitive content." }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endif %}
 
-Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.   
+Diese öffentlich zugängliche Plattform dient der Bereitstellung von Quellen und historischen Forschungsdaten. In naher Zukunft werden Sie auf dieser Plattform eine umfangreiche Sammlung von Ressourcen zur Geschichte der Stadt Basel finden können. Sie bietet direkten Zugang zu nachnutzbaren Quellen und Daten, die aus verschiedenen Bänden stammen. Die sorgfältige Aufbereitung dieser Objekte ermöglicht es, Themen aus der Basler Geschichte aus verschiedenen Perspektiven zu erforschen – sei es auf einer Karte, entlang einer Zeitachse oder durch Inhalte, die mit Schlagworten versehen sind. Darüber hinaus werden wissenschaftliche Publikationen, die im Zusammenhang mit dem Forschungsprojekt stehen, sowie eine Bibliographie mit sämtlicher in den Bänden zitierter Literatur zur Verfügung gestellt.
 
-Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer
+Da die Plattform noch im Testbetrieb ist, werden kontinuierlich weitere Daten hinzugefügt, bis das Projekt Ende 2025 abgeschlossen wird. Wir laden Sie ein, die Plattform regelmäßig zu besuchen, um die neuesten Updates zu entdecken, und ermutigen Sie, Fehler oder Unstimmigkeiten zu melden.
+
+{% include index/carousel.html title="Daten aus der Sammlung" %}

@@ -1,33 +1,93 @@
 ---
-title: Über
-layout: about
+title: Über uns
+layout: page
 permalink: /about.html
-# include CollectionBuilder info at bottom
 credits: true
-# Edit the markdown on in this file to describe your collection
-# Look in _includes/feature for options to easily add features to the page
 ---
 
-{% include feature/jumbotron.html objectid="https://cdil.lib.uidaho.edu/images/palouse_sm.jpg" %} 
+Wir sind ein interdisziplinäres [Forschungsprojekt](https://stadtgeschichtebasel.ch/projekt), das sich der umfassenden Erforschung und Dokumentation der langen Geschichte von Basel widmet. Unsere Initiative wurde in den 1980er Jahren geboren, erhielt jedoch erst im Jahr 2011 durch einen Verein und das Departement Geschichte der Universität Basel neuen Schwung. Schliesslich wurde unser Projekt 2016 durch den Grossen Rat des Kantons Basel-Stadt unterstützt und genehmigt.
 
-{% include feature/nav-menu.html sections="About CollectionBuilder CSV;About the About Page" %}
+Unser Team besteht aus mehr als fünfzig engagierten Forscher\*innen und Mitarbeiter\*innen aus verschiedenen Ländern, die sich mit Hingabe der Erforschung und Darstellung der Basler Geschichte widmen.
 
-## About CollectionBuilder CSV
+Unser Ziel ist es, einen bedeutenden Beitrag zur Erforschung und Dokumentation der Geschichte von Basel zu leisten und gleichzeitig die Vergangenheit auf zeitgemässe Weise zugänglich zu machen. Wir freuen uns über Ihr Interesse und laden Sie ein, unsere Webseite zu erkunden und mehr über die faszinierende Geschichte von Basel zu erfahren.
 
-This demo collection features items from the University of Idaho Library's [Digital Collections](https://www.lib.uidaho.edu/digital/), and is build using [CollectionBuilder-CSV](https://github.com/CollectionBuilder/collectionbuilder-csv).
+Die [Stiftung Stadt.Geschichte.Basel](https://stiftungen.stiftungschweiz.ch/organisation/stiftung-stadt-geschichte-basel) ist durch den [Verein Basler Geschichte](https://stadtgeschichtebasel.ch/verein) am 9.1.2017 gegründet worden. Sie überwacht die Durchführung des Projekts und stellt durch ein Herausgebergremium die inhaltliche Qualität der Forschung sicher. Die Koordination der Forschung und die damit verbundene konzeptionelle und redaktionelle Arbeit ist Aufgabe der Projektleitung.
 
-CollectionBuilder-CSV is a "Stand Alone" template for creating digital collection and exhibit websites using Jekyll, given:
+Mitglieder des Stiftungsrates
+-----------------------------
 
-- a CSV of collection metadata
-- a folder of images, PDFs, audio, or video files
+*   **Andreas Burckhardt**, Dr., ehemaliger Verwaltungsratspräsident Bâloise Group
+*   **Christoph Lanz**, Jurist, ehemaliger Leiter Abteilung Recht und Sekretär des Verwaltungsrates MCH Group AG (vormals Schweizer Mustermesse)
+*   **Antonia Schmidlin**, Dr., Historikerin, Gymnasiallehrerin, Vorstandsmitlied Verein Basler Geschichte
+*   **Barbara Schneider**, Alt Regierungsrätin Basel-Stadt, Richterin
+*   **Marie-Louise Stamm**, Dr., ehem. Vorsitzende Appellationsgericht, Richterin
+*   **Regina Wecker**, Prof. em. Dr., Historikerin, Vorstand Verein Basler Geschichte, Stiftungsratspräsidentin
+*   **Benedikt Wyss**, Historiker, Kurator
 
-Driven by your collection metadata, the template generates engaging visualizations to browse and explore your objects.
-The resulting static site can be hosted on any basic web server.
+Geldgeber (ab CHF 1’000.-)
+--------------------------
 
-[CollectionBuilder](https://github.com/CollectionBuilder/) is an set of open source tools for creating digital collection and exhibit websites that are driven by metadata and powered by modern static web technology.
-See [CB Docs](https://collectionbuilder.github.io/cb-docs/) for detailed information.
+*   Bank J. Safra Sarasin AG
+*   Basel Tourismus
+*   Bell AG
+*   Christoph Merian Stiftung
+*   Dr. H. A. Vögelin-Bienz-Stiftung
+*   E. E. Zunft zu Hausgenossen
+*   Ernst Göhner Stiftung
+*   Felix Labhardt
+*   Historisch-Antiquarische Gesellschaft zu Basel
+*   Ing. A. Aegerter + Dr. O. Bosshardt AG
+*   Iseli Optik AG
+*   K. Schweizer AG
+*   Manor AG
+*   Max Geldner-Stiftung
+*   Moritz Straus-Stiftung
+*   Novartis
+*   PAX, Schweizerische Lebensversicherungs-Gesellschaft AG
+*   Raiffeisen Schweiz AG
+*   Rapp Management AG
+*   Schachenmann + Co. AG
+*   Swisslos-Fonds Basel-Landschaft
+*   Swisslos-Fonds Basel-Stadt
+*   Sulger-Stiftung
+*   UBS Kulturstiftung
+*   Verein Basler Geschichte
+*   Vischer Architekten AG
+*   Völlmy AG
+*   …und weitere Spender\*innen, die ungenannt bleiben möchten.
 
-{% include feature/image.html objectid="demo_001" width="75" %} 
+Social Media
+------------
 
-<!-- IMPORTANT!!! DELETE this comment and the include below when you are finished editing this page for your collection. The include below introduces about page features. They will show up on your collection's about page until you delete it.  -->
-{% include cb/about_the_about.md %} 
+Wir sind unter [sta.ge.ba](https://www.instagram.com/sta.ge.ba/) auf Instagram und unter [basel\_stadt](https://twitter.com/basel_stadt) auf X zu finden. Wir folgen dabei strikten [Richtlinien für den Blog und soziale Medien](https://stadtgeschichtebasel.ch/richtlinien-fuer-den-blog-und-soziale-medien).
+
+Medien und Pressemappe
+----------------------
+
+*   [Pressemappe](https://stadtgeschichtebasel.ch/pressemappe)
+
+Medienanfragen richten Sie bitte direkt den [Christoph Merian Verlag](https://www.merianverlag.ch/presse.html).
+
+Lehrmittel
+----------
+
+*   [«Verschachtelte Geschichten. Immigrationsschicksale in der Schweiz in den letzten hundert Jahren»](https://stadtgeschichtebasel.ch/vermittlungsangebot-verschachtelte-geschichten-immigrationsschicksale-in-der-schweiz-in-den-letzten-hundert-jahren) bietet Unterrichtsmaterial über 12 Immigrationsschicksale der letzten hundert Jahre.
+
+Weitere Lehrmittel von Kooperationspartner\*innen und Dritten finden sich auf dem Basler Bildungsserver unter [www.edubs.ch](https://www.edubs.ch/).
+
+Impressum
+---------
+
+Stiftung Stadt.Geschichte.Basel, Hirschgässlein 21, 4051 Basel. [info@stadtgeschichtebasel.ch](mailto:info@stadtgeschichtebasel.ch)
+
+Redaktion: Moritz Mähr, Noëlle Schnegg und Cristina Wildisen-Münch
+
+Datenschutz
+-----------
+
+Zur [Datenschutzerklärung](/datenschutzerklaerung).
+
+Barrierefreiheit
+---------------
+
+Zur [Barrierefreiheitserklärung](/barrierefreiheitserklaerung)

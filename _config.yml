@@ -8,7 +8,7 @@
 # URL VARIABLES
 #
 # site domain, full URL to the production location of your collection
-url: https://forschung.stadtgeschichtebasel.ch/
+url: https://forschung.stadtgeschichtebasel.ch
 # path to location on the domain if necessary e.g. /digital/hjccc
 # baseurl:
 # location of code, the full url to your github repository
@@ -60,18 +60,10 @@ organization-logo-banner: assets/img/logo.svg
 organization-logo-nav: assets/img/logo.svg
 
 ##########
-# GOOGLE SERVICES [optional!]
-#
-# leave these blank or comment out to NOT include google code
-# if present, used to add analytics during "production" build only
-# google-analytics-id: "G-XXXXXXXXX"
-# google-cse-id: "002151703305773322890:1pu3smhw1t8"
-
-##########
 # ROBOTS EXCLUDE
 #
 # set noindex to true if you do NOT want Google to index your site
-noindex: true 
+# noindex: true 
 
 ##########
 # BUILD SETTINGS 
