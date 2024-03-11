@@ -1,0 +1,177 @@
+<script type="text/javascript">
+ let url = new URL(window.location);
+    let params = url.searchParams;
+
+    function searchLines(x) {
+    var itemcontainer = document.getElementById("contents-container");
+    var lines = itemcontainer.getElementsByClassName("line");
+    var input, filter, p, span, i;
+    input = x;
+    let url = new URL(window.location);
+    let params = url.searchParams;
+    params.set('q', input);
+    params.delete('filter');
+    var p = params.toString();
+    window.history.replaceState({}, '', location.pathname + '?' + p);
+    var filter = input.toUpperCase();
+    var searchResults = '<option>Select and scroll to a matching line</option>';
+    for (i = 0; i < lines.length; i++) {
+      itemcontents = lines[i].getElementsByClassName("words")[0];
+      var index = itemcontents.innerHTML.indexOf(input);
+      if (itemcontents) {
+        itemcontents.classList.add("text-muted");
+        itemcontents.classList.remove("featured");
+        if (itemcontents.innerHTML.toUpperCase().indexOf(filter) > -1) {
+          itemcontents.classList.add("featured");
+          itemcontents.classList.remove("text-muted");
+          searchResults += '<option class=text-truncate" style="max-width: 250px;" value="'+ i +'">Line ' + i + ' -- ' + itemcontents.innerHTML.substring(0,125) + '...</option>';
+          itemcontents.innerHTML = itemcontents.innerHTML.replace(input, "<span class='text-danger'>" + input + "</span>");
+          var rightnum = i + 1;
+          var rectal = "rect" + rightnum;
+          console.log(rectal);
+          document.getElementById(rectal).classList.add("hilite");
+          vizFilter('hilite');
+          } else { 
+        }
+      }
+     document.getElementById("filters").selectedIndex = 0;
+     let numberofint = document.querySelectorAll('.featured').length;
+     document.getElementById("numberof").innerHTML = numberofint + " lines match your query";
+     document.getElementById("searchResults").innerHTML = searchResults;
+     document.getElementById("linecount").classList.remove("d-none");
+     document.getElementById("filtersearch").classList.remove("d-none");
+    }
+  }
+
+  function filterLines() {
+    var itemcontainer = document.getElementById("contents-container");
+    var lines = itemcontainer.getElementsByClassName("line");
+    var filterClass = document.getElementById("filters").value;
+    var item = itemcontainer.getElementsByClassName(filterClass);  
+    vizFilter(filterClass);
+    params.set('filter', filterClass);
+    params.delete('?');
+    var p = params.toString();
+    window.history.replaceState({}, '', location.pathname + '?' + p);
+    var searchResults = '<option>Select and scroll to a matching line</option>';
+    for (i = 0; i < lines.length; i++) {
+      lines[i].classList.remove('featured');
+      itemcontents = lines[i].getElementsByClassName("words")[0];
+      if (itemcontents) {
+        itemcontents.classList.remove("featured");
+        if (lines[i].classList.contains(filterClass)) {
+      itemcontents.classList.add("featured");
+      itemcontents.classList.remove("small","text-muted");
+      var prevLine = i - 1;
+      var nextLine = i + 1;
+        if (!lines[prevLine].classList.contains(filterClass)){
+        searchResults += '<option class="text-truncate" style="max-width: 250px;" value="'+ i +'">Line ' + i ;
+          var startLine = itemcontents.innerHTML.substring(0,125);
+          var startNumber = i;
+        }
+        else if (lines[nextLine].classList.contains(filterClass) && lines[prevLine].classList.contains(filterClass) ){
+          searchResults += '';
+        } 
+        else if (!lines[nextLine].classList.contains(filterClass)){
+          var lineTotal = i - startNumber + 1;
+          searchResults +=  ' to Line ' + i + ' (' + lineTotal +  ' lines total) -- ' + startLine + '...</option>';
+        } 
+      }
+      else {
+        itemcontents.classList.add("small","text-muted");     }
+      }
+    }
+     document.getElementById("quicksearch").value = "";
+     document.getElementById("searchResults").innerHTML = searchResults;
+     document.getElementById("linecount").classList.remove("d-none");
+     document.getElementById("filtersearch").classList.remove("d-none");
+     countforFilter(filterClass);
+    }
+  
+    function countforFilter(x){
+    var numberofint = document.querySelectorAll('.' + x).length;
+    var sectnumber = document.getElementsByClassName('text-truncate').length;
+    if (sectnumber == 1){
+      var sectnumber = sectnumber + " section "
+    } else {
+      var sectnumber = sectnumber + " sections "
+    }
+    document.getElementById("numberof").innerHTML = sectnumber + "(" +  numberofint + " lines) are tagged as related to " + x;
+  }
+
+
+var elem = document.getElementById("quicksearch");
+elem.onkeyup = function(e){
+    if(e.keyCode == 13){
+      var searchval = document.getElementById('quicksearch').value; 
+      searchLines(searchval);
+    }
+}
+
+  function scrollToLine(x) {
+  var line_array_num = x;
+  const featured_lines = document.getElementsByClassName('line');
+  var line_num = parseInt(line_array_num);
+  var position = featured_lines[line_num].offsetTop;
+  featured_lines[line_num].getElementsByClassName('words')[0].classList.add("featured");
+  var plus_position = parseInt(position) - 300;
+    window.scroll({
+    top: plus_position,
+    behavior: 'smooth'
+  });
+console.log(position + ' - ' + plus_position);
+}
+
+
+
+
+function resetVals(){
+    params.delete('q');
+     params.delete('filter');
+     window.history.replaceState({}, '', location.pathname);
+  document.getElementById("linecount").classList.add("d-none");
+     document.getElementById("filtersearch").classList.add("d-none");
+     document.getElementById("quicksearch").value = "";
+     document.getElementById("filters").selectedIndex = 0;
+     var words = document.querySelectorAll("p.words")
+     for (i = 0; i < words.length; i++) {
+      words[i].classList.remove('text-muted');
+      words[i].classList.remove('featured');
+      if ( words[i].querySelector(".text-danger")){
+      words[i].getElementsByClassName('text-danger')[0].classList.remove('text-danger');}
+     }
+     var svgContainer  = document.getElementById("colorViz");
+     var rects = svgContainer.getElementsByTagName('rect');
+     for (i = 0; i < rects.length; i++) {
+      rects[i].classList.remove('dark');
+      rects[i].classList.remove('rect-hilite');
+
+     }
+}
+
+ function vizFilter(x) {
+  var svgContainer  = document.getElementById("colorViz");
+  var rects = svgContainer.getElementsByTagName('rect');
+  for (i = 0; i < rects.length; i++) {
+    var classString = rects[i].classList;
+        classString.add('dark');
+        classString.forEach(item=>{
+    if(item.startsWith('primary')) {
+      classString.remove(item) ;}});
+    if (x == "all"){
+      classString.remove('dark');
+      resetVals();
+    } else if (classString.contains(x)){
+      classString.remove('dark');          
+      classString.add("primary-" + x);  
+    } else if (x == "darkforall"){ }
+        }
+    }
+
+
+   
+
+
+
+
+</script>
