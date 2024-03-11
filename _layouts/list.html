@@ -37,5 +37,5 @@ layout: page
         <button class="dropdown-item list-sort-item" data-filter='term'>{{ site.data.translations['_layouts']['list.html']['term'][site.lang] | default: 'Term' }}</button>
     </div>
 </div>
-<div id="{{ list_id }}" class="text-center my-4 bg-{{ page.background | default: 'light' }} border rounded p-2"></div>
+<div id="{{ list_id }}" class="text-center my-4 bg-{{ page.background | default: 'light' }} border rounded p-1"></div>
 {% include js/list-js.html id=list_id fields=fields min=min stopwords=stopwords %}

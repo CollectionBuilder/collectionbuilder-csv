@@ -18,19 +18,19 @@ custom-foot: js/browse-js.html
         <form role="search" id="lunrSearch" onsubmit="submitFilter(); return false;">
             <div class="input-group input-group-lg">
                 <input type="text" class="form-control" id="filterTextBox" placeholder="{{ site.data.translations['_layouts']['browse.html']['filter'][site.lang] | default: 'Filter' }} ..." aria-label="{{ site.data.translations['_layouts']['browse.html']['search'][site.lang] | default: 'Search' }}"> 
-                <button class="btn btn-success" type="submit" title="{{ site.data.translations['_layouts']['browse.html']['filter-items'][site.lang] | default: 'Filter items' }}" id="filterButton" >{{ site.data.translations['_layouts']['browse.html']['search'][site.lang] | default: 'Search' }}</button>
-                <button class="btn btn-outline-secondary filter" onclick="resetFilter(); return false;" data-filter="">{{ site.data.translations['_layouts']['browse.html']['reset'][site.lang] | default: 'Reset' }}</button>
+                <button class="btn btn-secondary" type="submit" title="{{ site.data.translations['_layouts']['browse.html']['filter-items'][site.lang] | default: 'Filter items' }}" id="filterButton" >{{ site.data.translations['_layouts']['browse.html']['search'][site.lang] | default: 'Search' }}</button>
+                <button class="btn btn-outline-secondary text-dark filter" onclick="resetFilter(); return false;" data-filter="">{{ site.data.translations['_layouts']['browse.html']['reset'][site.lang] | default: 'Reset' }}</button>
             </div>
         </form>
         <div class="h2" id="numberOf"></div>
     </div>
     <div class="col-md-2">
         <div class="dropdown">
-            <button class="btn btn-secondary mt-1 dropdown-toggle" type="button" id="browseSortButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <button class="btn btn-outline-primary mt-1 dropdown-toggle" type="button" id="browseSortButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 {{ site.data.translations['_layouts']['browse.html']['sort-by'][site.lang] | default: 'Sort by' }} <span id="sortFilter">{{ site.data.translations['_layouts']['browse.html']['random'][site.lang] | default: 'Random' }}</span>
             </button>
             <div class="dropdown-menu browse-sort-menu" aria-labelledby="browseSortButton">
-                <button class="dropdown-item browse-sort-item active" data-filter="random">{{ site.data.translations['_layouts']['browse.html']['random'][site.lang] | default: 'Random' }}</button>
+                <button class="dropdown-item browse-sort-item" data-filter="random">{{ site.data.translations['_layouts']['browse.html']['random'][site.lang] | default: 'Random' }}</button>
                 <button class="dropdown-item browse-sort-item" data-filter="title">{{ site.data.translations['_layouts']['browse.html']['title'][site.lang] | default: 'Title' }}</button>
                 {% assign sort_options = site.data.config-browse | where_exp: 'i','i.sort_name != nil' %}
                 {% for o in sort_options %}
