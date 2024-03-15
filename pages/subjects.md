@@ -7,6 +7,4 @@ permalink: /subjects.html
 fields: site.data.theme.subjects-fields
 ---
 
-## Themen durchsuchen
-
-
+# Themen durchsuchen

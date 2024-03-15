@@ -4,4 +4,4 @@ title: Sammlung
 permalink: /browse.html
 ---
 
-## Sammlung durchsuchen
+# Sammlung durchsuchen

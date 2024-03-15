@@ -4,7 +4,7 @@ layout: data
 permalink: /data.html
 ---
 
-## Metadaten der Sammlung
+# Metadaten der Sammlung
 
 Die folgende Tabelle ermöglicht die Sortierung und eine einfache Suche nach dem Inhalt der Sammlung.
 Über die Schaltflächen "Excel" und "CSV" können Sie die gefilterten Metadaten herunterladen.

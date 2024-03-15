@@ -7,6 +7,4 @@ permalink: /eras.html
 cloud-fields: era
 ---
 
-## Epochen durchsuchen
-
-
+# Epochen durchsuchen
