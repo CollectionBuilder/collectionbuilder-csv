@@ -6,6 +6,7 @@ require 'csv'
 require 'fileutils'
 require 'image_optim' unless Gem.win_platform?
 require 'mini_magick'
+require 'benchmark'
 
 ###############################################################################
 # TASK: deploy
@@ -160,4 +161,31 @@ task :generate_derivatives, [:thumbs_size, :small_size, :density, :missing, :com
     end
   end
   puts "\e[32mSee '#{list_name}' for list of objects and derivatives created.\e[0m"
+end
+
+###############################################################################
+# TASK: benchmark
+###############################################################################
+
+desc "Benchmark the build process of CollectionBuilder"
+task :benchmark_build do
+  n = 10
+  total_time = 0
+
+  n.times do |i|
+    puts "Running build ##{i+1}..."
+    
+    ENV['JEKYLL_ENV'] = 'production'
+    system('bundle', 'exec', 'jekyll', 'clean')
+    build_time = Benchmark.realtime do
+      ENV['JEKYLL_ENV'] = 'production'
+      system('bundle', 'exec', 'jekyll', 'build')
+    end
+
+    puts "Time for build ##{i+1}: #{build_time.round(2)} seconds"
+    total_time += build_time
+  end
+
+  average_time = total_time / n
+  puts "Average build time over #{n} runs: #{average_time.round(2)} seconds"
 end
