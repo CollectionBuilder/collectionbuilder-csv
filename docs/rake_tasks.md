@@ -57,7 +57,3 @@ rake generate_derivatives[,,70]
 The mini_magick Gem is used to interface with ImageMagick so it supports both current version 7 and legacy versions (which are common on Linux). 
 The image_optim Gem is used to optimize images using the optimization libraries provided by the image_optim_pack Gem. 
 image_optim_pack does not provide binaries for Windows, so optimization is skipped when using the rake task on Windows.
-
-## benchmark_build
-
-`rake benchmark_build`, is a command to benchmark the build time of the site. It is useful for comparing the build time of the site in different environments, or after making changes to the site that may affect build time.

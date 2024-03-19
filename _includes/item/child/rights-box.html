@@ -4,12 +4,12 @@
 
 {%- endcomment -%}
 <div class="card mb-2">
-    <div class="card-header">{{ site.data.translations['_includes']['item']['child']['rights-box.html']['rights'][site.lang] | default: "Rights" }}</div>
+    <div class="card-header">Rights</div>
     <div class="card-body">
         <dl>
-            {% if child.rights %}<dt>{{ site.data.translations['_includes']['item']['child']['rights-box.html']['rights'][site.lang] | default: "Rights" }}:</dt>
+            {% if child.rights %}<dt>Rights:</dt>
             <dd>{{ child.rights }}</dd>{% endif %}
-            {% if child.rightsstatement %}<dt>{{ site.data.translations['_includes']['item']['child']['rights-box.html']['rights-statement'][site.lang] | default: "Standardized Rights" }}:</dt>
+            {% if child.rightsstatement %}<dt>Standardized Rights:</dt>
             <dd><a target="_blank" rel="noopener" href="{{ child.rightsstatement }}">{{ child.rightsstatement }}</a>
             </dd>{% endif %}
         </dl>

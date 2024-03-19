@@ -35,7 +35,8 @@
     <model-viewer id="item-model-viewer" alt="{{ page.image_alt_text | default: page.description | default: page.title | escape }}" src="{{ page.object_location | relative_url }}"  shadow-intensity="1" camera-controls touch-action="pan-y" {% if page.image_small %}reveal="manual"{% endif %}>
         {% if page.image_small %}
         <div id="poster-image" slot="poster"></div>
-        <button id="load-model-btn" class="btn btn-lg btn-primary" slot="poster">{{ site.data.translations['_includes']['item']['3d-model-viewer.html']['load-model'][site.lang] | default: "Load 3D Model" }}</button>{% endif %}
+        <button id="load-model-btn" class="btn btn-lg btn-primary" slot="poster">Load 3D Model</button>
+        {% endif %}
     </model-viewer>
 </div>
 {% if page.image_small %}

@@ -28,7 +28,7 @@
         </div>
         {% unless site.data.theme.featured-image contains '/' %}
         <div class="position-absolute bottom-0 end-0 px-2 bg-dark bg-opacity-75">
-            <a class="text-white fs-6" href="{{ site.data.featured_item.link | relative_url }}" title="{{ site.data.featured_item.alt | escape }}">{{ site.data.translations['_includes']['collection-banner.html']['featured-item'][site.lang] | default: 'Featured Image' }}</a>
+            <a class="text-white fs-6" href="{{ site.data.featured_item.link | relative_url }}" title="{{ site.data.featured_item.alt | escape }}">Featured Image</a>
         </div>{% endunless %}
     </div>
 </div>

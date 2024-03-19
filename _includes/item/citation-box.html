@@ -4,12 +4,12 @@
 
 {%- endcomment -%}
 <div class="card">
-    <div class="card-header">{{ site.data.translations['_includes']['item']['citation-box.html']['title'][site.lang] | default: "Source" }}</div>
+    <div class="card-header">Source</div>
     <div class="card-body">
         <dl>
-            <dt>{{ site.data.translations['_includes']['item']['citation-box.html']['preferred-citation'][site.lang] | default: "Preferred Citation" }}:</dt>
+            <dt>Preferred Citation:</dt>
             <dd>"{{ page.title }}", {{ site.title }}, {{ site.organization-name }}</dd>
-            <dt>{{ site.data.translations['_includes']['item']['citation-box.html']['reference-link'][site.lang] | default: "Reference Link" }}:</dt>
+            <dt>Reference Link:</dt>
             <dd>{{ page.url | absolute_url }}</dd>
         </dl>
     </div>

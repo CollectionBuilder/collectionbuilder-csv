@@ -5,7 +5,7 @@
 
 {%- endcomment -%}
 <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a class="text-dark" href="{{ '/' | relative_url }}">{{ site.data.translations['_includes']['item']['breadcrumbs.html']['home'][site.lang] | default: "Home" }}</a></li>
-    <li class="breadcrumb-item"><a class="text-dark" href="{{ '/browse.html' | relative_url }}">{{ site.data.translations['_includes']['item']['breadcrumbs.html']['items'][site.lang] | default: "Items" }}</a></li>
+    <li class="breadcrumb-item"><a class="text-dark" href="{{ '/' | relative_url }}">Home</a></li>
+    <li class="breadcrumb-item"><a class="text-dark" href="{{ '/browse.html' | relative_url }}">Items</a></li>
     <li class="breadcrumb-item active text-dark" aria-current="page">{{ page.title | truncatewords: 10 }}</li>
 </ol>

@@ -1,19 +1,17 @@
 {% assign fcount = site.data.config-table | size %}
-{% assign lang = site.lang %}
 <!-- load DataTables with jquery bundled -->
 <script type="text/javascript" language="javascript" src="{{ '/assets/lib/datatables/datatables.min.js' | relative_url }}"></script>
 <script>
 /* use jquery to initialize DataTables and load collection data */
 $(document).ready( function () {
     $('#item-table').DataTable( {
-        {% if lang != "en" %}language: { url: '{{ "/assets/lib/datatables/" | append: lang | append: ".json" | relative_url }}' },{% endif %}
         // use DataTables ajax load 
         ajax: { url: '{{ "/assets/js/metadata.min.json" | relative_url }}', dataSrc: 'objects' },
         // defer render to speed up large sets
         "deferRender": true,
         // enable pagination 
         "paging": true,
-        "lengthMenu": [[ 25, 50, 100, -1], [ 25, 50, 100, "∞"]],
+        "lengthMenu": [[ 25, 50, 100, -1], [ 25, 50, 100, "All"]],
         // add download features
         dom: 'B<"row mt-2"<"col-md-6"l><"col-md-6"f>>t<"row"<"col-md-6"i><"col-md-6"p>>', 
         buttons: [ 'excelHtml5', 'csvHtml5' ],
