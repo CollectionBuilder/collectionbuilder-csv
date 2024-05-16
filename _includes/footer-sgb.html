@@ -24,7 +24,14 @@
                     </a>
                 </small>
             </p>
-            <p class="text-white"><small>{{
+
+            <p class="text-white footer-links"><small>
+                <a class="anchor" href="https://stadtgeschichtebasel.ch/datenschutzerklaerung" target="_blank" rel="noopener">Datenschutz</a>
+                <span class="mx-2" aria-hidden="true">|</span>
+                <a class="anchor" href="https://stadtgeschichtebasel.ch/barrierefreiheitserklaerung" target="_blank" rel="noopener">Barrierefreiheit</a>
+                <span class="mx-2" aria-hidden="true">|</span>
+                <a class="anchor" href="https://github.com/Stadt-Geschichte-Basel/forschung.stadtgeschichtebasel.ch/graphs/contributors" target="_blank" rel="noopener">Credits</a>
+            <br />{{
                 site.data.translations['_includes']['footer.html']['last-updated'][site.lang] |
                 default: 'Last updated' }} {{ site.time | date: '%Y' }}</small></p>
         </div>
