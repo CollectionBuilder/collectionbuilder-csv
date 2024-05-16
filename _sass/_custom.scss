@@ -68,3 +68,12 @@
     background: #fff6cc;
     color: black;
 }
+
+a {
+    .footer-links & {
+        color: #ffffff;
+        &:hover {
+            color: #ffe880;
+        }
+    }    
+}
