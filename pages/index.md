@@ -11,7 +11,7 @@ permalink: /
 {% if site.data.theme.trigger-warning %}
 <div class="alert alert-danger alert-dismissible fade show" role="alert" id="trigger-warning">
     {{ site.data.theme.trigger-warning-text | default: "This collection may contain sensitive content." }}
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <button type="button" class="btn-close top-50 translate-middle-y" data-bs-dismiss="alert" aria-label="Hinweis ausblenden"></button>
 </div>
 {% endif %}
 
