@@ -14,13 +14,12 @@
     - "header" = card header text in bar above card content (optional)
     - "max" = maximum images selected for slide show (optional, default 9. Do not make too big!)
     - "btn-color" - a bootstrap color class to theme the buttons. Can be any bootstrap template color (e.g. info, success) or outline (e.g. outline-info, outline-success), including colors created in config-theme-colors. (optional, default "primary")
-    - "btn-text" - the label used in the link btn to view the carousel item (optional, default "View Item")
     
 {%- endcomment -%}
 
 {%- assign carousel-max = include.max | default: 9 -%}
 {%- assign btn-color = include.btn-color | default: "secondary" -%}
-{%- assign btn-text = include.btn-text | site.data.translations['_includes']['index']['carousel.html']['view-item'][site.lang] | default: "View Item" -%}
+{%- assign btn-text = site.data.translations['_includes']['index']['carousel.html']['view-item'][site.lang] | default: "View Item" -%}
 {% if site.data.theme.carousel-child-objects == true %}
 {%- assign carousel-items = site.data[site.metadata] | where_exp: 'item','item.objectid' | where_exp: "item","item.image_small != nil or item.image_thumb != nil"-%}
 {% else %}

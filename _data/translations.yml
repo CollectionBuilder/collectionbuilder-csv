@@ -208,15 +208,15 @@ _includes:
         timeline:
           en: "View on Timeline"
           es: "Ver en la Línea de Tiempo"
-          de: "In der Zeitachse anzeigen"
+          de: "Auf der Zeitachse anzeigen"
         map:
           en: "View on Map"
           es: "Ver en el Mapa"
           de: "Auf der Karte anzeigen"
         download:
-          en: "Download"
-          es: "Descargar"
-          de: "Herunterladen"
+          en: "Download as"
+          es: "Descargar como"
+          de: "Herunterladen als"
       compound-item-modal-gallery.html:
         previous:
           en: "Previous Item"
@@ -230,7 +230,7 @@ _includes:
         timeline:
           en: "View on Timeline"
           es: "Ver en la Línea de Tiempo"
-          de: "In der Zeitachse anzeigen"
+          de: "Auf der Zeitachse anzeigen"
         map:
           en: "View on Map"
           es: "Ver en el Mapa"
@@ -248,9 +248,9 @@ _includes:
           es: "Enlace al Objeto"
           de: "Link zum Objekt"
         download:
-          en: "Download"
-          es: "Descargar"
-          de: "Herunterladen"
+          en: "Download as"
+          es: "Descargar como"
+          de: "Herunterladen als"
       image-gallery.html:
         full-screen:
           en: "Click to view full screen"
@@ -335,7 +335,7 @@ _includes:
       timeline:
         en: "View on Timeline"
         es: "Ver en la Línea de Tiempo"
-        de: "In der Zeitachse anzeigen"
+        de: "Auf der Zeitachse anzeigen"
       map:
         en: "View on Map"
         es: "Ver en el Mapa"
@@ -353,9 +353,9 @@ _includes:
         es: "Enlace al Objeto"
         de: "Link zum Objekt"
       download:
-        en: "Download"
-        es: "Descargar"
-        de: "Herunterladen"
+        en: "Download as"
+        es: "Descargar como"
+        de: "Herunterladen als"
       subject:
         en: "Report faulty metadata for"
         es: "Informe de metadatos defectuosos para"
@@ -584,7 +584,7 @@ _layouts:
     random:
       en: "Random"
       es: "Aleatorio"
-      de: "Zufällig"
+      de: "Zufall"
     title:
       en: "Title"
       es: "Título"
