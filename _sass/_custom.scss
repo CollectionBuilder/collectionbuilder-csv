@@ -68,3 +68,12 @@
     background: #fff6cc;
     color: black;
 }
+
+a {
+    .link-on-dark & {
+        color: #ffffff;
+        &:hover {
+            color: #ffe880;
+        }
+    }    
+}
