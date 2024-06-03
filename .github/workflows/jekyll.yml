@@ -33,7 +33,7 @@ jobs:
       - name: Process Data
         run: python .github/workflows/process_data.py
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: sgb-metadata
           path: _data/sgb-metadata.csv
@@ -62,7 +62,7 @@ jobs:
         env:
           JEKYLL_ENV: production
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v3
 
   deploy:
     needs: build
