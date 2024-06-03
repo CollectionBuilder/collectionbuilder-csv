@@ -1,20 +1,20 @@
 field,display_name,browse_link,external_link,dc_map,schema_map
 objectid,Identifikator,,,DCTERMS.identifier,identifier
 title,Titel,,,DCTERMS.title,headline
-creator,Ersteller*in,,,DCTERMS.creator,creator
-date,Datum,,,DCTERMS.date,dateCreated
-era,Epoche,true,,DCTERMS.temporal,
 description,Beschreibung,,,DCTERMS.description,description
 subject,Thema,true,,DCTERMS.subject,keywords
-publisher,Rechteinhaber*in,true,,DCTERMS.publisher,publisher
-source,Quelle,,,DCTERMS.source,
-relation,Link,,true,DCTERMS.relation,
-hasVersion,IIIF Manifest,,true,DCTERMS.hasVersion,version
-type,Typ,,,DCTERMS.type,
+era,Epoche,true,,DCTERMS.temporal,
+isPartOf,Gehört zu,,true,DCTERMS.isPartOf,isPartOf
+creator,Ersteller*in,,true,DCTERMS.creator,creator
+publisher,Verantwortliche Gedächtnisinstitution,,true,DCTERMS.publisher,publisher
+date,Datum,,,DCTERMS.date,dateCreated
+source,Quelle,,true,DCTERMS.source,
+type,Typ,,true,DCTERMS.type,
 format,Format,,,DCTERMS.format,encodingFormat
 extent,Auflösung,,,DCTERMS.extent,
 language,Sprache,true,,DCTERMS.language,inLanguage
 rights,Rechte,,,DCTERMS.rights,usageInfo
 license,Lizenz,,true,DCTERMS.license,license
-isReferencedBy,Abbildung,,,DCTERMS.isReferencedBy,
-isPartOf,Band,,,DCTERMS.isPartOf,isPartOf
+relation,Verwandte Ressourcen,,true,DCTERMS.relation,relation
+
+

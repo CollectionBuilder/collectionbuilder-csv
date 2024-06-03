@@ -85,10 +85,10 @@ metadata-facets-fields: "subject,creator,format"
 # Note, like other items, child objects will only appear in visualizations if they have the correct metadata (lat long for map; date for timeline)
 # select true below if you'd like your compound object's child objects to appear in any of the pages or features listed
 map-child-objects: false # true / false - if true, and if child item has latitude and longitude, child objects will be displayed on map
-timeline-child-objects: false # true / false - if true, and if child object has date, child objects will appear as thumbnails on timeline page
-data-child-objects: false # true / false - if true, child objects will appear linked in table on data page
+timeline-child-objects: true # true / false - if true, and if child object has date, child objects will appear as thumbnails on timeline page
+data-child-objects: true # true / false - if true, child objects will appear linked in table on data page
 carousel-child-objects: true # true / false - if true, child objects will appear on homepage carousel
-browse-child-objects: false # true / false - if true, child objects will appear on browse page and child objects' metadata will populate cloud pages like Subjects page and Locations page, as well as featured terms boxes on the home page
+browse-child-objects: true # true / false - if true, child objects will appear on browse page and child objects' metadata will populate cloud pages like Subjects page and Locations page, as well as featured terms boxes on the home page
 search-child-objects: true # true / false - if true, child objects will appear on on search page along with parent objects
 
 
@@ -122,14 +122,15 @@ font-cdn: "<link rel='preload' href='/assets/fonts/EuclidCircularB-Regular-WebS.
 # the template uses Bootstrap Icons, https://icons.getbootstrap.com/
 # find the names on the BI icons page, e.g. file-image
 #
-# icons: 
-#   icon-image: image
-#   icon-audio: soundwave
-#   icon-video: film
-#   icon-pdf: file-pdf
-#   icon-record: file-text
-#   icon-panorama: image-alt
-#   icon-compound-object: collection 
-#   icon-multiple: postcard
-#   icon-default: file-earmark # fall back icon
-#   icon-back-to-top: arrow-up-square
+icons: 
+   icon-image: image
+   icon-audio: soundwave
+   icon-video: film
+   icon-pdf: file-pdf
+   icon-record: file-text
+   icon-panorama: image-alt
+   icon-compound-object: collection 
+   icon-multiple: postcard
+   icon-default: file-earmark # fall back icon
+   icon-back-to-top: arrow-up-square
+   icon-external-link: box-arrow-up-right

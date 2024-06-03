@@ -89,6 +89,8 @@
                                                 <div class="m-2">
                                                     {% if child.display_template == 'image' %}
                                                         {% include item/child/image-gallery.html %}
+                                                    {% elsif child.display_template == 'geodata' %}
+                                                        {% include item/child/geodata_child.html %}
                                                     {% elsif child.display_template == 'video' %}
                                                         {% if child.object_location contains 'vimeo' or child.object_location contains 'youtu' %}
                                                             {% include item/child/video-embed.html %}

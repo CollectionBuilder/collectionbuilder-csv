@@ -10,9 +10,19 @@
     <a href="{{ year | strip | prepend: '/timeline.html#y' | relative_url }}" class="btn btn-outline-primary">{{ site.data.translations['_includes']['item']['child']['compound-item-download-buttons.html']['timeline'][site.lang] | default: "View on Timeline"}}</a>{% endif %}
     {% if page.latitude and page.longitude %}
     <a href="{{ '/map.html?location=' | append: page.latitude  | append: ',' | append: page.longitude | append: '&marker=' | append: page.objectid | relative_url }}" class="btn btn-outline-primary">{{ site.data.translations['_includes']['item']['child']['compound-item-download-buttons.html']['map'][site.lang] | default: "View on Map" }}</a>{% endif %}
+    
+    {% assign has_download_options = false %}
+    {% if page.object_location %}
+        {% assign has_download_options = true %}
+    {% endif %}
+    {% for child in children %}
+        {% if child.object_location %}
+            {% assign has_download_options = true %}
+        {% endif %}
+    {% endfor %}
 
     <div class="btn-group" role="group">
-        <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <button class="btn dropdown-toggle {% unless has_download_options %}btn-secondary{% else %}btn-outline-primary{% endunless %}" type="button" data-bs-toggle="dropdown" aria-expanded="false" {% unless has_download_options %}disabled{% endunless %}>
             {{ site.data.translations['_includes']['item']['child']['compound-item-download-buttons.html']['download'][site.lang] | default: "Download" }}
         </button>
         <ul class="dropdown-menu">
@@ -28,5 +38,7 @@
             {% endunless %}
             {% endfor %}
         </ul>
+        <a class="btn btn-outline-primary text-danger d-flex align-items-center" href="mailto:{{ site.report-email }}?subject={{ site.data.translations['_includes']['item']['download-buttons.html']['subject'][site.lang] | default: 'Report faulty metadata for'}} {{ page.title | escape }}&body={{ site.data.translations['_includes']['item']['download-buttons.html']['body'][site.lang] | default: 'Please describe the issue with the metadata for'}} {{ page.title | escape }}.%0D%0A%0D%0A- URL: {{ site.url | append: page.url | url_encode }}%0D%0A- ID: {{ page.objectid | escape }}">{{ site.data.translations['_includes']['item']['download-buttons.html']['report'][site.lang] | default: "Report faulty metadata" }}</a>
+
     </div>
 </div>

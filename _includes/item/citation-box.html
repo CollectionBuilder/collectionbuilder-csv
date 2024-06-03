@@ -8,7 +8,7 @@
     <div class="card-body">
         <dl>
             <dt>{{ site.data.translations['_includes']['item']['citation-box.html']['preferred-citation'][site.lang] | default: "Preferred Citation" }}:</dt>
-            <dd>"{{ page.title }}", {{ site.title }}, {{ site.organization-name }}</dd>
+            <dd>{{ site.organization-name }}: {{ page.title}}. {{ site.title }}, &lt;{{ page.url | absolute_url }}&gt;, Stand: {{ "now" | date: "%d.%m.%Y" }}.</dd>
             <dt>{{ site.data.translations['_includes']['item']['citation-box.html']['reference-link'][site.lang] | default: "Reference Link" }}:</dt>
             <dd>{{ page.url | absolute_url }}</dd>
         </dl>

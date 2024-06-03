@@ -11,14 +11,38 @@
         <dt class="field">{{ f.display_name }}:</dt>
         <dd class="field-value">
             {% if f.browse_link == "true" %}
-            {% assign topics = child[f.field] | split: ";" %}
-            {% for t in topics %}
-            <a class="me-3" href="{{ t | strip | url_param_escape | prepend: '/browse.html#' | relative_url }}">{{ t | strip }}</a>
-            {% endfor %}
+              {% assign topics = child[f.field] | split: ";" %}
+              {% for t in topics %}
+                <a class="me-3" href="{{ t | strip | url_param_escape | prepend: '/browse.html#' | relative_url }}">{{ t | strip }}</a>
+              {% endfor %}
             {% elsif f.external_link == "true" %}
-            <a href="{{ child[f.field] }}" target="_blank" rel="noopener">{{ child[f.field] }}</a>
+              {% assign links = child[f.field] | split: ";" %}
+              {% for item in links %}
+                {% if item contains "[" and item contains "]" and item contains "(" and item contains ")" %}
+                  {% assign link_text = item | split: '[' | last | split: ']' | first %}
+                  {% assign link_url = item | split: '(' | last | split: ')' | first %}
+                    <a class="me-3" href="{{ link_url }}" target="_blank" rel="noopener">{{ link_text }} <svg class="bi icon-sprite" role="img" aria-label="external link">
+                      <use xlink:href="/assets/lib/cb-icons.svg#icon-external-link"/>
+                  </svg>
+                  </a>
+                {% else %}
+                  {% assign text = child[f.field] %}
+                  {% assign urls = text | regex_match: '(https?:\/\/[^\s,]+)' %}                
+                  {% for url in urls %}
+                    {% assign link = "<a href='" | append: url | append: "' target='_blank' rel='noopener'>" | append: url | append: " <svg class='bi icon-sprite' role='img' aria-label='external link'>
+                      <use xlink:href='/assets/lib/cb-icons.svg#icon-external-link'/>
+                  </svg>
+                  </a>" %}
+                    {% assign text = text | replace: url, link %}
+                  {% endfor %}
+                  {{ text }}
+                {% endif %}
+                <br>
+              {% endfor %}
             {% else %}
-            {{ child[f.field] | replace: '""','"' }}{% endif %}
+              {% assign text = child[f.field] %}          
+              {{ text }}
+            {% endif %}
         </dd>
         {% endif %}{% endfor %}
     </dl>

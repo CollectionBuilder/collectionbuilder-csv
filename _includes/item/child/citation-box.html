@@ -8,7 +8,11 @@
     <div class="card-body">
         <dl>
             <dt>{{ site.data.translations['_includes']['item']['child']['citation-box.html']['preferred-citation'][site.lang] | default: "Preferred Citation" }}:</dt>
-            <dd>"{{ child.title | default: page.title }}", {{ site.title }}, {{ site.organization-name }}</dd>
+            <dd>{{ site.organization-name }}: {{ child['title'] }}. {{ site['title'] }}, 
+                {% if child['date'] %}
+                    {{ child['date'] }}, 
+                {% endif %}  
+                &lt;{{ page.url | absolute_url }}#{{ child.objectid }}&gt;, Stand: {{ "now" | date: "%d.%m.%Y" }}.</dd>
             <dt>{{ site.data.translations['_includes']['item']['child']['citation-box.html']['reference-link'][site.lang] | default: "Reference Link" }}:</dt>
             <dd>{{ page.url | absolute_url }}#{{ child.objectid }}</dd>
         </dl>
