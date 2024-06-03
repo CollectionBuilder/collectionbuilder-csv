@@ -32,11 +32,16 @@ jobs:
       - run: pip install pandas requests
       - name: Process Data
         run: python .github/workflows/process_data.py
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
+      - name: Upload sgb-metadata.csv
+        uses: actions/upload-artifact@v4
         with:
           name: sgb-metadata
           path: _data/sgb-metadata.csv
+      - name: Upload objects folder
+        uses: actions/upload-artifact@v4
+        with:
+          name: objects
+          path: objects
 
   build:
     needs: data-processing
@@ -44,11 +49,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Download artifact
+      - name: Download sgb-metadata.csv
         uses: actions/download-artifact@v4
         with:
           name: sgb-metadata
           path: _data
+      - name: Download objects folder
+        uses: actions/download-artifact@v4
+        with:
+          name: objects
+          path: objects
       - name: Setup Ruby
         uses: ruby/setup-ruby@8575951200e472d5f2d95c625da0c7bec8217c42 # v1.161.0
         with:
