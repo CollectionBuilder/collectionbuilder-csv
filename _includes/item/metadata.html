@@ -26,7 +26,7 @@
                     </svg>
                     </a>
                 {% else %}
-                    {% assign text = page[f.field] %}
+                    {% assign text = item %}
                     {% assign urls = text | regex_match: '(https?:\/\/[^\s,]+)' %}
                     {% for url in urls %}
                     {% assign link = "<a href='" | append: url | append: "' target='_blank' rel='noopener'>" | append: url | append: " <svg class='bi icon-sprite' role='img' aria-label='external link'>
