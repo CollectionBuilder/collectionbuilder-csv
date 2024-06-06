@@ -1,0 +1,16 @@
+---
+#####
+# generates a robots.txt based on https://developer.mozilla.org/en-US/docs/Glossary/Robots.txt
+# blank if noindex: true is set in _config.yml
+#####
+permalink: /robots.txt
+---
+{%- if jekyll.environment == "production" and site.noindex != true -%}
+User-agent: *
+Allow: /
+
+Sitemap: {{ site.url }}/robots.txt
+{%- else -%}
+User-agent: *
+Disallow: 
+{%- endif -%}
