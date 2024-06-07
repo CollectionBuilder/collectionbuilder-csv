@@ -1,25 +1,77 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
 cff-version: 1.2.0
-message: "If you use this software, please cite it as below."
-title: "CollectionBuilder-CSV"
+title: Stadt.Geschichte.Basel Research Data Platform
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
 type: software
 authors:
-  - family-names: Williamson
-    given-names: Evan Peter
-    orcid: https://orcid.org/0000-0002-7990-9924
-  - family-names: Becker
-    given-names: Devin
-    orcid: https://orcid.org/0000-0002-0974-9064
-  - family-names: Wikle
-    given-names: Olivia
-    orcid: https://orcid.org/0000-0001-8122-4169
-repository-code: 'https://github.com/CollectionBuilder/collectionbuilder-csv'
-url: 'https://collectionbuilder.github.io/'
-license: MIT
-version: 1+
-date-released: '2021-04-25'
+  - given-names: Moritz
+    family-names: Mähr
+    email: moritz.maehr@unibas.ch
+    affiliation: University of Basel
+    orcid: 'https://orcid.org/0000-0002-1367-1618'
+  - given-names: Nico
+    family-names: Görlich
+    email: nico.goerlich@unibas.ch
+    affiliation: University of Basel
+    orcid: 'https://orcid.org/0000-0003-3860-1488'
+  - given-names: Moritz
+    family-names: Twente
+    email: moritz.twente@unibas.ch
+    affiliation: University of Basel
+    orcid: 'https://orcid.org/0009-0005-7187-9774'
+repository-code: >-
+  https://github.com/Stadt-Geschichte-Basel/forschung.stadtgeschichtebasel.ch
+url: 'https://forschung.stadtgeschichtebasel.ch'
 abstract: >-
-  CollectionBuilder is an open source tool for
-  creating digital collection and exhibit websites
-  that are driven by metadata and powered by modern
-  static web technology.
+  The Stadt.Geschichte.Basel Research Data Platform provides
+  access to reusable sources and data on the history of the
+  city of Basel.
 license: MIT
+
+references:
+  - authors:
+      - family-names: Williamson
+        given-names: Evan Peter
+        orcid: 'https://orcid.org/0000-0002-7990-9924'
+      - family-names: Becker
+        given-names: Devin
+        orcid: 'https://orcid.org/0000-0002-0974-9064'
+      - family-names: Wikle
+        given-names: Olivia
+        orcid: 'https://orcid.org/0000-0001-8122-4169'
+    title: "CollectionBuilder-CSV"
+    type: software
+    version: 1+
+    license: MIT
+    date-released: '2021-04-25'
+    url: 'https://collectionbuilder.github.io/'
+    repository-code: 'https://github.com/CollectionBuilder/collectionbuilder-csv'
+    abstract: >-
+     CollectionBuilder is an open source tool for creating digital collection and exhibit websites that are driven by metadata and powered by modern static web technology.
+
+  - authors:
+      - family-names: Mähr
+        given-names: Moritz
+        affiliation: University of Basel
+        orcid: 'https://orcid.org/0000-0002-1367-1618'
+      - family-names: Schnegg
+        given-names: Noëlle
+        affiliation: University of Basel
+        orcid: 'https://orcid.org/0009-0008-5207-6652'
+    title: >-
+     Handbuch zur Erstellung diskriminierungsfreier Metadaten für historische Quellen und Forschungsdaten   
+    type: software
+    version: '1.0'
+    license: CC-BY-SA-4.0
+    identifiers:
+       - type: doi
+         value: 10.5281/zenodo.11124720
+    date-released: '2024-06-03'
+    url: 'https://maehr.github.io/diskriminierungsfreie-metadaten//'
+    repository-code: 'https://github.com/maehr/diskriminierungsfreie-metadaten'
+    abstract: >-
+     Dieses Handbuch ist ein Leitfaden zur Erstellung von diskriminierungsfreien Metadaten für historische Quellen und Forschungsdaten, der im Rahmen des Forschungsprojekts Stadt.Geschichte.Basel entwickelt wurde. Es richtet sich an professionelle Historiker\*innen, Archivar\*innen, Bibliothekar\*innen und alle, die sich mit Open Research Data in den Geschichtswissenschaften beschäftigen. Die Autor\*innen Moritz Mähr und Noëlle Schnegg führen durch die praktischen Aspekte der Erstellung von Metadaten, basierend auf den FAIR-Prinzipien, um Forschungsdaten auffindbar, zugänglich, interoperabel und nachnutzbar zu machen. Durch praktische Anleitungen und illustrierte Fallbeispiele zeigt das Handbuch, wie maschinenlesbare Metadaten Forschung und Lehre bereichern und die Interpretation historischer Quellen beeinflussen können. Als öffentlich zugängliches "Living Document" ist es auf eine kontinuierliche Weiterentwicklung durch die Community ausgelegt und verpflichtet sich zu einer inklusiven und diskriminierungsfreien Darstellung historischer Inhalte. Das Handbuch ist eine grundlegende Ressource für alle, die sich mit moderner digitaler Geschichtswissenschaft und Open Research Data beschäftigen wollen.
