@@ -37,13 +37,13 @@ custom-foot: js/lunr-js.html
                             <ul>
                                 <li>{{ site.data.translations['_layouts']['search.html']['field-name'][site.lang] | default: 'Search
                                     a specific field: use the field name, colon, then your query, e.g. <code>title:foo</code>,
-                                    <code>date:1911</code>, <code>subject:tree</code>. In this collection you can use (( fields |
-                                    join: ", " )).' }}</li>
+                                    <code>date:1911</code>, <code>subject:tree</code>. In this collection you can use }} <code>{{ fields | join: "</code>, <code>" }}</code>.
+                                </li>
                                 <li>{{ site.data.translations['_layouts']['search.html']['wildcards'][site.lang] | default:
                                     'Wildcards: add <code>*</code> to match any character(s), e.g. <code>foo*</code>,
                                     <code>*oo</code>. This is helpful for using a root to find words with all related endings.' }}
                                 </li>
-                                <li>{{ site.data.translations['_layouts']['search.html']['furry-match'][site.lang] | default: 'Fuzzy
+                                <li>{{ site.data.translations['_layouts']['search.html']['fuzzy-match'][site.lang] | default: 'Fuzzy
                                     match: add <code>~</code> plus a number at the end of your query to specify a higher level of
                                     fuzziness in search, e.g. <code>foo~1</code>. This can help with misspellings.' }}</li>
                                 <li>{{ site.data.translations['_layouts']['search.html']['boost-term'][site.lang] | default: 'Boost

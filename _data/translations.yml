@@ -652,9 +652,9 @@ _layouts:
       es: "Estas opciones avanzadas se pueden agregar a su consulta en el cuadro de búsqueda para refinar sus resultados:"
       de: "Diese erweiterten Optionen können Ihrer Abfrage im Suchfeld hinzugefügt werden, um Ihre Ergebnisse zu verfeinern:"
     field-name:
-      en: "Search a specific field: use the field name, colon, then your query, e.g. <code>title:foo</code>, <code>date:1911</code>, <code>subject:tree</code>. In this collection you can use (( fields | join: \", \" ))."
-      es: "Buscar un campo específico: use el nombre del campo, dos puntos y luego su consulta, por ejemplo <code>título:foo</code>, <code>fecha:1911</code>, <code>tema:árbol</code>. En esta colección puede usar (( fields | join: \", \" ))."
-      de: "Suchen Sie ein bestimmtes Feld: Verwenden Sie den Feldnamen, Doppelpunkt und dann Ihre Abfrage, z.B. <code>titel:foo</code>, <code>datum:1911</code>, <code>thema:baum</code>. In dieser Sammlung können Sie (( fields | join: \", \" )) verwenden."
+      en: "Search a specific field: use the field name, colon, then your query, e.g. <code>title:foo</code>, <code>date:1911</code>, <code>subject:tree</code>. In this collection you can use the following fields:"
+      es: "Buscar un campo específico: use el nombre del campo, dos puntos y luego su consulta, por ejemplo <code>title:foo</code>, <code>date:1911</code>, <code>subject:árbol</code>. En esta colección puede usar los siguientes campos:"
+      de: "Suchen Sie ein bestimmtes Feld: Verwenden Sie den Feldnamen, Doppelpunkt und dann Ihre Abfrage, z.B. <code>title:foo</code>, <code>date:1911</code>, <code>subject:baum</code>. In dieser Sammlung können Sie folgende Felder verwenden:"
     wildcards:
       en: "Wildcards: add <code>*</code> to match any character(s), e.g. <code>foo*</code>, <code>*oo</code>. This is helpful for using a root to find words with all related endings."
       es: "Comodines: agregue <code>*</code> para hacer coincidir cualquier carácter(es), por ejemplo <code>foo*</code>, <code>*oo</code>. Esto es útil para usar una raíz para encontrar palabras con todos los finales relacionados."
