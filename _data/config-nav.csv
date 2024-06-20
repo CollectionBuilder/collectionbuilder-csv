@@ -10,6 +10,4 @@ Metadaten,/data.html,Daten,
 Datenarchiv,https://zenodo.org/communities/stadt-geschichte-basel/,Daten,true
 Quellcode,https://github.com/Stadt-Geschichte-Basel/,Daten,true
 Portal,https://stadtgeschichtebasel.ch/,,true
-Über,,,
-Projekt,/about.html,Über,
-Workshops,/workshops.html,Über,
+Über,/about.html,,
