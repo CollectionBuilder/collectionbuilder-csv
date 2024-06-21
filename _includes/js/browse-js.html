@@ -70,11 +70,11 @@ function makeCard(obj) {
     {% endunless %}{% endfor %}
     card += '</p>';
     // media type
-    if(obj.template && obj.template != "") {
+/*     if(obj.template && obj.template != "") {
         mediaIcon = getIcon(obj.template,obj.format,"hidden");
         card += '<p class="card-text"><small><a class="btn btn-sm btn-outline-primary" href="{{ page.url | relative_url }}#' + encodeURIComponent(obj.template) + '">' + 
         obj.template.toUpperCase() + ' ' + mediaIcon + '</a></small></p>';
-    }
+    } */
     // view button
     card += '<hr><a href="' + itemHref + '" class="btn btn-sm btn-outline-primary" title="link to ' + obj.title + '">' + "{{ site.data.translations['_includes']['js']['browse-js.html']['view-full-record'][site.lang] | default: 'View Full Record' }}" + '</a>';
     // close divs
