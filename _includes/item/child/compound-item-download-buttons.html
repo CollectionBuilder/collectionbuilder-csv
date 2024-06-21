@@ -31,8 +31,7 @@
             {% unless child.object_location == nil %}
             <li>
                 <a target="_blank" rel="noopener" href="{{ child.object_location | relative_url }}" class="dropdown-item">
-                    {% if page.title != child.title and child.title != nil %}{{ child.title | truncatewords: 3 }}{% else %}Item {{ forloop.index }}{% endif %}
-                    {% if child.format %}({{ child.format | split: '/' | last | upcase }}){% endif %}
+                    {{ child.objectid }} {% if child.format %}({{ child.format | split: '/' | last | upcase }}){% endif %}
                 </a>
             </li>
             {% endunless %}

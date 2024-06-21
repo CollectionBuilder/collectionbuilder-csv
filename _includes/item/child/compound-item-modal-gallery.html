@@ -14,8 +14,7 @@
             <div class="my-auto">
                 <div class="card-body text-center" id="{{ child.objectid }}Card">
                 
-                    {% if child.title %}<div class="small text-dark mb-2">{{ child.title | truncatewords: 4 }}</div>{% endif %}
-                    
+                    {{ child.objectid }}: {% if child.title %}<div class="small text-dark mb-2">{{ child.title | truncatewords: 4 }}</div>{% endif %}
                     <div class="mb-2">
                         {% if child.image_thumb or child.image_small %}
                         <img class="img-thumbnail compound-thumb" src="{{ child.image_thumb | default: child.image_small | relative_url }}" alt="{{ child.image_alt_text | default: child.description | default: child.title | escape }}">

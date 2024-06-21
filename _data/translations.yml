@@ -217,6 +217,10 @@ _includes:
           en: "Download as"
           es: "Descargar como"
           de: "Herunterladen als"
+        item:
+          en: "Item"
+          es: "Elemento"
+          de: "Element"
       compound-item-modal-gallery.html:
         previous:
           en: "Previous Item"
