@@ -29,7 +29,7 @@ layout: page
 
 {% assign list_id = "list-div-" | append: fields | slugify %}
 <div class="dropdown">
-    <button class="btn btn-secondary mt-1 dropdown-toggle" type="button" id="browseSortButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <button class="btn btn-outline-primary mt-1 dropdown-toggle" type="button" id="browseSortButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         {{ site.data.translations['_layouts']['list.html']['sort-by'][site.lang] | default: 'Sort by' }} <span id="sortFilter">{{ site.data.translations['_layouts']['list.html']['count'][site.lang] | default: 'Count' }}</span>
     </button>
     <div class="dropdown-menu browse-sort-menu" aria-labelledby="browseSortButton">

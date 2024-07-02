@@ -112,7 +112,7 @@ bootswatch: # leave blank or comment out for plain bootstrap
 # THEME FONTS [optional!]
 base-font-size: 1em
 text-color: "#191919"
-link-color: "#507082"
+link-color: "#0073a9"
 base-font-family: "'Euclid Circular B', sans-serif;" # comment out for bootstrap defaults. e.g. Roboto
 font-cdn: "<link rel='preload' href='/assets/fonts/EuclidCircularB-Regular-WebS.woff2' as='font' type='font/woff2' crossorigin><link rel='preload' href='/assets/fonts/EuclidCircularB-Medium-WebS.woff2' as='font' type='font/woff2' crossorigin><link rel='preload' href='/assets/fonts/EuclidCircularB-Semibold-WebS.woff2' as='font' type='font/woff2' crossorigin>
 " # add font stylesheet, e.g. <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">

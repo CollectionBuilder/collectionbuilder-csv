@@ -33,7 +33,7 @@
                         data-bs-toggle="modal"
                         href="#{{ child.objectid }}"
                         onclick="window.location.hash='{{ child.objectid }}'"
-                        class="btn btn-sm btn-outline-secondary small stretched-link">
+                        class="btn btn-sm btn-outline-primary small stretched-link">
                         {{ child.display_template | upcase | default: "Item" }} <svg class="bi icon-sprite" fill="currentColor" aria-hidden="true"><use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#icon-{{ child.display_template | default: 'file'}}"/></svg>
                     </a> 
 

@@ -2,7 +2,7 @@
     class="navbar sticky-top navbar-expand-lg {{ site.data.theme.navbar-color | default: 'navbar-dark' }} {{ site.data.theme.navbar-background | default: 'bg-dark' }}">
     <div class="container">
         <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#page-nav"
-            aria-controls="page-nav" aria-expanded="false" aria-label="Toggle navigation">
+            aria-controls="page-nav" aria-expanded="false" aria-label="Navigation anzeigen">
             <!-- <span class="navbar-toggler-icon"></span> -->
             <span>
                 <svg xmlns="http://www.w3.org/2000/svg" height="2em" viewBox="0 0 448 512"
@@ -13,7 +13,7 @@
             </span>
         </button>
         {% if site.organization-logo-nav %}
-        <a href="{{ site.baseurl }}/" class="navbar-brand d-flex align-items-center" style="width: 7rem;">
+        <a href="{{ site.baseurl }}/" class="navbar-brand d-flex align-items-center" style="width: 7rem;" aria-label="Startseite">
             <img class="img-fluid" src="{{ site.organization-logo-nav | relative_url }}" alt="">
         </a>
         {% endif %}

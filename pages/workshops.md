@@ -16,7 +16,7 @@ Das Team von Stadt.Geschichte.Basel nutzt das Tool, um Forschungsdaten des histo
 
 ## Tagung Digital History & Citizen Science (Halle/S.)
 
-**📅 21.09.2024 🕒 10:00–14:00 Uhr**
+**<span aria-hidden="true">📅</span> 21.09.2024 <span aria-hidden="true">🕒</span> 10:00 bis 14:00 Uhr**
 
 Im Rahmen der Tagung [Digital History & Citizen Science](https://www.geschichte.uni-halle.de/struktur/hist-data/dh_cs/) an der Martin-Luther-Universität Halle-Wittenberg bietet Stadt.Geschichte.Basel einen [Workshop](https://www.conftool.org/digital-humanities-citizen-science-2024/index.php?page=browseSessions&form_session=74) an, in dem die Teilnehmer:innen CollectionBuilder kennenlernen.
 
@@ -30,7 +30,7 @@ Registrierung via conftool nach erfolgter Anmeldung zur [Tagung](https://www.ges
 
 ## Praxislabor AG Digitale Geschichtswissenschaft
 
-**📅 15.10.2024 🕒 10:00–13:00 Uhr, online**
+**<span aria-hidden="true">📅</span> 15.10.2024 <span aria-hidden="true">🕒</span> 10:00 bis 13:00 Uhr, online**
 
 Als Teil der Reihe [Praxislabor 2024](https://doi.org/10.58079/w9uv) veranstaltet Stadt.Geschichte.Basel einen Online-Workshop zur Einführung in die Arbeit mit CollectionBuilder.
 

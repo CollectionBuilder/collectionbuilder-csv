@@ -527,9 +527,10 @@ _includes:
       es: "Buscar"
       de: "Suche"
   scroll-to-top.html:
-    en: "Back to Top"
-    es: "Volver al Principio"
-    de: "Zurück nach oben"
+    back-to-top:
+      en: "Back to Top"
+      es: "Volver al Principio"
+      de: "Zurück nach oben"
 _layouts:
   item:
     audio.html:

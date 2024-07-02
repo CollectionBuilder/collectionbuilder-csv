@@ -45,7 +45,7 @@ function makeCard(obj) {
         card += '<a href="' + itemHref + '"> <img class="card-img-top lazyload" src="' + placeholder + '" data-src="' + imgSrc + '" alt="' + imgAlt + '"></a>';
     }
     // title
-    card += '<div class="card-body text-center"> <h3 class="card-title h4"><a href="' + itemHref + '" class="text-dark">' + obj.title + '</a></h3>';
+    card += '<div class="card-body text-center"> <h2 class="card-title h4"><a href="' + itemHref + '" class="text-dark">' + obj.title + '</a></h3>';
     // icon thumb for item without image
     if(thumbIcon){
         card += '<p><a href="' + itemHref + '">' + thumbIcon + '</a></p>';
@@ -113,7 +113,7 @@ function filterItems(arr,q) {
     browseItemsDiv.innerHTML = cards;
 
     // finish
-    filterButton.focus();
+    filterTextBox.focus();
     loadingIcon.classList.add("d-none");
 };
 

@@ -21,7 +21,7 @@
                 {% if item contains "[" and item contains "]" and item contains "(" and item contains ")" %}
                     {% assign link_text = item | split: '[' | last | split: ']' | first %}
                     {% assign link_url = item | split: '(' | last | split: ')' | first %}
-                    <a class="me-3" href="{{ link_url }}" target="_blank" rel="noopener">{{ link_text }} <svg class="bi icon-sprite" role="img" aria-label="external link">
+                    <a class="me-3" href="{{ link_url }}" target="_blank" rel="noopener">{{ link_text }} <svg class="bi icon-sprite" role="img" aria-label="Externer Link">
                         <use xlink:href="/assets/lib/cb-icons.svg#icon-external-link"/>
                     </svg>
                     </a>
@@ -29,7 +29,7 @@
                     {% assign text = item %}
                     {% assign urls = text | regex_match: '(https?:\/\/[^\s,]+)' %}
                     {% for url in urls %}
-                    {% assign link = "<a href='" | append: url | append: "' target='_blank' rel='noopener'>" | append: url | append: " <svg class='bi icon-sprite' role='img' aria-label='external link'>
+                    {% assign link = "<a href='" | append: url | append: "' target='_blank' rel='noopener'>" | append: url | append: " <svg class='bi icon-sprite' role='img' aria-label='Externer Link'>
                       <use xlink:href='/assets/lib/cb-icons.svg#icon-external-link'/>
                         </svg>
                         </a>" %}
