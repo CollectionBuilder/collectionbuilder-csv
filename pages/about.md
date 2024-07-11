@@ -7,13 +7,13 @@ credits: true
 
 # Über uns
 
-Wir sind ein interdisziplinäres [Forschungsprojekt](https://stadtgeschichtebasel.ch/projekt), das sich der umfassenden Erforschung und Dokumentation der langen Geschichte von Basel widmet. Unsere Initiative wurde in den 1980er Jahren geboren, erhielt jedoch erst im Jahr 2011 durch einen Verein und das Departement Geschichte der Universität Basel neuen Schwung. Schliesslich wurde unser Projekt 2016 durch den Grossen Rat des Kantons Basel-Stadt unterstützt und genehmigt.
+Wir sind ein interdisziplinäres [Forschungsprojekt](https://stadtgeschichtebasel.ch/projekt){:target="_blank"}, das sich der umfassenden Erforschung und Dokumentation der langen Geschichte von Basel widmet. Unsere Initiative wurde in den 1980er Jahren geboren, erhielt jedoch erst im Jahr 2011 durch einen Verein und das Departement Geschichte der Universität Basel neuen Schwung. Schliesslich wurde unser Projekt 2016 durch den Grossen Rat des Kantons Basel-Stadt unterstützt und genehmigt.
 
 Unser Team besteht aus mehr als fünfzig engagierten Forscher\*innen und Mitarbeiter\*innen aus verschiedenen Ländern, die sich mit Hingabe der Erforschung und Darstellung der Basler Geschichte widmen.
 
 Unser Ziel ist es, einen bedeutenden Beitrag zur Erforschung und Dokumentation der Geschichte von Basel zu leisten und gleichzeitig die Vergangenheit auf zeitgemässe Weise zugänglich zu machen. Wir freuen uns über Ihr Interesse und laden Sie ein, unsere Webseite zu erkunden und mehr über die faszinierende Geschichte von Basel zu erfahren.
 
-Die [Stiftung Stadt.Geschichte.Basel](https://stiftungen.stiftungschweiz.ch/organisation/stiftung-stadt-geschichte-basel) ist durch den [Verein Basler Geschichte](https://stadtgeschichtebasel.ch/verein) am 9.1.2017 gegründet worden. Sie überwacht die Durchführung des Projekts und stellt durch ein Herausgebergremium die inhaltliche Qualität der Forschung sicher. Die Koordination der Forschung und die damit verbundene konzeptionelle und redaktionelle Arbeit ist Aufgabe der Projektleitung.
+Die [Stiftung Stadt.Geschichte.Basel](https://stiftungen.stiftungschweiz.ch/organisation/stiftung-stadt-geschichte-basel){:target="_blank"} ist durch den [Verein Basler Geschichte](https://stadtgeschichtebasel.ch/verein){:target="_blank"} am 9.1.2017 gegründet worden. Sie überwacht die Durchführung des Projekts und stellt durch ein Herausgebergremium die inhaltliche Qualität der Forschung sicher. Die Koordination der Forschung und die damit verbundene konzeptionelle und redaktionelle Arbeit ist Aufgabe der Projektleitung.
 
 ## Mitglieder des Stiftungsrates
 
@@ -58,19 +58,19 @@ Die [Stiftung Stadt.Geschichte.Basel](https://stiftungen.stiftungschweiz.ch/orga
 
 ## Social Media
 
-Wir sind unter [sta.ge.ba](https://www.instagram.com/sta.ge.ba/) auf Instagram und unter [basel\_stadt](https://twitter.com/basel_stadt) auf X zu finden. Wir folgen dabei strikten [Richtlinien für den Blog und soziale Medien](https://stadtgeschichtebasel.ch/richtlinien-fuer-den-blog-und-soziale-medien).
+Wir sind unter [sta.ge.ba](https://www.instagram.com/sta.ge.ba/){:target="_blank"} auf Instagram und unter [basel\_stadt](https://twitter.com/basel_stadt){:target="_blank"} auf X zu finden. Wir folgen dabei strikten [Richtlinien für den Blog und soziale Medien](https://stadtgeschichtebasel.ch/richtlinien-fuer-den-blog-und-soziale-medien){:target="_blank"}.
 
 ## Medien und Pressemappe
 
-* [Pressemappe](https://stadtgeschichtebasel.ch/pressemappe)
+* [Pressemappe](https://stadtgeschichtebasel.ch/pressemappe){:target="_blank"}
 
-Medienanfragen richten Sie bitte direkt den [Christoph Merian Verlag](https://www.merianverlag.ch/presse.html).
+Medienanfragen richten Sie bitte direkt den [Christoph Merian Verlag](https://www.merianverlag.ch/presse.html){:target="_blank"}.
 
 ## Lehrmittel
 
-* [«Verschachtelte Geschichten. Immigrationsschicksale in der Schweiz in den letzten hundert Jahren»](https://stadtgeschichtebasel.ch/vermittlungsangebot-verschachtelte-geschichten-immigrationsschicksale-in-der-schweiz-in-den-letzten-hundert-jahren) bietet Unterrichtsmaterial über 12 Immigrationsschicksale der letzten hundert Jahre.
+* [«Verschachtelte Geschichten. Immigrationsschicksale in der Schweiz in den letzten hundert Jahren»](https://stadtgeschichtebasel.ch/vermittlungsangebot-verschachtelte-geschichten-immigrationsschicksale-in-der-schweiz-in-den-letzten-hundert-jahren){:target="_blank"} bietet Unterrichtsmaterial über 12 Immigrationsschicksale der letzten hundert Jahre.
 
-Weitere Lehrmittel von Kooperationspartner\*innen und Dritten finden sich auf dem Basler Bildungsserver unter [www.edubs.ch](https://www.edubs.ch/).
+Weitere Lehrmittel von Kooperationspartner\*innen und Dritten finden sich auf dem Basler Bildungsserver unter [www.edubs.ch](https://www.edubs.ch/){:target="_blank"}.
 
 # Impressum
 
@@ -80,8 +80,8 @@ Redaktion: Moritz Mähr, Noëlle Schnegg und Cristina Wildisen-Münch
 
 ## Datenschutz
 
-Zur [Datenschutzerklärung](https://stadtgeschichtebasel.ch//datenschutzerklaerung).
+Zur [Datenschutzerklärung](https://stadtgeschichtebasel.ch//datenschutzerklaerung){:target="_blank"}.
 
 ## Barrierefreiheit
 
-Zur [Barrierefreiheitserklärung](https://stadtgeschichtebasel.ch//barrierefreiheitserklaerung).
+Zur [Barrierefreiheitserklärung](https://stadtgeschichtebasel.ch//barrierefreiheitserklaerung){:target="_blank"}.
