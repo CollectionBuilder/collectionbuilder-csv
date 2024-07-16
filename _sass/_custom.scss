@@ -144,3 +144,19 @@ a {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
 }
+
+#search button:hover svg {
+    fill: #ffe880;
+}
+
+#search button:hover {
+    background-color: #3a1e3e;
+    border-color: #3a1e3e;
+}
+
+.toggle-icon {
+    fill: #ffffff;
+    &:hover {
+        fill: #ffe880;
+    }
+}
