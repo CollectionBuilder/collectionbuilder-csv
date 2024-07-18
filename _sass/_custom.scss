@@ -145,6 +145,49 @@ a {
     border-bottom-right-radius: 0;
 }
 
+.datatable-border {
+    border-color: #ffe880 !important;
+    border-width: 6.5px !important;
+    border-top: none !important;
+}
+
+.datatable-border th,
+.datatable-border td {
+    border: none; /* for inner cell borders */
+}
+
+#wrap {
+    max-height: 600px; 
+    overflow-y: auto;
+    text-align: left;
+    background-color: #ffe880;
+}
+
+.dataTables_wrapper {
+    overflow-x: auto;
+}
+
+#csvTable {
+    background-color: white;
+}
+
+.dataTables_scrollFoot {
+    position: sticky;
+    bottom: 0;
+    background-color: white;
+    z-index: 999;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0px !important;
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
 #search button:hover svg {
     fill: #ffe880;
 }
