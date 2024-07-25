@@ -139,32 +139,29 @@
 </div>
 
 <script>
-    function stopMedia() {
-   // Stop any playing <video> or <audio> elements
-   const mediaElements = document.querySelectorAll('video, audio');
-   mediaElements.forEach(media => {
-     if (!media.paused) {
-       media.pause();
-       media.currentTime = 0; // Optional: Reset video/audio to start
-     }
-   });
- 
-   // Stop any playing YouTube videos
-   const iframes = document.querySelectorAll('iframe');
-   iframes.forEach(iframe => {
-     console.log("iframe here");
-     const src = iframe.src;
-     if (src.includes('youtube')) {
-      // Assuming the iframe is a YouTube video
-      const message = JSON.stringify({ event: 'command', func: 'pauseVideo', args: '' });
-      iframe.contentWindow.postMessage(message, '*');
-    } else if (src.includes('vimeo')) {
-      // Assuming the iframe is a Vimeo video
-      // Utilizing Vimeo's Player.js API to pause the video
-      iframe.src = iframe.src;
-    }
-   });
+function stopMedia() {
+    // Stop any playing <video> or <audio> elements
+    const mediaElements = document.querySelectorAll('video, audio');
+    mediaElements.forEach(media => {
+        if (!media.paused) {
+            media.pause();
+            media.currentTime = 0; // Optional: Reset video/audio to start
+        }
+    });
+
+    // Stop any playing YouTube videos
+    const iframes = document.querySelectorAll('iframe');
+    iframes.forEach(iframe => {
+        const src = iframe.src;
+        if (src.includes('youtube')) {
+            // Assuming the iframe is a YouTube video
+            const message = JSON.stringify({ event: 'command', func: 'pauseVideo', args: '' });
+            iframe.contentWindow.postMessage(message, '*');
+        } else if (src.includes('vimeo')) {
+            // Assuming the iframe is a Vimeo video
+            iframe.src = iframe.src;
+        }
+    });
  }
  
-  
  </script>
