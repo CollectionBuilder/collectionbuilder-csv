@@ -13,6 +13,6 @@
 {% if youtube_id contains 'v=' %}{% assign youtube_id = youtube_id | split: 'v=' | last | split: '&' | first %}
 {% elsif youtube_id contains '?' %}{% assign youtube_id = youtube_id | split: '?' | first %}{% endif %}
 <div class="ratio ratio-16x9">
-    <iframe title="video embed {{ child.title | escape }}" src="https://www.youtube-nocookie.com/embed/{{ youtube_id }}?rel=0&modestbranding=1" allowfullscreen></iframe>
+    <iframe title="video embed {{ child.title | escape }}" src="https://www.youtube-nocookie.com/embed/{{ youtube_id }}?enablejsapi=1&rel=0&modestbranding=1" allowfullscreen></iframe>
 </div>
 {% endif %}
