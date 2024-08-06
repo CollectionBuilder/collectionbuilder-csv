@@ -88,7 +88,7 @@
         margin: 1.5rem auto 1rem;
     }
     
-    p, .about-narrowed-content, .footnotes, ol, ul, blockquote {
+    p, .about-narrowed-content, .narrow-content, hr, .footnotes, ol, ul, blockquote {
         margin-left: auto;
         margin-right: auto;
         max-width: 650px;
@@ -98,9 +98,7 @@
 
 /* narrow text block for page-narrow layout */
 .page-narrow {
-    h1, h2, h3, h4, h5, h6, p, ol, ul, .footnotes, .narrow-content { 
-        max-width: 650px;
-        margin-left: auto;
-        margin-right: auto; 
-    }
+    max-width: 750px;
+    margin-left: auto;
+    margin-right: auto;
 }
