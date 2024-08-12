@@ -2,34 +2,32 @@
 # Default home page with boxes providing collection stats
 layout: page
 ---
-{%- assign items = site.data[site.metadata] | where_exp: 'item','item.objectid' -%}
-{%- assign sample_items = site.data.translations['_layouts']['home-infographic.html']['sample-items'][site.lang] | default: 'Sample Items' -%}
-{%- assign top_subjects = site.data.translations['_layouts']['home-infographic.html']['top-subjects'][site.lang] | default: 'Top Subjects' -%}
-{%- assign locations = site.data.translations['_layouts']['home-infographic.html']['locations'][site.lang] | default: 'Locations' -%}
+{%- assign items = site.data[site.metadata] | where_exp: 'item', 'item.objectid' -%}
+{%- assign sample_items = site.data.translations._layouts['home-infographic.html']['sample-items'][site.lang]
+  | default: 'Sample Items'
+-%}
+{%- assign top_subjects = site.data.translations._layouts['home-infographic.html']['top-subjects'][site.lang]
+  | default: 'Top Subjects'
+-%}
+{%- assign locations = site.data.translations._layouts['home-infographic.html'].locations[site.lang]
+  | default: 'Locations'
+-%}
 
 <div class="row">
-
   <div class="col-md-8">
-
     {% include index/description.html %}
     {% include index/carousel.html title=sample_items %}
-    
   </div>
-  <div class="col-md-4">  
-
+  <div class="col-md-4">
     {% include index/time.html %}
 
     {% include index/featured-terms.html field="subject" title=top_subjects btn-color="primary" %}
 
     {% include index/featured-terms.html field="location" title=locations btn-color="outline-secondary" %}
-    
-    {% include index/objects.html %}
 
+    {% include index/objects.html %}
   </div>
   <div class="col-md-12">
-
     {% include index/data-download.html %}
-
   </div>
-
 </div>

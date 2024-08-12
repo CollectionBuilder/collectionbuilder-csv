@@ -25,13 +25,13 @@ Requirements:
 
 The following configuration options are available:
 
-| option | description | default value |
-| --- | --- | --- |
-| thumbs_size | the max dimensions of the generated thumbnail images, using ImageMagick resizing syntax | 450x |
-| small_size | the max dimensions of the generated small images, using ImageMagick resizing syntax | 800x800 |
-| density | the pixel density used to generate PDF thumbnails | 300 |
-| missing | whether to only generate derivatives that don't already exist | true |
-| compress_originals | Optimize the original image files | false |
+| option             | description                                                                             | default value |
+| ------------------ | --------------------------------------------------------------------------------------- | ------------- |
+| thumbs_size        | the max dimensions of the generated thumbnail images, using ImageMagick resizing syntax | 450x          |
+| small_size         | the max dimensions of the generated small images, using ImageMagick resizing syntax     | 800x800       |
+| density            | the pixel density used to generate PDF thumbnails                                       | 300           |
+| missing            | whether to only generate derivatives that don't already exist                           | true          |
+| compress_originals | Optimize the original image files                                                       | false         |
 
 The default image sizes are based on the max pixel width of the images where they will appear in the base CollectionBuilder features (e.g. the width of thumb is based on the card image top featured on the Browse page).
 
@@ -54,8 +54,8 @@ For example, if you only wanted to set `density` to `70`, you can do:
 rake generate_derivatives[,,70]
 ```
 
-The mini_magick Gem is used to interface with ImageMagick so it supports both current version 7 and legacy versions (which are common on Linux). 
-The image_optim Gem is used to optimize images using the optimization libraries provided by the image_optim_pack Gem. 
+The mini_magick Gem is used to interface with ImageMagick so it supports both current version 7 and legacy versions (which are common on Linux).
+The image_optim Gem is used to optimize images using the optimization libraries provided by the image_optim_pack Gem.
 image_optim_pack does not provide binaries for Windows, so optimization is skipped when using the rake task on Windows.
 
 ## benchmark_build

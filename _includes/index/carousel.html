@@ -1,63 +1,68 @@
-{% comment %} 
+{% comment %}
+  Image item carousel.
+  This include adds a Bootstrap Carousel component populated with randomly selected image items, designed with index page in mind.
+  https://getbootstrap.com/docs/5.1/components/carousel/
 
-    Image item carousel.
-    This include adds a Bootstrap Carousel component populated with randomly selected image items, designed with index page in mind. 
-    https://getbootstrap.com/docs/5.1/components/carousel/
+  E.G. --> {% include index/carousel.html title="Sample Items" height=450 %}
 
-    E.G. --> {% include index/carousel.html title="Sample Items" height=450 %}
+  Options:
 
-    Options:
-
-    - "height" - the height of the carousel in px, just give the number (optional, default 300)
-    - "carousel-type" - the selection of items featured in the carousel, choose from thumb (all items with image_thumb) or small (all items with image_small). (optional, default thumb)
-    - "title" - card title text inside card content area (optional)
-    - "header" = card header text in bar above card content (optional)
-    - "max" = maximum images selected for slide show (optional, default 9. Do not make too big!)
-    - "btn-color" - a bootstrap color class to theme the buttons. Can be any bootstrap template color (e.g. info, success) or outline (e.g. outline-info, outline-success), including colors created in config-theme-colors. (optional, default "primary")
-    
-{%- endcomment -%}
+  - "height" - the height of the carousel in px, just give the number (optional, default 300)
+  - "carousel-type" - the selection of items featured in the carousel, choose from thumb (all items with image_thumb) or small (all items with image_small). (optional, default thumb)
+  - "title" - card title text inside card content area (optional)
+  - "header" = card header text in bar above card content (optional)
+  - "max" = maximum images selected for slide show (optional, default 9. Do not make too big!)
+  - "btn-color" - a bootstrap color class to theme the buttons. Can be any bootstrap template color (e.g. info, success) or outline (e.g. outline-info, outline-success), including colors created in config-theme-colors. (optional, default "primary")
+{% endcomment %}
 
 {%- assign carousel-max = include.max | default: 9 -%}
-{%- assign btn-color = include.btn-color | default: "secondary" -%}
-{%- assign btn-text = site.data.translations['_includes']['index']['carousel.html']['view-item'][site.lang] | default: "View Item" -%}
-{% if site.data.theme.carousel-child-objects == true %}
-{%- assign carousel-items = site.data[site.metadata] | where_exp: 'item','item.objectid' | where_exp: "item","item.image_small != nil or item.image_thumb != nil"-%}
+{%- assign btn-color = include['btn-color'] | default: 'secondary' -%}
+{%- assign btn-text = site.data.translations._includes.index['carousel.html']['view-item'][site.lang]
+  | default: 'View Item'
+-%}
+{% if site.data.theme['carousel-child-objects'] == true %}
+  {%- assign carousel-items = site.data[site.metadata]
+    | where_exp: 'item', 'item.objectid'
+    | where_exp: 'item', 'item.image_small != nil or item.image_thumb != nil'
+  -%}
 {% else %}
-{%- assign carousel-items = site.data[site.metadata] | where_exp: 'item','item.objectid and item.parentid == nil' | where_exp: "item","item.image_small != nil or item.image_thumb != nil" -%}
+  {%- assign carousel-items = site.data[site.metadata]
+    | where_exp: 'item', 'item.objectid and item.parentid == nil'
+    | where_exp: 'item', 'item.image_small != nil or item.image_thumb != nil'
+  -%}
 {% endif %}
 
 {%- comment -%}
-    Set up carousel div
+  Set up carousel div
 {%- endcomment -%}
 <style>
-    #imageCarousel .carousel-item { height: {{ include.height | remove: 'px' | strip | default: '300' }}px; }
+  #imageCarousel .carousel-item { height: {{ include.height | remove: 'px' | strip | default: '300' }}px; }
 </style>
 <div class="card mb-3">
-    {% if include.header %}<h2 class="card-header h5">{{ include.header }}</h2>{% endif %}
-    <div class="card-body">
-        {% if include.title %}<h2 class="card-title h5">{{ include.title }}</h2>{% endif %}
-        
-        <div id="imageCarousel" class="carousel slide bg-dark rounded mb-3" data-bs-ride="carousel">
-            <div id="carouselIndicators" class="carousel-indicators">
-                
-            </div>
-            <div id="carouselInner" class="carousel-inner">
-                
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#imageCarousel" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#imageCarousel" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
-        </div>
-            
+  {% if include.header %}
+    <h2 class="card-header h5">{{ include.header }}</h2>
+  {% endif %}
+  <div class="card-body">
+    {% if include.title %}
+      <h2 class="card-title h5">{{ include.title }}</h2>
+    {% endif %}
+
+    <div id="imageCarousel" class="carousel slide bg-dark rounded mb-3" data-bs-ride="carousel">
+      <div id="carouselIndicators" class="carousel-indicators"></div>
+      <div id="carouselInner" class="carousel-inner"></div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#imageCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#imageCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
     </div>
+  </div>
 </div>
 {%- comment -%}
-    add slides using JS to allow for randomizing slide show
+  add slides using JS to allow for randomizing slide show
 {%- endcomment -%}
 <script>
     /* add item data */

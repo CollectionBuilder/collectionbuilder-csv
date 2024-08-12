@@ -1,15 +1,13 @@
 {% comment %}
-
-    Embed an interactive viewer to display 3d model files in glTF/GLB format (.glb or .gltf).
-    Uses the model-viewer component, https://modelviewer.dev/
-    This assumes that the item's object_location is a .glb or .gltf file. 
-    If an image_small is set in the metadata, that image is used as a "poster" and model is not loaded until user clicks. 
-    
+  Embed an interactive viewer to display 3d model files in glTF/GLB format (.glb or .gltf).
+  Uses the model-viewer component, https://modelviewer.dev/
+  This assumes that the item's object_location is a .glb or .gltf file.
+  If an image_small is set in the metadata, that image is used as a "poster" and model is not loaded until user clicks.
 {% endcomment %}
 <!-- import model-viewer component from CDN -->
 <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.1.1/model-viewer.min.js"></script>
 {% if page.image_small %}
-<style>
+  <style>
     /* add styles for poster image and load button */
     #poster-image {
         position: absolute;
@@ -29,19 +27,36 @@
         top: 50%;
         transform: translate3d(-50%, -50%, 0);
     }
-</style>{% endif %}
+  </style>
+{% endif %}
 <!-- add 3d viewer to page -->
 <div class="ratio ratio-4x3">
-    <model-viewer id="item-model-viewer" alt="{{ page.image_alt_text | default: page.description | default: page.title | escape }}" src="{{ page.object_location | relative_url }}"  shadow-intensity="1" camera-controls touch-action="pan-y" {% if page.image_small %}reveal="manual"{% endif %}>
-        {% if page.image_small %}
-        <div id="poster-image" slot="poster"></div>
-        <button id="load-model-btn" class="btn btn-lg btn-primary" slot="poster">{{ site.data.translations['_includes']['item']['3d-model-viewer.html']['load-model'][site.lang] | default: "Load 3D Model" }}</button>{% endif %}
-    </model-viewer>
+  <model-viewer
+    id="item-model-viewer"
+    alt="{{ page.image_alt_text | default: page.description | default: page.title | escape }}"
+    src="{{ page.object_location | relative_url }}"
+    shadow-intensity="1"
+    camera-controls
+    touch-action="pan-y"
+    {% if page.image_small %}
+      reveal="manual"
+    {% endif %}
+  >
+    {% if page.image_small %}
+      <div id="poster-image" slot="poster"></div>
+      <button id="load-model-btn" class="btn btn-lg btn-primary" slot="poster">
+        {{
+          site.data.translations._includes.item['3d-model-viewer.html']['load-model'][site.lang]
+          | default: 'Load 3D Model'
+        }}
+      </button>
+    {%- endif %}
+  </model-viewer>
 </div>
 {% if page.image_small %}
-<script>
-    /* load model on user click */ 
+  <script>
+    /* load model on user click */
     var itemModelViewer = document.querySelector('#item-model-viewer');
     itemModelViewer.addEventListener('click', () => itemModelViewer.dismissPoster());
-</script>
+  </script>
 {% endif %}

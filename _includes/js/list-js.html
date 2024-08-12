@@ -1,85 +1,83 @@
 {%- comment -%}
-
-    Generates a list-group using js to process the terms for display on "list" layout.
-    Requires CB's array_count_uniq.rb plugin!
-    
+  Generates a list-group using js to process the terms for display on "list" layout.
+  Requires CB's array_count_uniq.rb plugin!
 {%- endcomment -%}
-{% if site.data.theme.browse-child-objects == true %}
-{%- assign items = site.data[site.metadata] | where_exp: 'item','item.objectid' -%}
+{% if site.data.theme['browse-child-objects'] == true %}
+  {%- assign items = site.data[site.metadata] | where_exp: 'item', 'item.objectid' -%}
 {% else %}
-{%- assign items = site.data[site.metadata] | where_exp: 'item','item.objectid and item.parentid == nil' -%}
+  {%- assign items = site.data[site.metadata] | where_exp: 'item', 'item.objectid and item.parentid == nil' -%}
 {% endif %}
 {%- assign termsMin = include.min | plus: 0 | default: 1 -%}
-{%- assign list_id = include.id | default: "list-group" -%}
-{%- assign list-fields = include.fields | split: ";" -%}
+{%- assign list_id = include.id | default: 'list-group' -%}
+{%- assign list-fields = include.fields | split: ';' -%}
 
 {%- comment -%} capture terms from all list fields {%- endcomment -%}
-{%- assign terms = "" -%}
+{%- assign terms = '' -%}
 {%- for c in list-fields -%}
-{% assign new = items | map: c | join: ";" %}
-{% assign terms = terms | append: ";" | append: new %}
+  {% assign new = items | map: c | join: ';' %}
+  {% assign terms = terms | append: ';' | append: new %}
 {%- endfor -%}
 {%- comment -%} find unique terms and counts {%- endcomment -%}
-{%- assign uniqTerms = terms | split: ";" | array_count_uniq | sort | where_exp: 't','t[1] >= termsMin' -%}
+{%- assign uniqTerms = terms | split: ';' | array_count_uniq | sort | where_exp: 't', 't[1] >= termsMin' -%}
 
-<script>  
-    var currentSortMethod = 'count';
+<script>
+  var currentSortMethod = 'count';
 
-    /* subject terms + count */
-    var terms = [
-        {% for t in uniqTerms %}[{{ t[0] | jsonify }}, {{ t[1] | jsonify }}]{% unless forloop.last %}, {% endunless %}{% endfor %}
-    ];
+  /* subject terms + count */
+  var terms = [
+      {% for t in uniqTerms %}[{{ t[0] | jsonify }}, {{ t[1] | jsonify }}]{% unless forloop.last %}, {% endunless %}{% endfor %}
+  ];
 
-    {% if include.stopwords %}/* apply stopwords */
-    var stopWords = {{ include.stopwords | split: ';' | jsonify }};
-    terms = terms.filter(function(a) { return stopWords.indexOf(a[0]) < 0;});{% endif %}
-    
-    /* sort terms */
-    function sortTerms(sortMethod) {
-        if (sortMethod === 'count') {
-            terms.sort(function(a, b) {
-                return b[1] - a[1];
-            });
-        } else if (sortMethod === 'term') {
-            terms.sort(function(a, b) {
-                return a[0].localeCompare(b[0]);
-            });
-        }
-    }
+  {% if include.stopwords %}/* apply stopwords */
+  var stopWords = {{ include.stopwords | split: ';' | jsonify }};
+  terms = terms.filter(function(a) { return stopWords.indexOf(a[0]) < 0;});{% endif %}
 
-    /* create list-group */
-    function makeList(array) {
-        var items = "";
-        for (var i = 0; i < array.length; i++) {
-            items += '<a href="{{ "/browse.html" | relative_url }}#' + encodeURIComponent(array[i][0]) + '" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center text-primary">' + array[i][0] + ' <span class="badge bg-primary rounded-pill">' + array[i][1] + '</span></li>';
-        }
-        var listGroup = document.getElementById("{{ list_id }}");
-        listGroup.innerHTML = items;
-    }
+  /* sort terms */
+  function sortTerms(sortMethod) {
+      if (sortMethod === 'count') {
+          terms.sort(function(a, b) {
+              return b[1] - a[1];
+          });
+      } else if (sortMethod === 'term') {
+          terms.sort(function(a, b) {
+              return a[0].localeCompare(b[0]);
+          });
+      }
+  }
 
-    /* add sort function on click of sort options */
-    var sortFilter = document.querySelector("#sortFilter");
-    var sortOptions = document.querySelectorAll(".list-sort-item");
-    sortOptions.forEach((button) => {
-        button.addEventListener("click", (event) => {
-            // get the sort field
-            var field = button.dataset.filter;
-            var display_name = button.textContent;
-            // switch active sort option
-            sortOptions.forEach((option) => { option.classList.remove("active"); } );
-            button.classList.add("active");
-            sortFilter.innerHTML = display_name;
-            // send to sort
-            sortTerms(field);
-            makeList(terms);
-        });
-    }); 
+  /* create list-group */
+  function makeList(array) {
+      var items = "";
+      for (var i = 0; i < array.length; i++) {
+          items += '<a href="{{ "/browse.html" | relative_url }}#' + encodeURIComponent(array[i][0]) + '" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center text-primary">' + array[i][0] + ' <span class="badge bg-primary rounded-pill">' + array[i][1] + '</span></li>';
+      }
+      var listGroup = document.getElementById("{{ list_id }}");
+      listGroup.innerHTML = items;
+  }
 
-    function capitalizeFirstLetter(string) {
-        return string.charAt(0).toUpperCase() + string.slice(1);
-    }
+  /* add sort function on click of sort options */
+  var sortFilter = document.querySelector("#sortFilter");
+  var sortOptions = document.querySelectorAll(".list-sort-item");
+  sortOptions.forEach((button) => {
+      button.addEventListener("click", (event) => {
+          // get the sort field
+          var field = button.dataset.filter;
+          var display_name = button.textContent;
+          // switch active sort option
+          sortOptions.forEach((option) => { option.classList.remove("active"); } );
+          button.classList.add("active");
+          sortFilter.innerHTML = display_name;
+          // send to sort
+          sortTerms(field);
+          makeList(terms);
+      });
+  });
 
-    /* initial sorting */
-    sortTerms(currentSortMethod);
-    makeList(terms);
+  function capitalizeFirstLetter(string) {
+      return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
+  /* initial sorting */
+  sortTerms(currentSortMethod);
+  makeList(terms);
 </script>

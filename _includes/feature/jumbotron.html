@@ -1,62 +1,64 @@
 {% comment %}
+  Bootstrap Jumbotron, https://getbootstrap.com/docs/5.1/examples/jumbotron/
+  This include adds a Jumbotron feature from an objectid.
 
-    Bootstrap Jumbotron, https://getbootstrap.com/docs/5.1/examples/jumbotron/
-    This include adds a Jumbotron feature from an objectid.
+  E.G. --> {% include feature/jumbotron.html objectid="demo_001" %}
 
-    E.G. --> {% include feature/jumbotron.html objectid="demo_001" %}
+  Options:
+  - "objectid" = one objectid for a photo object in this collection, a relative path to an image in this project, or a full url to any image. If left blank, by default this the image will be the featured-image set in theme.yml.
+  - "position" = set background-position, "center", "top", "bottom"
+  - "heading" = major heading to display. By default this will be the site title. Give the value false for no heading.
+  - "text" = paragraph text below heading. By default this will be the site tagline. Give the value false for no text.
+  - "padding" = additional padding added to the feature to increase size. Give value in em or px, e.g. "5em".
 
-    Options:
-    - "objectid" = one objectid for a photo object in this collection, a relative path to an image in this project, or a full url to any image. If left blank, by default this the image will be the featured-image set in theme.yml.
-    - "position" = set background-position, "center", "top", "bottom"
-    - "heading" = major heading to display. By default this will be the site title. Give the value false for no heading.
-    - "text" = paragraph text below heading. By default this will be the site tagline. Give the value false for no text.
-    - "padding" = additional padding added to the feature to increase size. Give value in em or px, e.g. "5em".
-
-    Note: if using a YouTube item and an error image appears, the video may not have a "maxresdefault" image available. Replace "maxresdefault.jpg" in the code below with "hqdefault.jpg"
-
-{%- endcomment -%}
-{% assign jumbo_div_id = "j-" | append: include.objectid | slugify | truncate: 12, "" %}
+  Note: if using a YouTube item and an error image appears, the video may not have a "maxresdefault" image available. Replace "maxresdefault.jpg" in the code below with "hqdefault.jpg"
+{% endcomment %}
+{% assign jumbo_div_id = 'j-' | append: include.objectid | slugify | truncate: 12, '' %}
 {% assign jumboId = include.objectid | default: site.data.featured_item.src %}
 {% if jumboId contains '/' %}
-{% assign jumboSrc = jumboId | relative_url %}
+  {% assign jumboSrc = jumboId | relative_url %}
 {% else %}
-{% assign jumboItem = site.data[site.metadata] | where: "objectid", jumboId | first %}
-{% capture jumboSrc %}{{ jumboItem.object_location | default: jumboItem.image_small | relative_url }}{% endcapture %}
+  {% assign jumboItem = site.data[site.metadata] | where: 'objectid', jumboId | first %}
+  {% capture jumboSrc %}{{ jumboItem.object_location | default: jumboItem.image_small | relative_url }}{% endcapture %}
 {%- endif -%}
 
 <style>
-.jumbotron {
-    padding: 4rem 2rem;
-    margin-bottom: 2rem;
-    background-color: #e9ecef;
-    border-radius: 0.3rem;
-}  
-#{{ jumbo_div_id }} {
-    background-image: url({{ jumboSrc }});
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: {{ include.position | default: 'center' }};
-}
-{% if include.padding %}
-.jumbo-title-box {
-    padding-top: {{ include.padding }};
-    padding-bottom: {{ include.padding }};
-}
-{%- endif -%}
-@media screen and (max-width: 576px) {
-    .jumbo-title-box {
-        max-height: 500px; 
-    }
-    .jumbo-tagline { font-size:.85em; }
-}
+  .jumbotron {
+      padding: 4rem 2rem;
+      margin-bottom: 2rem;
+      background-color: #e9ecef;
+      border-radius: 0.3rem;
+  }
+  #{{ jumbo_div_id }} {
+      background-image: url({{ jumboSrc }});
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: {{ include.position | default: 'center' }};
+  }
+  {% if include.padding %}
+  .jumbo-title-box {
+      padding-top: {{ include.padding }};
+      padding-bottom: {{ include.padding }};
+  }
+  {%- endif -%}
+  @media screen and (max-width: 576px) {
+      .jumbo-title-box {
+          max-height: 500px;
+      }
+      .jumbo-tagline { font-size:.85em; }
+  }
 </style>
 <div class="jumbotron feature px-0 border" id="{{ jumbo_div_id }}">
-    <div class="jumbo-title-box">
-        {% unless include.heading == false and include.text == false %}
-        <div class="p-2 text-center text-white bg-dark bg-opacity-75">
-            {% unless include.heading == false %}<h2 class="display-4">{{ include.heading | default: site.title }}</h2>{% endunless %}
-            {% unless include.text == false %}<p class="jumbo-tagline">{{ include.text | default: site.tagline }}</p>{% endunless %}
-        </div>
+  <div class="jumbo-title-box">
+    {% unless include.heading == false and include.text == false %}
+      <div class="p-2 text-center text-white bg-dark bg-opacity-75">
+        {% unless include.heading == false %}
+          <h2 class="display-4">{{ include.heading | default: site.title }}</h2>
         {% endunless %}
-    </div>
+        {% unless include.text == false %}
+          <p class="jumbo-tagline">{{ include.text | default: site.tagline }}</p>
+        {% endunless %}
+      </div>
+    {% endunless %}
+  </div>
 </div>

@@ -3,18 +3,14 @@
 # Displays image_small if available, with fall back to image_thumb, or a pdf icon.
 layout: item/item-page-base
 ---
-
 <div class="card mb-4 text-center">
-    <div class="card-body">
-        <p>
-            {% include item/item-thumb.html %}
-        </p>
+  <div class="card-body">
+    <p>
+      {% include item/item-thumb.html %}
+    </p>
 
-        <div class="mt-2">
-
-            {% include item/download-buttons.html %}
-
-        </div>
-
+    <div class="mt-2">
+      {% include item/download-buttons.html %}
     </div>
+  </div>
 </div>

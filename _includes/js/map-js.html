@@ -1,17 +1,23 @@
-{% if site.data.theme.map-child-objects == true %}
-{%- assign items = site.data[site.metadata] | where_exp: 'item','item.objectid' -%}
+{% if site.data.theme['map-child-objects'] == true %}
+  {%- assign items = site.data[site.metadata] | where_exp: 'item', 'item.objectid' -%}
 {% else %}
-{%- assign items = site.data[site.metadata] | where_exp: 'item','item.objectid and item.parentid == nil' -%}
+  {%- assign items = site.data[site.metadata] | where_exp: 'item', 'item.objectid and item.parentid == nil' -%}
 {% endif %}
-{%- assign items = items | where_exp: 'item','item.latitude != nil and item.longitude != nil' -%}
-{%- assign fields = site.data.config-map -%}
+{%- assign items = items | where_exp: 'item', 'item.latitude != nil and item.longitude != nil' -%}
+{%- assign fields = site.data['config-map'] -%}
 <!-- load leaflet dependencies -->
 <script src="{{ '/assets/lib/leaflet/leaflet.js' | relative_url }}"></script>
 <script src="{{ '/assets/lib/leaflet/Leaflet.fullscreen.min.js' | relative_url }}"></script>
-{% if site.data.theme.map-search == true %}<script src="{{ '/assets/lib/leaflet/fuse.min.js' | relative_url }}"></script>
-<script src="{{ '/assets/lib/leaflet/leaflet.fusesearch.js' | relative_url }}"></script>{% endif %}
-{% if site.data.theme.map-cluster == true %}<script src="{{ '/assets/lib/leaflet/leaflet.markercluster.js' | relative_url }}"></script>{% endif %}
-{% if site.data.theme.map-search == true and site.data.theme.map-cluster == true %}<script src="{{ '/assets/lib/leaflet/leaflet.markercluster.freezable.js' | relative_url }}"></script>{% endif %}
+{% if site.data.theme['map-search'] == true %}
+  <script src="{{ '/assets/lib/leaflet/fuse.min.js' | relative_url }}"></script>
+  <script src="{{ '/assets/lib/leaflet/leaflet.fusesearch.js' | relative_url }}"></script>
+{% endif %}
+{% if site.data.theme['map-cluster'] == true %}
+  <script src="{{ '/assets/lib/leaflet/leaflet.markercluster.js' | relative_url }}"></script>
+{% endif %}
+{% if site.data.theme['map-search'] == true and site.data.theme['map-cluster'] == true %}
+  <script src="{{ '/assets/lib/leaflet/leaflet.markercluster.freezable.js' | relative_url }}"></script>
+{% endif %}
 
 <script>
 (function(){
@@ -184,5 +190,4 @@
     }
 
 })();
-
 </script>

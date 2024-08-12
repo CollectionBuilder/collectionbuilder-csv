@@ -5,15 +5,10 @@
 layout: item/item-page-base
 gallery: true
 ---
-
 <div class="card mb-4 text-center">
+  {% include item/image-gallery.html %}
 
-    {% include item/image-gallery.html %}
-    
-    <div class="card-body">
-
-        {% include item/download-buttons.html %}
-
-    </div>
-
+  <div class="card-body">
+    {% include item/download-buttons.html %}
+  </div>
 </div>

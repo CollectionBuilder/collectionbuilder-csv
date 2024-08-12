@@ -1,63 +1,108 @@
 <nav
-    class="navbar sticky-top navbar-expand-lg {{ site.data.theme.navbar-color | default: 'navbar-dark' }} {{ site.data.theme.navbar-background | default: 'bg-dark' }}">
-    <div class="container">
-        <button class="navbar-toggler border-0 order-1" type="button" data-bs-toggle="collapse" data-bs-target="#page-nav"
-            aria-controls="page-nav" aria-expanded="false" aria-label="Navigation anzeigen">
-            <!-- <span class="navbar-toggler-icon"></span> -->
-            <span>
-                <svg xmlns="http://www.w3.org/2000/svg" class="toggle-icon" height="2em" viewBox="0 0 448 512">
-                    <!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
-                    <path
-                        d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z" />
-                </svg>
-            </span>
-        </button>
-        {% if site.organization-logo-nav %}
-        <a href="{{ site.baseurl }}/" class="navbar-brand d-flex align-items-center" style="width: 7rem;" aria-label="Startseite">
-            <img class="img-fluid" src="{{ site.organization-logo-nav | relative_url }}" alt="">
-        </a>
-        {% endif %}
+  class="navbar sticky-top navbar-expand-lg {{ site.data.theme.navbar-color | default: 'navbar-dark' }} {{ site.data.theme.navbar-background | default: 'bg-dark' }}"
+>
+  <div class="container">
+    <button
+      class="navbar-toggler border-0 order-1"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#page-nav"
+      aria-controls="page-nav"
+      aria-expanded="false"
+      aria-label="Navigation anzeigen"
+    >
+      <!-- <span class="navbar-toggler-icon"></span> -->
+      <span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="toggle-icon" height="2em" viewBox="0 0 448 512">
+          <!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+          <path
+              d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z" />
+        </svg>
+      </span>
+    </button>
+    {% if site['organization-logo-nav'] %}
+      <a
+        href="{{ site.baseurl }}/"
+        class="navbar-brand d-flex align-items-center"
+        style="width: 7rem;"
+        aria-label="Startseite"
+      >
+        <img class="img-fluid" src="{{ site.organization-logo-nav | relative_url }}" alt="">
+      </a>
+    {% endif %}
 
+    <div class="collapse navbar-collapse order-2" id="page-nav">
+      <ul class="navbar-nav me-auto">
+        {%- assign navItems = site.data['config-nav'] | where_exp: 'item', 'item.dropdown_parent == nil' -%}
+        {% for nav in navItems %}
+          {% if nav.stub %}
+            {% if nav.external_link %}
+              <li class="nav-item">
+                <a
+                  class="nav-link{% if page.url == nav.stub %} active{% endif %}"
+                  href="{{ nav.stub | absolute_url }}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  nofollow
+                >
+                  {{- nav.display_name -}}
+                </a>
+              </li>
+            {% else %}
+              <li class="nav-item">
+                <a
+                  class="nav-link{% if page.url == nav.stub %} active{% endif %}"
+                  href="{{ nav.stub | relative_url }}"
+                >
+                  {{- nav.display_name -}}
+                </a>
+              </li>
+            {% endif %}
+          {%- else -%}
+            <li class="nav-item dropdown">
+              {% assign navChildren = site.data['config-nav']
+                | where_exp: 'item', 'item.dropdown_parent ==
+                    nav.display_name'
+              %}
+              {%- assign childStubs = navChildren | map: 'stub' -%}
+              <a
+                class="nav-link  dropdown-toggle{% if childStubs contains page.url %} active{% endif %}"
+                data-bs-toggle="dropdown"
+                href="#"
+                role="button"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                {{- nav.display_name -}}
+              </a>
+              <div class="dropdown-menu">
+                {% for c in navChildren %}
+                  {% if c.external_link %}
+                    <a
+                      class="dropdown-item {% if page.url == c.stub %}active{% endif %}"
+                      href="{{ c.stub | relative_url }}"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      nofollow
+                    >
+                      {{- c.display_name -}}
+                    </a>
+                  {% else %}
+                    <a
+                      class="dropdown-item {% if page.url == c.stub %}active{% endif %}"
+                      href="{{ c.stub | relative_url }}"
+                    >
+                      {{- c.display_name -}}
+                    </a>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </li>
+          {% endif %}
+        {%- endfor -%}
+      </ul>
 
-        <div class="collapse navbar-collapse order-2" id="page-nav">
-            <ul class="navbar-nav me-auto">
-                {%- assign navItems = site.data.config-nav | where_exp: 'item', 'item.dropdown_parent == nil' -%}
-                {% for nav in navItems %}
-                {% if nav.stub %}
-                {% if nav.external_link %}
-                <li class="nav-item">
-                    <a class="nav-link{% if page.url == nav.stub %} active{% endif %}" href="{{ nav.stub | absolute_url }}" target="_blank" rel="noopener noreferrer" nofollow>{{ nav.display_name }}</a>
-                </li>
-                {% else %}
-                <li class="nav-item">
-                    <a class="nav-link{% if page.url == nav.stub %} active{% endif %}"
-                        href="{{ nav.stub | relative_url }}">{{ nav.display_name }}</a>
-                </li>
-                {% endif %}
-                {%- else -%}
-                <li class="nav-item dropdown">
-                    {% assign navChildren = site.data.config-nav | where_exp: 'item', 'item.dropdown_parent ==
-                    nav.display_name' %}
-                    {%- assign childStubs = navChildren | map: 'stub' -%}
-                    <a class="nav-link  dropdown-toggle{% if childStubs contains page.url %} active{% endif %}"
-                        data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">{{
-                        nav.display_name }}</a>
-                    <div class="dropdown-menu">
-                        {% for c in navChildren %}
-                        {% if c.external_link %}
-                        <a class="dropdown-item {% if page.url == c.stub %}active{% endif %}" href="{{ c.stub | relative_url }}" target="_blank" rel="noopener noreferrer" nofollow>{{ c.display_name }}</a>
-                        {% else %}
-                        <a class="dropdown-item {% if page.url == c.stub %}active{% endif %}" href="{{ c.stub | relative_url }}">{{ c.display_name }}</a>
-                        {% endif %}
-                        {% endfor %}
-                    </div>
-                </li>
-                {% endif %}
-                {%- endfor -%}
-            </ul>
-
-            {% include nav-search-lunr.html %}
-
-        </div>
+      {% include nav-search-lunr.html %}
     </div>
+  </div>
 </nav>

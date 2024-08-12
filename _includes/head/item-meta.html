@@ -1,34 +1,54 @@
-{% if page.subject %}<meta name="keywords" content="{{ page.subject | escape }}" >{% endif %}
-{% if page.description %}<meta name="description" content="Item from {{ site.title | escape }}: {{ page.description | truncatewords: 25 | escape }}">{% endif %}
+{% if page.subject %}<meta name="keywords" content="{{ page.subject | escape }}">{% endif %}
+{% if page.description -%}
+  <meta
+    name="description"
+    content="Item from {{ site.title | escape }}: {{ page.description | truncatewords: 25 | escape }}"
+  >
+{%- endif %}
 <!-- DC meta -->
-<link rel="schema.DCTERMS" href="http://purl.org/dc/terms/" />
-{%- assign dc-fields = site.data.config-metadata | where_exp: 'item', 'item.dc_map != nil' -%}
-{% for f in dc-fields %}{% if page[f.field] %}<meta name="{{ f.dc_map | xml_escape }}" content="{{ page[f.field] | truncatewords: 25 | xml_escape }}" xml:lang="en" />
-{% endif %}{% endfor %}
-{% if site.organization-name %}<meta name="DCTERMS.publisher" content="{{ site.organization-name | escape }}" xml:lang="en" />{% endif %}
+<link rel="schema.DCTERMS" href="http://purl.org/dc/terms/">
+{%- assign dc-fields = site.data['config-metadata'] | where_exp: 'item', 'item.dc_map != nil' -%}
+{% for f in dc-fields -%}
+  {%- if page[f.field] -%}
+    <meta
+      name="{{ f.dc_map | xml_escape }}"
+      content="{{ page[f.field] | truncatewords: 25 | xml_escape }}"
+      xml:lang="en"
+    >
+  {% endif -%}
+{%- endfor %}
+{% if site['organization-name'] -%}
+  <meta name="DCTERMS.publisher" content="{{ site.organization-name | escape }}" xml:lang="en">
+{%- endif %}
 <!-- Open Graph meta -->
-<meta property="og:title" content="{{ page.title | escape }}" />
-<meta property="og:type" content="website" />
-<meta property="og:description" content="Item from {{ site.title | escape }}. {{ page.description | truncatewords: 30 | escape }}" />
+<meta property="og:title" content="{{ page.title | escape }}">
+<meta property="og:type" content="website">
+<meta
+  property="og:description"
+  content="Item from {{ site.title | escape }}. {{ page.description | truncatewords: 30 | escape }}"
+>
 {% if page.image_small or page.image_thumb %}
-<meta property="og:image" content="{{ page.image_small | default: page.image_thumb | relative_url }}" />
-<meta property="og:image:alt" content="{{ page.title | escape }}" />{% endif %}
-<meta property="og:site_name" content="{{ site.title | escape }}" />
-<meta property="og:url" content="{{ page.url | absolute_url }}" />
-<meta property="og:locale" content="en_US" />
+  <meta property="og:image" content="{{ page.image_small | default: page.image_thumb | relative_url }}">
+  <meta property="og:image:alt" content="{{ page.title | escape }}">
+{%- endif %}
+<meta property="og:site_name" content="{{ site.title | escape }}">
+<meta property="og:url" content="{{ page.url | absolute_url }}">
+<meta property="og:locale" content="en_US">
 <!-- schema.org JSON-LD -->
 <script type="application/ld+json">
-{ 
-    "@context": "http://schema.org",
-    "@type": "CreativeWork",
-    {%- assign sc-fields = site.data.config-metadata | where_exp: 'item', 'item.schema_map != nil' -%}
-    {% for f in sc-fields %}{% if page[f.field] %}
-    "{{ f.schema_map }}": {{ page[f.field] | jsonify }},{% endif %}{% endfor %}
-    "isPartOf": {{ site.title | jsonify }},
-    {% if page.image_small %}"image": "{{ page.image_small | relative_url }}",{% endif %}
-    {% if page.image_thumb %}"thumbnailUrl": "{{ page.image_thumb | relative_url }}",{% endif %}
-    "url": {{ page.url | absolute_url | jsonify }}
-}
-</script> 
+  {
+      "@context": "http://schema.org",
+      "@type": "CreativeWork",
+      {%- assign sc-fields = site.data.config-metadata | where_exp: 'item', 'item.schema_map != nil' -%}
+      {% for f in sc-fields %}{% if page[f.field] %}
+      "{{ f.schema_map }}": {{ page[f.field] | jsonify }},{% endif %}{% endfor %}
+      "isPartOf": {{ site.title | jsonify }},
+      {% if page.image_small %}"image": "{{ page.image_small | relative_url }}",{% endif %}
+      {% if page.image_thumb %}"thumbnailUrl": "{{ page.image_thumb | relative_url }}",{% endif %}
+      "url": {{ page.url | absolute_url | jsonify }}
+  }
+</script>
 <!-- breadcrumbs schema -->
-<script type="application/ld+json">{"@context": "http://schema.org", "@type": "BreadcrumbList", "itemListElement": [{ "@type": "ListItem", "position": 1, "item": { "@id": "{{ "/" | absolute_url }}", "name": {{ site.title | jsonify }} } },{ "@type": "ListItem", "position": 2, "item": { "@id": "{{ '/browse.html' | absolute_url }}", "name": "Browse Collection" } },{ "@type": "ListItem", "position": 3, "item": { "@id": "{{ page.url | absolute_url }}", "name": {{ page.title | jsonify }} } }] }</script>
+<script type="application/ld+json">
+  {"@context": "http://schema.org", "@type": "BreadcrumbList", "itemListElement": [{ "@type": "ListItem", "position": 1, "item": { "@id": "{{ "/" | absolute_url }}", "name": {{ site.title | jsonify }} } },{ "@type": "ListItem", "position": 2, "item": { "@id": "{{ '/browse.html' | absolute_url }}", "name": "Browse Collection" } },{ "@type": "ListItem", "position": 3, "item": { "@id": "{{ page.url | absolute_url }}", "name": {{ page.title | jsonify }} } }] }
+</script>

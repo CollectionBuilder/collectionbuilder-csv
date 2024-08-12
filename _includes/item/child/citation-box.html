@@ -1,20 +1,34 @@
 {% comment %}
-
-    Adds a basic citation box for child item with reference link to the child page.
-
-{%- endcomment -%}
+  Adds a basic citation box for child item with reference link to the child page.
+{% endcomment %}
 <div class="card mb-2">
-    <div class="card-header">{{ site.data.translations['_includes']['item']['child']['citation-box.html']['title'][site.lang] | default: "Source" }}</div>
-    <div class="card-body">
-        <dl>
-            <dt>{{ site.data.translations['_includes']['item']['child']['citation-box.html']['preferred-citation'][site.lang] | default: "Preferred Citation" }}:</dt>
-            <dd>{{ site.organization-name }}: {{ child['title'] }}. {{ site['title'] }}, 
-                {% if child['date'] %}
-                    {{ child['date'] }}, 
-                {% endif %}  
-                &lt;{{ page.url | absolute_url }}#{{ child.objectid }}&gt;, Stand: {{ "now" | date: "%d.%m.%Y" }}.</dd>
-            <dt>{{ site.data.translations['_includes']['item']['child']['citation-box.html']['reference-link'][site.lang] | default: "Reference Link" }}:</dt>
-            <dd>{{ page.url | absolute_url }}#{{ child.objectid }}</dd>
-        </dl>
-    </div>
+  <div class="card-header">
+    {{ site.data.translations._includes.item.child['citation-box.html'].title[site.lang] | default: 'Source' }}
+  </div>
+  <div class="card-body">
+    <dl>
+      <dt>
+        {{
+          site.data.translations._includes.item.child['citation-box.html']['preferred-citation'][site.lang]
+          | default: 'Preferred Citation'
+        -}}
+        :
+      </dt>
+      <dd>
+        {{ site['organization-name'] }}: {{ child.title }}. {{ site.title }},
+        {% if child.date %}
+          {{ child.date }},
+        {% endif %}
+        &lt;{{ page.url | absolute_url }}#{{ child.objectid }}&gt;, Stand: {{ 'now' | date: '%d.%m.%Y' }}.
+      </dd>
+      <dt>
+        {{
+          site.data.translations._includes.item.child['citation-box.html']['reference-link'][site.lang]
+          | default: 'Reference Link'
+        -}}
+        :
+      </dt>
+      <dd>{{ page.url | absolute_url }}#{{ child.objectid }}</dd>
+    </dl>
+  </div>
 </div>

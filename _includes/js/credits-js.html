@@ -1,54 +1,51 @@
 {%- comment -%}
-
-    Fetches a list of contributors from a GitHub repository to be displayed as parts of the credits page.
-
+  Fetches a list of contributors from a GitHub repository to be displayed as parts of the credits page.
 {%- endcomment -%}
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      const contributorsDiv = document.getElementById('contributors');
-      
-      fetch('https://api.github.com/repos/Stadt-Geschichte-Basel/forschung.stadtgeschichtebasel.ch/contributors')
-        .then(response => response.json())
-        .then(data => {
-          if (data && data.length > 0) {
-            const container = document.createElement('div');
-            container.style.display = 'grid';
-            container.style.gridTemplateColumns = '1fr 1fr';
-            container.style.gap = '20px';
-    
-            data.forEach(contributor => {
-              const item = document.createElement('div');
-              item.style.display = 'flex';
-              item.style.alignItems = 'center';
-    
-              const img = document.createElement('img');
-              img.src = contributor.avatar_url;
-              img.alt = contributor.login;
-              img.style.width = '64px';
-              img.style.height = '64px';
-              img.style.borderRadius = '50%';
-              img.style.marginRight = '10px';
-    
-              const link = document.createElement('a');
-              link.href = contributor.html_url;
-              link.textContent = contributor.login;
-              link.target = '_blank';
-    
-              item.appendChild(img);
-              item.appendChild(link);
-              container.appendChild(item);
-            });
-    
-            contributorsDiv.appendChild(container);
-          } else {
-            contributorsDiv.textContent = 'Keine Mitwirkenden gefunden.';
-          }
-        })
-        .catch(error => {
-          console.error('Fehler beim Abrufen der Mitwirkenden:', error);
-          contributorsDiv.textContent = 'Fehler beim Abrufen der Mitwirkenden.';
-        });
-    });
-    </script>
-    
+  document.addEventListener('DOMContentLoaded', function () {
+    const contributorsDiv = document.getElementById('contributors');
+
+    fetch('https://api.github.com/repos/Stadt-Geschichte-Basel/forschung.stadtgeschichtebasel.ch/contributors')
+      .then((response) => response.json())
+      .then((data) => {
+        if (data && data.length > 0) {
+          const container = document.createElement('div');
+          container.style.display = 'grid';
+          container.style.gridTemplateColumns = '1fr 1fr';
+          container.style.gap = '20px';
+
+          data.forEach((contributor) => {
+            const item = document.createElement('div');
+            item.style.display = 'flex';
+            item.style.alignItems = 'center';
+
+            const img = document.createElement('img');
+            img.src = contributor.avatar_url;
+            img.alt = contributor.login;
+            img.style.width = '64px';
+            img.style.height = '64px';
+            img.style.borderRadius = '50%';
+            img.style.marginRight = '10px';
+
+            const link = document.createElement('a');
+            link.href = contributor.html_url;
+            link.textContent = contributor.login;
+            link.target = '_blank';
+
+            item.appendChild(img);
+            item.appendChild(link);
+            container.appendChild(item);
+          });
+
+          contributorsDiv.appendChild(container);
+        } else {
+          contributorsDiv.textContent = 'Keine Mitwirkenden gefunden.';
+        }
+      })
+      .catch((error) => {
+        console.error('Fehler beim Abrufen der Mitwirkenden:', error);
+        contributorsDiv.textContent = 'Fehler beim Abrufen der Mitwirkenden.';
+      });
+  });
+</script>

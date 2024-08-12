@@ -1,9 +1,9 @@
-{% if site.data.theme.browse-child-objects == true %}
-{%- assign items = site.data[site.metadata] | where_exp: 'item','item.objectid' -%}
+{% if site.data.theme['browse-child-objects'] == true %}
+  {%- assign items = site.data[site.metadata] | where_exp: 'item', 'item.objectid' -%}
 {% else %}
-{%- assign items = site.data[site.metadata] | where_exp: 'item','item.objectid and item.parentid == nil' -%}
+  {%- assign items = site.data[site.metadata] | where_exp: 'item', 'item.objectid and item.parentid == nil' -%}
 {% endif %}
-{%- assign fields = site.data.config-browse -%}
+{%- assign fields = site.data['config-browse'] -%}
 <script>
 
 /* add items */
@@ -208,6 +208,5 @@ sortOptions.forEach((button) => {
         filterItems(items, query);
     }
   });
-}); 
-
+});
 </script>

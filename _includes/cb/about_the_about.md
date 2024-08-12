@@ -1,5 +1,5 @@
 {% comment %}
-    Find some sample images or use defaults for About demos
+Find some sample images or use defaults for About demos
 {% endcomment %}
 {% assign imagesample = site.data[site.metadata] | where_exp: 'item','item.format contains "image"' | first %}
 {% capture imagesampleid %}{{ imagesample.objectid | default: "https://www.lib.uidaho.edu/collectionbuilder/demo-objects/mg101_b6_photographs_01.jpg" }}{% endcapture %}
@@ -12,16 +12,16 @@
 
 ## About the About Page
 
-We want to make engaging interpretive pages easier to create, so CollectionBuilder gives you tools to write *with* your collection content!
+We want to make engaging interpretive pages easier to create, so CollectionBuilder gives you tools to write _with_ your collection content!
 
 The template comes with a customizable "About" page layout designed for long form content with rich media embeds.
 Content is written in [Markdown](https://guides.github.com/features/mastering-markdown/) and enhanced using "includes" that pull in collection content, external media, and [Bootstrap](https://getbootstrap.com/) features like cards and modals.
-We hope this makes it easier for site builders to develop the collection AND add interesting and engaging contextual information. 
+We hope this makes it easier for site builders to develop the collection AND add interesting and engaging contextual information.
 
-Each "include" file has several options, which are documented in the files themselves--copy the examples to see how it works with your content! 
+Each "include" file has several options, which are documented in the files themselves--copy the examples to see how it works with your content!
 In the demo below, we've given display widths of 25% and 50% to save space, but you can feature the entire image or document.
 
-You can also see a page featuring [a bonanza of feature includes options](https://collectionbuilder.github.io/collectionbuilder-gh/feature_options.html) on our CollectionBuilder-GH demo site. 
+You can also see a page featuring [a bonanza of feature includes options](https://collectionbuilder.github.io/collectionbuilder-gh/feature_options.html) on our CollectionBuilder-GH demo site.
 
 {% include feature/button.html text="Feature *Includes* Bonanza page" link="https://collectionbuilder.github.io/collectionbuilder-gh/feature_options.html" color="primary" size="lg" centered=true %}
 
@@ -64,12 +64,12 @@ These features allow you to better organize and highlight your content.
 
 {% include feature/card.html header="This is a Card" text="The card features an image from the collection as a cap" objectid=imagesampleid width="25" centered=true %}
 
-#### Include a Button 
+#### Include a Button
 
 - Buttons -- > `{% raw %}{% include feature/button.html text="Button Link to Somewhere" link="https://collectionbuilder.github.io/" color="success" %}{% endraw %}`
 
 {% include feature/button.html text="Button Link to Somewhere" link="https://collectionbuilder.github.io/" color="success" centered=true %}
-  
+
 #### Include an Alert
 
 - Alerts -- > `{% raw %}{% include feature/alert.html text="this is an *alert* that 'warns' a user" color="warning" align="center" %}{% endraw %}`
@@ -80,4 +80,4 @@ These features allow you to better organize and highlight your content.
 
 - Modals -- > `{% raw %}{% include feature/modal.html button="This is a modal using a 'primary' colored button to invite clicking" title="when clicked:" text="A Modal will pop out a box with some more information" color="primary"  %}{% endraw %}`
 
-{% include feature/modal.html button="This is a modal using a 'primary' colored button to invite clicking" title="When clicked:" text="A Modal will pop out a box with some more information" color="primary"  %} 
+{% include feature/modal.html button="This is a modal using a 'primary' colored button to invite clicking" title="When clicked:" text="A Modal will pop out a box with some more information" color="primary"  %}

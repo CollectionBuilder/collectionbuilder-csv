@@ -27,7 +27,6 @@ nameOfFolder:
       en: "English Translation"
       es: "Traducción española"
       de: "Deutsche Übersetzung"
-...
 ```
 
 ## Adding New Languages

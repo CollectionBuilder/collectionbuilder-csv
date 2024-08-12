@@ -1,16 +1,20 @@
 {% comment %}
-
-    Add a thumbnail image or icon based on format for an item, with a object_location link (if available).
-
+  Add a thumbnail image or icon based on format for an item, with a object_location link (if available).
 {% endcomment %}
-{% if page.object_location %}<a href="{{ page.object_location | relative_url }}" target="_blank" rel="noopener">{% endif %}
-    {% if page.image_thumb or page.image_small %}
-    <img class="img-thumbnail" src="{{ page.image_small | default: page.image_thumb | relative_url }}" alt="{{ page.image_alt_text | default: page.description | default: page.title | escape }}">
-    {% else %}
-    <svg class="bi text-body" fill="currentColor" aria-hidden="true">
-        {%- assign icon_template = page.display_template | default: page.format -%}
-        <use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#{% if icon_template contains 'image' %}icon-image{% elsif icon_template contains 'pdf' %}icon-pdf{% elsif icon_template contains 'audio' %}icon-audio{% elsif icon_template contains 'video' %}icon-video{% elsif icon_template contains 'record' %}icon-record{% elsif icon_template contains 'geodata' %}icon-geodata{% else %}icon-default{% endif %}"/>
-    </svg>
-    <span class="visually-hidden">{{ page.title | escape }} - {{ page.format }}</span>
-    {% endif %}
+{% if page.object_location -%}
+  <a href="{{ page.object_location | relative_url }}" target="_blank" rel="noopener">
+{%- endif %}
+{% if page.image_thumb or page.image_small %}
+  <img
+    class="img-thumbnail"
+    src="{{ page.image_small | default: page.image_thumb | relative_url }}"
+    alt="{{ page.image_alt_text | default: page.description | default: page.title | escape }}"
+  >
+{% else %}
+  <svg class="bi text-body" fill="currentColor" aria-hidden="true">
+    {%- assign icon_template = page.display_template | default: page.format -%}
+    <use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#{% if icon_template contains 'image' %}icon-image{% elsif icon_template contains 'pdf' %}icon-pdf{% elsif icon_template contains 'audio' %}icon-audio{% elsif icon_template contains 'video' %}icon-video{% elsif icon_template contains 'record' %}icon-record{% elsif icon_template contains 'geodata' %}icon-geodata{% else %}icon-default{% endif %}"/>
+  </svg>
+  <span class="visually-hidden">{{ page.title | escape }} - {{ page.format }}</span>
+{% endif %}
 {% if page.object_location %}</a>{% endif %}

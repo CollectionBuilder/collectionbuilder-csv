@@ -10,8 +10,8 @@ We invite all those who participate in the CollectionBuilder project and communi
 
 This code of conduct outlines our expectations for everyone who participates in our community, as well as the consequences for unacceptable behavior.
 
-We expect all community participants (community organizers; project maintainers; contributors, paid or otherwise; sponsors; and others) to abide by this Code of Conduct, which applies in all community venues, online and in-person; in one-on-one or group communications pertaining to community business; and within project spaces and in public spaces when an individual is representing the project or its community. 
-Examples of representing a project or community include using an official project e-mail address, posting via an official social media account, or acting as an appointed representative at an online or offline event. 
+We expect all community participants (community organizers; project maintainers; contributors, paid or otherwise; sponsors; and others) to abide by this Code of Conduct, which applies in all community venues, online and in-person; in one-on-one or group communications pertaining to community business; and within project spaces and in public spaces when an individual is representing the project or its community.
+Examples of representing a project or community include using an official project e-mail address, posting via an official social media account, or acting as an appointed representative at an online or offline event.
 Representation of a project may be further defined and clarified by community organizers.
 
 Participants are also expected to uphold the [GitHub Community Guidelines](https://help.github.com/en/articles/github-community-guidelines) for all behavior and content on the platform.
@@ -56,10 +56,10 @@ Community organizers have the right and responsibility to remove, edit, or rejec
 If you are subject to or witness unacceptable behavior, or have any other concerns, please notify community organizers as soon as possible at collectionbuilder.team@gmail.com which is maintained by evanwill, dcnb, owikle, and juliastone0729.
 If these are not appropriate contacts, please consider [reporting directly to GitHub](https://github.com/contact/report-abuse) or an administrative contact in the project's home at [University of Idaho Library](https://www.lib.uidaho.edu/about/directory.html).
 
-All complaints will be reviewed and investigated and will result in a response that is deemed necessary and appropriate to the circumstances. 
-Community organizers are obligated to uphold confidentiality with regard to the reporter of an incident. 
+All complaints will be reviewed and investigated and will result in a response that is deemed necessary and appropriate to the circumstances.
+Community organizers are obligated to uphold confidentiality with regard to the reporter of an incident.
 
-Additionally, any abuse, harassment, and other harmful behavior taking place on GitHub can be reported directly: 
+Additionally, any abuse, harassment, and other harmful behavior taking place on GitHub can be reported directly:
 https://github.com/contact/report-abuse
 
 ## Contact info

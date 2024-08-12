@@ -4,7 +4,7 @@ Powered by Leaflet.js, https://github.com/Leaflet/Leaflet
 
 Following best practices listed in the Leaflet guide to accessibility, https://leafletjs.com/examples/accessibility/
 
-With plugins: 
+With plugins:
 
 - search, https://github.com/naomap/leaflet-fusesearch
 - cluster, https://github.com/Leaflet/Leaflet.markercluster
@@ -16,14 +16,14 @@ Set base configuration in `_data/theme.yml` map section, including:
 ```
 latitude: 46.727485 #to determine center of map
 longitude: -117.014185 #to determine center of map
-zoom-level: 5 # zoom level for map 
+zoom-level: 5 # zoom level for map
 map-search: true # not suggested with large collections
 map-search-fuzziness: 0.35 # fuzzy search range from 1 = anything to 0 = exact match only
 map-cluster: true # suggested for large collection or with many items in same location
 map-cluster-radius: 25 # size of clusters, from ~ 10 to 80
 ```
 
-These `theme` options will load the correct CSS and JS for leaflet features, while setting some JS configuration variables. 
+These `theme` options will load the correct CSS and JS for leaflet features, while setting some JS configuration variables.
 `map-cluster-radius` sets the `maxClusterRadius` which corresponds to the maximum radius a cluster can cover in pixels on the map.
 A smaller radius will create more, smaller clusters, and increasing will create fewer, larger clusters on the map.
 
@@ -36,11 +36,11 @@ Next, configure the display using `_data/map-config.csv`, which controls the met
 Because of the way markers are handled, for larger collections it is strongly suggested to turn search off and cluster on.
 Cluster makes loading and navigating the map significantly more efficient.
 
-Object pages that have lat/long will generate a "View on Map" button link. 
+Object pages that have lat/long will generate a "View on Map" button link.
 These link to the `map.html` page with a query string created from their lat long and objectid.
 If the url includes a query string, it will be parsed and set as the map view box with full zoom and open the popup.
 
-For example: 
+For example:
 `/map.html?location=46.726113,-117.015671&marker=example_004`
 
 This can be created using the Liquid:
@@ -48,7 +48,7 @@ This can be created using the Liquid:
 
 ## Customizing the Base Map
 
-You can customize the base maps by editing the template code in "_includes/js/map-js.html".
+You can customize the base maps by editing the template code in "\_includes/js/map-js.html".
 
 There is three parts to add a new one:
 

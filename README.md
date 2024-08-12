@@ -22,9 +22,9 @@ This project is the open-source code of the digital platform for research data o
 - **Sensitive Content Annotation**: Collection items are annotated using the [GenderOpen Index](https://opengenderplatform.de/schlagwortindex), a controlled vocabulary for sensitive content.
 - **Accessibility-Focused Design**: Ensuring inclusivity for all users by complying with WCAG standards and observing neurodiversity design guidelines. More at our [accessibility statement](https://stadtgeschichtebasel.ch/barrierefreiheitserklaerung/).
 
-### CollectionBuilder 
+### CollectionBuilder
 
-The technical basis for Stadt.Geschichte.Basel's research data platform is provided by [CollectionBuilder](https://collectionbuilder.github.io/), an open source framework for creating metadata-driven digital collections. CollectionBuilder is a project maintained by the University of Idaho Library's [Digital Initiatives](https://www.lib.uidaho.edu/digital/) and the [Center for Digital Inquiry and Learning](https://cdil.lib.uidaho.edu) (CDIL) following the [Lib-Static](https://lib-static.github.io/) methodology. 
+The technical basis for Stadt.Geschichte.Basel's research data platform is provided by [CollectionBuilder](https://collectionbuilder.github.io/), an open source framework for creating metadata-driven digital collections. CollectionBuilder is a project maintained by the University of Idaho Library's [Digital Initiatives](https://www.lib.uidaho.edu/digital/) and the [Center for Digital Inquiry and Learning](https://cdil.lib.uidaho.edu) (CDIL) following the [Lib-Static](https://lib-static.github.io/) methodology.
 
 The basic theme is created using [Bootstrap](https://getbootstrap.com/).
 Metadata visualizations are built using open source libraries such as [DataTables](https://datatables.net/), [Spotlight gallery](https://github.com/nextapps-de/spotlight), [lazysizes](https://github.com/aFarkas/lazysizes), and [Lunr.js](https://lunrjs.com/).
@@ -95,8 +95,8 @@ rake deploy
 
 This project is maintained by [@Stadt-Geschichte-Basel](https://github.com/Stadt-Geschichte-Basel). Please understand that we won't be able to provide individual support via email. We believe that help is much more valuable if it's shared publicly, so that more people can benefit from it.
 
-| Type                                   | Platforms                                                                                           |
-| -------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| Type                                   | Platforms                                                                                                     |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
 | 🚨 **Bug Reports**                     | [GitHub Issue Tracker](https://github.com/Stadt-Geschichte-Basel/forschung.stadtgeschichtebasel.ch/issues)    |
 | 🎁 **Feature Requests**                | [GitHub Issue Tracker](https://github.com/Stadt-Geschichte-Basel/forschung.stadtgeschichtebasel.ch/issues)    |
 | 🛡 **Report a security vulnerability** | [GitHub Issue Tracker](https://github.com/Stadt-Geschichte-Basel/forschung.stadtgeschichtebasel.ch/issues)    |
@@ -118,10 +118,10 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 See also the list of [contributors](https://github.com/Stadt-Geschichte-Basel/forschung.stadtgeschichtebasel.ch/graphs/contributors) who participated in this project.
 
-----------
+---
 
 ## License
 
 The code in this repository is licensed under the [MIT](https://github.com/Stadt-Geschichte-Basel/forschung.stadtgeschichtebasel.ch/blob/main/LICENSE) license. This license does not include external dependencies included in the `assets/lib` directory, which are covered by their individual licenses.
 
-Any content relating to the items that form the research data collection (e.g. media files, metadata objects) at [forschung.stadtgeschichtebasel.ch](https://forschung.stadtgeschichtebasel.ch) are *NOT* covered by this license. Please see the individual rights and license statement in the corresponding metadata for each collection item.
+Any content relating to the items that form the research data collection (e.g. media files, metadata objects) at [forschung.stadtgeschichtebasel.ch](https://forschung.stadtgeschichtebasel.ch) are _NOT_ covered by this license. Please see the individual rights and license statement in the corresponding metadata for each collection item.

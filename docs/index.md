@@ -1,6 +1,6 @@
 # CollectionBuilder-CSV Docs
 
-## Set Up 
+## Set Up
 
 metadata.md
 metadata-template.csv

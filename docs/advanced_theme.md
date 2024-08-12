@@ -12,23 +12,23 @@ By modifying `navbar-color` and `navbar-background` the basic colors of the navi
 
 ## Bootswatch themes
 
-To play with more Bootstrap theme-ing, try swapping out a [Bootswatch](https://github.com/thomaspark/bootswatch) favor. 
+To play with more Bootstrap theme-ing, try swapping out a [Bootswatch](https://github.com/thomaspark/bootswatch) favor.
 This will remove default Bootstrap CSS for the Bootswatch version (from a CDN), swiftly changing the entire look.
 Choose from: cerulean; cosmo; cyborg; darkly; flatly; journal; litera; lumen; lux; materia; minty; pulse; sandstone; simplex; sketchy; slate; solar; spacelab; superhero; united; yeti.
 
-This is mainly just a fun way to demonstrate the power of CSS and frameworks to transform look and feel. 
+This is mainly just a fun way to demonstrate the power of CSS and frameworks to transform look and feel.
 
-## Theme fonts 
+## Theme fonts
 
 To tweak the default font and text colors check the "Theme fonts" section.
-These setting will be passed to `/assets/css/cb.scss` which in turn passes the values to the `_sass` to build out the final CSS. 
+These setting will be passed to `/assets/css/cb.scss` which in turn passes the values to the `_sass` to build out the final CSS.
 
 - `base-font-size` we set font size a bit bigger than Bootstrap default, which can be tweaked here.
 - `text-color` we set the base color to a darker black.
 - `link-color` by default set to match Bootstrap "info". This is an easy way to add a distinctive brand color to your site.
-- `base-font-family` sets the font-family for `body`, overriding Bootstrap. It will be necessary to use `font-cdn` or manually add loading the font in the head element (_includes/head/head.html). 
+- `base-font-family` sets the font-family for `body`, overriding Bootstrap. It will be necessary to use `font-cdn` or manually add loading the font in the head element (\_includes/head/head.html).
 - `font-cdn` will add a font stylesheet, such as from [Google Fonts](https://fonts.google.com/), to the head element. Use valid markup, e.g. `<link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">`. Keep in mind, these CDN expose your users to a 3rd party service and trackers.
 
-## Theme icons 
+## Theme icons
 
 See "docs/icons.md" for details.

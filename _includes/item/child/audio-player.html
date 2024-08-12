@@ -1,10 +1,17 @@
 {% comment %}
-
-    Adds html audio element with source listed in object_location of a child item.
-    Provides a fallback to download the file.
-
-{%- endcomment -%}
+  Adds html audio element with source listed in object_location of a child item.
+  Provides a fallback to download the file.
+{% endcomment %}
 <audio controls class="w-100">
-    <source src="{{ child.object_location | relative_url }}">
-    {{ site.data.translations['_includes']['item']['child']['audio-player.html']['error'][site.lang] | default: "Your browser does not support the audio player." }}<a href="{{ child.object_location | relative_url }}">{{ site.data.translations['_includes']['item']['child']['audio-player.html']['download'][site.lang] | default: "Download Audio File" }}</a>.
+  <source src="{{ child.object_location | relative_url }}">
+  {{
+    site.data.translations._includes.item.child['audio-player.html'].error[site.lang]
+    | default: 'Your browser does not support the audio player.'
+  -}}
+  <a href="{{ child.object_location | relative_url }}">
+    {{-
+      site.data.translations._includes.item.child['audio-player.html'].download[site.lang]
+      | default: 'Download Audio File'
+    -}}</a
+  >.
 </audio>

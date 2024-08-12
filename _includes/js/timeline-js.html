@@ -1,25 +1,24 @@
 <script>
-(function(){
+  (function () {
     // init bootstrap tooltips
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl)
-    })
+      return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
 
     // Highlight years based on query parameters
     var queryParams = new URLSearchParams(window.location.search);
-    
-    queryParams.forEach(function(value, key) {
-        var years = key.split('y');
-        years.forEach(function(year) {
-            if (year) {
-                var tableRow = document.querySelector("tr#y" + year);
-                if (tableRow) {
-                    tableRow.classList.add("table-info");
-                }
-            }
-        });
-    });
-})();
-</script>
 
+    queryParams.forEach(function (value, key) {
+      var years = key.split('y');
+      years.forEach(function (year) {
+        if (year) {
+          var tableRow = document.querySelector('tr#y' + year);
+          if (tableRow) {
+            tableRow.classList.add('table-info');
+          }
+        }
+      });
+    });
+  })();
+</script>

@@ -1,62 +1,66 @@
 {% comment %}
-    
-    Video embed from an item's objectid or external link.
-    This include adds a video embed to the page using Bootstrap ratio styles, https://getbootstrap.com/docs/5.1/helpers/ratio/
+  Video embed from an item's objectid or external link.
+  This include adds a video embed to the page using Bootstrap ratio styles, https://getbootstrap.com/docs/5.1/helpers/ratio/
 
-    E.G. --> {% include feature/video.html objectid="demo_003" %}
+  E.G. --> {% include feature/video.html objectid="demo_003" %}
 
-    It requires an "objectid" with the include, which is used to find the video details. Alternatively, a URL to an external video can be used in "objectid".
-    YouTube and Vimeo items will use iframe embeds, video files use html video element.
+  It requires an "objectid" with the include, which is used to find the video details. Alternatively, a URL to an external video can be used in "objectid".
+  YouTube and Vimeo items will use iframe embeds, video files use html video element.
 
-    Options: 
-    - "objectid" = several options below (required)
-        1. an objectid of a video item in this collection, e.g. "demo_003"
-        2. a full URL to a video hosted on YouTube, e.g. https://youtu.be/dbKNr3wuiuQ
-        3. a full URL to a video hosted on Vimeo, e.g. https://vimeo.com/464555587 
-        4. a full URL to an external video file (supported by browsers, generally mp4), e.g. "https://www.lib.uidaho.edu/digital/videos/fluffyclouds.mp4"
-        5. a relative link to a video file stored in this repository (that is not included in the collection), i.e. "/assets/videos/cloudyskies.mp4"  
-    - "caption" = by default the figure include automatically adds the title of the item from your metadata. The caption option allows you to manually add a different caption, or give the value false for none. (optional)
-    - "width" = will use responsive sizing to set the % size on desktop (will be 100% on mobile), choose from "25", "50", "75", or "100" (optional)
-    - "ratio" = use Bootstrap embed ratio options "21x9", "16x9", "4x3", or "1x1" to customize the responsive aspect ratio. 16by9 is default. (optional)
+  Options:
+  - "objectid" = several options below (required)
+      1. an objectid of a video item in this collection, e.g. "demo_003"
+      2. a full URL to a video hosted on YouTube, e.g. https://youtu.be/dbKNr3wuiuQ
+      3. a full URL to a video hosted on Vimeo, e.g. https://vimeo.com/464555587
+      4. a full URL to an external video file (supported by browsers, generally mp4), e.g. "https://www.lib.uidaho.edu/digital/videos/fluffyclouds.mp4"
+      5. a relative link to a video file stored in this repository (that is not included in the collection), i.e. "/assets/videos/cloudyskies.mp4"
+  - "caption" = by default the figure include automatically adds the title of the item from your metadata. The caption option allows you to manually add a different caption, or give the value false for none. (optional)
+  - "width" = will use responsive sizing to set the % size on desktop (will be 100% on mobile), choose from "25", "50", "75", or "100" (optional)
+  - "ratio" = use Bootstrap embed ratio options "21x9", "16x9", "4x3", or "1x1" to customize the responsive aspect ratio. 16by9 is default. (optional)
 
-    Note: if you have issues make sure the item is a video item and a web friendly format
-
-{%- endcomment -%}
+  Note: if you have issues make sure the item is a video item and a web friendly format
+{% endcomment %}
 {%- if include.objectid contains '/' -%}
-    {% capture video_caption %}{{ include.caption }}{% endcapture %}
-    {% capture raw_src %}{{ include.objectid }}{% endcapture %}
+  {% capture video_caption %}{{ include.caption }}{% endcapture %}
+  {% capture raw_src %}{{ include.objectid }}{% endcapture %}
 {%- else -%}
-    {%- assign item = site.data[site.metadata] | where: "objectid", include.objectid | first -%}
-    {% capture video_caption %}{% if include.caption %}{{ include.caption }}{% else %}<a href="{{ '/items/' | relative_url }}{% if item.parentid %}{{ item.parentid }}.html#{{ item.objectid }}{% else %}{{ item.objectid }}.html{% endif %}">{{ item.title }}</a>{% endif %}{% endcapture %}
-    {% capture raw_src %}{{ item.object_location }}{% endcapture %}
+  {%- assign item = site.data[site.metadata] | where: 'objectid', include.objectid | first -%}
+  {% capture video_caption %}{% if include.caption %}{{ include.caption }}{% else %}<a href="{{ '/items/' | relative_url }}{% if item.parentid %}{{ item.parentid }}.html#{{ item.objectid }}{% else %}{{ item.objectid }}.html{% endif %}">{{ item.title }}</a>{% endif %}{% endcapture %}
+  {% capture raw_src %}{{ item.object_location }}{% endcapture %}
 {%- endif -%}
 {%- if raw_src contains 'vimeo' -%}
-    {% assign vimeo_id = raw_src | split: '/' | last %}
-    {% capture video_src %}https://player.vimeo.com/video/{{ vimeo_id }}{% endcapture %}
+  {% assign vimeo_id = raw_src | split: '/' | last %}
+  {% capture video_src %}https://player.vimeo.com/video/{{ vimeo_id }}{% endcapture %}
 {%- elsif raw_src contains 'youtu' -%}
-    {% assign youtube_id = raw_src | split: '/' | last %}
-    {% if youtube_id contains 'v=' %}{% assign youtube_id = youtube_id | split: 'v=' | last | split: '&' | first %}
-    {% elsif youtube_id contains '?' %}{% assign youtube_id = youtube_id | split: '?' | first %}{% endif %}
-    {% capture video_src %}https://www.youtube-nocookie.com/embed/{{ youtube_id }}?rel=0&modestbranding=1{% endcapture %}
+  {% assign youtube_id = raw_src | split: '/' | last %}
+  {% if youtube_id contains 'v=' -%}
+    {%- assign youtube_id = youtube_id | split: 'v=' | last | split: '&' | first %}
+  {% elsif youtube_id contains '?' -%}
+    {%- assign youtube_id = youtube_id | split: '?' | first -%}
+  {%- endif %}
+  {% capture video_src %}https://www.youtube-nocookie.com/embed/{{ youtube_id }}?rel=0&modestbranding=1{% endcapture %}
 {%- else -%}
-    {% assign video_src = raw_src | relative_url %}
+  {% assign video_src = raw_src | relative_url %}
 {%- endif -%}
 <div class="text-center my-4">
-    <figure class="mx-auto{% if include.width %} feature-w-{{ include.width }}{% endif %}">
-        <div class="ratio ratio-{{ include.ratio | default: '16x9' }}">
-            {%- if video_src contains "vimeo" or video_src contains "youtu" -%}
-            <iframe title="video embed {{ video_caption | escape }}" src="{{ video_src }}" allowfullscreen></iframe>
-            {% else %}
-            <video width="320" height="240" controls>
-                <source src="{{ video_src }}">
-                {{ site.data.translations['_includes']['feature']['video.html']['error'][site.lang] | default: "Your browser does not support the video tag." }}
-            </video>
-            {%- endif -%}
-        </div>
-        {% unless include.caption == false %}
-        <figcaption class="figure-caption">
-            {{ video_caption }}
-        </figcaption>
-        {% endunless %}
-    </figure>
+  <figure class="mx-auto{% if include.width %} feature-w-{{ include.width }}{% endif %}">
+    <div class="ratio ratio-{{ include.ratio | default: '16x9' }}">
+      {%- if video_src contains 'vimeo' or video_src contains 'youtu' -%}
+        <iframe title="video embed {{ video_caption | escape }}" src="{{ video_src }}" allowfullscreen></iframe>
+      {% else %}
+        <video width="320" height="240" controls>
+          <source src="{{ video_src }}">
+          {{
+            site.data.translations._includes.feature['video.html'].error[site.lang]
+            | default: 'Your browser does not support the video tag.'
+          }}
+        </video>
+      {%- endif -%}
+    </div>
+    {% unless include.caption == false %}
+      <figcaption class="figure-caption">
+        {{ video_caption }}
+      </figcaption>
+    {% endunless %}
+  </figure>
 </div>

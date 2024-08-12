@@ -1,50 +1,63 @@
 {% comment %}
+  Image embed from an item's objectid or external link.
+  This include adds a figure to the page styled using bootstrap, https://getbootstrap.com/docs/5.1/content/figures/
 
-    Image embed from an item's objectid or external link.
-    This include adds a figure to the page styled using bootstrap, https://getbootstrap.com/docs/5.1/content/figures/
+  It requires an "objectid" with the include, which is used to find the object title and image (for collection items). If multiple collection objectids are included (separated by ; ), they will be added to a "col-md" in a row which will automatically divided equally.
+  Alternatively, a URL to an external image can be used in "objectid".
 
-    It requires an "objectid" with the include, which is used to find the object title and image (for collection items). If multiple collection objectids are included (separated by ; ), they will be added to a "col-md" in a row which will automatically divided equally. 
-    Alternatively, a URL to an external image can be used in "objectid".
+  E.G. --> {% include feature/image.html objectid="demo_001" %}
 
-    E.G. --> {% include feature/image.html objectid="demo_001" %}
-
-    Options: 
-    - "objectid" = several options below (required)
-        1. one or more objectids from this collection, separated by semicolon, e.g. "demo_001" or "demo_001;demo_005"
-        2. a full URL to an external image file, e.g. "https://www.lib.uidaho.edu/digital/images/fluffyclouds.jpg"
-        3. a relative link to an image file stored in this repository (that is not included in the collection), i.e. "/assets/img/evan.jpg"  
-        IMPORTANT NOTE: Options 2 and 3 require you to add an "alt" option (or "alt" options for multiple images) in order to allow for the accessibility enabled by the "alt" tag
-    - "alt" = alternative text describing the image. This is a required accessibility feature IF you are using an external URL or a relative link (options 2 and 3 above)--it will be automatically filled if providing an objectid. For multiple alts, split using a semi-colon. If you do not fill this in but fill in the "caption" option, the "caption" will be included as the images alt value. (optional)
-    - "caption" = for option 1 above, the figure include automatically adds the title of the item from your metadata. The caption option allows you to manually add a different caption for that option, or give the value false ('caption=false' - no quotes around false) for none. For options 2 and 3, captions will only be added if the caption variable is set. For multiple images of any option, you can also use multiple captions, by splitting them with a semi-colons (optional)
-    - "link" = for option 1 above, the figure include automatically links to the item from your metadata. The link option allows you to manually add a different link for that image. For options 2 and 3, link will only be added if the link variable is set; otherwise, the link will be set to the external or relative image file. For multiple images of any option, you can also use multiple links, by splitting them with a semi-colons (optional)
-    - "width" = will use responsive sizing to set the % size on desktop (will be 100% on mobile), choose from "25", "50", "75", or "100" (optional)
-    
-{%- endcomment -%}
-{%- assign figures = include.objectid | split: ";" %}
+  Options:
+  - "objectid" = several options below (required)
+      1. one or more objectids from this collection, separated by semicolon, e.g. "demo_001" or "demo_001;demo_005"
+      2. a full URL to an external image file, e.g. "https://www.lib.uidaho.edu/digital/images/fluffyclouds.jpg"
+      3. a relative link to an image file stored in this repository (that is not included in the collection), i.e. "/assets/img/evan.jpg"
+      IMPORTANT NOTE: Options 2 and 3 require you to add an "alt" option (or "alt" options for multiple images) in order to allow for the accessibility enabled by the "alt" tag
+  - "alt" = alternative text describing the image. This is a required accessibility feature IF you are using an external URL or a relative link (options 2 and 3 above)--it will be automatically filled if providing an objectid. For multiple alts, split using a semi-colon. If you do not fill this in but fill in the "caption" option, the "caption" will be included as the images alt value. (optional)
+  - "caption" = for option 1 above, the figure include automatically adds the title of the item from your metadata. The caption option allows you to manually add a different caption for that option, or give the value false ('caption=false' - no quotes around false) for none. For options 2 and 3, captions will only be added if the caption variable is set. For multiple images of any option, you can also use multiple captions, by splitting them with a semi-colons (optional)
+  - "link" = for option 1 above, the figure include automatically links to the item from your metadata. The link option allows you to manually add a different link for that image. For options 2 and 3, link will only be added if the link variable is set; otherwise, the link will be set to the external or relative image file. For multiple images of any option, you can also use multiple links, by splitting them with a semi-colons (optional)
+  - "width" = will use responsive sizing to set the % size on desktop (will be 100% on mobile), choose from "25", "50", "75", or "100" (optional)
+{% endcomment %}
+{%- assign figures = include.objectid | split: ';' %}
 {%- assign figcount = figures | size -%}
-{%- assign captions = include.caption | split: ";" %}
-{%- assign alts = include.alt | split: ";" -%}
-{%- assign links = include.link | split: ";" -%}
+{%- assign captions = include.caption | split: ';' %}
+{%- assign alts = include.alt | split: ';' -%}
+{%- assign links = include.link | split: ';' -%}
 <div class="row">
-    {% for i in figures %}
-    {% if i contains "/" %}
-        {%- capture image_src -%}{{ i | relative_url }}{%- endcapture -%}
-        {%- capture image_caption -%}{{ captions[forloop.index0] }}{%- endcapture -%}
-        {%- capture image_alt -%}{{ alts[forloop.index0] }}{%- endcapture -%}
-        {%- capture image_link -%}{{ links[forloop.index0] | default: image_src }}{%- endcapture -%}
+  {% for i in figures %}
+    {% if i contains '/' %}
+      {%- capture image_src -%}{{ i | relative_url }}{%- endcapture -%}
+      {%- capture image_caption -%}{{ captions[forloop.index0] }}{%- endcapture -%}
+      {%- capture image_alt -%}{{ alts[forloop.index0] }}{%- endcapture -%}
+      {%- capture image_link -%}{{ links[forloop.index0] | default: image_src }}{%- endcapture -%}
     {% else %}
-        {%- assign figure = site.data[site.metadata] | where: "objectid", i | first -%}
-        {%- capture image_link -%}{{ '/items/' | relative_url }}{% if figure.parentid %}{{ figure.parentid }}.html#{{ figure.objectid }}{% else %}{{ figure.objectid }}.html{% endif %}{% endcapture %}
-        {%- capture image_caption -%}{{ captions[forloop.index0] | default: figure.title }}{%- endcapture -%}
-        {%- capture image_alt -%}{{ alts[forloop.index0] | default: figure.image_alt_text | default: figure.description | default: figure.title }}{%- endcapture -%}
-        {%- capture image_src -%}{{ figure.image_small | default: figure.object_location | relative_url }}{% endcapture %}
+      {%- assign figure = site.data[site.metadata] | where: 'objectid', i | first -%}
+      {%- capture image_link -%}{{ '/items/' | relative_url }}{% if figure.parentid %}{{ figure.parentid }}.html#{{ figure.objectid }}{% else %}{{ figure.objectid }}.html{% endif %}{% endcapture %}
+      {%- capture image_caption -%}{{ captions[forloop.index0] | default: figure.title }}{%- endcapture -%}
+      {%- capture image_alt -%}{{ alts[forloop.index0] | default: figure.image_alt_text | default: figure.description | default: figure.title }}{%- endcapture -%}
+      {%- capture image_src -%}{{ figure.image_small | default: figure.object_location | relative_url }}{% endcapture %}
     {% endif %}
     <div class="col-md {% if figcount == 1 %}text-center{% elsif forloop.first %}text-md-end{% elsif forloop.last %}text-md-start{% else %}text-center{% endif %}">
-        <figure class="figure mx-3{% if include.width %} feature-w-{{ include.width }}{% endif %}">
-            <a href="{{ image_link | default: image_src }}">
-                <img class="figure-img img-fluid rounded lazyload" alt="{{ image_alt | default: image_caption | escape }}"  title="{{ site.data.translations['_includes']['feature']['image.html']['click'][site.lang] | default: "click to see item" }}" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'%3E%3C/svg%3E" data-src="{{ image_src }}" >
-            </a>
-            {% unless include.caption == false %}<figcaption class="figure-caption text-center">{% if i contains "/" %}{{ image_caption }}{% else %}<a href="{{ image_link }}">{{ image_caption }}</a>{% endif %}</figcaption>{% endunless %}
-        </figure>
-    </div>{% endfor %}
+      <figure class="figure mx-3{% if include.width %} feature-w-{{ include.width }}{% endif %}">
+        <a href="{{ image_link | default: image_src }}">
+          <img
+            class="figure-img img-fluid rounded lazyload"
+            alt="{{ image_alt | default: image_caption | escape }}"
+            title="{{ site.data.translations['_includes']['feature']['image.html']['click'][site.lang] | default: "click to see item" }}"
+            src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'%3E%3C/svg%3E"
+            data-src="{{ image_src }}"
+          >
+        </a>
+        {% unless include.caption == false %}
+          <figcaption class="figure-caption text-center">
+            {% if i contains '/' -%}
+              {{- image_caption -}}
+            {%- else -%}
+              <a href="{{ image_link }}">{{ image_caption }}</a>
+            {%- endif %}
+          </figcaption>
+        {% endunless %}
+      </figure>
+    </div>
+  {% endfor %}
 </div>

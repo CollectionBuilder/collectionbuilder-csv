@@ -1,24 +1,24 @@
 # Migrate Older CollectionBuilder Projects to New CSV
 
-CollectionBuilder-CSV introduces a new metadata centered approach to managing the links to collection object downloads and image representations. 
+CollectionBuilder-CSV introduces a new metadata centered approach to managing the links to collection object downloads and image representations.
 Rather than embedding the various API options inside the project template, the collection metadata CSV has fields for "object_location", "image_small", and "image_thumb".
-Thus the work of figuring out the API or locations of digital objects is pushed into the metadata, rather than the Liquid includes in the template code. 
+Thus the work of figuring out the API or locations of digital objects is pushed into the metadata, rather than the Liquid includes in the template code.
 
 This approach enables greater flexibility to adapt to multiple content sources without requiring extensive customization of the template code.
 We hope this better leverages and acknowledges librarian's skill in metadata and spreadsheet data, creating a more accessible and agile approach to customization.
 
 Migrating an existing CollectionBuilder project to the new template is relatively straightforward, involving generating the new fields from your existing metadata values.
 CB-CSV provides recipes to generate the fields which can be used to create new project or migrate existing ones.
-Other configuration options are backwards compatible (_config.yml, _data/theme.yml, _data/config-metadata.csv, etc), but can also be updated to simplify or access new options.
+Other configuration options are backwards compatible (\_config.yml, \_data/theme.yml, \_data/config-metadata.csv, etc), but can also be updated to simplify or access new options.
 
 ## Migrating Configurations
 
-- "_config.yml": existing configurations options will work in the new template. Changes include:
-    - `objects` value is no longer used (previously used to set location of digital objects). Use the value in your old configuration to help generate the new "objects_download" field in metadata.
-    - `page_gen` object is no longer necessary. The new CB page gen plugin does not require separate configuration, and will generate pages from your configured `metadata`. However, it is compatible with old style configuration, so your settings can be left as is if desired.
-- "_data/theme.yml": existing theme configurations options work the same in the new template. New options include: 
-    - "THEME ICONS" section to customize the default icons used for items with out image representations.
-- "_data/config-" CSVs: The CSVs used to configure individual pages are the same in all versions of CB. Newer versions have more option columns than older templates. 
+- "\_config.yml": existing configurations options will work in the new template. Changes include:
+  - `objects` value is no longer used (previously used to set location of digital objects). Use the value in your old configuration to help generate the new "objects_download" field in metadata.
+  - `page_gen` object is no longer necessary. The new CB page gen plugin does not require separate configuration, and will generate pages from your configured `metadata`. However, it is compatible with old style configuration, so your settings can be left as is if desired.
+- "\_data/theme.yml": existing theme configurations options work the same in the new template. New options include:
+  - "THEME ICONS" section to customize the default icons used for items with out image representations.
+- "\_data/config-" CSVs: The CSVs used to configure individual pages are the same in all versions of CB. Newer versions have more option columns than older templates.
 
 ## Migrating Metadata CSV from CB-GH
 
@@ -34,7 +34,7 @@ A youtubeid or vimeoid field is not necessary.
 
 ## Migrating Metadata CSV from CollectionBuilder-SA
 
-Older style CollectionBuilder-SA metadata templates had a column "filename" containing the digital object filename or full URL to the object, plus the option to set an `objects` value in _config.yml which provided a custom directory location or full url to the web location hosting the objects.
+Older style CollectionBuilder-SA metadata templates had a column "filename" containing the digital object filename or full URL to the object, plus the option to set an `objects` value in \_config.yml which provided a custom directory location or full url to the web location hosting the objects.
 
 Starting from "filename" create a new column "object_location" using the `objects` value + the value of "filename".
 For example, if the objects are contained with the project in the "objects" folder, the resulting "object_location" should look like `/objects/demo_001.jpg`.
@@ -42,9 +42,9 @@ If the objects are at an external location, they would contain the full url, e.g
 
 If you generated derivatives for your objects (i.e. smalls and thumbs), add the link to those files in "image_small" and "image_thumb" following the same pattern, e.g. `/objects/small/demo_001_sm.jpg` and `/objects/thumbs/demo_001_th.jpg`.
 
-## Migrating metadata CSV from CB-CONTENTdm 
+## Migrating metadata CSV from CB-CONTENTdm
 
 CollectionBuilder-CONTENTdm collections contain values for "cdm-url", "cdm-collection-id" / "collectionid", and "cdmid" which can be used to generate the values for "object_location", "image_small", and "image_thumb".
 
-Collections focused on remaining a skin to a CONTENTdm repository will likely want to continue using CB-CONTENTdm. 
-However, if your collection contains items from multiple repositories or mixes non-CONTENTdm items with CONTENTdm content, there may be advantages to migrating to the new CB-SA template to simplify customization. 
+Collections focused on remaining a skin to a CONTENTdm repository will likely want to continue using CB-CONTENTdm.
+However, if your collection contains items from multiple repositories or mixes non-CONTENTdm items with CONTENTdm content, there may be advantages to migrating to the new CB-SA template to simplify customization.

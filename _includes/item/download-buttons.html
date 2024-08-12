@@ -1,36 +1,100 @@
 {% comment %}
-
-    Adds Item page button links, styled as a Bootstrap btn-group. 
-    Features: 
-    - View Transcript -- if the item has the field "object_transcript", this button is added along with a Bootstrap collapse containing the transcript content. If the value of "object_transcript" starts with objects/ it will look for the matching transcript file in the objects fold, otherwise it will use the value directly. Both will be rendered in Markdown. 
-    - View on Timeline -- if the item has a "date" value, links to Timeline page.
-    - View on Map -- if item has "latitude" and "longitude" value, links to location on map.
-    - Download -- if the item has "object_location" value, adds a download button along with the item format, or if the value is a YouTube or Vimeo link adds a "View on" link.  
-
-{%- endcomment -%}
+  Adds Item page button links, styled as a Bootstrap btn-group.
+  Features:
+  - View Transcript -- if the item has the field "object_transcript", this button is added along with a Bootstrap collapse containing the transcript content. If the value of "object_transcript" starts with objects/ it will look for the matching transcript file in the objects fold, otherwise it will use the value directly. Both will be rendered in Markdown.
+  - View on Timeline -- if the item has a "date" value, links to Timeline page.
+  - View on Map -- if item has "latitude" and "longitude" value, links to location on map.
+  - Download -- if the item has "object_location" value, adds a download button along with the item format, or if the value is a YouTube or Vimeo link adds a "View on" link.
+{% endcomment %}
 <div class="btn-group" role="group" aria-label="Objektoptionen">
-    {% if page.object_transcript %}<button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTranscript" aria-expanded="false" aria-controls="collapseExample">{{ site.data.translations['_includes']['item']['download-buttons.html']['transcript'][site.lang] | default: "View Transcript" }}</button>{% endif %}
-    {% if page.date %}{% assign regex = '[\dX]{4}' %}{%- assign matches = page.date | regex_match: regex -%}
-    {%- capture url -%}{%- for match in matches -%}{% capture queryParam %}y{{ match }}{% endcapture %}{% assign years = years | append: queryParam %}{% assign url = url | append: queryParam %}{%- endfor %}{%- endcapture %}{% assign url = url | append: '#y' | append: matches[0] %}{% assign url = '?' | append: years | append: '#y' | append: matches[0] %}   
-    <a href="{{ url | strip | prepend: '/timeline.html' | relative_url | escape}}" class="btn btn-outline-primary d-flex align-items-center">{{ site.data.translations['_includes']['item']['download-buttons.html']['timeline'][site.lang] | default: "View on Timeline" }}</a>{% endif %}
-    {% if page.latitude and page.longitude %}
-    <a href="{{ '/map.html?location=' | append: page.latitude  | append: ',' | append: page.longitude | append: '&marker=' | append: page.objectid | relative_url }}" class="btn btn-outline-primary">{{ site.data.translations['_includes']['item']['download-buttons.html']['map'][site.lang] | default: "View on Map" }}</a>{% endif %}
-    {% if page.object_location %}<a target="_blank" rel="noopener" href="{{ page.object_location | relative_url }}" class="btn btn-outline-primary d-flex align-items-center">
-        {% if page.display_template == 'video' and page.object_location contains 'vimeo' %}{{ site.data.translations['_includes']['item']['download-buttons.html']['vimeo'][site.lang] | default: "View on Vimeo"}}{% elsif page.display_template == 'video' and page.object_location contains 'youtu' %}{{ site.data.translations['_includes']['item']['download-buttons.html']['youtube'][site.lang] | default: "View on YouTube"}}{% elsif page.display_template == 'record'%}{{ site.data.translations['_includes']['item']['download-buttons.html']['link-to-object'][site.lang] | default: "Link to Object"}}{% else %}{{ site.data.translations['_includes']['item']['download-buttons.html']['download'][site.lang] | default: "Download" }} {{ page.format | split: '/' | last | default: page.display_template | upcase }}{% endif %}
-    </a>{% endif %}
-    <a class="btn btn-report d-flex align-items-center" href="mailto:{{ site.report-email }}?subject={{ site.data.translations['_includes']['item']['download-buttons.html']['subject'][site.lang] | default: 'Report faulty metadata for'}} {{ page.title | escape }}&body={{ site.data.translations['_includes']['item']['download-buttons.html']['body'][site.lang] | default: 'Please describe the issue with the metadata for'}} {{ page.title | escape }}.%0D%0A%0D%0A- URL: {{ site.url | append: page.url | url_encode }}%0D%0A- ID: {{ page.objectid | escape }}">{{ site.data.translations['_includes']['item']['download-buttons.html']['report'][site.lang] | default: "Report faulty metadata" }}</a>
+  {% if page.object_transcript -%}
+    <button
+      class="btn btn-outline-primary"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#collapseTranscript"
+      aria-expanded="false"
+      aria-controls="collapseExample"
+    >
+      {{
+        site.data.translations._includes.item['download-buttons.html'].transcript[site.lang]
+        | default: 'View Transcript'
+      }}
+    </button>
+  {%- endif %}
+  {% if page.date -%}
+    {%- assign regex = '[\dX]{4}' %}
+    {%- assign matches = page.date | regex_match: regex -%}
+    {%- capture url -%}{%- for match in matches -%}{% capture queryParam %}y{{ match }}{% endcapture %}{% assign years = years | append: queryParam %}{% assign url = url | append: queryParam %}{%- endfor %}{%- endcapture -%}
+    {%- assign url = url | append: '#y' | append: matches[0] -%}
+    {%- assign url = '?' | append: years | append: '#y' | append: matches[0] %}
+    <a
+      href="{{ url | strip | prepend: '/timeline.html' | relative_url | escape}}"
+      class="btn btn-outline-primary d-flex align-items-center"
+    >
+      {{-
+        site.data.translations._includes.item['download-buttons.html'].timeline[site.lang]
+        | default: 'View on Timeline'
+      -}}
+    </a>
+  {%- endif %}
+  {% if page.latitude and page.longitude %}
+    <a
+      href="{{ '/map.html?location=' | append: page.latitude  | append: ',' | append: page.longitude | append: '&marker=' | append: page.objectid | relative_url }}"
+      class="btn btn-outline-primary"
+    >
+      {{- site.data.translations._includes.item['download-buttons.html'].map[site.lang] | default: 'View on Map' -}}
+    </a>
+  {%- endif %}
+  {% if page.object_location -%}
+    <a
+      target="_blank"
+      rel="noopener"
+      href="{{ page.object_location | relative_url }}"
+      class="btn btn-outline-primary d-flex align-items-center"
+    >
+      {% if page.display_template == 'video' and page.object_location contains 'vimeo' -%}
+        {{-
+          site.data.translations._includes.item['download-buttons.html'].vimeo[site.lang]
+          | default: 'View on Vimeo'
+        -}}
+      {%- elsif page.display_template == 'video' and page.object_location contains 'youtu' -%}
+        {{-
+          site.data.translations._includes.item['download-buttons.html'].youtube[site.lang]
+          | default: 'View on YouTube'
+        -}}
+      {%- elsif page.display_template == 'record' -%}
+        {{-
+          site.data.translations._includes.item['download-buttons.html']['link-to-object'][site.lang]
+          | default: 'Link to Object'
+        -}}
+      {%- else -%}
+        {{- site.data.translations._includes.item['download-buttons.html'].download[site.lang] | default: 'Download' }}
+        {{ page.format | split: '/' | last | default: page.display_template | upcase -}}
+      {%- endif %}
+    </a>
+  {%- endif %}
+  <a
+    class="btn btn-report d-flex align-items-center"
+    href="mailto:{{ site.report-email }}?subject={{ site.data.translations['_includes']['item']['download-buttons.html']['subject'][site.lang] | default: 'Report faulty metadata for'}} {{ page.title | escape }}&body={{ site.data.translations['_includes']['item']['download-buttons.html']['body'][site.lang] | default: 'Please describe the issue with the metadata for'}} {{ page.title | escape }}.%0D%0A%0D%0A- URL: {{ site.url | append: page.url | url_encode }}%0D%0A- ID: {{ page.objectid | escape }}"
+  >
+    {{-
+      site.data.translations._includes.item['download-buttons.html'].report[site.lang]
+      | default: 'Report faulty metadata'
+    -}}
+  </a>
 </div>
 {% if page.object_transcript %}
-<div class="collapse mt-3" id="collapseTranscript">
+  <div class="collapse mt-3" id="collapseTranscript">
     <div class="card card-body text-start">
-        {% assign transcript_type = page.object_transcript | slice: 0,1 %}
-        {% if transcript_type == '/' %}
+      {% assign transcript_type = page.object_transcript | slice: 0, 1 %}
+      {% if transcript_type == '/' %}
         {% assign transcript_location = page.object_transcript | remove_first: '/' %}
         {% assign transcript = site.pages | where: 'path', transcript_location | first %}
         {{ transcript.content | markdownify }}
-        {% else %}
+      {% else %}
         {{ page.object_transcript | markdownify }}
-        {% endif %}
+      {% endif %}
     </div>
-</div>
-{% endif %} 
+  </div>
+{% endif %}

@@ -1,68 +1,66 @@
 {%- comment -%}
-
-    Generates a subject cloud using js to process the terms for display on "cloud" layout.
-    Requires CB's array_count_uniq.rb plugin!
-
+  Generates a subject cloud using js to process the terms for display on "cloud" layout.
+  Requires CB's array_count_uniq.rb plugin!
 {%- endcomment -%}
-{% if site.data.theme.browse-child-objects == true %}
-{%- assign items = site.data[site.metadata] | where_exp: 'item','item.objectid' -%}
+{% if site.data.theme['browse-child-objects'] == true %}
+  {%- assign items = site.data[site.metadata] | where_exp: 'item', 'item.objectid' -%}
 {% else %}
-{%- assign items = site.data[site.metadata] | where_exp: 'item','item.objectid and item.parentid == nil' -%}
+  {%- assign items = site.data[site.metadata] | where_exp: 'item', 'item.objectid and item.parentid == nil' -%}
 {% endif %}
 {%- assign termsMin = include.min | plus: 0 | default: 1 -%}
-{%- assign cloud_id = include.id | default: "cloud" -%}
-{%- assign cloud-fields = include.fields | split: ";" -%}
+{%- assign cloud_id = include.id | default: 'cloud' -%}
+{%- assign cloud-fields = include.fields | split: ';' -%}
 
 {%- comment -%} capture terms from all cloud fields {%- endcomment -%}
-{%- assign terms = "" -%}
+{%- assign terms = '' -%}
 {%- for c in cloud-fields -%}
-{% assign new = items | map: c | join: ";" %}
-{% assign terms = terms | append: ";" | append: new %}
+  {% assign new = items | map: c | join: ';' %}
+  {% assign terms = terms | append: ';' | append: new %}
 {%- endfor -%}
 {%- comment -%} find unique terms and counts {%- endcomment -%}
-{%- assign uniqTerms = terms | split: ";" | array_count_uniq | sort | where_exp: 't','t[1] >= termsMin' -%}
+{%- assign uniqTerms = terms | split: ';' | array_count_uniq | sort | where_exp: 't', 't[1] >= termsMin' -%}
 
 <script>
-(function(){    
-    /* subject terms + count */
-    var terms = [
-        {% for t in uniqTerms %}[{{ t[0] | jsonify }}, {{ t[1] | jsonify }}]{% unless forloop.last %}, {% endunless %}{% endfor %}
-    ];
+  (function(){
+      /* subject terms + count */
+      var terms = [
+          {% for t in uniqTerms %}[{{ t[0] | jsonify }}, {{ t[1] | jsonify }}]{% unless forloop.last %}, {% endunless %}{% endfor %}
+      ];
 
-    {% if include.stopwords %}/* apply stopwords */
-    var stopWords = {{ include.stopwords | split: ';' | jsonify }};
-    terms = terms.filter(function(a) { return stopWords.indexOf(a[0]) < 0;});{% endif %}
-    /* calculate max size */
-    var counts = terms.map(function(obj){ return obj[1]; });
-    var countMax = counts.reduce(function(a, b) { return Math.max(a, b); });
-    var cloud = document.getElementById("{{ cloud_id }}");
-    {% if include.shuffle == true %}
-    /* Fisher-Yates shuffle https://bost.ocks.org/mike/shuffle/ */
-    function shuffle(array) {
-        var m = array.length, t, i;
-        while (m) {
-            i = Math.floor(Math.random() * m--);
-            t = array[m];
-            array[m] = array[i];
-            array[i] = t;
-        }
-        return array;
-    }
-    {% endif %}
+      {% if include.stopwords %}/* apply stopwords */
+      var stopWords = {{ include.stopwords | split: ';' | jsonify }};
+      terms = terms.filter(function(a) { return stopWords.indexOf(a[0]) < 0;});{% endif %}
+      /* calculate max size */
+      var counts = terms.map(function(obj){ return obj[1]; });
+      var countMax = counts.reduce(function(a, b) { return Math.max(a, b); });
+      var cloud = document.getElementById("{{ cloud_id }}");
+      {% if include.shuffle == true %}
+      /* Fisher-Yates shuffle https://bost.ocks.org/mike/shuffle/ */
+      function shuffle(array) {
+          var m = array.length, t, i;
+          while (m) {
+              i = Math.floor(Math.random() * m--);
+              t = array[m];
+              array[m] = array[i];
+              array[i] = t;
+          }
+          return array;
+      }
+      {% endif %}
 
-    function mapSize(x) { return Math.round(x * 9 / countMax + 1); }
-    /* create cloud */
-    function makeGrid(array) {
-        var i, size;
-        var items = "";
-        {% if include.shuffle == true %}shuffle(array);{% endif %}
-        for (i = 0; i < array.length; i++) {
-            size = mapSize(array[i][1]);
-            items += '<a class="btn btn-{{ include.button | default: "secondary" }} m-2 tagcloud' + size + '" href="{{ "/browse.html" | relative_url }}#' + encodeURIComponent(array[i][0]) + '" >' + array[i][0] + '</a>';
-        }
-        cloud.innerHTML = items;
-    }
-    makeGrid(terms);
+      function mapSize(x) { return Math.round(x * 9 / countMax + 1); }
+      /* create cloud */
+      function makeGrid(array) {
+          var i, size;
+          var items = "";
+          {% if include.shuffle == true %}shuffle(array);{% endif %}
+          for (i = 0; i < array.length; i++) {
+              size = mapSize(array[i][1]);
+              items += '<a class="btn btn-{{ include.button | default: "secondary" }} m-2 tagcloud' + size + '" href="{{ "/browse.html" | relative_url }}#' + encodeURIComponent(array[i][0]) + '" >' + array[i][0] + '</a>';
+          }
+          cloud.innerHTML = items;
+      }
+      makeGrid(terms);
 
-})();
+  })();
 </script>

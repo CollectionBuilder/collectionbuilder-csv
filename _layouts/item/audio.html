@@ -3,23 +3,16 @@
 # Uses <audio> element to embed audio file from object_location as src.
 layout: item/item-page-base
 ---
-
 <div class="card mb-4 text-center">
-    <div class="card-body">
+  <div class="card-body">
+    {% include item/audio-player.html %}
 
-        {% include item/audio-player.html %}
-
-        <div class="mt-2">
-
-            {% include item/item-thumb.html %}
-        
-        </div>
-        
-        <div class="mt-2">
-
-            {% include item/download-buttons.html %}
-
-        </div>
-
+    <div class="mt-2">
+      {% include item/item-thumb.html %}
     </div>
+
+    <div class="mt-2">
+      {% include item/download-buttons.html %}
+    </div>
+  </div>
 </div>

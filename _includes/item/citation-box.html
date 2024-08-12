@@ -1,16 +1,31 @@
 {% comment %}
-
-    Adds a basic citation box for the item with reference link to the item page.
-
-{%- endcomment -%}
+  Adds a basic citation box for the item with reference link to the item page.
+{% endcomment %}
 <div class="card">
-    <div class="card-header">{{ site.data.translations['_includes']['item']['citation-box.html']['title'][site.lang] | default: "Source" }}</div>
-    <div class="card-body">
-        <dl>
-            <dt>{{ site.data.translations['_includes']['item']['citation-box.html']['preferred-citation'][site.lang] | default: "Preferred Citation" }}:</dt>
-            <dd>{{ site.organization-name }}: {{ page.title}}. {{ site.title }}, &lt;{{ page.url | absolute_url }}&gt;, Stand: {{ "now" | date: "%d.%m.%Y" }}.</dd>
-            <dt>{{ site.data.translations['_includes']['item']['citation-box.html']['reference-link'][site.lang] | default: "Reference Link" }}:</dt>
-            <dd>{{ page.url | absolute_url }}</dd>
-        </dl>
-    </div>
+  <div class="card-header">
+    {{ site.data.translations._includes.item['citation-box.html'].title[site.lang] | default: 'Source' }}
+  </div>
+  <div class="card-body">
+    <dl>
+      <dt>
+        {{
+          site.data.translations._includes.item['citation-box.html']['preferred-citation'][site.lang]
+          | default: 'Preferred Citation'
+        -}}
+        :
+      </dt>
+      <dd>
+        {{ site['organization-name'] }}: {{ page.title }}. {{ site.title }}, &lt;{{ page.url | absolute_url }}&gt;,
+        Stand: {{ 'now' | date: '%d.%m.%Y' }}.
+      </dd>
+      <dt>
+        {{
+          site.data.translations._includes.item['citation-box.html']['reference-link'][site.lang]
+          | default: 'Reference Link'
+        -}}
+        :
+      </dt>
+      <dd>{{ page.url | absolute_url }}</dd>
+    </dl>
+  </div>
 </div>

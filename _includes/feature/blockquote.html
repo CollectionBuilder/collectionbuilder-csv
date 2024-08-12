@@ -1,6 +1,5 @@
 {% comment %}
-
-    Block quote
+  Block quote
 
     E.G. --> {% include feature/blockquote.html text="Knowledge comes, but wisdom lingers" speaker="Alfred Lord Tennyson" source="Locksley Hall" %}
 
@@ -9,15 +8,22 @@
     - "speaker" = name of the person who said the quote (optional)
     - "source" = title of the quote's source (optional)
     - "link" = link to source, will be added to speaker/source (note: will not be added unless you have a speaker or source value!)
-
-{%- endcomment -%}
+{% endcomment %}
 <figure class="my-3 narrow-content">
-    <blockquote class="blockquote fs-3">
-        {{ include.text | markdownify }}
-    </blockquote>
-    {% if include.speaker or include.source %}
-    <figcaption class="blockquote-footer text-end fs-4">{% if include.link %}<a href="{{ include.link | relative_url }}" target="_blank" rel="noopener">{% endif %}
-        {% if include.speaker %}{{ include.speaker }}{% if include.source %}, {% endif %}{% endif %}
-        {% if include.source %}<cite title="Source Title">{{ include.source }}</cite>{% endif %}
-    {% if include.link %}</a>{% endif %}</figcaption>{% endif %}
+  <blockquote class="blockquote fs-3">
+    {{ include.text | markdownify }}
+  </blockquote>
+  {% if include.speaker or include.source %}
+    <figcaption class="blockquote-footer text-end fs-4">
+      {% if include.link %}<a href="{{ include.link | relative_url }}" target="_blank" rel="noopener">{% endif %}
+      {% if include.speaker -%}
+        {{- include.speaker -}}
+        {%- if include.source %}, {% endif -%}
+      {%- endif %}
+      {% if include.source -%}
+        <cite title="Source Title">{{ include.source }}</cite>
+      {%- endif %}
+      {% if include.link %}</a>{% endif %}
+    </figcaption>
+  {% endif %}
 </figure>

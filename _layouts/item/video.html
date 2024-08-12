@@ -3,21 +3,16 @@
 # Displays a video embedded on the page with default support for video files (using <video> element with object_location as src, MP4 is most compatible format), YouTube (from full link in object_location), or Vimeo videos (from full link in object_location).
 layout: item/item-page-base
 ---
-
 <div class="card mb-4 text-center">
-    <div class="card-body">
-    
-        {% if page.object_location contains 'vimeo' or page.object_location contains 'youtu' %}
-        {% include item/video-embed.html %}
-        {% else %}
-        {% include item/video-player.html %}
-        {% endif %}
+  <div class="card-body">
+    {% if page.object_location contains 'vimeo' or page.object_location contains 'youtu' %}
+      {% include item/video-embed.html %}
+    {% else %}
+      {% include item/video-player.html %}
+    {% endif %}
 
-        <div class="mt-2">
-            
-            {% include item/download-buttons.html %}
-           
-        </div>
-        
+    <div class="mt-2">
+      {% include item/download-buttons.html %}
     </div>
+  </div>
 </div>

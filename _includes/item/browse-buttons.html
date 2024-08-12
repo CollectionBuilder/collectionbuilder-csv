@@ -1,14 +1,22 @@
 {% comment %}
-
   Adds previous and next button arrows to provide navigation between items.
   Requires cb_page_gen plugin.
   The item order follows the order in the metadata CSV, so pre-sort the CSV to the desired order.
-
-{%- endcomment -%}
+{% endcomment %}
 <div class="text-center">
-  <a class="btn btn-outline-primary" href="{{ page.previous_item | relative_url }}" id="prev-page-button">&laquo; {{ site.data.translations['_includes']['item']['browse-buttons.html']['previous'][site.lang] | default: "Previous" }}</a>
-  <a class="btn btn-outline-primary" href="{{ '/browse.html' | relative_url }}">{{ site.data.translations['_includes']['item']['browse-buttons.html']['back-to-browse'][site.lang] | default: "Back to Browse" }}</a>
-  <a class="btn btn-outline-primary" href="{{ page.next_item | relative_url }}" id="next-page-button">{{ site.data.translations['_includes']['item']['browse-buttons.html']['next'][site.lang] | default: "Next" }} &raquo;</a>
+  <a class="btn btn-outline-primary" href="{{ page.previous_item | relative_url }}" id="prev-page-button"
+    >&laquo;
+    {{ site.data.translations._includes.item['browse-buttons.html'].previous[site.lang] | default: 'Previous' -}}
+  </a>
+  <a class="btn btn-outline-primary" href="{{ '/browse.html' | relative_url }}">
+    {{-
+      site.data.translations._includes.item['browse-buttons.html']['back-to-browse'][site.lang]
+      | default: 'Back to Browse'
+    -}}
+  </a>
+  <a class="btn btn-outline-primary" href="{{ page.next_item | relative_url }}" id="next-page-button">
+    {{- site.data.translations._includes.item['browse-buttons.html'].next[site.lang] | default: 'Next' }} &raquo;</a
+  >
 </div>
 <div id="item-nav">
   <div class="d-none d-md-block">
@@ -18,83 +26,78 @@
 </div>
 <script>
   function leftArrowPressed() {
-    location.href = document.getElementById("prev-page-button").href;
-  };
+    location.href = document.getElementById('prev-page-button').href;
+  }
 
   function rightArrowPressed() {
-    location.href = document.getElementById("next-page-button").href;
-  };
+    location.href = document.getElementById('next-page-button').href;
+  }
 
   function leftModalArrowPressed() {
     // Get the modal element.
-    var modalshow = document.querySelector(".modal.show");
+    var modalshow = document.querySelector('.modal.show');
     // If the modal exists, get the prev button element.
     if (modalshow) {
-      const prevButton = modalshow.querySelector(".prev-child-button");
+      const prevButton = modalshow.querySelector('.prev-child-button');
       // If the prev button exists, click it.
       if (prevButton) {
         prevButton.click();
       }
     }
-  };
+  }
 
   function rightModalArrowPressed() {
     // Get the modal element.
-    var modalshow = document.querySelector(".modal.show");
+    var modalshow = document.querySelector('.modal.show');
     // If the modal exists, get the prev button element.
     if (modalshow) {
-      const nextButton = modalshow.querySelector(".next-child-button");
+      const nextButton = modalshow.querySelector('.next-child-button');
       // If the prev button exists, click it.
       if (nextButton) {
         nextButton.click();
       }
     }
-  };
+  }
 
   function isModalShown() {
     // Get the modal element.
-    const modal = document.querySelector(".modal.show");
+    const modal = document.querySelector('.modal.show');
 
     // Check if the modal has the "show" class.
-    return modal && modal.classList.contains("show");
-  };
+    return modal && modal.classList.contains('show');
+  }
 
   function isSpotlightModalShown() {
     // Get the modal element.
-    const spotlight = document.getElementById("spotlight");
+    const spotlight = document.getElementById('spotlight');
     // Check if the modal has the "show" class.
-    return spotlight && spotlight.classList.contains("show");
-  };
-
+    return spotlight && spotlight.classList.contains('show');
+  }
 
   document.onkeydown = function (evt) {
     if (isSpotlightModalShown()) {
-
-
     } else if (isModalShown()) {
       // The modal is shown.
       evt = evt || window.event;
       switch (evt.keyCode) {
         case 37:
           leftModalArrowPressed();
-            break;
+          break;
         case 39:
           rightModalArrowPressed();
-            break;
+          break;
       }
-    }
-    else {
+    } else {
       // The modal is not shown.
       evt = evt || window.event;
       switch (evt.keyCode) {
         case 37:
           leftArrowPressed();
-            break;
+          break;
         case 39:
           rightArrowPressed();
-            break;
+          break;
       }
     }
-
   };
 </script>

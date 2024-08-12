@@ -1,17 +1,25 @@
 {% comment %}
+  About Page Nav Menu include,
+  add a basic nav at top of About page.
 
-    About Page Nav Menu include,
-    add a basic nav at top of About page.
+  E.G. --> {% include feature/nav-menu.html sections="Background;Timeline;More Information" %}
 
-    E.G. --> {% include feature/nav-menu.html sections="Background;Timeline;More Information" %}
+  Options:
+  - "sections" = headers to be added to the nav separated by semicolon (;), exactly copy text from any header written in markdown on the page (i.e. ## Example header)
 
-    Options: 
-    - "sections" = headers to be added to the nav separated by semicolon (;), exactly copy text from any header written in markdown on the page (i.e. ## Example header)
-
-    Note: styling in _sass/_pages.scss adds 100px margin to top of h2 on the about page to accommodate the sticky-top option of this element. If you add headers other than h2 to this nav, they will likely overlap under the element when jumping to the section. Similarly, if more than a handful of sections or long section titles are added, the box will overlap the headers when jumping. Modify the spacing in the scss, or remove the "sticky-top" class to fix.
-
-{%- endcomment -%}
-{% assign sections = include.sections | split: ';'%}
+  Note: styling in _sass/_pages.scss adds 100px margin to top of h2 on the about page to accommodate the sticky-top option of this element. If you add headers other than h2 to this nav, they will likely overlap under the element when jumping to the section. Similarly, if more than a handful of sections or long section titles are added, the box will overlap the headers when jumping. Modify the spacing in the scss, or remove the "sticky-top" class to fix.
+{% endcomment %}
+{% assign sections = include.sections | split: ';' %}
 <p class="h6 shadow-sm p-3 about-nav sticky-top bg-white">
-    {{ site.data.translations['_includes']['feature']['nav-menu.html']['contents'][site.lang] | default: "Contents" }}: {% for section in sections %}<a class="mx-2" href="#{{ section | slugify }}">{{ section }}</a> {% unless forloop.last %}| {% endunless %}{% endfor %}{% if page.credits == true %}| <a class="mx-2" href="#technical">{{ site.data.translations['_includes']['feature']['nav-menu.html']['tech'][site.lang] | default: "Tech" }}</a>{% endif %}
+  {{ site.data.translations._includes.feature['nav-menu.html'].contents[site.lang] | default: 'Contents' }}:
+  {% for section in sections -%}
+    <a class="mx-2" href="#{{ section | slugify }}">{{ section }}</a>
+    {% unless forloop.last %}| {% endunless -%}
+  {%- endfor -%}
+  {%- if page.credits == true -%}
+    |
+    <a class="mx-2" href="#technical">
+      {{- site.data.translations._includes.feature['nav-menu.html'].tech[site.lang] | default: 'Tech' -}}
+    </a>
+  {%- endif %}
 </p>

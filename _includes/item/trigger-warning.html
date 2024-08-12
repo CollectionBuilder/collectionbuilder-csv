@@ -1,32 +1,32 @@
 {% comment %}
-    Adds Bootstrap styled trigger warning to page.
-    By default the trigger warning is: "This item contains sensitive content."
-    The trigger warning can be customized in the site.data.theme file.
+  Adds Bootstrap styled trigger warning to page.
+  By default the trigger warning is: "This item contains sensitive content."
+  The trigger warning can be customized in the site.data.theme file.
 {% endcomment %}
 
-{% if site.data.theme.trigger-warning %}
-    {% assign trigger_field = site.data.theme.trigger-field | default: "subject" %}
-    {% assign trigger_terms = site.data.theme.trigger-terms | split: "," %}
-    {% assign terms = page[trigger_field] | split: ";" %}
+{% if site.data.theme['trigger-warning'] %}
+  {% assign trigger_field = site.data.theme['trigger-field'] | default: 'subject' %}
+  {% assign trigger_terms = site.data.theme['trigger-terms'] | split: ',' %}
+  {% assign terms = page[trigger_field] | split: ';' %}
 
-    <div class="alert alert-danger alert-dismissible fade show" role="alert" id="trigger-warning" style="display: none;">
-        {{ site.data.theme.trigger-warning-text-item | default: "This item may contain sensitive content." }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Hinweis schliessen"></button>
-    </div>
+  <div class="alert alert-danger alert-dismissible fade show" role="alert" id="trigger-warning" style="display: none;">
+    {{ site.data.theme['trigger-warning-text-item'] | default: 'This item may contain sensitive content.' }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Hinweis schliessen"></button>
+  </div>
 
-    <script>
-        var triggerTerms = {{ trigger_terms | jsonify }};
-        var terms = {{ terms | jsonify }};
-        // strip whitespace from terms
-        terms = terms.map(function(x) { return x.trim(); });
+  <script>
+    var triggerTerms = {{ trigger_terms | jsonify }};
+    var terms = {{ terms | jsonify }};
+    // strip whitespace from terms
+    terms = terms.map(function(x) { return x.trim(); });
 
-        function doTwoArraysShareElement(arr1, arr2) {
-            return arr1.some(item => arr2.includes(item));
-        }
+    function doTwoArraysShareElement(arr1, arr2) {
+        return arr1.some(item => arr2.includes(item));
+    }
 
-        // Check if the arrays share an element and show the warning if they do
-        if (doTwoArraysShareElement(terms, triggerTerms)) {
-            document.getElementById("trigger-warning").style.display = "block";
-        }
-    </script>
+    // Check if the arrays share an element and show the warning if they do
+    if (doTwoArraysShareElement(terms, triggerTerms)) {
+        document.getElementById("trigger-warning").style.display = "block";
+    }
+  </script>
 {% endif %}

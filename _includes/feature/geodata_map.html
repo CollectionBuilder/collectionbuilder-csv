@@ -1,28 +1,31 @@
 {% comment %}
+  Mini Leaflet Map item feature.
+  This include adds a small leaflet map.
 
-    Mini Leaflet Map item feature.
-    This include adds a small leaflet map.
-    
-    E.G> --> {% include feature/geodata_map.html %}
+  E.G> --> {% include feature/geodata_map.html %}
 
-    Options: 
-    - "latitude" = center of map, required if not using objectid
-    - "longitude" = center of map, required if not using objectid 
-    - "height" = height of the mini map in px (default 400px)
-    - "map-zoom" = provide a zoom level, default 10
-    - "map-link" = true/false, add a button link to the collection's default full map page (default false)
-    - "basemap" = set basemap option, Esri_WorldStreetMap, Esri_NatGeoWorldMap, Esri_WorldImagery. default Esri_WorldImagery.
-
+  Options:
+  - "latitude" = center of map, required if not using objectid
+  - "longitude" = center of map, required if not using objectid
+  - "height" = height of the mini map in px (default 400px)
+  - "map-zoom" = provide a zoom level, default 10
+  - "map-link" = true/false, add a button link to the collection's default full map page (default false)
+  - "basemap" = set basemap option, Esri_WorldStreetMap, Esri_NatGeoWorldMap, Esri_WorldImagery. default Esri_WorldImagery.
 {% endcomment %}
 {% capture map_id %}mini-map_{{ include.latitude | slugify }}{% endcapture %}
-{% assign map-item = site.data[site.metadata] | where: "objectid", include.objectid | first %}
+{% assign map-item = site.data[site.metadata] | where: 'objectid', include.objectid | first %}
 {% assign geojson = page.object_location %}
 <style>
-#{{ map_id }} { height: {{ include.height | default: '500px' }}; z-index: 98; }
+  #{{ map_id }} { height: {{ include.height | default: '500px' }}; z-index: 98; }
 </style>
 <div id="{{ map_id }}" class="text-start"></div>
-{% if include.map-link == true %}
-<a href="{{ '/map.html' | relative_url }}?location={{ map-item.latitude | default: include.latitude }},{{ map-item.longitude | default: include.longitude }}{%if include.objectid %}&marker={{ include.objectid }}{% endif %}" class="btn btn-outline-primary my-3">View on Full Map</a>{% endif %}
+{% if include['map-link'] == true %}
+  <a
+    href="{{ '/map.html' | relative_url }}?location={{ map-item.latitude | default: include.latitude }},{{ map-item.longitude | default: include.longitude }}{%if include.objectid %}&marker={{ include.objectid }}{% endif %}"
+    class="btn btn-outline-primary my-3"
+    >View on Full Map</a
+  >
+{%- endif %}
 <!-- load leaflet dependencies -->
 <link rel="stylesheet" href="{{ '/assets/lib/leaflet/leaflet.css' | relative_url }}">
 <link rel="stylesheet" href="{{ '/assets/lib/leaflet/leaflet.fullscreen.css' | relative_url }}">
@@ -31,137 +34,136 @@
 <script src="{{ '/assets/lib/proj4leaflet/proj4.js' | relative_url }}"></script>
 <script src="{{ '/assets/lib/proj4leaflet/proj4leaflet.js' | relative_url }}"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/leaflet-tilelayer-swiss@2.3.0/dist/Leaflet.TileLayer.Swiss.umd.js"
-          crossorigin integrity="sha384-M4p8VfZ8RG6qNiPYA3vOCApQXAlLtnJXVPdydMYPAsvvIDsWp2dqqzF2OEeWWNhy">
-  </script>
+<script
+  src="https://cdn.jsdelivr.net/npm/leaflet-tilelayer-swiss@2.3.0/dist/Leaflet.TileLayer.Swiss.umd.js"
+  crossorigin
+  integrity="sha384-M4p8VfZ8RG6qNiPYA3vOCApQXAlLtnJXVPdydMYPAsvvIDsWp2dqqzF2OEeWWNhy"
+></script>
 
 <script>
-    var url = '{{ geojson | default: 'null' }}';
-var geoJsonData;
+      var url = '{{ geojson | default: 'null' }}';
+  var geoJsonData;
 
-fetch(url)
-    .then(response => response.json())
-    .then(data => {
-        geoJsonData = data;
-        const crsValue = geoJsonData.crs.properties.name;       
+  fetch(url)
+      .then(response => response.json())
+      .then(data => {
+          geoJsonData = data;
+          const crsValue = geoJsonData.crs.properties.name;
 
-        /*  initial start point */
-        var mapCenter = [{{ map-item.latitude | default: 0 }}, {{ map-item.longitude | default: 0 }}];
-        var mapZoom = {{ include.map-zoom | default: 10 }};
+          /*  initial start point */
+          var mapCenter = [{{ map-item.latitude | default: 0 }}, {{ map-item.longitude | default: 0 }}];
+          var mapZoom = {{ include.map-zoom | default: 10 }};
 
-        if (crsValue === 'urn:ogc:def:crs:EPSG::2056') {
-            proj4.defs(crsValue, "+proj=somerc +lat_0=46.9524055555556 +lon_0=7.43958333333333 +k_0=1 +x_0=2600000 +y_0=1200000 +ellps=bessel +towgs84=674.374,15.056,405.346,0,0,0,0 +units=m +no_defs");
-            var map = L.map('{{ map_id }}', {
-                // Use LV95 (EPSG:2056) projection
-                crs: L.CRS.EPSG2056,
-            }).setView(mapCenter, mapZoom);
+          if (crsValue === 'urn:ogc:def:crs:EPSG::2056') {
+              proj4.defs(crsValue, "+proj=somerc +lat_0=46.9524055555556 +lon_0=7.43958333333333 +k_0=1 +x_0=2600000 +y_0=1200000 +ellps=bessel +towgs84=674.374,15.056,405.346,0,0,0,0 +units=m +no_defs");
+              var map = L.map('{{ map_id }}', {
+                  // Use LV95 (EPSG:2056) projection
+                  crs: L.CRS.EPSG2056,
+              }).setView(mapCenter, mapZoom);
 
-            var mapLayer = L.tileLayer.swiss({
-                layer: 'ch.swisstopo.pixelkarte-grau',
-                maxNativeZoom: 28
-            });
-            var satelliteLayer = L.tileLayer.swiss({
-                layer: 'ch.swisstopo.swissimage',
-                maxNativeZoom: 28
-            });
-            var baseMaps = {
-                'Karte': mapLayer,
-                'Satellit (Swissimage)': satelliteLayer
-            };
-            var overlayMaps = {
-                'Höhenmodell': L.tileLayer.swiss({
-                    format: 'png',
-                    layer: 'ch.swisstopo.digitales-hoehenmodell_25_reliefschattierung',
-                    maxNativeZoom: 28,
-                    opacity: 1,
-                    timestamp: 'current'
-                }),
-                'Dufourkarte': L.tileLayer.swiss({
-                    format: 'png',
-                    layer: 'ch.swisstopo.hiks-dufour',
-                    maxNativeZoom: 28,
-                    opacity: 1,
-                    timestamp: 'current'
-                }),
-                'Siegfriedkarte (1870-1926)': L.tileLayer.swiss({
-                    format: 'png',
-                    layer: 'ch.swisstopo.hiks-siegfried',
-                    maxNativeZoom: 28,
-                    opacity: 1,
-                    timestamp: 'current'
-                }),
-                'Kantonsgrenzen': L.tileLayer.swiss({
-                    format: 'png',
-                    layer: 'ch.swisstopo.swissboundaries3d-kanton-flaeche.fill',
-                    maxNativeZoom: 28,
-                    opacity: 0.7,
-                    timestamp: 'current'
-                })
-            };
-            map.fitSwitzerland();
+              var mapLayer = L.tileLayer.swiss({
+                  layer: 'ch.swisstopo.pixelkarte-grau',
+                  maxNativeZoom: 28
+              });
+              var satelliteLayer = L.tileLayer.swiss({
+                  layer: 'ch.swisstopo.swissimage',
+                  maxNativeZoom: 28
+              });
+              var baseMaps = {
+                  'Karte': mapLayer,
+                  'Satellit (Swissimage)': satelliteLayer
+              };
+              var overlayMaps = {
+                  'Höhenmodell': L.tileLayer.swiss({
+                      format: 'png',
+                      layer: 'ch.swisstopo.digitales-hoehenmodell_25_reliefschattierung',
+                      maxNativeZoom: 28,
+                      opacity: 1,
+                      timestamp: 'current'
+                  }),
+                  'Dufourkarte': L.tileLayer.swiss({
+                      format: 'png',
+                      layer: 'ch.swisstopo.hiks-dufour',
+                      maxNativeZoom: 28,
+                      opacity: 1,
+                      timestamp: 'current'
+                  }),
+                  'Siegfriedkarte (1870-1926)': L.tileLayer.swiss({
+                      format: 'png',
+                      layer: 'ch.swisstopo.hiks-siegfried',
+                      maxNativeZoom: 28,
+                      opacity: 1,
+                      timestamp: 'current'
+                  }),
+                  'Kantonsgrenzen': L.tileLayer.swiss({
+                      format: 'png',
+                      layer: 'ch.swisstopo.swissboundaries3d-kanton-flaeche.fill',
+                      maxNativeZoom: 28,
+                      opacity: 0.7,
+                      timestamp: 'current'
+                  })
+              };
+              map.fitSwitzerland();
 
-            L.control.layers(baseMaps, overlayMaps, { collapsed: true }).addTo(map);
-            /* load base map */
-            {{ include.basemap | default: 'mapLayer' }}.addTo(map);
-        
-            /* add fullscreen control */ 
-            map.addControl(new L.Control.Fullscreen());
+              L.control.layers(baseMaps, overlayMaps, { collapsed: true }).addTo(map);
+              /* load base map */
+              {{ include.basemap | default: 'mapLayer' }}.addTo(map);
 
-
-            /* add geojson layer */
-            const layer = L.Proj.geoJson(geoJsonData, {
-                onEachFeature: function (f, l) {
-                    l.bindPopup('<pre>'+JSON.stringify(f.properties,null,' ').replace(/[\{\}"]/g,'')+'</pre>');
-                }
-            }).addTo(map);
-        }
-        else {
-            var map = L.map('{{ map_id }}').setView(mapCenter, mapZoom);
-
-            /* add map layer options */
-            var Esri_WorldTopoMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
-                attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community'
-            });
-            var Esri_WorldGrayCanvas = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
-                attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
-                maxZoom: 16
-            });
-            var Esri_WorldShadedRelief = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Shaded_Relief/MapServer/tile/{z}/{y}/{x}', {
-                attribution: 'Tiles &copy; Esri &mdash; Source: Esri',
-                maxZoom: 13
-            });
-            var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-                attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
-            });
-            /* add base map switcher */
-            var baseMaps = {
-                "Esri World TopoMap": Esri_WorldTopoMap,
-                "Esri World Gray Canvas": Esri_WorldGrayCanvas,
-                "Esri World Shaded Relief": Esri_WorldShadedRelief,
-                "Esri Imagery": Esri_WorldImagery
-            };
-            L.control.layers(baseMaps).addTo(map);
-            /* load base map */
-            {{ include.basemap | default: 'Esri_WorldImagery' }}.addTo(map);
-        
-            /* add fullscreen control */ 
-            map.addControl(new L.Control.Fullscreen());
-        
-            /* add geojson layer */
-            const layer = L.geoJSON(geoJsonData, {
-                onEachFeature: function (f, l) {
-                    l.bindPopup('<pre>'+JSON.stringify(f.properties,null,' ').replace(/[\{\}"]/g,'')+'</pre>');
-                }
-            }).addTo(map);
-            /* Fit map to GeoJSON layer bounds */
-            map.fitBounds(layer.getBounds());
-        }
-
-    })
-    .catch(error => {
-        console.error('Error fetching GeoJSON data:', error);
-    });
+              /* add fullscreen control */
+              map.addControl(new L.Control.Fullscreen());
 
 
+              /* add geojson layer */
+              const layer = L.Proj.geoJson(geoJsonData, {
+                  onEachFeature: function (f, l) {
+                      l.bindPopup('<pre>'+JSON.stringify(f.properties,null,' ').replace(/[\{\}"]/g,'')+'</pre>');
+                  }
+              }).addTo(map);
+          }
+          else {
+              var map = L.map('{{ map_id }}').setView(mapCenter, mapZoom);
 
+              /* add map layer options */
+              var Esri_WorldTopoMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+                  attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community'
+              });
+              var Esri_WorldGrayCanvas = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+                  attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
+                  maxZoom: 16
+              });
+              var Esri_WorldShadedRelief = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Shaded_Relief/MapServer/tile/{z}/{y}/{x}', {
+                  attribution: 'Tiles &copy; Esri &mdash; Source: Esri',
+                  maxZoom: 13
+              });
+              var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                  attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+              });
+              /* add base map switcher */
+              var baseMaps = {
+                  "Esri World TopoMap": Esri_WorldTopoMap,
+                  "Esri World Gray Canvas": Esri_WorldGrayCanvas,
+                  "Esri World Shaded Relief": Esri_WorldShadedRelief,
+                  "Esri Imagery": Esri_WorldImagery
+              };
+              L.control.layers(baseMaps).addTo(map);
+              /* load base map */
+              {{ include.basemap | default: 'Esri_WorldImagery' }}.addTo(map);
+
+              /* add fullscreen control */
+              map.addControl(new L.Control.Fullscreen());
+
+              /* add geojson layer */
+              const layer = L.geoJSON(geoJsonData, {
+                  onEachFeature: function (f, l) {
+                      l.bindPopup('<pre>'+JSON.stringify(f.properties,null,' ').replace(/[\{\}"]/g,'')+'</pre>');
+                  }
+              }).addTo(map);
+              /* Fit map to GeoJSON layer bounds */
+              map.fitBounds(layer.getBounds());
+          }
+
+      })
+      .catch(error => {
+          console.error('Error fetching GeoJSON data:', error);
+      });
 </script>

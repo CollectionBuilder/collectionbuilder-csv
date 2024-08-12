@@ -1,51 +1,76 @@
 <footer class="bg-dark pt-4 mt-auto container-fluid">
-
-    <div class="row border-bottom border-white pb-4 mb-2">
-
-        <div class="col-md-7 px-4 mt-3">
-
-            <h2 class="h4"><a href="{{ '/' | relative_url }}" class="text-white">{{ site.title }}</a></h2>
-            <p class="text-white"><small>{{ site.description }}</small></p>
-            <nav>
-                <ul id="footer-nav" class="nav nav-pills ">
-                    {%- assign navItems = site.data.config-nav | where_exp: 'item', 'item.dropdown_parent == nil' -%}
-                    {% for nav in navItems %}
-                    <li class="nav-item">
-                    {% if nav.stub %}
-                        <a class="nav-link text-light{% if page.url == nav.stub %} active{% endif %}" href="{{ nav.stub | relative_url }}">{{ nav.display_name }}</a>
-                    {%- else -%}
-                    {% assign childStub = site.data.config-nav | where_exp: 'item', 'item.dropdown_parent == nav.display_name' | first %}
-                        <a class="nav-link text-light{% if page.url == childStub.stub %} active{% endif %}" href="{{ childStub.stub | relative_url }}">{{ nav.display_name }}</a>
-                    {% endif %}
-                    </li>
-                    {%- endfor -%}
-                </ul>
-            </nav>
-
-        </div>
-
-        <div class="col-md-5 mt-3 text-center">
-
-           {% if site.organization-logo-nav %} <p class="text-md-end">
-                <a href="{{ site.organization-link }}" target="_blank" rel="noopener">
-                    <img id="footer-logo" class="img-fluid" src="{{ site.organization-logo-nav | relative_url }}" alt="{{ site.organization-name | escape }} home">
+  <div class="row border-bottom border-white pb-4 mb-2">
+    <div class="col-md-7 px-4 mt-3">
+      <h2 class="h4">
+        <a href="{{ '/' | relative_url }}" class="text-white">{{ site.title }}</a>
+      </h2>
+      <p class="text-white">
+        <small>{{ site.description }}</small>
+      </p>
+      <nav>
+        <ul id="footer-nav" class="nav nav-pills ">
+          {%- assign navItems = site.data['config-nav'] | where_exp: 'item', 'item.dropdown_parent == nil' -%}
+          {% for nav in navItems %}
+            <li class="nav-item">
+              {% if nav.stub %}
+                <a
+                  class="nav-link text-light{% if page.url == nav.stub %} active{% endif %}"
+                  href="{{ nav.stub | relative_url }}"
+                >
+                  {{- nav.display_name -}}
                 </a>
-            </p>
-            {% endif %}
-            <p class="text-white text-md-end" id="footer-credits">
-                <small><em>{{ site.data.translations['_includes']['footer.html']['built-with'][site.lang] | default: 'built with' }}</em>
-                    <a href="https://collectionbuilder.github.io/" target="_blank" rel="noopener" title="CollectionBuilder">
-                        <img src="{{ '/assets/img/collectionbuilder-logo.png' | relative_url }}" class="img-fluid" alt="CollectionBuilder" >
-                    </a>
-                </small>
-            </p>
-
-        </div>
-
+              {%- else -%}
+                {% assign childStub = site.data['config-nav']
+                  | where_exp: 'item', 'item.dropdown_parent == nav.display_name'
+                  | first
+                %}
+                <a
+                  class="nav-link text-light{% if page.url == childStub.stub %} active{% endif %}"
+                  href="{{ childStub.stub | relative_url }}"
+                >
+                  {{- nav.display_name -}}
+                </a>
+              {% endif %}
+            </li>
+          {%- endfor -%}
+        </ul>
+      </nav>
     </div>
 
-    <div class="col-md-12 text-center pt-3 pb-1">
-        <p class="text-white">{{ site.data.translations['_includes']['footer.html']['last-updated'][site.lang] | default: 'Last updated' }} {{ site.time | date: '%Y' }}</p>
+    <div class="col-md-5 mt-3 text-center">
+      {% if site['organization-logo-nav'] %}
+        <p class="text-md-end">
+          <a href="{{ site.organization-link }}" target="_blank" rel="noopener">
+            <img
+              id="footer-logo"
+              class="img-fluid"
+              src="{{ site.organization-logo-nav | relative_url }}"
+              alt="{{ site.organization-name | escape }} home"
+            >
+          </a>
+        </p>
+      {% endif %}
+      <p class="text-white text-md-end" id="footer-credits">
+        <small
+          ><em>
+            {{- site.data.translations._includes['footer.html']['built-with'][site.lang] | default: 'built with' -}}
+          </em>
+          <a href="https://collectionbuilder.github.io/" target="_blank" rel="noopener" title="CollectionBuilder">
+            <img
+              src="{{ '/assets/img/collectionbuilder-logo.png' | relative_url }}"
+              class="img-fluid"
+              alt="CollectionBuilder"
+            >
+          </a>
+        </small>
+      </p>
     </div>
+  </div>
 
+  <div class="col-md-12 text-center pt-3 pb-1">
+    <p class="text-white">
+      {{ site.data.translations._includes['footer.html']['last-updated'][site.lang] | default: 'Last updated' }}
+      {{ site.time | date: '%Y' }}
+    </p>
+  </div>
 </footer>

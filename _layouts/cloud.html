@@ -4,29 +4,26 @@
 # can be used for any metadata field cloud
 layout: page
 ---
-
 {{ content }}
 
 {%- comment -%}
-
-    Figure out default "Subjects" and "Locations" page cloud values as configured in in "theme.yml", 
-    and set default values for cloud include.
-
+  Figure out default "Subjects" and "Locations" page cloud values as configured in in "theme.yml",
+  and set default values for cloud include.
 {%- endcomment -%}
-{%- if page.cloud-fields == "site.data.theme.subjects-fields" -%}
-    {% assign fields = site.data.theme.subjects-fields %}
-    {% assign min = site.data.theme.subjects-min | default: 1 %}
-    {% assign stopwords = site.data.theme.subjects-stopwords %}
-{%- elsif page.cloud-fields == "site.data.theme.locations-fields" -%}
-    {% assign fields = site.data.theme.locations-fields %}
-    {% assign min = site.data.theme.locations-min | default: 1 %}
-    {% assign stopwords = site.data.theme.locations-stopwords %}
+{%- if page['cloud-fields'] == 'site.data.theme.subjects-fields' -%}
+  {% assign fields = site.data.theme['subjects-fields'] %}
+  {% assign min = site.data.theme['subjects-min'] | default: 1 %}
+  {% assign stopwords = site.data.theme['subjects-stopwords'] %}
+{%- elsif page['cloud-fields'] == 'site.data.theme.locations-fields' -%}
+  {% assign fields = site.data.theme['locations-fields'] %}
+  {% assign min = site.data.theme['locations-min'] | default: 1 %}
+  {% assign stopwords = site.data.theme['locations-stopwords'] %}
 {%- else -%}
-    {% assign fields = page.cloud-fields | default: "subjects" %}
-    {% assign min = page.cloud-min | default: 1 %}
-    {% assign stopwords = page.cloud-stopwords %}
+  {% assign fields = page['cloud-fields'] | default: 'subjects' %}
+  {% assign min = page['cloud-min'] | default: 1 %}
+  {% assign stopwords = page['cloud-stopwords'] %}
 {%- endif -%}
 
-{% assign cloud_id = "cloud-div-" | append: fields | slugify %}
+{% assign cloud_id = 'cloud-div-' | append: fields | slugify %}
 <div id="{{ cloud_id }}" class="text-center my-4 bg-{{ page.background | default: 'transparent' }} p-2"></div>
 {% include js/cloud-js.html id=cloud_id fields=fields min=min stopwords=stopwords shuffle=page.shuffle button=page.button %}
