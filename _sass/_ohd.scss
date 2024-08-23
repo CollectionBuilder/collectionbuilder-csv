@@ -2,87 +2,9 @@
     SCSS from the Oral History as Data project
 */
 
-
-.grey {
-    color: grey;
-}
-
-.grey-small {
-    color: grey;
-    height: 3px;
-    line-height: 2px;
-    overflow: hidden;
-}
-
-.line.grey-small {
-
-    .timestamp,
-    .linenum {
-        display: none;
-    }
-
-    .words {
-        display: inline;
-        font-size: 3px;
-        padding: 0px 5px;
-    }
-}
-
-.iframe-wrapper {
-    position: fixed;
-    right: 10px;
-    height: 200px;
-    width: 370px;
-    transition: all 1s linear;
-
-    .meta {
-        display: none;
-    }
-
-   @media screen and (max-width: 576px) {
-        bottom: 0px;
-        left: 0px;
-        height: auto;
-        width: 300px;
-
-        .meta {
-            display: none;
-        }
-
-        .vizdiv, #colorViz, .title {
-            display: none;
-        }
-    }
-}
-
-.anchored-highlight p.words {
-    background: aquamarine;
-}
-
-.featured {
-    
-    float: none;
-    clear: both;
-}
-
-.linenum {
-    font-size: 11px;
-    float: left;
-    width: auto;
-}
-
 .words {
    @media screen and (max-width: 576px) {
         min-width: 250px;
-    }
-}
-
-.filteroptions,
-.searchinput {
-    font-size: 24px;
-
-    @media screen and (max-width: 576px) {
-        font-size: 18px;
     }
 }
 
@@ -94,18 +16,59 @@
     font-size: 12px;
 }
 
-.darklink:hover{
-    text-decoration: underline;
+.featured {
+    background-color: aquamarine !important;
+    color: black !important;
 }
 
-.featured {
-    background-color: #dbf1fd !important;
-    color: black !important;
+.border-featured {
+    border-left: 1px solid black !important;
+    border-left-width: thick !important;
+    background-color: aquamarine !important;
 }
 
 .btn-outline-dark:hover {
     background-color: #212529 !important;
 }
+
+// tab to show/hide  filters options for transcripts
+
+.filter-tab {
+    position: absolute;
+    bottom:-17px;
+    right: 0%;
+    transform: translateY(50%);    
+    border-radius: 0 0 5px 5px;
+    cursor: pointer;
+    transition: all 0.5s ease;
+  }
+
+  .filter-tab:hover {
+    background-color: #0056b3;
+  }
+
+  #filters-search.retracted {
+    transform: translateY(-100%);
+    transition: all 0.5s ease;
+    #show-filters-text{
+        display:block;
+    }
+    #hide-filters-text{
+        display:none;
+    }
+  }
+
+  #filters-search {
+    transition: transform 0.5s ease;
+    #show-filters-text{
+        display:none;
+    }
+    #hide-filters-text{
+        display:block;
+    }
+}
+
+
 
 
 @media print {
@@ -128,7 +91,3 @@
     }
 
 }
-
-html {
-    scroll-padding-top: 130px; /* height of sticky header */
-  }

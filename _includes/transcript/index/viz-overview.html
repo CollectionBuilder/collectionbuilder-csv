@@ -1,0 +1,21 @@
+{% assign viz-height = include.height | default: '400px' %}
+<div style="height:{{ viz-height }}; width:100%;">
+ {% for transcript in site.data.transcripts %}
+ {% assign height_integer = forloop.length %}
+     {% assign height_float = height_integer | times: 1.0 %}
+     {% if viz-height contains "%" %}{% assign viz-integer = viz-height | replace: "%","" %}{% assign viz-height-measure = "%" %}
+     {% elsif viz-height contains "px" %}{% assign viz-integer = viz-height | replace: "px","" %}{% assign viz-height-measure = "px" %}
+     {% else %}{% assign viz-integer = viz-height %}{% assign viz-height-measure = "px" %}{% endif %}
+ {% assign rect-height = 100 | divided_by: height_float  %}
+ {%assign transcript-name = transcript[0] %}
+ {% assign transcript_item = items | where_exp: 'item', 'item.objectid == transcript-name' | first %}
+ <div id="{{transcript-name}}viz" class="vizdiv" style="height:{{rect-height}}%">
+   <a href="{{ '/subjects.html' | relative_url }}"><svg class="chart {{transcript-name}}" width="100%" height="100%" style="overflow: visible">
+     {% for item in transcript[1] %}
+     {% assign my_integer = forloop.length %}
+     {% assign my_float = my_integer | times: 1.0 %}
+     {% assign rect-width = 100 | divided_by: my_float  %}
+       <rect x="{{forloop.index0 | times: rect-width }}%" y="0" width="{{rect-width}}%" height="100%" data-bs-toggle="tooltip" data-bs-placement="top" class="{{item.tags | downcase | replace: ';', ' '}}" title=" {% if item.tags %}(Subjects: {{ item.tags | replace: ';', ', ' }}){%endif%}"></rect>
+     {%endfor%}</svg></a>
+ </div>{%endfor%}
+ </div>

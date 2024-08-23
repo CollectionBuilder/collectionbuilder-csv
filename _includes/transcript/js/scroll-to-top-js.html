@@ -9,33 +9,16 @@
             console.log("height is" + topheight);
             document.getElementById("scroll-to-top").style.display = "block";
             triggerElement.setAttribute('style', 'margin-top:' + topheight + 'px');
-               document.getElementById('object-meta').classList.add('iframe-wrapper');
                 }
         //BOTTOM
         else {
             document.getElementById("scroll-to-top").style.display = "none";
-               document.getElementById('object-meta').classList.remove('iframe-wrapper');
               triggerElement.removeAttribute('style');
     
         }
     }
     
-        // When the user scrolls down from the top of the document, show the button
-       /* window.onscroll = function () {
-            if (document.body.scrollTop > 1000 || document.documentElement.scrollTop > 500) {
-                document.getElementById("scroll-to-top").style.display = "block";
-               document.getElementById('object-meta').classList.add('iframe-wrapper');
-               
     
-    
-    
-            } else {
-                document.getElementById("scroll-to-top").style.display = "none";
-               document.getElementById('object-meta').classList.remove('iframe-wrapper');
-    
-    
-            }
-        }*/
         // scroll to top function
         function scrollToTop() {
             window.scroll({
