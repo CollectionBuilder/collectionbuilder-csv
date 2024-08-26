@@ -154,9 +154,10 @@
         behavior: 'smooth',  // Enables smooth scrolling
         block: 'start'       // Aligns to the top of the viewport
       });
-      if (!filtersSearch.classList.contains("retracted")){
+      setTimeout(function() {
         filtersSearch.classList.add("retracted");
-      }
+}, 300);
+        
     }
 
 
@@ -251,7 +252,6 @@ document.addEventListener('DOMContentLoaded', function() {
         // Get the element to check for stickiness
         const stickyElement = document.getElementById('filters-search');
         const filterTabElement = document.getElementById('filter-tab');
-    
         // Ensure both elements are present
         if (!stickyElement || !filterTabElement) {
             console.warn('Required elements are not found in the DOM.');
@@ -269,6 +269,10 @@ document.addEventListener('DOMContentLoaded', function() {
             filterTabElement.classList.remove('d-none');
         } else {
             filterTabElement.classList.add('d-none');
+            if (filtersSearch.classList.contains("retracted")) {
+          filtersSearch.classList.remove("retracted");
+          console.log("removing retracted");
+          };
         }
     }
     
