@@ -147,12 +147,7 @@
   function scrollToLine(x) {
     var targetElement = document.getElementById(x);
     if (targetElement) {
-      if (targetElement.classList.contains("featured")){
-        targetElement.classList.remove("featured");
         targetElement.classList.add("border-featured");
-      }
-      else {
-        targetElement.classList.add("featured");
       }
       // Smoothly scroll to the element
       targetElement.scrollIntoView({
@@ -163,7 +158,6 @@
         filtersSearch.classList.add("retracted");
       }
     }
-  }
 
 
 
@@ -242,13 +236,17 @@
   })();
 
   
-//filters tab javascript + tooltips
-document.addEventListener('DOMContentLoaded', function() {
-    
+//filters tab javascript + scroll-to-top retraction of filters
+document.addEventListener('DOMContentLoaded', function() { 
       filterTab.addEventListener('click', function() {
         filtersSearch.classList.toggle('retracted');
       });
+      document.getElementById('scroll-to-top').addEventListener('click', function() {
+    if (filtersSearch.classList.contains("retracted")) {
+          filtersSearch.classList.remove("retracted");
+          }});
     });
+
     function checkStickyAndUpdate() {
         // Get the element to check for stickiness
         const stickyElement = document.getElementById('filters-search');
