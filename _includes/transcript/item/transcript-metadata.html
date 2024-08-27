@@ -1,0 +1,22 @@
+<div class="my-2 row px-3 mt-4 meta">
+    <div class="col">
+      <p><span class="me-3">
+        {%if page.bio and site.data.theme.transcript-fields contains 'bio'%}<b>Bio:</b>  <span class="me-3">{{page.bio}}</span> <br/>{%endif%}
+        {%if page.description and site.data.theme.transcript-fields contains 'description'%}<b>Description:</b>  <span class="me-3">{{page.description}}</span>{%endif%}{%if
+        page.date and site.data.theme.transcript-fields contains 'date'%}<br><b>Date:</b> <span class="me-3">{{page.date | date: "%B %d, %Y" }}</span>{%endif%} {%if
+          page.location and site.data.theme.transcript-fields contains 'location' %}<b>Location:</b> {{page.location }}{%endif%}
+        {%if page.interviewer and site.data.theme.transcript-fields contains 'interviewer' %} <br><b>Interviewer:</b> {{page.interviewer}}{%endif%}
+        {%if page.interviewer and site.data.theme.transcript-fields contains 'interviewee' %} <br><b>Interviewee:</b> {{page.interviewee}}{%endif%}
+       </p>
+      {% include transcript/item/download-buttons.html %}
+      {% include transcript/item/metadata-modal.html %}
+
+   </div>
+    {% if site.data.theme.transcript-fields contains 'image'  %}
+    {% if page.image_small or page.image_thumb %}
+    <div class="col-md-3 {% if av == 'vimeo' or av == 'youtube'%}d-none d-md-block{% endif %}">
+      <img class="img-thumbnail timeline-thumb" src="{{page.image_small | default: page.image_thumb | relative_url }}" alt="{{page.title}}"> 
+    </div>
+    {% endif %}
+    {% endif %}
+  </div>

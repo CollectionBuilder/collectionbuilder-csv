@@ -1,0 +1,45 @@
+<div class="row my-3 sticky-top bg-white border-bottom border-left border-right d-print-none py-3 w-md-75" id="filters-search" style="z-index: 0;">
+    <div class="col {% unless site.data.filters %}d-none{% endunless %}">
+      <select id="filters" title="Filter by Topic" aria-label="Topic filtering dropdown select option" class="filters py-1 form-select border border-primary" onchange="filterLines(this.value)">
+        <option value="all" class="reset" selected="selected reset">Filter by Topic</option>
+        {% assign filters = site.data.filters %}
+        {% for filter in filters %}
+        {% assign tag = filter.tag | slugify %}
+        {%if uniqueSubjects contains tag %}<option value="{{ tag }}">{{filter.description | capitalize}}
+          ({{filter.tag}})</option>{%endif%}
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col">
+      <div id="transcriptsearch" class="bg-lightr">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="input-group fs-5 mt-0 mt-md-0">
+              <input type="text" class="form-control border border-primary py-1" placeholder="Search..." aria-label="Search"
+                aria-describedby="goButton" id="quicksearch">
+              <div class="input-group-append">
+                <button class=" rounded-right border border-primary btn btn-primary p-1" type="submit"
+                  title="Search" alt="Search" id="goButton"
+                  onclick="var searchval = document.getElementById('quicksearch').value; searchLines(searchval);">Go</button>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <button class="reset btn btn-sm btn-primary input-group-text float-end float-md-none mt-2 mt-md-0" onclick="vizFilter('all');">Reset
+              Filters</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="filtersearch" class="col-12 d-none mt-3">
+      <h5 id="linecount" class="d-none small ms-3"><span id="numberof"></span></h5>
+
+      <select class="w-100 col-md-8 mb-2 form-select p-2 border border-primary" id="searchResults" onchange="scrollToLine(this.value);">
+
+      </select>
+    </div>
+    <div id="filter-tab" class="d-none filter-tab col-4 col-lg-2 text-center justify-content-end bg-primary text-white small px-1 py-1">
+      <span id="hide-filters-text">Hide Filters &#9650;</span>
+      <span id="show-filters-text">Show Filters &#9660;</span>
+    </div>
+  </div>

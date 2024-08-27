@@ -1,0 +1,18 @@
+<div class="my-2 row px-3 mt-2" id="viz">
+  <h4 class="mt-2 mb-0 meta">Topics:</h4>
+    <div class="vizdiv w-100">
+      <svg id="colorViz" class="chart" width="100%" height="100px" style="overflow: visible">
+        {% for item in items %}
+        {% assign my_integer = forloop.length %}
+        {% assign my_float = my_integer | times: 1.0 %}
+        {% assign rect-width = 100 | divided_by: my_float %}
+        <a onclick="scrollToLine('{{page.objectid}}{{ forloop.index0 }}');" style="cursor:pointer">
+          <rect id="rect{{-forloop.index0-}}" x="{{forloop.index0 | times: rect-width }}%" y="20" width="{{rect-width}}%"
+            height="50" data-bs-toggle="tooltip" data-bs-placement="top" class="{%- assign tags = item.tags | split: ";" |
+            compact | where_exp: 'item' , 'item != " "' %}{% for tag in tags %}{{tag | slugify }} {% endfor %}"
+            title="{{ item.words | default: '...' }}{% if item.tags %} (Subjects: {{ item.tags | replace: ';', ', ' }}){%endif%}">
+          </rect>
+        </a>{%endfor%}</svg>
+    </div>
+  </div>
+  {% include /transcript/style/visualization-filter-legend.html %}

@@ -1,84 +1,20 @@
-<div id="transcript">
-  <div class="my-2 row px-3 mt-4">
-    <div class="vizdiv w-100">
-      <h2>Transcript</h2>
-      <p class="my-2 meta ">Topics:</h4>
-      <svg id="colorViz" class="chart" width="100%" height="100px" style="overflow: visible">
-        {% for item in items %}
-        {% assign my_integer = forloop.length %}
-        {% assign my_float = my_integer | times: 1.0 %}
-        {% assign rect-width = 100 | divided_by: my_float %}
-        <a onclick="scrollToLine('{{page.objectid}}{{ forloop.index0 }}');" style="cursor:pointer">
-          <rect id="rect{{-forloop.index0-}}" x="{{forloop.index0 | times: rect-width }}%" y="20" width="{{rect-width}}%"
-            height="50" data-bs-toggle="tooltip" data-bs-placement="top" class="{%- assign tags = item.tags | split: ";" |
-            compact | where_exp: 'item' , 'item != " "' %}{% for tag in tags %}{{tag | slugify }} {% endfor %}"
-            title="{{ item.words | default: '...' }}{% if item.tags %} (Subjects: {{ item.tags | replace: ';', ', ' }}){%endif%}">
-          </rect>
-        </a>{%endfor%}</svg>
+{% include transcript/item/filters.html %}
+
+<div id="contents-container" class="pe-5 pb-5 mb-5 border-bottom">
+  {% for item in items %}
+  {% assign prev_index = forloop.index0 | times: 1 | minus: 1 %}
+  {% assign prev_speaker = items[prev_index].speaker %}
+  {% assign mod = forloop.index0 | plus: 1 | modulo: 5 %}
+  <div id="{{page.objectid}}{{ forloop.index0 }}" class="{%- assign tags = item.tags | split: " ;" | compact |
+    where_exp: 'item' , 'item != " "' %}{% for tag in tags %}{{tag | slugify }} {% endfor %}row line py-1">
+    <p class="words col-md-10 col-lg-8 col-print-12 pr-0">
+      {% unless item.speaker == prev_speaker %}{%if item.speaker %}<span class="fw-bold pe-3 pb-3">{{item.speaker |
+        remove: ":"}}: </span>{% endif %}{% endunless %}{{item.words}}
+    </p>
+    <div class="col-12 col-md-2 timestamp mb-3 small text-center">{%if item.timestamp%}{% if av %}{% capture avlink
+      %}transcript/timestamp/{{av | downcase }}.html{% endcapture %}<a
+        href="{% include {{avlink}} %}">{{item.timestamp}}</a>{% else %}{{item.timestamp}}{% endif %}{% endif %}
     </div>
   </div>
-  {% include /transcript/style/visualization-filter-legend.html %}
-  <div id="filters-content" class="pe-md-5">
-    <div class="row my-3 sticky-top bg-white border-bottom border-left border-right d-print-none py-3 w-md-75" id="filters-search" style="z-index: 0;">
-      <div class="col {% unless site.data.filters %}d-none{% endunless %}">
-        <select id="filters" title="Filter by Topic" aria-label="Topic filtering dropdown select option" class="filters py-1 form-select border border-primary" onchange="filterLines(this.value)">
-          <option value="all" class="reset" selected="selected reset">Filter by Topic</option>
-          {% assign filters = site.data.filters %}
-          {% for filter in filters %}
-          {% assign tag = filter.tag | slugify %}
-          {%if uniqueSubjects contains tag %}<option value="{{ tag }}">{{filter.description | capitalize}}
-            ({{filter.tag}})</option>{%endif%}
-          {% endfor %}
-        </select>
-      </div>
-      <div class="col">
-        <div id="transcriptsearch" class="bg-lightr">
-          <div class="row">
-            <div class="col-md-6">
-              <div class="input-group fs-5 mt-0 mt-md-0">
-                <input type="text" class="form-control border border-primary py-1" placeholder="Search..." aria-label="Search"
-                  aria-describedby="goButton" id="quicksearch">
-                <div class="input-group-append">
-                  <button class=" rounded-right border border-primary btn btn-primary p-1" type="submit"
-                    title="Search" alt="Search" id="goButton"
-                    onclick="var searchval = document.getElementById('quicksearch').value; searchLines(searchval);">Go</button>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <button class="reset btn btn-sm btn-primary input-group-text float-end float-md-none mt-2 mt-md-0" onclick="vizFilter('all');">Reset
-                Filters</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id="filtersearch" class="col-12 d-none mt-3">
-        <h5 id="linecount" class="d-none small ms-3"><span id="numberof"></span></h5>
-
-        <select class="w-100 col-md-8 mb-2 form-select p-2 border border-primary" id="searchResults" onchange="scrollToLine(this.value);">
-
-        </select>
-      </div>
-      <div id="filter-tab" class="d-none filter-tab col-4 col-lg-2 text-center justify-content-end bg-primary text-white small px-1 py-1">
-        <span id="hide-filters-text">Hide Filters &#9650;</span>
-        <span id="show-filters-text">Show Filters &#9660;</span>
-      </div>
-    </div>
-
-    <div id="contents-container" class="pe-5">
-      {% for item in items %}
-      {% assign prev_index = forloop.index0 | times: 1 | minus: 1 %}
-      {% assign prev_speaker = items[prev_index].speaker %}
-      {% assign mod = forloop.index0 | plus: 1 | modulo: 5 %}
-      <div id="{{page.objectid}}{{ forloop.index0 }}" class="{%- assign tags = item.tags | split: ";" | compact | where_exp: 'item' , 'item != " "' %}{% for tag in tags %}{{tag | slugify }} {% endfor %}row line py-1">
-        <p class="words col-md-10 col-lg-8 col-print-12 pr-0">
-          {% unless item.speaker == prev_speaker %}{%if item.speaker %}<span class="fw-bold pe-3 pb-3">{{item.speaker |
-            remove: ":"}}: </span>{% endif %}{% endunless %}{{item.words}}
-        </p>
-        <div class="col-12 col-md-2 timestamp mb-3 small text-center">{%if item.timestamp%}{% if av %}{% capture avlink %}transcript/timestamp/{{av | downcase }}.html{% endcapture %}<a href="{% include {{avlink}} %}">{{item.timestamp}}</a>{% else %}{{item.timestamp}}{% endif %}{% endif %}
-        </div>
-      </div>
-      {% endfor %}
-    </div>
-  </div>
+  {% endfor %}
 </div>
