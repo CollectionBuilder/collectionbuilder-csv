@@ -1,0 +1,29 @@
+<p class="h3" id="side-title">{{page.interviewee | default: page.title }}</p>
+<style>
+#side-title{
+    display: none;
+}
+
+.media-scroll-wrapper {
+    position: fixed;
+    right: 10px;
+    bottom: 300px;
+    height: 200px;
+    width: 370px
+}
+
+.media-scroll-wrapper .meta {
+    display: none
+}
+
+.media-scroll-wrapper #side-title {
+    display: flex;
+}
+
+@media screen and (max-width: 998px) {
+
+    .media-scroll-wrapper {
+        display: none
+    }
+}
+</style>

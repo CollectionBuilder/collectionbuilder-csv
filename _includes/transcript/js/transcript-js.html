@@ -267,12 +267,14 @@ document.addEventListener('DOMContentLoaded', function() {
         // Update the class of the filter tab element based on stickiness
         if (isSticky) {
             filterTabElement.classList.remove('d-none');
+            {% if site.data.theme.media-scroll == true %}document.getElementById("upper-content").classList.add("media-scroll-wrapper");{% endif %}
         } else {
             filterTabElement.classList.add('d-none');
             if (filtersSearch.classList.contains("retracted")) {
           filtersSearch.classList.remove("retracted");
           console.log("removing retracted");
           };
+          {% if site.data.theme.media-scroll == true %}document.getElementById("upper-content").classList.remove("media-scroll-wrapper");{% endif %}
         }
     }
     

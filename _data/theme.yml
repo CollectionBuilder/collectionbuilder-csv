@@ -82,7 +82,7 @@ search-child-objects: true # true / false - if true, child objects will appear o
 # 
 transcript-fields: "description,date,location,interviewer,image" # choose from the following fields --> description,date,location,interviewer,interviewee,bio,image 
 # list the fields you'd like displayed, separated by comma
-
+media-scroll: true ## true/false --> determines if the media and vizualization will appear to the lower right as a user scrolls down a transcript. This only appears on larger screens (min width 1024px).
 
 
 ##########
