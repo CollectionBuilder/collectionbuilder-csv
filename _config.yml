@@ -37,13 +37,15 @@ author: CollectionBuilder
 metadata: demo-compoundobjects-metadata 
 # page generation settings [optional!]
 # [optional: only used if you need to tweak CB defaults or generate from more than one data file]
-# page_gen:
-#   - data: 'demo-metadata'
-#     template: 'item'
-#     name: 'objectid'
-#     dir: 'items'
-#     extension: 'html' 
-#     filter: 'objectid'  
+page_gen:
+  - data: demo-compoundobjects-metadata
+  - data: 'demo-compoundobjects-metadata'
+    template: 'manifest'
+    template_override: true
+    name: 'objectid'
+    dir: 'manifests'
+    extension: 'json' 
+    filter: 'objectid'  
 
 ##########
 # Site/Organization Branding 

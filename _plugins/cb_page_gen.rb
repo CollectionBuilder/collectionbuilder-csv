@@ -51,6 +51,7 @@ module CollectionBuilderPageGenerator
         template_location = data_config['template_location'] || template_location_default
         template = template_location + (data_config['template'] || template_default)
         display_template = data_config['display_template'] || display_template_default
+        template_override = data_config['template_override'] || false
         name = data_config['name'] || name_default
         dir = data_config['dir'] || dir_default
         extension = data_config['extension'] || extension_default
@@ -152,14 +153,18 @@ module CollectionBuilderPageGenerator
           end
           record['previous_item'] = "/" + dir + "/" + slugify(previous_item, mode: "pretty").to_s + "." + extension.to_s
           
-          # Add layout value from display_template or the default
-          if record[display_template]
+          # override display_template?
+          if template_override == true
+            record['layout'] = template
+          elsif record[display_template]
+            # Add layout value from display_template 
             record['layout'] = template_location + record[display_template].strip
             # if not valid layout, fall back to template default
             if !all_layouts.include? record['layout']
               record['layout'] = template
             end
           else
+            # fall back to the default
             record['layout'] = template
           end
           # Check if layout exists, if not provide error message and skip
