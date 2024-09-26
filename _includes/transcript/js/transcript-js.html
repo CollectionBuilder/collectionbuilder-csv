@@ -248,63 +248,53 @@ document.addEventListener('DOMContentLoaded', function() {
           }});
     });
 
-    // Intersection Observer to check visibility
-let observer;
+// Debounce function to limit how often the scroll event fires
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
 
-function checkStickyAndUpdate() {
-    const stickyElement = document.getElementById('filters-search');
-    const filterTabElement = document.getElementById('filter-tab');
+    function checkStickyAndUpdate() {
+        // Get the element to check for stickiness
+        const stickyElement = document.getElementById('filters-search');
+        const filterTabElement = document.getElementById('filter-tab');
+        // Ensure both elements are present
+        if (!stickyElement || !filterTabElement) {
+            console.warn('Required elements are not found in the DOM.');
+            return;
+        }
     
-    if (!stickyElement || !filterTabElement) {
-        console.warn('Required elements are not found in the DOM.');
-        return;
-    }
-
-    const stickyRect = stickyElement.getBoundingClientRect();
-    const isSticky = stickyRect.top <= 0;
-
-    if (isSticky) {
-        filterTabElement.classList.remove('d-none');
-        {% if site.data.theme.media-scroll == true %}document.getElementById("upper-content").classList.add("media-scroll-wrapper");{% endif %}
-    } else {
-        filterTabElement.classList.add('d-none');
-        if (stickyElement.classList.contains("retracted")) {
-            stickyElement.classList.remove("retracted");
-            console.log("removing retracted");
-        }
-        {% if site.data.theme.media-scroll == true %}document.getElementById("upper-content").classList.remove("media-scroll-wrapper");{% endif %}
-    }
-}
-
-function handleIntersection(entries) {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            // Element is visible, add scroll listener
-            window.addEventListener('scroll', checkStickyAndUpdate);
+        // Get the bounding rectangle of the sticky element
+        const stickyRect = stickyElement.getBoundingClientRect();
+    
+        // Determine if the sticky element is in its sticky state
+        const isSticky = stickyRect.top <= 0;
+    
+        // Update the class of the filter tab element based on stickiness
+        if (isSticky) {
+            filterTabElement.classList.remove('d-none');
+            {% if site.data.theme.media-scroll == true %}document.getElementById("upper-content").classList.add("media-scroll-wrapper");{% endif %}
         } else {
-            // Element is not visible, remove scroll listener
-            window.removeEventListener('scroll', checkStickyAndUpdate);
+            filterTabElement.classList.add('d-none');
+            if (filtersSearch.classList.contains("retracted")) {
+          filtersSearch.classList.remove("retracted");
+          console.log("removing retracted");
+          };
+          {% if site.data.theme.media-scroll == true %}document.getElementById("upper-content").classList.remove("media-scroll-wrapper");{% endif %}
         }
-    });
-}
-
-function initStickyCheck() {
-    const stickyElement = document.getElementById('filters-search');
-    if (!stickyElement) {
-        console.warn('Sticky element not found in the DOM.');
-        return;
     }
+    
+    // Attach event listeners
+    window.addEventListener('load', checkStickyAndUpdate);
+    
+    window.addEventListener('scroll', debounce(checkStickyAndUpdate, 10));
 
-    observer = new IntersectionObserver(handleIntersection, {
-        root: null,
-        rootMargin: "0px",
-        threshold: 0
-    });
-
-    observer.observe(stickyElement);
-}
-
-// Initialize on page load
-window.addEventListener('load', initStickyCheck);
 
 </script>
