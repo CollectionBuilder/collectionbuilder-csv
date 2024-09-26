@@ -248,38 +248,63 @@ document.addEventListener('DOMContentLoaded', function() {
           }});
     });
 
-    function checkStickyAndUpdate() {
-        // Get the element to check for stickiness
-        const stickyElement = document.getElementById('filters-search');
-        const filterTabElement = document.getElementById('filter-tab');
-        // Ensure both elements are present
-        if (!stickyElement || !filterTabElement) {
-            console.warn('Required elements are not found in the DOM.');
-            return;
-        }
+    // Intersection Observer to check visibility
+let observer;
+
+function checkStickyAndUpdate() {
+    const stickyElement = document.getElementById('filters-search');
+    const filterTabElement = document.getElementById('filter-tab');
     
-        // Get the bounding rectangle of the sticky element
-        const stickyRect = stickyElement.getBoundingClientRect();
-    
-        // Determine if the sticky element is in its sticky state
-        const isSticky = stickyRect.top <= 0;
-    
-        // Update the class of the filter tab element based on stickiness
-        if (isSticky) {
-            filterTabElement.classList.remove('d-none');
-            {% if site.data.theme.media-scroll == true %}document.getElementById("upper-content").classList.add("media-scroll-wrapper");{% endif %}
-        } else {
-            filterTabElement.classList.add('d-none');
-            if (filtersSearch.classList.contains("retracted")) {
-          filtersSearch.classList.remove("retracted");
-          console.log("removing retracted");
-          };
-          {% if site.data.theme.media-scroll == true %}document.getElementById("upper-content").classList.remove("media-scroll-wrapper");{% endif %}
-        }
+    if (!stickyElement || !filterTabElement) {
+        console.warn('Required elements are not found in the DOM.');
+        return;
     }
-    
-    // Attach event listeners
-    window.addEventListener('scroll', checkStickyAndUpdate);
-    window.addEventListener('load', checkStickyAndUpdate);
+
+    const stickyRect = stickyElement.getBoundingClientRect();
+    const isSticky = stickyRect.top <= 0;
+
+    if (isSticky) {
+        filterTabElement.classList.remove('d-none');
+        {% if site.data.theme.media-scroll == true %}document.getElementById("upper-content").classList.add("media-scroll-wrapper");{% endif %}
+    } else {
+        filterTabElement.classList.add('d-none');
+        if (stickyElement.classList.contains("retracted")) {
+            stickyElement.classList.remove("retracted");
+            console.log("removing retracted");
+        }
+        {% if site.data.theme.media-scroll == true %}document.getElementById("upper-content").classList.remove("media-scroll-wrapper");{% endif %}
+    }
+}
+
+function handleIntersection(entries) {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            // Element is visible, add scroll listener
+            window.addEventListener('scroll', checkStickyAndUpdate);
+        } else {
+            // Element is not visible, remove scroll listener
+            window.removeEventListener('scroll', checkStickyAndUpdate);
+        }
+    });
+}
+
+function initStickyCheck() {
+    const stickyElement = document.getElementById('filters-search');
+    if (!stickyElement) {
+        console.warn('Sticky element not found in the DOM.');
+        return;
+    }
+
+    observer = new IntersectionObserver(handleIntersection, {
+        root: null,
+        rootMargin: "0px",
+        threshold: 0
+    });
+
+    observer.observe(stickyElement);
+}
+
+// Initialize on page load
+window.addEventListener('load', initStickyCheck);
 
 </script>
