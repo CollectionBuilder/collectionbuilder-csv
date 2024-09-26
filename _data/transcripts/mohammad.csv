@@ -31,7 +31,7 @@ timestamp,speaker,words,tags,highlight,timelink
 ,KM:,"Oh, no. I don't. I probably should, but I almost never save drafts. I just open up a doc and write over it until I think it's finished.",files; revision,,
 ,DB:,OK. And what are your naming conventions for your files?,files,,
 ,KM:,"Usually the name of the poem, followed by the file name.",files,,
-,DB:,"And so, because you don't use drafts, it's just the one?",filesfiles,,
+,DB:,"And so, because you don't use drafts, it's just the one?",files,,
 ,KM:,Yeah. I don't rename it once I've drafted it or anything. It just stays the same.,,,
 ,DB:,Do you print out your writing to revise it?,,,
 ,KM:,"No, not typically.",,,
