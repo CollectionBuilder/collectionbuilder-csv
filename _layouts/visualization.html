@@ -5,7 +5,8 @@ custom-foot: transcript/js/visualization-js.html
 {% include transcript/style/filter-style.html %}
 {% assign transcripts = site.data.transcripts | sort %}
 {% assign items = site.data[site.metadata] %}
-<div class="container p-4 p-md-5">
+
+<div class="container p-4 p-md-5">{% include transcript/filters-data-download-modal.html %}
   <h2 id="visualize-by-subject">Color-coded Subject Visualization</h2>
 
   <p>Click a colored circle/subject to see corresponding sections. You can also filter by subject and view/print related <a href="#transcript-contents">contents</a> below.</p>

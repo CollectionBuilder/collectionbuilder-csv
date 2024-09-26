@@ -1,0 +1,72 @@
+{% comment %}
+    This include creates a modal pop up with data export options.
+    The logic of which formats appear is based on config-nav stubs:
+    if subject.html, map.html, location.html, or timeline.html are present, 
+    corresponding data formats will be available for download.
+{%- endcomment -%}
+
+{%- assign stubs = site.data.config-nav | map: 'stub' | join: ';' -%}
+{% if site.data.filters %}<button type="button" class="btn btn-outline-primary float-md-end" data-bs-toggle="modal" data-bs-target="#dataModal">As Data</button>{% endif %}
+<!-- Modal -->
+<div class="modal fade" id="dataModal" tabindex="-1" role="dialog" aria-labelledby="dataModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title" id="dataModalLabel">Collection Data</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <p>Below is data related to the tags included in your transcript files. Use this data to check for typos and/or mistakes, and to generate a starter filters.csv file.</p>
+                <div class="card my-3">
+                    <div class="card-body">
+                        <h2 class="card-title h4">Filters Facets</h2>
+                        <p class="card-text">List of unique values  included as tags in your transcript CSV files and their counts. This is useful for understanding content and distribution of your tags.</p>
+                        <a href="{{ '/assets/data/filter-facets.json' | relative_url }}" class="btn btn-outline-dark" target="_blank">Filter Facets JSON</a>
+                    </div>
+                </div>
+                <div class="card my-3">
+                    <div class="card-body">
+                        <h2 class="card-title h4">Filters Starter CSV Metadata</h2>
+                        <p class="card-text">This should serve as a starter file for your filters.csv file. It gathers all the unique subject tags used in your transcript files "tags" column and lists them. You can copy this file and replace the current `filters.csv` file in your _data folder.</p>
+                        <a href="{{ '/assets/data/filters.csv' | relative_url }}" class="btn btn-outline-dark" target="_blank">Filters CSV</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="application/ld+json">
+{
+    "@context":"https://schema.org/",
+    "@type":"Dataset",
+    "name":"{{ site.title | escape }} Data",
+    "description":"Filters / Subject Code  data derived from {{ site.title | escape }}. {{ site.description | escape }}",
+    {% if site.keywords %}"keywords": {% assign keywords = site.keywords | split: ';' %} {{ keywords | jsonify }},{% endif %}
+    "url":"{{ page.url | absolute_url }}",
+    "license" : "https://creativecommons.org/publicdomain/zero/1.0/",
+    "creator": [
+        {
+            "@type": "Organization",
+            "sameAs": "{{ site.organization-link }}",
+            "name": "{{ site.organization-name | escape }}"
+        }
+    ],
+    "hasPart" : [
+        {
+            "@type": "Dataset",
+            "name": "{{ site.title | escape }} Metadata Facets",
+            "description": "Unique values and counts of filters / subject codes assigned to sections ofthe oral history and/or interview transcripts.",
+            "license" : "https://creativecommons.org/publicdomain/zero/1.0/",
+            "distribution":[
+                {
+                    "@type":"DataDownload",
+                    "encodingFormat":"JSON",
+                    "contentUrl":"{{ '/assets/data/facets.json' | absolute_url }}"
+                }
+            ]      
+        }   ]
+    ]
+}
+</script>
