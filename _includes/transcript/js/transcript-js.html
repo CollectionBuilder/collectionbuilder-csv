@@ -248,19 +248,6 @@ document.addEventListener('DOMContentLoaded', function() {
           }});
     });
 
-// Debounce function to limit how often the scroll event fires
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
-}
-
     function checkStickyAndUpdate() {
         // Get the element to check for stickiness
         const stickyElement = document.getElementById('filters-search');
@@ -277,12 +264,13 @@ function debounce(func, wait) {
         // Determine if the sticky element is in its sticky state
         const isSticky = stickyRect.top <= 0;
     
+
+        filterTabElement.classList.toggle('d-none', !isSticky);
+
         // Update the class of the filter tab element based on stickiness
         if (isSticky) {
-            filterTabElement.classList.remove('d-none');
             {% if site.data.theme.media-scroll == true %}document.getElementById("upper-content").classList.add("media-scroll-wrapper");{% endif %}
         } else {
-            filterTabElement.classList.add('d-none');
             if (filtersSearch.classList.contains("retracted")) {
           filtersSearch.classList.remove("retracted");
           console.log("removing retracted");
@@ -292,9 +280,9 @@ function debounce(func, wait) {
     }
     
     // Attach event listeners
+    window.addEventListener('scroll', checkStickyAndUpdate);
     window.addEventListener('load', checkStickyAndUpdate);
-    
-    window.addEventListener('scroll', debounce(checkStickyAndUpdate, 10));
+
 
 
 </script>
