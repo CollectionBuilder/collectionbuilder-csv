@@ -35,7 +35,11 @@ However, here is a super quick overview of the process:
 - Edit your project's "_config.yml" with your collection information (see [site configuration docs](https://collectionbuilder.github.io/cb-docs/docs/config/)). Additional customization is done via a theme file, configuration files, CSS tweaks, and more--however, once your "_config.yml" is edited your site is ready to be previewed. 
 - Generate your site using Jekyll! (see docs for how to [use Jekyll locally](https://collectionbuilder.github.io/cb-docs/docs/repository/generate/) and [deploy on the web](https://collectionbuilder.github.io/cb-docs/docs/deploy/))
 
-Please feel free to ask questions in the main [CollectionBuilder discussion forum](https://github.com/CollectionBuilder/collectionbuilder.github.io/discussions).       
+Please feel free to ask questions in the main [CollectionBuilder discussion forum](https://github.com/CollectionBuilder/collectionbuilder.github.io/discussions).      
+
+## Important TIMESTAMP Note!
+
+If you put `timestamp` in your transcripts (we highly recommended that you do) please make sure they use full `[hh:mm:ss]` notation!  You may omit the `hh:` portion for timestamps of less than an hour, but make sure you always specify a full `mm:ss` notation.  For example, for 9-minutes 7 seconds do NOT specify `[9:7]` or `[9:07]`, the proper form is `[00:09:07]` but `[09:07]` will also work.  
 
 ----------
 

@@ -5,8 +5,10 @@
     Size is controlled using Bootstrap Custom ratios, https://getbootstrap.com/docs/5.3/helpers/ratio/#custom-ratios
 
 {% endcomment %}
+<!-- cb: _includes/item/pdf-embed.html -->
 <div class="ratio" style="--bs-aspect-ratio: 115%;">
     <object title="PDF file of {{ page.title }}" data="{{ page.object_location | relative_url }}" type="application/pdf" width="100%" >
         <p>The PDF is not rendering in your browser, please use the button below to download the PDF.</p>
     </object>
 </div>
+<!-- /cb: _includes/item/pdf-embed.html -->

@@ -24,10 +24,15 @@ tagline: Prototype for working with Oral History as Data items in CollectionBuil
 # description appears in meta tags and other locations
 # this description might appear in search result lists, keep around 160 characters max
 description: "CB-OHD is a mix of CollectionBuilder-CSV and Oral History as Data (OHD)."
+# if you want a different description to appear in the footer only, define it here, or leave blank to use description
+footer_description: "cb-oralhistory rocks!" 
 # keywords, a short list of subjects describing the collection, separated by semicolon, to appear in rich markup
 keywords: oral histories;digital collections
 # creator of the digital collection, to appear in meta tags; we typically use our GitHub usernames but feel free to just use your name
 author: dcnb
+
+### The documentation suggests...
+# JEKYLL_ENV=production  # ...must be set in order to make a production build.
 
 ##########
 # COLLECTION SETTINGS
@@ -81,3 +86,9 @@ exclude: [docs/, Rakefile, README.md, LICENSE, CITATION.cff, CODE_OF_CONDUCT.md,
 # compress CSS output
 sass:
   style: compressed
+
+###########
+# Additional parameters
+#
+# timezone: added per suggestion found in https://talk.jekyllrb.com/t/timezone-global-configuration-problem/7985
+timezone: America/Chicago

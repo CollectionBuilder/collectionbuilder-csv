@@ -1,3 +1,16 @@
+<!-- cb: _includes/transcript/item/filters.html -->
+
+<!-- For debugging consider https://gist.github.com/alexanderadam/00f40186d2797cfb9b1dffdc78dac445 in place of...
+<pre>
+    site: {{ site | jsonify | escape }}
+    page: {{ page | jsonify | escape }}
+    layout: {{ layout | jsonify | escape }}
+    content: {{ content | jsonify | escape }}
+    paginator: {{ paginator | jsonify | escape }}
+    site.data.filters: {{ site.data.filters | jsonify | escape }}
+</pre>
+-->
+
 <div class="row my-3 sticky-top bg-white border-bottom border-left border-right d-print-none py-3 w-md-75" id="filters-search" >
     <div class="col {% unless site.data.filters %}d-none{% endunless %}">
       <select id="filters" title="Filter by Topic" aria-label="Topic filtering dropdown select option" class="filters py-1 form-select border border-primary" onchange="filterLines(this.value)">
@@ -9,15 +22,22 @@
           ({{filter.tag}})</option>{%endif%}
         {% endfor %}
       </select>
+
+    {% if filters %}   <!-- MAM added logic 26-Sep-2024 to hide some controls if no filters are present -->
+      {% assign hidden = "" %}
+    {% else %}
+      {% assign hidden = "style='display:none'" %}
+    {% endif %}  
+
     </div>
     <div class="col">
       <div id="transcriptsearch" class="bg-lightr">
         <div class="row">
           <div class="col-md-6">
             <div class="input-group fs-5 mt-0 mt-md-0">
-              <input type="text" class="form-control border border-primary py-1" placeholder="Search..." aria-label="Search"
+              <input type="text" {{hidden}} class="form-control border border-primary py-1" placeholder="Search..." aria-label="Search"
                 aria-describedby="goButton" id="quicksearch">
-              <div class="input-group-append">
+              <div class="input-group-append" {{hidden}}>
                 <button class=" rounded-right border border-primary btn btn-primary p-1" type="submit"
                   title="Search" alt="Search" id="goButton"
                   onclick="var searchval = document.getElementById('quicksearch').value; searchLines(searchval);">Go</button>
@@ -25,8 +45,7 @@
             </div>
           </div>
           <div class="col-md-6">
-            <button class="reset btn btn-sm btn-primary input-group-text float-end float-md-none mt-2 mt-md-0" onclick="vizFilter('all');">Reset
-              Filters</button>
+            <button {{hidden}} class="reset btn btn-sm btn-primary input-group-text float-end float-md-none mt-2 mt-md-0" onclick="vizFilter('all');">Reset Filters</button>
           </div>
         </div>
       </div>

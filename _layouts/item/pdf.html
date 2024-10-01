@@ -2,12 +2,18 @@
 # basic layout for PDF documents
 # Displays image_small if available, with fall back to image_thumb, or a pdf icon.
 layout: item/item-page-base
+
+# MAM 27-Sep-2024 Added embed-pdf logic from the CSV project... seems to work!
 ---
 
+<!-- cb: _includes/item/pdf.html -->
 <div class="card mb-4 text-center">
     <div class="card-body">
         <p>
-            {% include item/item-thumb.html %}
+            {% comment %}
+              {% include item/item-thumb.html %}
+            {% endcomment %}
+            {% include item/pdf-embed.html %}
         </p>
 
         <div class="mt-2">

@@ -6,6 +6,8 @@
 {%- assign raw-dates = date-items | map: 'date' | compact | uniq -%}
 {%- capture clean-years -%}{% for date in raw-dates %}{% if date contains "-" %}{{ date | strip | split: "-" | first }}{% elsif date contains "/" %}{{ date | strip | split: "/" | last }}{% else %}{{ date | strip }}{% endif %}{% unless forloop.last %};{% endunless %}{%- endfor -%}{%- endcapture -%}
 {%- assign date-range = clean-years | remove: " " | split: ";" | uniq | sort  -%}
+
+{% if date-range.size > 0 %}  <!-- MAM added logic to hide this if empty, Sept. 2024 -->
 <div class="card mb-3">
   <div class="card-body">
     <h2 class="card-title h5">Time Span</h2>
@@ -14,3 +16,4 @@
     </p>
   </div>
 </div>
+{% endif %}
