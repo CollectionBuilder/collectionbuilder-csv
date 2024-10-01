@@ -1,9 +1,9 @@
-<div class="my-2 row px-3 mt-4 meta">
+<!-- cb: _includes/transcript/item/transcript-metadata.html -->
     <div class="col">
       <p><span class="me-3">
         {%if page.bio and site.data.theme.transcript-fields contains 'bio'%}<b>Bio:</b>  <span class="me-3">{{page.bio}}</span> <br/>{%endif%}
         {%if page.description and site.data.theme.transcript-fields contains 'description'%}<b>Description:</b>  <span class="me-3">{{page.description}}</span>{%endif%}{%if
-        page.date and site.data.theme.transcript-fields contains 'date'%}<br><b>Date:</b> <span class="me-3">{{page.date | date: "%B %d, %Y" }}</span>{%endif%} {%if
+        page.date and site.data.theme.transcript-fields contains 'date'%}<br><b>Date:</b> <span class="me-3">{{page.date}}</span>{%endif%} {%if
           page.location and site.data.theme.transcript-fields contains 'location' %}<b>Location:</b> {{page.location }}{%endif%}
         {%if page.interviewer and site.data.theme.transcript-fields contains 'interviewer' %} <br><b>Interviewer:</b> {{page.interviewer}}{%endif%}
         {%if page.interviewer and site.data.theme.transcript-fields contains 'interviewee' %} <br><b>Interviewee:</b> {{page.interviewee}}{%endif%}
@@ -20,3 +20,4 @@
     {% endif %}
     {% endif %}
   </div>
+<!-- /cb: _includes/transcript/item/transcript-metadata.html -->
