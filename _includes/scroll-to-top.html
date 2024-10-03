@@ -14,6 +14,9 @@
             left: 0, 
             behavior: 'smooth'
         });
+        {% if site.data.theme.media-scroll == true %}
+            if (upperElement.classList.contains("media-scroll-wrapper")) {
+            upperElement.classList.remove("media-scroll-wrapper");}{% endif %}
     }
 </script>
 <button id="scroll-to-top" type="button" class="btn btn-link" onclick="scrollToTop();" title="Back to Top" aria-label="Back to Top">

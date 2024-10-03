@@ -3,6 +3,9 @@
   let params = url.searchParams;
   const filtersSearch = document.getElementById('filters-search');
   const filterTab = document.getElementById('filter-tab');
+  const upperElement = document.getElementById('upper-content');
+  const upperWrapper = document.getElementById('upper-wrapper');
+  
 
   function vizFilter(x) {
     var rects = document.getElementsByTagName('rect');
@@ -74,6 +77,7 @@
       document.getElementById("searchResults").innerHTML = searchResults;
       document.getElementById("linecount").classList.remove("d-none");
       document.getElementById("filtersearch").classList.remove("d-none");
+      if (filtersSearch.classList.contains("retracted")) {filtersSearch.classList.remove("retracted"); }
     }
   }
 
@@ -121,6 +125,7 @@
     document.getElementById("linecount").classList.remove("d-none");
     document.getElementById("filtersearch").classList.remove("d-none");
     countforFilter(filterClass);
+    if (filtersSearch.classList.contains("retracted")) {filtersSearch.classList.remove("retracted"); }
   }
 
   function countforFilter(x) {
@@ -145,6 +150,7 @@
 
   
   function scrollToLine(x) {
+    {% if site.data.theme.media-scroll == true %}upperElement.classList.add("media-scroll-wrapper");{% endif %}
     var targetElement = document.getElementById(x);
     if (targetElement) {
         targetElement.classList.add("border-featured");
@@ -243,44 +249,68 @@ document.addEventListener('DOMContentLoaded', function() {
         filtersSearch.classList.toggle('retracted');
       });
       document.getElementById('scroll-to-top').addEventListener('click', function() {
-    if (filtersSearch.classList.contains("retracted")) {
+        {% if site.data.theme.media-scroll == true %}
+            if (upperElement.classList.contains("media-scroll-wrapper")) {
+            upperElement.classList.remove("media-scroll-wrapper");}{% endif %}
+        if (filtersSearch.classList.contains("retracted")) {
           filtersSearch.classList.remove("retracted");
           }});
     });
+
+    function throttle(mainFunction, delay) {
+  let timerFlag = null; // Variable to keep track of the timer
+
+  // Returning a throttled version 
+  return (...args) => {
+    if (timerFlag === null) { // If there is no timer currently running
+      mainFunction(...args); // Execute the main function 
+      timerFlag = setTimeout(() => { // Set a timer to clear the timerFlag after the specified delay
+        timerFlag = null; // Clear the timerFlag to allow the main function to be executed again
+      }, delay);
+    }
+  };
+}
 
     function checkStickyAndUpdate() {
         // Get the element to check for stickiness
         const stickyElement = document.getElementById('filters-search');
         const filterTabElement = document.getElementById('filter-tab');
         // Ensure both elements are present
-        if (!stickyElement || !filterTabElement) {
+        if (!filtersSearch || !filterTab) {
             console.warn('Required elements are not found in the DOM.');
             return;
         }
     
         // Get the bounding rectangle of the sticky element
-        const stickyRect = stickyElement.getBoundingClientRect();
+        const stickyRect = filtersSearch.getBoundingClientRect();
     
         // Determine if the sticky element is in its sticky state
         const isSticky = stickyRect.top <= 0;
     
 
-        filterTabElement.classList.toggle('d-none', !isSticky);
+        filterTab.classList.toggle('d-none', !isSticky);
 
         // Update the class of the filter tab element based on stickiness
         if (isSticky) {
-            {% if site.data.theme.media-scroll == true %}document.getElementById("upper-content").classList.add("media-scroll-wrapper");{% endif %}
+            {% if site.data.theme.media-scroll == true %}
+            if (!upperElement.classList.contains("media-scroll-wrapper")) {
+            upperElement.classList.add("media-scroll-wrapper");}{% endif %}
+            
         } else {
             if (filtersSearch.classList.contains("retracted")) {
           filtersSearch.classList.remove("retracted");
           console.log("removing retracted");
           };
-          {% if site.data.theme.media-scroll == true %}document.getElementById("upper-content").classList.remove("media-scroll-wrapper");{% endif %}
+          {% if site.data.theme.media-scroll == true %}upperElement.classList.remove("media-scroll-wrapper");{% endif %}
         }
     }
     
     // Attach event listeners
-    window.addEventListener('scroll', checkStickyAndUpdate);
+    // Throttle the checkStickyAndUpdate function with a delay of 200 ms
+const throttleScrollCheck = throttle(checkStickyAndUpdate, 500);
+
+// Add an event listener to the window scroll event that calls the throttleScrollCheck function
+window.addEventListener("scroll", throttleScrollCheck);
     window.addEventListener('load', checkStickyAndUpdate);
 
 
