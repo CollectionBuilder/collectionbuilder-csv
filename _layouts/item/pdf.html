@@ -11,9 +11,10 @@ layout: item/item-page-base
     <div class="card-body">
         <p>
             {% comment %}
-              {% include item/item-thumb.html %}
-            {% endcomment %}
+            <!-- if you'd like to include an embedded pdf, replace the include command that ends item-thumb.html below with the one directly below this comment-->
             {% include item/pdf-embed.html %}
+            {% endcomment %}
+            {% include item/item-thumb.html %}
         </p>
 
         <div class="mt-2">
