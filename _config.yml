@@ -31,8 +31,6 @@ keywords: oral histories;digital collections
 # creator of the digital collection, to appear in meta tags; we typically use our GitHub usernames but feel free to just use your name
 author: dcnb
 
-### The documentation suggests...
-# JEKYLL_ENV=production  # ...must be set in order to make a production build.
 
 ##########
 # COLLECTION SETTINGS
@@ -92,3 +90,9 @@ sass:
 #
 # timezone: added per suggestion found in https://talk.jekyllrb.com/t/timezone-global-configuration-problem/7985
 timezone: America/Chicago
+
+### Note Jekyll documentation suggests...
+# JEKYLL_ENV=production  # ...must be set in order to make a production build. 
+# but we've built in a command to build for production. It's:  rake deploy
+# if you enter  rake deploy    in the command line, the site will build with production variables
+# documented here: https://collectionbuilder.github.io/cb-docs/docs/deploy/build/#build-with-rake-deploy
