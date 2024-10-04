@@ -291,10 +291,7 @@ document.addEventListener('DOMContentLoaded', function() {
             {% if site.data.theme.media-scroll == true %}
             if (!upperElement.classList.contains("media-scroll-wrapper")) {
             upperElement.classList.add("media-scroll-wrapper");}{% endif %}
-            if (!filtersSearch.classList.contains("retracted")) {
-          filtersSearch.classList.add("retracted");
-          console.log("adding retracted");
-          };
+           
         } else {
             if (filtersSearch.classList.contains("retracted")) {
           filtersSearch.classList.remove("retracted");
@@ -306,7 +303,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Attach event listeners
     // Throttle the checkStickyAndUpdate function with a delay of 200 ms
-const throttleScrollCheck = throttle(checkStickyAndUpdate, 500);
+const throttleScrollCheck = throttle(checkStickyAndUpdate, 200);
 
 // Add an event listener to the window scroll event that calls the throttleScrollCheck function
 window.addEventListener("scroll", throttleScrollCheck);
