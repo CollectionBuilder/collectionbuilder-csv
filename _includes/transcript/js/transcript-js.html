@@ -309,11 +309,4 @@ const throttleScrollCheck = throttle(checkStickyAndUpdate, 200);
 window.addEventListener("scroll", throttleScrollCheck);
     window.addEventListener('load', checkStickyAndUpdate);
 
-const observer = new IntersectionObserver( 
-  ([e]) => e.target.classList.toggle("bg-info", e.intersectionRatio < 1),
-  { threshold: [1] }
-);
-
-observer.observe(stickyElement);
-
 </script>
