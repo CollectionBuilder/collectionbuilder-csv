@@ -147,7 +147,7 @@
 
 
   function scrollToLine(x) {
-    {% if site.data.theme.media - scroll == true %} upperElement.classList.add("media-scroll-wrapper"); {% endif %}
+    {% if site.data.theme.media-scroll == true %} upperElement.classList.add("media-scroll-wrapper"); {% endif %}
     var targetElement = document.getElementById(x);
     if (targetElement) {
       targetElement.classList.add("border-featured");
@@ -241,7 +241,7 @@
     });
     document.getElementById('scroll-to-top').addEventListener('click', function () {
       if (filtersSearch.classList.contains("retracted")) { filtersSearch.classList.remove("retracted"); }
-      {% if site.data.theme.media - scroll == true %}
+      {% if site.data.theme.media-scroll == true %}
       if (upperElement.classList.contains("media-scroll-wrapper")) { setTimeout(function () { upperElement.classList.remove("media-scroll-wrapper"); }, 300); console.log('scrollstopped?'); } {% endif %}
     });
   });
@@ -276,13 +276,12 @@
     // Determine if the sticky element is in its sticky state
     const isSticky = stickyRect.top <= 0;
 
-
-
+    // Toggle display: none class based on status of is Sticky
     filterTab.classList.toggle('d-none', !isSticky);
 
     // Update the class of the filter tab element based on stickiness
     if (isSticky) {
-      {% if site.data.theme.media - scroll == true %}
+      {% if site.data.theme.media-scroll == true %}
       if (!upperElement.classList.contains("media-scroll-wrapper")) {
         upperElement.classList.add("media-scroll-wrapper");
       } {% endif %}
@@ -292,7 +291,7 @@
         filtersSearch.classList.remove("retracted");
         console.log("removing retracted");
       };
-      {% if site.data.theme.media - scroll == true %} upperElement.classList.remove("media-scroll-wrapper"); {% endif %}
+      {% if site.data.theme.media-scroll == true %} upperElement.classList.remove("media-scroll-wrapper"); {% endif %}
     }
   }
 
