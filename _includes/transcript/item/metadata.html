@@ -5,6 +5,7 @@
     
 {%- endcomment -%}
 {%- assign fields = site.data.config-metadata | where_exp: 'item', 'item.display_name != nil' -%}
+<!-- cb: _includes/transcript/item/metadata.html -->
 <div id="item-metadata">
     <dl>
         {% for f in fields %}{% if page[f.field] %}

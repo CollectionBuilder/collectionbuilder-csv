@@ -35,7 +35,17 @@ However, here is a super quick overview of the process:
 - Edit your project's "_config.yml" with your collection information (see [site configuration docs](https://collectionbuilder.github.io/cb-docs/docs/config/)). Additional customization is done via a theme file, configuration files, CSS tweaks, and more--however, once your "_config.yml" is edited your site is ready to be previewed. 
 - Generate your site using Jekyll! (see docs for how to [use Jekyll locally](https://collectionbuilder.github.io/cb-docs/docs/repository/generate/) and [deploy on the web](https://collectionbuilder.github.io/cb-docs/docs/deploy/))
 
-Please feel free to ask questions in the main [CollectionBuilder discussion forum](https://github.com/CollectionBuilder/collectionbuilder.github.io/discussions).       
+Please feel free to ask questions in the main [CollectionBuilder discussion forum](https://github.com/CollectionBuilder/collectionbuilder.github.io/discussions).      
+
+## Important TIMESTAMP Note!
+
+If you put `timestamp` in your transcript .CSV files (we highly recommended that you do) please make sure they use full `[hh:mm:ss]` notation!  You may omit the `hh:` portion for timestamps of less than an hour, but make sure you always specify a full `mm:ss` notation.  For example, 9-minutes 7-seconds should never be specified as `[9:7]` or even `[9:07]`, the proper form is `[00:09:07]` but `[09:07]` will also work.  
+
+## Important DATE Note!
+
+Handling dates in metadata can be tricky and remember that information you enter in your metadata .CSV file comes into the framework as `text`, not as any other data type (so there are no `date` type variables).  This makes custom formatting of things like dates especially tricky.  Consequently, you won't find a lot of `date` formatting in CB, for the most part it will display exactly what you entered.  
+
+This can also present difficulties if you want to sort on something like a `date` field.  So it's recommended that you **always enter dates in the form `yyyy` (only the year), or `yyyy-mm` (year and month), or `yyyy-mm-dd` (a complete discrete date)**.  Doing so will ensure that your dates make sense when displayed AND they will sort properly too.  
 
 ----------
 

@@ -1,3 +1,4 @@
+<!-- cb: _includes/transcript/item/download-buttons.html -->
 <div class="btn-group meta" role="group" aria-label="Button group">
 <a data-bs-toggle="modal" data-bs-target="#metadata-modal" class="btn btn-outline-primary">View Item Information</a>
 {% if page.date %}{%- capture year -%}{% if page.date contains "-" %}{{ page.date | split: "-" | first }}{% elsif page.date contains "/" %}{{ page.date | split: "/" | last }}{% else %}{{ page.date }}{% endif %}{%- endcapture -%}
