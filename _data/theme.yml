@@ -87,6 +87,14 @@ search-and-filters: true ## true/false --> determines if the search and filter o
 search-and-filters-sticky: true ## true/false --> determines if the search and filter options are sticky to the top of the page as a user scrolls down a transcript
 
 ##########
+# Visualization page / Oral History as Data Options 
+# 
+as-data: false ## true/false --> determines if the "As Data" button and modal that pops up if you click it will appear at the top right of the visualization page
+transcript-contents: false ## true/false --> determines if the contents of the individual interviews will appear and be filtered at the bottom of the visualization page (below the color coded portion)
+
+
+
+##########
 # ADVANCED OPTIONS
 #
 

@@ -5,11 +5,10 @@ custom-foot: transcript/js/visualization-js.html
 {% include transcript/style/filter-style.html %}
 {% assign transcripts = site.data.transcripts | sort %}
 {% assign items = site.data[site.metadata] %}
-
-<div class="container p-4 p-md-5">{% include transcript/filters-data-download-modal.html %}
+<div class="container p-4 p-md-5">{% unless site.data.theme.as-data == false %}{% include transcript/filters-data-download-modal.html %}{% endunless %}
   <h2 id="visualize-by-subject">Color-coded Subject Visualization</h2>
 
-  <p>Click a colored circle/subject to see corresponding sections. You can also filter by subject and view/print related <a href="#transcript-contents">contents</a> below.</p>
+  <p>Click a colored circle/subject to see corresponding sections. {% unless site.data.theme.transcript-contents == false %}You can also filter by subject and view/print related <a href="#transcript-contents">contents</a> below.{% endunless %}</p>
   
 
   <div  class="row" role="group" aria-labelledby="filterGroupLabel">
@@ -47,6 +46,7 @@ custom-foot: transcript/js/visualization-js.html
 <br />
 
 <hr /><br />
+{% unless site.data.theme.transcript-contents == false %}
 <div class="container" id="transcript-contents">
   <h2>Contents</h2>
 
@@ -69,6 +69,6 @@ custom-foot: transcript/js/visualization-js.html
       {% if forloop.last%}</table>
     </section>{%endif%}
   {% endfor %}{% endfor %}
-
+{% endunless %}
 
 </div>
