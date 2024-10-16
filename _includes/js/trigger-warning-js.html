@@ -1,0 +1,22 @@
+<script>
+  // Function to hide the trigger warning using Bootstrap's modal method
+  function hideWarning() {
+    const modal = document.getElementById('triggerWarning');
+    const bootstrapModal = bootstrap.Modal.getInstance(modal) || new bootstrap.Modal(modal);
+    bootstrapModal.hide();
+
+    // Set in localStorage to not show the warning again
+    localStorage.setItem('triggerWarningDismissed', 'true');
+  }
+
+  // Show the modal if the user has not seen it yet
+  window.onload = function () {
+    if (!localStorage.getItem('triggerWarningDismissed')) {
+      const modal = new bootstrap.Modal(document.getElementById('triggerWarning'));
+      modal.show();
+    }
+
+    // Add event listener to the button
+    document.getElementById('proceedButton').addEventListener('click', hideWarning);
+  };
+</script>

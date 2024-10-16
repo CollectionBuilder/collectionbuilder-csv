@@ -1,0 +1,20 @@
+<div
+  class="modal fade"
+  id="triggerWarning"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="triggerWarningTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content" style="display: flex; justify-content: center; align-items: center;">
+      <div class="modal-body" style="max-width: 600px; text-align: center; margin: 0 auto;">
+        <h5 class="modal-title text-center w-100" id="triggerWarningTitle">Content Note</h5>
+        <p>{{ site.data.theme['trigger-warning-text'] | default: 'This collection may contain sensitive content.' }}</p>
+        <button id="proceedButton" type="button" class="btn btn-triggerwarning mt-4" aria-label="Hinweis ausblenden">
+          Hinweis ausblenden
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

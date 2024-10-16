@@ -19,14 +19,8 @@ home-banner-image-position: center # Default is top
 #
 # see _data/metadata-config.csv to define the metadata fields that will display.
 browse-buttons: true # true / false, adds previous/next arrows to items, but increases build time
-trigger-warning: true # true / false, adds trigger warning to item pages
-trigger-warning-text: "Diese Sammlung enthält sensible Inhalte. <a href='/sensible-inhalte.html'>Klicken Sie hier</a>, um mehr zu erfahren." # optional, if you want to override the default trigger warning text
-trigger-warning-text-item: "Diese Ressource enthält sensible Inhalte. <a href='/sensible-inhalte.html'>Klicken Sie hier</a>, um mehr zu erfahren." #optional, if you want to override the default trigger warning text for individual items
-trigger-field: "subject" # field to trigger warning, e.g. "subject"
-trigger-terms: "Ableismus,Abtreibungsgegner,Abtreibungsverbot,AIDS,Androzentrismus,Antifeminismus,Antisemitismus,Antiziganismus,Armut,Asyl,Ausbeutung,Beschneidung,Biologismus,Depression,Diskriminierung,Erotik,Essstörung,Ethnizität,Ethnozentrismus,Eurozentrismus,Faschismus,Female Genital Cutting,Female Genital Mutilation,Faschismus,Flucht,Frauenfeindlichkeit,Fundamentalismus,Gender Bias,Gender Pay Gap,Genozid,Geschlechterdifferenz,Geschlechterordnung,Geschlechterstereotyp,Gewalt,Gewalt gegen Frauen,Hass,Heteronormativität,HIV,Homofeindlichkeit,Konzentrationslager,Krieg,Marginalisierung,Menschenhandel,Misshandlung,Nationalsozialismus,Opfer,Pornografie,Prostitution,Rassismus,Rechtsextremismus,Schwangerschaftsabbruch,Sexarbeit,Sexismus,Sexualisierte Gewalt,Sexuelle Belästigung,Shoah,Sklaverei,Stigmatisierung,Sucht,Täter,Täterin,Terrorismus,Tod,Verfolgung,Vergewaltigung,Xenophobie,Zwang" # set of subjects separated by , that will trigger warning, e.g. violence,sexuality,racism,discrimination
-
-
-
+trigger-warning: true # true / false, adds trigger warning to index.md
+trigger-warning-text: "<p>Die historischen Materialien in dieser Datenbank dokumentieren historische Vorgänge und Ereignisse. Sie werden unverändert präsentiert und sind primär für Forschungszwecke bestimmt.</p><p>Als historische Quellen spiegeln sie Normen und Werte ihrer Zeit und können veraltete, vorurteilsbeladene oder diskriminierende Stereotypen enthalten. Solche zeitgenössischen Inhalte werden in der ursprünglichen Terminologie beibehalten, um die historische Authentizität der Quellen zu bewahren und eine transparente wissenschaftliche Aufarbeitung zu ermöglichen.</p><p>Sie spiegeln in keiner Weise die Überzeugungen und Haltungen der Verantwortlichen dieser Datenbank.</p>" # optional, if you want to override the default trigger warning text
 
 ##########
 # SUBJECTS PAGE

@@ -203,3 +203,28 @@ a {
         fill: #ffe880;
     }
 }
+
+  .modal-backdrop.show {
+    opacity: 0.8;
+  }
+
+  #triggerWarning .modal-content {
+    background-color: #fff3cd;
+  }
+
+  #triggerWarning ::selection {
+    background: #3a1e3e;
+    color: white;
+}
+
+.btn-triggerwarning {
+    border-color: #3a1e3e;
+    background-color: #3a1e3e;
+    color: #fff3cd;
+    &:hover {
+        color: #ffe880;
+        }
+    &:focus {
+        box-shadow:0 0 0 .25rem #3a1e3e;
+    }
+}
