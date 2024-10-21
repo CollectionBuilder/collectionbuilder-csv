@@ -2,11 +2,16 @@
   Adds child image in a Spotlight gallery markup.
   Ensure dependencies are added by including `gallery: true` in the layout front matter calling this include.
 {% endcomment %}
+{% assign valid_formats = 'image/jpeg,image/jpg,image/png' | split: ',' %}
 <a
   class="spotlight gallery-img"
   data-download="true"
   title="{{ child.title | escape }}"
-  href="{{ child.object_location | relative_url }}"
+  {% if valid_formats contains child.format %}
+    href="{{ child.object_location | relative_url }}"
+  {% else %}
+    href="{{ child.image_small | relative_url }}"
+  {% endif %}
 >
   <img
     src="{{ child.image_small | relative_url }}"
