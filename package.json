@@ -4,7 +4,7 @@
     "format": "prettier --write '**/*.{js,css,md,html}'"
   },
   "dependencies": {
-    "prettier": "^3.3.3",
-    "@shopify/prettier-plugin-liquid": "^1.5.0"
+    "@shopify/prettier-plugin-liquid": "^1.5.2",
+    "prettier": "^3.3.3"
   }
 }

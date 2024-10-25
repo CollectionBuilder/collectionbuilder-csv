@@ -1,0 +1,9 @@
+[project]
+name = "forschung.stadtgeschichtebasel.ch"
+version = "0.1.0"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "pandas>=2.2.3",
+    "requests>=2.32.3",
+]

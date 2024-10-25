@@ -28,12 +28,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - run: pip install pandas requests
-      - name: Process Data
-        run: python .github/workflows/process_data.py
+          python-version: '3.13'
+      - run: uv run .github/workflows/process_data.py
       - name: Upload sgb-metadata.csv
         uses: actions/upload-artifact@v4
         with:
