@@ -10,17 +10,16 @@ custom-foot: js/timeline-js.html
 {% else %}
   {%- assign items = site.data[site.metadata] | where_exp: 'item', 'item.objectid and item.parentid == nil' -%}
 {% endif %}
-{% assign regex = '[-]?[\dXu]{4,}' %}
 {%- assign items = items | where_exp: 'item', 'item[field]' -%}
 {%- assign raw-dates = items | map: field | compact | uniq -%}
+{% assign regex = '[\dX]{4}' %}
 {%- capture clean-years -%}{% for date in raw-dates %}{{date | regex_match: regex | join: ';' }}{% unless forloop.last %};{% endunless %}{%- endfor -%}{%- endcapture -%}
 {%- assign uniqueYears = clean-years | remove: ' ' | replace: ';;', ';' | split: ';' | uniq | sort -%}
-{% assign sorted_years = uniqueYears | sort_edtf %}
 {%- if site.data.theme['year-navigation'] -%}
   {%- assign navYears = site.data.theme['year-navigation'] | split: ';' -%}
 {%- elsif site.data.theme['year-nav-increment'] -%}
   {%- capture navYears -%}
-{%- for i in sorted_years -%}{%- assign t = i | modulo: site.data.theme.year-nav-increment -%}
+{%- for i in uniqueYears -%}{%- assign t = i | modulo: site.data.theme.year-nav-increment -%}
 {%- if t == 0 -%}{{ i }}{% unless forloop.last %};{% endunless %}{% endif %}{% endfor %}{%- endcapture -%}
   {%- assign navYears = navYears | split: ';' -%}
 {%- endif -%}
@@ -38,13 +37,8 @@ custom-foot: js/timeline-js.html
     </button>
     <div class="dropdown-menu" aria-labelledby="yearButton">
       {% for y in navYears %}
-        {% assign year_parts = y | split: ':' %}
-        {% if year_parts.size == 2 %}
-          <a class="dropdown-item" href="#y{{ year_parts[1] }}">{{ year_parts[0] }}</a>
-        {% else %}
-          <a class="dropdown-item" href="#y{{ y }}">{{ y }}</a>
-        {% endif %}
-      {% endfor %}
+        <a class="dropdown-item" href="#y{{ y }}">{{ y }}</a>
+      {%- endfor %}
     </div>
   </div>
 {%- endif -%}
@@ -52,25 +46,21 @@ custom-foot: js/timeline-js.html
 {{ content }}
 
 <h2>
-  {% assign first_year = sorted_years | first | split: ':' %}
-  {% assign last_year = sorted_years | last | split: ':' %}
-  {% if first_year.size == 2 and last_year.size == 2 %}
-    <a href="#y{{ first_year[1] }}">{{ first_year[0] }}</a> &#8211;
-    <a href="#y{{ last_year[1]}}">{{ last_year[0] }}</a>
-  {% endif %}
+  <a href="#y{{ uniqueYears | first }}">{{ uniqueYears | first }}</a>&#8211;<a href="#y{{ uniqueYears | last }}">
+    {{- uniqueYears | last -}}
+  </a>
 </h2>
 
 <table id="timeline" class="table table-striped">
   <tbody>
-    {% for date in sorted_years %}
-      {% assign year = date | split: ':' %}
-      <tr id="y{{ year[1] }}">
+    {% for year in uniqueYears %}
+      <tr id="y{{ year }}">
         <th>
-          <h3>{{ year[0] }}</h3>
+          <h3>{{ year }}</h3>
         </th>
         <td>
           <div class="row">
-            {%- assign inYear = items | filter_items_by_year: year[1], '[-]?[\dXu]{4,}' -%}
+            {%- assign inYear = items | where_exp: 'item', 'item[field] contains year' -%}
             {% for item in inYear %}
               <div class="col-lg-4 col-md-6">
                 <figure class="figure">
