@@ -12,7 +12,7 @@ module Jekyll
       end
 
       sorted_dates = processed_dates.sort_by { |date| -date[:numeric] }
-      sorted_dates.map { |date| "#{date[:display_format]}:#{date[:original]}" }
+      sorted_dates.map { |date| "#{date[:display_format]}:#{date[:original]}:#{date[:numeric]}" }
     end
 
     private

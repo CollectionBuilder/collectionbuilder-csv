@@ -39,10 +39,10 @@ custom-foot: js/timeline-js.html
     <div class="dropdown-menu" aria-labelledby="yearButton">
       {% for y in navYears %}
         {% assign year_parts = y | split: ':' %}
-        {% if year_parts.size == 2 %}
+        {% if year_parts.size >= 2 %}
           <a class="dropdown-item" href="#y{{ year_parts[1] }}">{{ year_parts[0] }}</a>
         {% else %}
-          <a class="dropdown-item" href="#y{{ y }}">{{ y }}</a>
+          <a class="dropdown-item" href="#" onclick="scrollToYear(event, {{ y }})">{{ y }}</a>
         {% endif %}
       {% endfor %}
     </div>
@@ -50,6 +50,44 @@ custom-foot: js/timeline-js.html
 {%- endif -%}
 
 {{ content }}
+
+<script>
+  function scrollToYear(event, year) {
+    // Prevent the default link behavior
+    event.preventDefault();
+
+    // Try to find the exact element with data-numericyear equal to the target year
+    let element = document.querySelector(`[data-numericyear="${year}"]`);
+
+    // If no exact match, find the nearest year
+    if (!element) {
+      const yearElements = Array.from(document.querySelectorAll('[data-numericyear]'));
+
+      // Find the element with the closest data-numericyear value
+      let closestElement = null;
+      let closestDifference = Infinity;
+
+      yearElements.forEach((el) => {
+        const elementYear = parseInt(el.getAttribute('data-numericyear'), 10);
+        const difference = Math.abs(elementYear - year);
+
+        if (difference < closestDifference) {
+          closestDifference = difference;
+          closestElement = el;
+        }
+      });
+
+      // Set the closest element as the target to scroll
+      element = closestElement;
+    }
+
+    // Scroll to the found element if it exists
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+</script>
+
 {% comment %}uncomment the next lines to display a heading indicating the period of the data in text form{% endcomment %}
 {% comment %}
   <h2>
@@ -78,7 +116,7 @@ custom-foot: js/timeline-js.html
   <tbody>
     {% for date in sorted_years %}
       {% assign year = date | split: ':' %}
-      <tr id="y{{ year[1] }}">
+      <tr id="y{{ year[1] }}" data-numericyear="{{ year[2] }}">
         <th>
           <h3>{{ year[0] }}</h3>
         </th>
