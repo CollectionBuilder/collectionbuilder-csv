@@ -521,6 +521,15 @@ _includes:
       en: "Last Updated"
       es: "Última Actualización"
       de: "Zuletzt aktualisiert"
+  nav-search-browse.html:
+    search:
+      en: "Search"
+      es: "Buscar"
+      de: "Suche"
+    submit:
+      en: "Submit search"
+      es: "Enviar búsqueda"
+      de: "Suche ausführen"
   nav-search-lunr.html:
     search:
       en: "Search"
