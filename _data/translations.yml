@@ -426,6 +426,22 @@ _includes:
         de: "Element anzeigen"
     modal-hash-js.html:
     table-js.html:
+      download:
+        en: "Download"
+        es: "Descargar"
+        de: "Herunterladen"
+      filtered_metadata_excel:
+        en: "Filtered Metadata (Excel)"
+        es: "Metadatos Filtrados (Excel)"
+        de: "Gefilterte Metadaten (Excel)"
+      filtered_metadata_csv:
+        en: "Filtered Metadata (CSV)"
+        es: "Metadatos Filtrados (CSV)"
+        de: "Gefilterte Metadaten (CSV)"
+      more_exports:
+        en: "More Exports"
+        es: "Más Exportaciones"
+        de: "Weitere Exporte"
     timeline-js.html:
   collection-banner.html:
     featured-items:
@@ -607,6 +623,37 @@ _layouts:
       en: "Loading"
       es: "Cargando"
       de: "Laden"
+    objects:
+      en: "Objects"
+      de: "Objekte"
+    timeline:
+      en: "Timeline"
+      es: "Línea de tiempo"
+      de: "Zeitachse"
+    subjects:
+      en: "Subjects"
+      es: "Temas"
+      de: "Themen"
+    eras:
+      en: "Eras"
+      es: "Épocas"
+      de: "Epochen"
+    view-objects:
+      en: "Show object view"
+      de: "Zeige Objektansicht"
+    view-timeline:
+      en: "Show objects on timeline"
+      de: "Zeige Objekte auf einer Zeitachse"
+    view-subjects:
+      en: "Show list of subjects"
+      de: "Zeige Liste mit Schlagwörtern"
+    view-eras:
+      en: "Show list of eras"
+      de: "Zeige Liste der Epochen"
+    switch-view:
+      en: "Switch view"
+      es: "Cambiar Vista"
+      de: "Ansicht wechseln"
   cloud.html:
   data.html:
     link:

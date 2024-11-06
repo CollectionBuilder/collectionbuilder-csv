@@ -4,4 +4,4 @@ layout: timeline_edtf
 permalink: /timeline.html
 ---
 
-# Zeitachse der Daten
+# Sammlung durchsuchen

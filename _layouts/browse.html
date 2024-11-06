@@ -5,73 +5,96 @@ custom-foot: js/browse-js.html
 ---
 {{ content }}
 
-<div class="row mb-3 justify-content-center">
-  <div class="col-md-8 text-center">
-    <form role="search" id="lunrSearch" onsubmit="submitFilter(); return false;">
-      <div class="input-group input-group-lg">
-        <input
-          type="text"
-          class="form-control"
-          id="filterTextBox"
-          placeholder="{{ site.data.translations['_layouts']['browse.html']['filter'][site.lang] | default: 'Filter' }} ..."
-          aria-label="{{ site.data.translations['_layouts']['browse.html']['search'][site.lang] | default: 'Search' }}"
-        >
-        <button
-          class="btn btn-secondary"
-          type="submit"
-          title="{{ site.data.translations['_layouts']['browse.html']['filter-items'][site.lang] | default: 'Filter items' }}"
-          id="filterButton"
-        >
-          {{ site.data.translations._layouts['browse.html'].search[site.lang] | default: 'Search' }}
-        </button>
-        <button
-          class="btn btn-outline-secondary text-dark filter"
-          onclick="resetFilter(); return false;"
-          data-filter=""
-        >
-          {{ site.data.translations._layouts['browse.html'].reset[site.lang] | default: 'Reset' }}
-        </button>
-      </div>
-    </form>
-    <div class="h2" id="numberOf"></div>
-  </div>
-  <div class="col-md-2">
-    <div class="dropdown">
-      <button
-        class="btn btn-outline-primary mt-1 dropdown-toggle"
-        type="button"
-        id="browseSortButton"
-        data-bs-toggle="dropdown"
-        aria-haspopup="true"
-        aria-expanded="false"
+<div class="container-fluid px-0">
+  <div class="row align-items-center">
+    <div class="col-12 col-md-auto text-center text-md-center mb-2 mb-lg-0">
+      <div
+        id="switch-view"
+        class="btn-group btn-group-toggle d-flex justify-content-center"
+        data-toggle="buttons"
+        role="group"
       >
-        {{ site.data.translations._layouts['browse.html']['sort-by'][site.lang] | default: 'Sort by' }}
-        <span id="sortFilter">
-          {{- site.data.translations._layouts['browse.html'].random[site.lang] | default: 'Random' -}}
-        </span>
-      </button>
-      <div class="dropdown-menu browse-sort-menu" aria-labelledby="browseSortButton">
-        <button class="dropdown-item browse-sort-item" data-filter="random">
-          {{ site.data.translations._layouts['browse.html'].random[site.lang] | default: 'Random' }}
+        <a
+          href="{{ '/browse.html' | relative_url }}"
+          class="btn btn-primary btn-lg active"
+          aria-pressed="true"
+          aria-label="{{ site.data.translations['_layouts']['browse.html'].view-objects[site.lang] | default: 'Show object view' }}"
+        >
+          {{ site.data.translations._layouts['browse.html'].objects[site.lang] | default: 'Objects' }}
+        </a>
+        <a
+          href="{{ '/timeline.html' | relative_url }}"
+          class="btn btn-outline-primary btn-lg"
+          aria-label="{{ site.data.translations['_layouts']['browse.html'].view-timeline[site.lang] | default: 'Show objects on timeline' }}"
+        >
+          {{ site.data.translations._layouts['browse.html'].timeline[site.lang] | default: 'Timeline' }}
+        </a>
+        <a
+          href="{{ '/subjects.html' | relative_url }}"
+          class="btn btn-outline-primary btn-lg"
+          aria-label="{{ site.data.translations['_layouts']['browse.html'].view-subjects[site.lang] | default: 'Show list of subjects' }}"
+        >
+          {{ site.data.translations._layouts['browse.html'].subjects[site.lang] | default: 'Subjects' }}
+        </a>
+        <a
+          href="{{ '/eras.html' | relative_url }}"
+          class="btn btn-outline-primary btn-lg"
+          aria-label="{{ site.data.translations['_layouts']['browse.html'].view-eras[site.lang] | default: 'Show list of eras' }}"
+        >
+          {{ site.data.translations._layouts['browse.html'].eras[site.lang] | default: 'Eras' }}
+        </a>
+        <button
+          class="btn btn-outline-primary btn-lg"
+          aria-label="{{ site.data.translations['_layouts']['browse.html'].switch-view[site.lang] | default: 'Switch view' }}"
+          onclick="toggleButtonView()"
+        >
+          {{ site.data.translations._layouts['browse.html']['switch-view'][site.lang] | default: 'Switch View' }}
         </button>
-        <button class="dropdown-item browse-sort-item" data-filter="title">
-          {{ site.data.translations._layouts['browse.html'].title[site.lang] | default: 'Title' }}
-        </button>
-        {% assign sort_options = site.data['config-browse'] | where_exp: 'i', 'i.sort_name != nil' %}
-        {% for o in sort_options %}
-          <button class="dropdown-item browse-sort-item" data-filter="{{ o.field | escape }}">{{ o.sort_name }}</button>
-        {% endfor %}
       </div>
     </div>
-  </div>
-</div>
 
-<div id="loadingIcon" class="text-center">
-  <div class="spinner-border text-dark" role="status">
-    <span class="visually-hidden">
-      {{- site.data.translations._layouts['browse.html'].loading[site.lang] | default: 'Loading' }}...</span
-    >
+    <div class="col align-self-end">
+      <form class="d-flex" role="search" id="lunrSearch" onsubmit="event.preventDefault(); submitFilter();">
+        <div class="input-group input-group-lg flex-nowrap">
+          <input
+            type="text"
+            class="form-control flex-nowrap"
+            id="filterTextBox"
+            placeholder="{{ site.data.translations['_layouts']['browse.html']['filter'][site.lang] | default: 'Filter' }} ..."
+            aria-label="{{ site.data.translations['_layouts']['browse.html']['search'][site.lang] | default: 'Search' }}"
+          >
+          <button
+            class="btn btn-secondary"
+            type="submit"
+            title="{{ site.data.translations['_layouts']['browse.html']['filter-items'][site.lang] | default: 'Filter items' }}"
+            id="filterButton"
+          >
+            {{ site.data.translations._layouts['browse.html'].search[site.lang] | default: 'Search' }}
+          </button>
+          <button
+            class="btn btn-outline-secondary text-dark filter d-none d-sm-flex"
+            type="reset"
+            onclick="event.preventDefault(); resetFilter();"
+            data-filter=""
+          >
+            {{ site.data.translations._layouts['browse.html'].reset[site.lang] | default: 'Reset' }}
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
-</div>
 
-<div class="row" id="browseItems"></div>
+  {% include js/switch-view-js.html %}
+
+  <div class="h2 mt-2 text-center" id="numberOf"></div>
+
+  <div id="loadingIcon" class="text-center">
+    <div class="spinner-border text-dark" role="status">
+      <span class="visually-hidden">
+        {{- site.data.translations._layouts['browse.html'].loading[site.lang] | default: 'Loading' }}...</span
+      >
+    </div>
+  </div>
+
+  <div class="row" id="browseItems"></div>
+</div>

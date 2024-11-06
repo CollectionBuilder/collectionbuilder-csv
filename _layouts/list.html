@@ -24,27 +24,84 @@ layout: page
   {% assign stopwords = page['field-stopwords'] %}
 {%- endif -%}
 
-{% assign list_id = 'list-div-' | append: fields | slugify %}
-<div class="dropdown">
-  <button
-    class="btn btn-outline-primary mt-1 dropdown-toggle"
-    type="button"
-    id="browseSortButton"
-    data-bs-toggle="dropdown"
-    aria-haspopup="true"
-    aria-expanded="false"
-  >
-    {{ site.data.translations._layouts['list.html']['sort-by'][site.lang] | default: 'Sort by' }}
-    <span id="sortFilter">{{ site.data.translations._layouts['list.html'].count[site.lang] | default: 'Count' }}</span>
-  </button>
-  <div class="dropdown-menu browse-sort-menu" aria-labelledby="browseSortButton">
-    <button class="dropdown-item list-sort-item active" data-filter="count">
-      {{ site.data.translations._layouts['list.html'].count[site.lang] | default: 'Count' }}
-    </button>
-    <button class="dropdown-item list-sort-item" data-filter="term">
-      {{ site.data.translations._layouts['list.html'].term[site.lang] | default: 'Term' }}
-    </button>
+<div class="container-fluid px-0">
+  <div class="row align-items-center">
+    <div class="col-12 col-md-auto text-center mb-2">
+      <div
+        id="switch-view"
+        class="btn-group btn-group-toggle d-flex justify-content-center"
+        data-toggle="buttons"
+        role="group"
+      >
+        <a
+          href="{{ '/browse.html' | relative_url }}"
+          class="btn btn-outline-primary btn-lg"
+          aria-pressed="true"
+          aria-label="{{ site.data.translations['_layouts']['browse.html'].view-objects[site.lang] | default: 'Show object view' }}"
+        >
+          {{ site.data.translations._layouts['browse.html'].objects[site.lang] | default: 'Objects' }}
+        </a>
+        <a
+          href="{{ '/timeline.html' | relative_url }}"
+          class="btn btn-outline-primary btn-lg"
+          aria-label="{{ site.data.translations['_layouts']['browse.html'].view-timeline[site.lang] | default: 'Show objects on timeline' }}"
+        >
+          {{ site.data.translations._layouts['browse.html'].timeline[site.lang] | default: 'Timeline' }}
+        </a>
+        <a
+          href="{{ '/subjects.html' | relative_url }}"
+          class="btn btn-primary btn-lg active"
+          aria-label="{{ site.data.translations['_layouts']['browse.html'].view-subjects[site.lang] | default: 'Show list of subjects' }}"
+        >
+          {{ site.data.translations._layouts['browse.html'].subjects[site.lang] | default: 'Subjects' }}
+        </a>
+        <a
+          href="{{ '/eras.html' | relative_url }}"
+          class="btn btn-outline-primary btn-lg"
+          aria-label="{{ site.data.translations['_layouts']['browse.html'].view-eras[site.lang] | default: 'Show list of eras' }}"
+        >
+          {{ site.data.translations._layouts['browse.html'].eras[site.lang] | default: 'Eras' }}
+        </a>
+        <button
+          class="btn btn-outline-primary btn-lg"
+          aria-label="{{ site.data.translations['_layouts']['browse.html'].switch-view[site.lang] | default: 'Switch view' }}"
+          onclick="toggleButtonView()"
+        >
+          {{ site.data.translations._layouts['browse.html']['switch-view'][site.lang] | default: 'Switch View' }}
+        </button>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-auto text-center mb-2 ms-md-auto">
+      <div class="dropdown">
+        <button
+          class="btn btn-outline-primary dropdown-toggle"
+          type="button"
+          id="browseSortButton"
+          data-bs-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          {{ site.data.translations._layouts['list.html']['sort-by'][site.lang] | default: 'Sort by' }}
+          <span id="sortFilter">
+            {{- site.data.translations._layouts['list.html'].count[site.lang] | default: 'Count' -}}
+          </span>
+        </button>
+        <div class="dropdown-menu browse-sort-menu" aria-labelledby="browseSortButton">
+          <button class="dropdown-item list-sort-item active" data-filter="count">
+            {{ site.data.translations._layouts['list.html'].count[site.lang] | default: 'Count' }}
+          </button>
+          <button class="dropdown-item list-sort-item" data-filter="term">
+            {{ site.data.translations._layouts['list.html'].term[site.lang] | default: 'Term' }}
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
-<div id="{{ list_id }}" class="text-center my-4 bg-{{ page.background | default: 'light' }} border rounded p-1"></div>
+
+{% include js/switch-view-js.html %}
+
+{% assign list_id = 'list-div-' | append: fields | slugify %}
+<div id="{{ list_id }}" class="text-center bg-{{ page.background | default: 'light' }} border rounded p-1"></div>
 {% include js/list-js.html id=list_id fields=fields min=min stopwords=stopwords %}

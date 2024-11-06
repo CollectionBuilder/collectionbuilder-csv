@@ -1,0 +1,38 @@
+<script>
+  const switchView = document.getElementById('switch-view');
+  const buttons = Array.from(switchView ? switchView.children : []);
+
+  function toggleButtonView() {
+    if (!switchView) return;
+
+    switchView.classList.add('btn-group-vertical');
+    switchView.classList.remove('btn-group');
+
+    // Hide last button (toggle) from vertical display
+    buttons.forEach((button, index) => {
+      button.style.display = index === buttons.length - 1 ? 'none' : 'block';
+    });
+  }
+
+  // Resizing with debounce
+  const debounce = (fn, delay) => {
+    let timeoutId;
+    return (...args) => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => fn(...args), delay);
+    };
+  };
+
+  const handleResize = () => {
+    if (!switchView) return;
+
+    if (window.innerWidth > 576) {
+      switchView.classList.add('btn-group', 'btn-group-toggle', 'd-flex');
+      switchView.classList.remove('btn-group-vertical');
+
+      buttons.forEach((button) => (button.style.display = ''));
+    }
+  };
+
+  window.addEventListener('resize', debounce(handleResize, 250));
+</script>

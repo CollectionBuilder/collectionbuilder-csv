@@ -1,5 +1,17 @@
 {% assign fcount = site.data['config-table'] | size %}
 {% assign lang = site.lang %}
+{% assign download_dropdown = site.data.translations._includes.js['table-js.html'].download[site.lang]
+  | default: 'Download'
+%}
+{% assign excel_export = site.data.translations._includes.js['table-js.html'].filtered_metadata_excel[site.lang]
+  | default: 'Filtered Metadata (Excel)'
+%}
+{% assign csv_export = site.data.translations._includes.js['table-js.html'].filtered_metadata_csv[site.lang]
+  | default: 'Filtered Metadata (CSV)'
+%}
+{% assign more_exports = site.data.translations._includes.js['table-js.html'].more_exports[site.lang]
+  | default: 'More Exports'
+%}
 {% include data-download-modal.html show_button=false %}
 <!-- load DataTables with jquery bundled -->
 <script
@@ -23,28 +35,27 @@
           "paging": true,
           "lengthMenu": [[ 25, 50, 100, -1], [ 25, 50, 100, "∞"]],
           // add download features
-          dom: 'B<"row mt-2"<"col-md-6"l><"col-md-6"f>>t<"row"<"col-md-6"i><"col-md-6"p>>',
+          dom: 'B<"d-flex justify-content-between align-items-center flex-nowrap mt-2"<"pagination-controls"l><"search-box"f>>t<"row"<"col-md-6"i><"col-md-6"p>>',
           buttons: [
               {
                   extend: 'collection',
-                  text: 'Tabelle exportieren',
+                  text: '{{ download_dropdown }}',
                   className: 'btn btn-outline-primary',
                   buttons: [
-
                       {
-                          text: 'Gefilterte Metadaten (Excel)',
+                          text: '{{ excel_export }}',
                           extend: 'excelHtml5',
                           className: 'btn btn-outline-primary'
                       },
                       {
-                          text: 'Gefilterte Metadaten (CSV)',
+                          text: '{{ csv_export }}',
                           extend: 'csvHtml5',
                           className: 'btn btn-outline-primary'
                       }
                   ]
               },
               {
-                  text: 'Sammlungsmetadaten',
+                  text: '{{ more_exports }}',
                   action: function ( e, dt, node, config ) {
                           $('#dataModal').modal('show');
                       },

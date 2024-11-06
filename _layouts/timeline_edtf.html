@@ -24,32 +24,87 @@ custom-foot: js/timeline-js.html
 {%- if t == 0 -%}{{ i }}{% unless forloop.last %};{% endunless %}{% endif %}{% endfor %}{%- endcapture -%}
   {%- assign navYears = navYears | split: ';' -%}
 {%- endif -%}
-{%- if navYears -%}
-  <div class="dropdown float-end" id="year-nav">
-    <button
-      class="btn btn-outline-primary dropdown-toggle"
-      type="button"
-      id="yearButton"
-      data-bs-toggle="dropdown"
-      aria-haspopup="true"
-      aria-expanded="false"
-    >
-      {{ years }}
-    </button>
-    <div class="dropdown-menu" aria-labelledby="yearButton">
-      {% for y in navYears %}
-        {% assign year_parts = y | split: ':' %}
-        {% if year_parts.size >= 2 %}
-          <a class="dropdown-item" href="#y{{ year_parts[1] }}">{{ year_parts[0] }}</a>
-        {% else %}
-          <a class="dropdown-item" href="#" onclick="scrollToYear(event, {{ y }})">{{ y }}</a>
-        {% endif %}
-      {% endfor %}
-    </div>
-  </div>
-{%- endif -%}
 
 {{ content }}
+
+<div class="container-fluid px-0">
+  <div class="row align-items-center">
+    <div class="col-12 col-md-auto text-center text-md-center mb-2 mb-lg-0">
+      <div
+        id="switch-view"
+        class="btn-group btn-group-toggle d-flex justify-content-center"
+        data-toggle="buttons"
+        role="group"
+      >
+        <a
+          href="{{ '/browse.html' | relative_url }}"
+          class="btn btn-outline-primary btn-lg"
+          aria-pressed="true"
+          aria-label="{{ site.data.translations['_layouts']['browse.html'].view-objects[site.lang] | default: 'Show object view' }}"
+        >
+          {{ site.data.translations._layouts['browse.html'].objects[site.lang] | default: 'Objects' }}
+        </a>
+        <a
+          href="{{ '/timeline.html' | relative_url }}"
+          class="btn btn-primary btn-lg active"
+          aria-label="{{ site.data.translations['_layouts']['browse.html'].view-timeline[site.lang] | default: 'Show objects on timeline' }}"
+        >
+          {{ site.data.translations._layouts['browse.html'].timeline[site.lang] | default: 'Timeline' }}
+        </a>
+        <a
+          href="{{ '/subjects.html' | relative_url }}"
+          class="btn btn-outline-primary btn-lg"
+          aria-label="{{ site.data.translations['_layouts']['browse.html'].view-subjects[site.lang] | default: 'Show list of subjects' }}"
+        >
+          {{ site.data.translations._layouts['browse.html'].subjects[site.lang] | default: 'Subjects' }}
+        </a>
+        <a
+          href="{{ '/eras.html' | relative_url }}"
+          class="btn btn-outline-primary btn-lg"
+          aria-label="{{ site.data.translations['_layouts']['browse.html'].view-eras[site.lang] | default: 'Show list of eras' }}"
+        >
+          {{ site.data.translations._layouts['browse.html'].eras[site.lang] | default: 'Eras' }}
+        </a>
+        <button
+          class="btn btn-outline-primary btn-lg"
+          aria-label="{{ site.data.translations['_layouts']['browse.html'].switch-view[site.lang] | default: 'Switch view' }}"
+          onclick="toggleButtonView()"
+        >
+          {{ site.data.translations._layouts['browse.html']['switch-view'][site.lang] | default: 'Switch View' }}
+        </button>
+      </div>
+    </div>
+
+    {% include js/switch-view-js.html %}
+
+    {%- if navYears -%}
+      <div class="col-12 col-md-auto text-center mb-2 mb-lg-0 ms-md-auto">
+        <div class="dropdown">
+          <button
+            class="btn btn-outline-primary dropdown-toggle"
+            type="button"
+            id="yearButton"
+            data-bs-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            {{ years }}
+          </button>
+          <div class="dropdown-menu" aria-labelledby="yearButton">
+            {% for y in navYears %}
+              {% assign year_parts = y | split: ':' %}
+              {% if year_parts.size >= 2 %}
+                <a class="dropdown-item" href="#y{{ year_parts[1] }}">{{ year_parts[0] }}</a>
+              {% else %}
+                <a class="dropdown-item" href="#" onclick="scrollToYear(event, {{ y }})">{{ y }}</a>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
 
 <script>
   function scrollToYear(event, year) {
@@ -112,7 +167,7 @@ custom-foot: js/timeline-js.html
   </h2>
 {% endcomment %}
 
-<table id="timeline" class="table table-striped">
+<table id="timeline" class="table table-striped mt-lg-2">
   <tbody>
     {% for date in sorted_years %}
       {% assign year = date | split: ':' %}
