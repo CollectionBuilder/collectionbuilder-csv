@@ -1,10 +1,12 @@
 {
   "scripts": {
     "check": "prettier --check '**/*.{js,css,md,html}'",
-    "format": "prettier --write '**/*.{js,css,md,html}'"
+    "format": "prettier --write '**/*.{js,css,md,html}'",
+    "clean": "rm _data/sgb-metadata-* && find objects -type f ! -name 'README.md' -delete",
+    "populate": "uv run .github/workflows/process_data.py"
   },
   "dependencies": {
-    "@shopify/prettier-plugin-liquid": "^1.5.2",
+    "@shopify/prettier-plugin-liquid": "^1.6.0",
     "prettier": "^3.3.3"
   }
 }

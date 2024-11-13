@@ -2,6 +2,7 @@ field,display_name,browse_link,external_link,dc_map,schema_map
 objectid,Identifikator,,,DCTERMS.identifier,identifier
 title,Titel,,,DCTERMS.title,headline
 description,Beschreibung,,,DCTERMS.description,description
+relation,Verwandte Ressourcen,,true,DCTERMS.relation,relation
 subject,Thema,true,,DCTERMS.subject,keywords
 era,Epoche,true,,DCTERMS.temporal,
 isPartOf,Gehört zu,,true,DCTERMS.isPartOf,isPartOf
@@ -15,6 +16,3 @@ extent,Auflösung,,,DCTERMS.extent,
 language,Sprache,true,,DCTERMS.language,inLanguage
 rights,Rechte,,,DCTERMS.rights,usageInfo
 license,Lizenz,,true,DCTERMS.license,license
-relation,Verwandte Ressourcen,,true,DCTERMS.relation,relation
-
-

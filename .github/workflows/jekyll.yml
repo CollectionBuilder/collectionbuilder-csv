@@ -35,11 +35,16 @@ jobs:
         with:
           python-version: '3.13'
       - run: uv run .github/workflows/process_data.py
-      - name: Upload sgb-metadata.csv
+      - name: Upload sgb-metadata-csv.csv
         uses: actions/upload-artifact@v4
         with:
-          name: sgb-metadata
-          path: _data/sgb-metadata.csv
+          name: sgb-metadata-csv
+          path: _data/sgb-metadata-csv.csv
+      - name: Upload sgb-metadata-json.json
+        uses: actions/upload-artifact@v4
+        with:
+          name: sgb-metadata-json
+          path: _data/sgb-metadata-json.json
       - name: Upload objects folder
         uses: actions/upload-artifact@v4
         with:
@@ -52,10 +57,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Download sgb-metadata.csv
+      - name: Download sgb-metadata-csv.csv
         uses: actions/download-artifact@v4
         with:
-          name: sgb-metadata
+          name: sgb-metadata-csv
+          path: _data
+      - name: Download sgb-metadata-json.json
+        uses: actions/download-artifact@v4
+        with:
+          name: sgb-metadata-json
           path: _data
       - name: Download objects folder
         uses: actions/download-artifact@v4
