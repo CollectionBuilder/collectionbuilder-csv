@@ -92,6 +92,30 @@
 .jekyll-toc-list { 
     list-style: none;
     padding-left: 0;
+    font-style: italic;
+
+    ul, ol {
+        padding-left: 0;
+        margin-left: 0;
+    }
+
+    > li {
+        font-size: 18px;
+        line-height: 1.2;
+        padding: 5px 0;
+    }
+
+    li li {
+        font-size: 15px;
+        line-height: 1.2;
+        padding-top: 7px;
+        margin-left: 15px;
+        list-style: none;
+    }
+    
+    a {
+        color: $text-color !important;
+    }
 }
 #about-contents-wrapper { 
     padding: 1rem;
@@ -100,9 +124,12 @@
 @media (min-width: 992px) {
     #about-wrapper {
         display: grid;
-        gap: 1.2rem;
-        grid-template-areas: "sidebar main aside";
-        grid-template-columns: 1fr 5fr 1fr;
+        grid-column-gap: 1.2rem;
+        grid-row-gap: 0;
+        grid-template-areas: 
+        "sidebar main"
+        "sidebar credits";
+        grid-template-columns: 1fr 6fr;
     }
     #about-toc-wrapper {
         grid-area: sidebar;
@@ -112,7 +139,27 @@
         grid-area: main;
         order: 1;
         min-width:0;
-        padding: 2rem 0 2rem 1rem;
+        padding: 2rem 0 0 3rem;
+        overflow-x: hidden;
+
+        /* creating a narrow text column */
+        h2 {
+            font-weight: bold;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            margin: 1.5rem 0 1rem;
+        }
+
+        p, .about-narrowed-content, .narrow-content, hr, .footnotes, ol, ul, blockquote, .feature-include {
+            max-width: 750px;
+        }
+    }
+    #credits-contents-wrapper {
+        grid-area: credits;
+        order: 2;
+        min-width:0;
+        padding: 2rem 0 0 3rem;
     }
     #about-toc { 
         position: -webkit-sticky;
@@ -126,18 +173,41 @@
     }
     .jekyll-toc-list { 
         padding: 1rem;
-        border: 1px solid #dee2e6;
-        border-radius: 0.25rem;
+        //border: 1px solid #dee2e6;
+        //border-radius: 0.25rem;
         max-height: 90vh;
         overflow-y: auto;
+        font-style: italic;
+
+        ul, ol {
+            padding-left: 0;
+            margin-left: 0;
+        }
+
+        > li {
+            font-size: 18px;
+            line-height: 1.2;
+            padding: 15px 0;
+        }
+
+        li li {
+            font-size: 15px;
+            line-height: 1.2;
+            padding-top: 15px;
+            margin-left: 15px;
+            list-style: none;
+        }
+
+        a {
+            color: $text-color !important;
+        }
     }
 }
 /* creating a narrow text column */ 
+/*
 .about-contents > {
     h2 {
         font-weight: bold;
-        padding-top: 100px;
-        border-top: 1px dotted black;
     }
     
     h1, h2, h3, h4, h5, h6 {
@@ -152,6 +222,7 @@
     }
 
 }
+*/
 
 /* narrow text block for page-narrow layout */
 .page-narrow {
