@@ -34,18 +34,6 @@ layout: default
     .jumbo-title {
         padding-left: 15% !important;
     }
-    .jumbo-title h2 {
-        display: inline-block;
-    }
-    .jumbo-title h2::after {
-        content: '';
-        display: block;
-        width: 100%;
-        height: 3px;
-        border: none;
-        background-color: white;
-        opacity: 1;
-    }
     @media screen and (max-width: 576px) {
         .jumbo-title-box {
             max-height: 500px; 
@@ -60,7 +48,7 @@ layout: default
     <div class="jumbo-title-box">
         {% unless page.heading == false and page.text == false %}
         <div class="p-2 text-start text-white bg-dark bg-opacity-75 jumbo-title">
-            {% unless page.heading == false %}<h2 class="display-4">{{ page.heading | default: site.title }}</h2>{% endunless %}
+            {% unless page.heading == false %}<h2 class="display-1">{{ page.heading | default: "About the Collection" }}</h2>{% endunless %}
         </div>
         {% endunless %}
     </div>
