@@ -19,7 +19,7 @@ var items = [
         "id":{{ item.objectid | jsonify }} }{% unless forloop.last %},{% endunless %}{%- endfor -%}
 ];
 
-{% include js/get-icon.js %}
+{% include helpers/get-icon.js %}
 
 /* function to create cards for each item */ 
 function makeCard(obj) {
