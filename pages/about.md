@@ -4,11 +4,17 @@ layout: about
 permalink: /about.html
 # include CollectionBuilder info at bottom
 credits: true
+# featured-image value can be one objectid for a photo object in this collection, a relative path to an image in this project, or a full url to any image. If left blank, no featured image will appear at top of About page.
+featured-image: demo_026
+# set background-position for featured image, "center", "top", "bottom"
+position:
+# major heading to display over featured image. By default this will be the site title. Give the value false for no heading.
+heading: Psychiana Digital Collection
+# paragraph text below heading in featured image. By default this will be the site tagline. Give the value false for no text.
+padding: 8em
 # Edit the markdown on in this file to describe your collection
 # Look in _includes/feature for options to easily add features to the page
 ---
-
-{% include feature/jumbotron.html objectid="https://cdil.lib.uidaho.edu/images/palouse_sm.jpg" %} 
 
 ## About CollectionBuilder CSV
 

@@ -3,14 +3,73 @@
 layout: default
 ---
 
-{% capture full_content %}
-<div class="container my-4 about-contents">
-{{ content }}
+{% if page.featured-image %}
+
+{% assign jumboId = page.featured-image %}
+{% if jumboId contains '/' %}
+{% assign jumboSrc = jumboId | relative_url %}
+{% else %}
+{% assign jumboItem = site.data[site.metadata] | where: "objectid", jumboId | first %}
+{% capture jumboSrc %}{{ jumboItem.object_location | default: jumboItem.image_small | relative_url }}{% endcapture %}
+{%- endif -%}
+
+<style>
+    .jumbotron {
+        padding: 4rem 2rem;
+        margin-bottom: 1rem;
+        background-color: #e9ecef;
+    }  
+    #about-feature {
+        background-image: url({{ jumboSrc }});
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: {{ page.position | default: 'center' }};
+    }
+    {% if page.padding %}
+    .jumbo-title-box {
+        padding-top: {{ page.padding }};
+        padding-bottom: 1em;
+    }
+    {%- endif -%}
+    .jumbo-title {
+        padding-left: 15% !important;
+    }
+    .jumbo-title h2 {
+        display: inline-block;
+    }
+    .jumbo-title h2::after {
+        content: '';
+        display: block;
+        width: 100%;
+        height: 3px;
+        border: none;
+        background-color: white;
+        opacity: 1;
+    }
+    @media screen and (max-width: 576px) {
+        .jumbo-title-box {
+            max-height: 500px; 
+        }
+        .jumbo-title {
+            text-align: center !important;
+            padding-left: 0 !important;
+        }
+    }
+</style>
+<div class="jumbotron feature px-0" id="about-feature">
+    <div class="jumbo-title-box">
+        {% unless page.heading == false and page.text == false %}
+        <div class="p-2 text-start text-white bg-dark bg-opacity-75 jumbo-title">
+            {% unless page.heading == false %}<h2 class="display-4">{{ page.heading | default: site.title }}</h2>{% endunless %}
+        </div>
+        {% endunless %}
+    </div>
 </div>
+{% endif %}
 
-{% if page.credits == true %}{% include cb/credits.html %}{% endif %}
+{% capture full_content %}
+    {{ content }}
 {% endcapture %}
-
 
 <div id="about-wrapper">
     <div id="about-toc-wrapper">
@@ -25,12 +84,15 @@ layout: default
                 </button>
             </div>
             <div id="about-toc-list" class="collapse" >
-            {% include feature/about-toc.html html=full_content h_min=1 h_max=3 skip_no_ids=true class="jekyll-toc-list" %}
+            {% include cb/jekyll-toc.html html=full_content h_min=1 h_max=3 skip_no_ids=true class="jekyll-toc-list" %}
             </div>
         </div>
         {% endunless %}
     </div>
     <div id="about-contents-wrapper">
         {{ full_content }}
+    </div>
+    <div id="credits-contents-wrapper">
+        {% if page.credits == true %}{% include cb/credits.html %}{% endif %}
     </div>
 </div>
