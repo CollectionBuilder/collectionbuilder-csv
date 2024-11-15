@@ -5,7 +5,11 @@ It is a standard part of all Ruby installs, so if you are using Jekyll, you have
 Adding a "Rakefile" allows you to add commands to automate repetitive tasks.
 
 CollectionBuilder-CSV provides a "Rakefile" with tasks to help set up and deploy your digital collection.
-This allows you to run `rake` commands inside this repository:
+This allows you to run `rake` commands inside this repository.
+the use of each task is documented in "docs/rake_tasks/" folder. 
+The code for the individual rake tasks is contained in the folder "rakelib".
+
+The two most commonly used task are:
 
 ## deploy
 
@@ -23,37 +27,7 @@ Requirements:
 - **ImageMagick**, [download](https://imagemagick.org/script/download.php)
 - **Ghostscript**, [download AGPL version](https://www.ghostscript.com/download/gsdnld.html) (required for processing PDF items)
 
-The following configuration options are available:
+Check the doc file for full configuration options.
 
-| option | description | default value |
-| --- | --- | --- |
-| thumbs_size | the max dimensions of the generated thumbnail images, using ImageMagick resizing syntax | 450x |
-| small_size | the max dimensions of the generated small images, using ImageMagick resizing syntax | 800x800 |
-| density | the pixel density used to generate PDF thumbnails | 300 |
-| missing | whether to only generate derivatives that don't already exist | true |
-| compress_originals | Optimize the original image files | false |
-
-The default image sizes are based on the max pixel width of the images where they will appear in the base CollectionBuilder features (e.g. the width of thumb is based on the card image top featured on the Browse page).
-
-You can configure any or all of these options by specifying them in the rake command like so:
-
-```
-rake generate_derivatives[<thumb_size>,<small_size>,<density>,<missing>,<compress_originals>]
-```
-
-Here's an example of overriding all of the option values:
-
-```
-rake generate_derivatives[100x100,300x300,70,false,false]
-```
-
-It's also possible to specify individual options that you want to override, leaving the others at their defaults.
-For example, if you only wanted to set `density` to `70`, you can do:
-
-```
-rake generate_derivatives[,,70]
-```
-
-The mini_magick Gem is used to interface with ImageMagick so it supports both current version 7 and legacy versions (which are common on Linux). 
-The image_optim Gem is used to optimize images using the optimization libraries provided by the image_optim_pack Gem. 
-image_optim_pack does not provide binaries for Windows, so optimization is skipped when using the rake task on Windows.
+Note: the image_optim Gem is used to optimize images using the optimization libraries provided by the image_optim_pack Gem. 
+However, image_optim_pack does not provide binaries for Windows, so optimization is skipped when using the rake task on Windows.
