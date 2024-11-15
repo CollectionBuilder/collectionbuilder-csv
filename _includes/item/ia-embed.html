@@ -1,0 +1,27 @@
+{% comment %}
+
+    Internet Archive item embed. 
+    Loads a book/pdf, video, or audio item from Internet Archive via their standard iframe embed. 
+
+    The item's "objects_location" must be the full public URL to the object on IA. The item url looks something like: 
+    
+    book, https://archive.org/details/uidaho_gem_1903 
+    video, https://archive.org/details/fluxusfireplace
+    audio, https://archive.org/details/aladore_1704_librivox
+
+    The embed works for books/pdfs, video, and audio--however, you will want to tweak the aspect ratio for different item types!
+
+    Options:
+
+    - "ratio" = use Bootstrap embed ratio options "21x9", "16x9", "4x3", or "1x1" to customize the responsive aspect ratio if not using height. 4x3 is default. (optional)
+    - "height" = set embed object height in px (rather than responsive size), width will be 100%, e.g. "800px" (optional)
+    - "style" = apply an arbitrary style to the div containing the embed. This is useful if you are trying to add a min height or custom aspect ratio. (optional)
+        - min height is useful for book items on mobile, e.g. "min-height: 500px;"
+        - custom aspect ratio may be useful for book items, e.g. "--bs-aspect-ratio: %115;"
+        - both e.g. "min-height: 500px;--bs-aspect-ratio: calc(3 / 4 * 100%);"
+
+{% endcomment %}
+{% assign archive_id = page.object_location | split: '/' | last %}
+<div class="{% unless include.height %}ratio ratio-{{ include.ratio | default: '4x3' }}{% endunless %}"{% if include.style %} style="{{ include.style }}"{% endif %}>
+    <iframe title="item embed for {{ page.title | escape }}" src="https://archive.org/embed/{{ archive_id }}" {% if include.height %}class="w-100" height="{{ include.height }}"{% endif %} frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen></iframe>
+</div>`
