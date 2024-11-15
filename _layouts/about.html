@@ -49,6 +49,7 @@ layout: default
         {% unless page.heading == false and page.text == false %}
         <div class="p-2 text-start text-white bg-dark bg-opacity-75 jumbo-title">
             {% unless page.heading == false %}<h2 class="display-1">{{ page.heading | default: "About the Collection" }}</h2>{% endunless %}
+            {% unless page.text == false %}<p class="jumbo-tagline">{{ page.text | default: site.tagline }}</p>{% endunless %}
         </div>
         {% endunless %}
     </div>
