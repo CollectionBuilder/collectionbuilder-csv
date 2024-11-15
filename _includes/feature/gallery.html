@@ -1,0 +1,73 @@
+{% comment %}
+    Gallery, grid of images to be used as it's own page or within an about page. 
+
+    E.G. --> (3 examples below) 
+
+        {% include feature/gallery.html image-heading="demo_008" heading="Items after 1900"  captions=false filter="item.date > '1900'" %}
+
+        {% include feature/gallery.html heading="All the Videos"  child-objects=true gallery-type="video" %}
+
+        {% include feature/gallery.html image-heading="demo_018" heading="Items that have the subject postcard and are in Spokane" context="This uses a complex liquid filter to specify specif items." filter="item.subject contains 'postcard' and item.location contains 'Spokane'" %}
+
+    *Note that filters are CASE-SENSITIVE so if you're constructing one, either using the filter itself or the filter-field and filter-value you will need to match the case of the string search. this is unlike our browse page.*
+
+    Options:
+    - "filter" = logic statement (in the templating language liquid -- non liquid option indented below) that filters out most of the collection to display only select items. The first part of the statement must start with an "item." and then the category you'd like filtered, followed by an operator (https://shopify.github.io/liquid/basics/operators/) and the string or value you'd like to filter by e.g. "item.date contains '2019'".
+    If needed you can use the below options to construct a filter statement
+        - "filter-field" = the metadata field by which you'd like to filter items in your collection. i.e. title, subject, date, etc.  
+        - "filter-value" = logic statement (in liquid) that filters out most of the collection to display only select items. 
+    - "heading" = the heading text above the gallery (optional)
+    - "image-heading" = one objectid for a photo object in this collection, a relative path to an image in this project, or a full url to any image. This will include a feature/jumbotron.html includes at the top of the gallery
+    - "context" = a paragraph explanation of the gallery contents (optional)
+    - "caption" = If you don't want captions for your items, add --> captions=false with no quotations. Captions are on by default
+    - "item-size" = tiny, small, medium, large; default is medium, which is 3 items per row on a laptop screen size. 
+    - "gallery-type" = this will determine how the items appear, so choosing 'video' will cause the gallery to display all items as embedded videos  options: image, video, pdf, audio. Default is "image" (optional)
+    - container-styles = adds css classes to allow you to style the container in which the gallery appears, e.g. "w-75 mx-auto"
+    - item-styles = adds css classes to allow you to style the container in which the individual items appears, e.g. "card py-3"
+    - "image-size" - will adjust the size of the images used in the gallery, options: original, small, thumb. Default is "small" (optional)
+    - "child-objects" = include child items in count or only parents, true or false (optional, default false)
+    - "limit" will limit the number of items featured to the number included, default 50 (optional)
+    
+{%- endcomment -%}
+
+{% if include.child-objects == true %}
+{%- assign gallery-items = site.data[site.metadata] | where_exp: 'item','item.objectid' -%}
+{% else %}
+{%- assign gallery-items = site.data[site.metadata] | where_exp: 'item','item.objectid and item.parentid == nil' -%}
+{% endif %}
+{% if include.gallery-type %}
+{%- assign gallery-items = gallery-items | where_exp: "item","item.display_template == include.gallery-type" -%}
+{% else %}
+{%- assign gallery-items = gallery-items |  where_exp: "item","item.image_small != nil or item.image_thumb != nil" -%}
+{% endif %} 
+{%- if include.filter-field and include.filter-value -%}
+{%- assign gallery-items = gallery-items | where_exp: 'item','item[include.filter-field] contains include.filter-value' -%}
+{%- elsif include.filter -%}
+{%- assign gallery-items = gallery-items | where_exp: 'item',include.filter -%}
+{% endif %}
+{% assign gallery-limit = include.limit | default: 50 %}
+{% capture captions %}{{ include.captions | default: "true" }}{% endcapture %}
+
+
+{% if include.image-heading and include.heading%}
+{% include feature/jumbotron.html objectid=include.image-heading heading=include.heading text=false padding="5rem" %}
+{% elsif include.image-heading %}
+{% include feature/jumbotron.html objectid=include.image-heading %}
+{% elsif include.heading %}
+<h2>{{ include.heading }}</h2>{% endif %}
+<div class="row my-3 py-3 {{ include.container-styles }}">
+    {% if include.context %}<p> {{include.context}} </p>{% endif %}
+    {% for item in gallery-items limit:gallery-limit %}
+    <div class="{% if include.item-size == 'tiny' %}col-lg-2 col-sm-4 col-xs-6{% elsif include.item-size == 'small' %}col-lg-3 col-sm-6{% elsif include.item-size == 'large' %}col-xl-4 col-lg-6{% else %}col-lg-4 col-sm-6{% endif %} {{ include.item-styles }}">
+        {% if include.gallery-type == "video" %}
+        {% include feature/video.html objectid=item.objectid caption=include.captions %}
+        {% elsif include.gallery-type == "pdf" %}
+        {% include feature/pdf.html objectid=item.objectid caption=include.captions %}
+        {% elsif include.gallery-type == "audio" %}
+        {% include feature/audio.html objectid=item.objectid caption=include.captions %}
+        {% else %}
+        {% include feature/image.html objectid=item.objectid caption=include.captions %}{% endif %}
+    </div>
+    {% endfor %}
+</div>
+
