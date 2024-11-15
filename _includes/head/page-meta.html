@@ -1,5 +1,6 @@
 <meta name="description" content="{{ site.description | escape }}">
 {% if site.author or site.organization-name %}<meta name="author" content="{% if site.author %}{{ site.author | escape }}; {% endif %}{{ site.organization-name | escape }}" >{% endif %}
+{% if site.keywords %}<meta name="keywords" content="{{ site.keywords | escape }}">{% endif %}
 <!-- DC meta --> 
 <link rel="schema.DCTERMS" href="http://purl.org/dc/terms/" />
 <meta name="DCTERMS.title" content="{{ page.title | escape }}, {{ site.title | escape }}" xml:lang="en" />
