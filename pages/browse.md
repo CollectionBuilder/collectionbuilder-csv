@@ -1,7 +1,9 @@
 ---
 title: Browse
-layout: browse
+layout: page
 permalink: /browse.html
 ---
 
 ## Browse Items
+
+{% include js/browse-js-new.html %}

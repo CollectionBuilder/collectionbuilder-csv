@@ -1,0 +1,56 @@
+{% if site.data.theme.browse-child-objects == true %}
+{%- assign items = site.data[site.metadata] | where_exp: 'item','item.objectid' -%}
+{% else %}
+{%- assign items = site.data[site.metadata] | where_exp: 'item','item.objectid and item.parentid == nil' -%}
+{% endif %}
+{%- assign fields = site.data.config-browse -%}
+<!-- load itemjs, https://github.com/itemsapi/itemsjs -->
+<script src="{{ '/assets/lib/itemjs.index.umd.js' | relative_url }}"></script>
+<script>
+    /* load the item data */ 
+    const itemData = [
+        { "title":"test","subject":"dogs" },
+        { "title":"test","subject":"1980s" },
+        { "title":"two item","subject":"muffin" }
+
+    ];
+    /* itemjs config options */ 
+    const indexOptions = {
+        sortings: {
+            title_asc: {
+                field: 'title',
+                order: 'asc'
+            },
+            title_desc: {
+                field: 'title',
+                order: 'desc'
+            }
+        },
+        aggregations: {
+            subject: {
+                title: 'Subjects',
+                sort: ['selected', 'count', 'key'],
+                order: ['desc', 'desc', 'asc'],
+                size: 10,
+                conjunction: false,
+                hide_zero_doc_count: true
+            }
+        },
+        searchableFields: ['title', 'subject']
+    };
+    /* init the itemjs index */ 
+    var itemsjs = itemsjs(itemData, indexOptions);
+
+    /* search */ 
+    var results = itemsjs.search({
+        query: 'test',
+        filters: {
+            subject: ['1980s']
+        },
+        sort: 'title_asc'
+    })
+    console.log(results);
+
+
+</script>
+
