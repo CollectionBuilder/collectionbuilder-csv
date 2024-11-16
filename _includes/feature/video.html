@@ -41,7 +41,7 @@
 {%- else -%}
     {% assign video_src = raw_src | relative_url %}
 {%- endif -%}
-<div class="text-start m-4">
+<div class="text-start my-4">
     <figure class="{% if include.width %} feature-w-{{ include.width }}{% endif %}">
         <div class="ratio ratio-{{ include.ratio | default: '16x9' }}">
             {%- if video_src contains "vimeo" or video_src contains "youtu" -%}
