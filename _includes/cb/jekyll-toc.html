@@ -51,6 +51,9 @@
         Output:
             An ordered or unordered list representing the table of contents of a markdown block. This snippet will only
             generate the table of contents and will NOT output the markdown given to it
+
+        Modified:
+            Functionality was modified for CollectionBuilder's context to allow site's creator to trigger a link to the technical credits in the side nav. Additions include lines 165-167 in this file, and the addition of an optional "credits" parameter in the include. credits=true will add "Technical" to the side nav with a link to the #technical anchor. credits=false or not including credits will remove "Technical" from the side nav.
     {% endcomment %}
 
     {% capture newline %}
@@ -160,7 +163,11 @@
 
     {% assign repeatCount = minHeader | minus: 1 %}
     {% assign repeatCount = lastLevel | minus: repeatCount %}
+
     {% for i in (1..repeatCount) %}
+        {% if i == repeatCount and include.credits == true %}
+            {% capture jekyll_toc %}{{ jekyll_toc }}<li><a href="#technical">Technical</a>{% endcapture %}
+        {% endif %}
         {% capture jekyll_toc %}{{ jekyll_toc }}</li></{{ listModifier }}>{% endcapture %}
     {% endfor %}
 
