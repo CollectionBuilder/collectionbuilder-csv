@@ -10,11 +10,13 @@ item-meta: true
     {% include item/breadcrumbs.html %}
     <div class="my-0 h5 small">{{ page.display_template | replace: "_", " " | upcase }} {% if page.display_template == "compound_object" or page.display_template == "multiple" %}{% assign children = site.data[site.metadata] | where_exp: 'item','item.parentid == page.objectid' %} ({{ children | size }} Items){% endif %}</div>
     <h2 class="mb-3">{{ page.title }} 
-        {% unless page.display_template == 'record' %}<a href="#metadata" class="ms-5 btn btn-sm btn-outline-dark small">Item Info 
+        {% unless page.display_template == 'record' %}{% if page.display_template == 'transcript' %}{% if page.bio  %}{% unless site.data.theme.transcript-fields contains 'bio' %}<a type="button" class="btn btn-sm btn-outline-dark meta ms-3"
+        data-bs-toggle="modal" data-bs-target="#bio-modal">Click for bio</a>{% endunless %}{% endif %}</h2>
+    {% if page.bio %}{% include transcript/item/bio-modal.html %}{% endif %}{% else %}<a href="#metadata" class="ms-5 btn btn-sm btn-outline-dark small">Item Info 
             <svg class="bi icon-sprite" role="img" aria-label="Jump to Item Info">
                 <use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#arrow-down"/>
             </svg>
-        </a>{% endunless %}
+        </a>{% endif%}{% endunless %}
     </h2>
 
     <div class="row justify-content-center">

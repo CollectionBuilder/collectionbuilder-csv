@@ -1,0 +1,24 @@
+---
+# filter facets generator
+# this creates a csv of unique values that are stored in your transcripts 'tags' column and their counts
+#
+# Requires CB's array_count_uniq.rb plugin!
+---
+{% assign transcripts = site.data.transcripts %}{% for transcript in transcripts %}
+{% assign items = transcript[1] %}
+{%- assign min-count = 1 -%}
+{%- assign raw-subjects = items | map: "tags" | compact | join: ";" | split: ";" -%}
+{%- capture subjects -%}{% for s in raw-subjects %}{% if s != "" %}{{- s | strip | downcase -}};{% endif %}{%- endfor -%}{%-endcapture -%}
+{%- assign subjects = subjects | split: ";" -%}
+{%- assign allSubjects = allSubjects | concat: subjects -%}{% endfor %}
+{
+    "facets": [ 
+        {%- assign uniqueArray = allSubjects | array_count_uniq -%} 
+        {
+            "field": "tags",
+            "terms": { {% for unique in uniqueArray %}
+                {{ unique[0] | jsonify }}: {{ unique[1] | jsonify }}{% unless forloop.last %},{% endunless %}{% endfor %}
+            }
+        }{% unless forloop.last %},{% endunless %}
+    ]
+}

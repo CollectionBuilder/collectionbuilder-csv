@@ -1,0 +1,11 @@
+<!-- note that I (dcnb) got rid of most of the vimeo options as their api / player got more locked down. 
+The below code is not used anywhere currently in OHD, but I kept it in there in case it became useful for someone.  
+Previously, this is how I built the call to a vimeo video in the page: 
+ 
+{% assign timestamp = item.timestamp | remove: '[' | remove: ']' %}https://player.vimeo.com/video/{{ vimeo_id }}#t={{timestamp | date: '%H'}}h{{timestamp | date: '%M'}}m{{timestamp | date: '%S'}}s" target="_blank
+ 
+But I deleted that timestamp include command when I got rid of the vimeo options more generally.
+-->
+<div class="ratio ratio-16x9">
+    <iframe title="video embed {{ page.title | escape }}" src="https://player.vimeo.com/video/{{ vimeo_id }}" allowfullscreen></iframe>
+</div>

@@ -1,6 +1,7 @@
 display_name,stub,dropdown_parent
 Home,/,
 Browse,/browse.html,
+Visualization,/ohdviz.html
 Subjects,/subjects.html,
 Locations,/locations.html,
 Map,/map.html,

@@ -21,6 +21,8 @@
     Note: if you have issues make sure the item is a PDF file!
 
 {%- endcomment -%}
+
+<!-- cb: _includes/feature/pdf.html -->
 {% if include.objectid contains "/" %}
 {%- capture src -%}{{ include.objectid | relative_url }}{%- endcapture -%}
 {%- capture pdf_link -%}{{ src }}{%- endcapture -%}
@@ -41,3 +43,4 @@
         {% unless include.caption == false %}<figcaption class="figure-caption"><a href="{{ pdf_link }}">{{ pdf_caption }}</a></figcaption>{% endunless %}
     </figure>
 </div>
+<!-- /cb: _includes/feature/pdf.html -->

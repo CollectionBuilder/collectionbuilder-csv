@@ -1,0 +1,74 @@
+---
+layout: default
+custom-foot: transcript/js/visualization-js.html
+---
+{% include transcript/style/filter-style.html %}
+{% assign transcripts = site.data.transcripts | sort %}
+{% assign items = site.data[site.metadata] %}
+<div class="container p-4 p-md-5">{% unless site.data.theme.as-data == false %}{% include transcript/filters-data-download-modal.html %}{% endunless %}
+  <h2 id="visualize-by-subject">Color-coded Subject Visualization</h2>
+
+  <p>Click a colored circle/subject to see corresponding sections. {% unless site.data.theme.transcript-contents == false %}You can also filter by subject and view/print related <a href="#transcript-contents">contents</a> below.{% endunless %}</p>
+  
+
+  <div  class="row" role="group" aria-labelledby="filterGroupLabel">
+  <div id="filterGroupLabel" class="visually-hidden d-none">Filter transcripts by subject</div>
+    {% for n in site.data.filters %}
+    <div class="col-md-3 col-4">
+      <svg class="legend" width="100%" height="25px" data-id="{{ n.tag | slugify }}" aria-labelledby="legendTitle{{ forloop.index }}" role="button" aria-label="Filter by {{ n.tag }} - {{ n.description }}" tabindex="0" style="cursor:pointer;" data-bs-toggle="tooltip" data-bs-placement="left" title="On {{ n.description | escape }}" aria-pressed="false">
+        <title id="legendTitle{{ forloop.index }}">Filter by {{ n.tag }} - {{ n.description }}</title>
+        <circle cx="25" cy="10" r="10" class="{{ n.tag | slugify }}"></circle>
+        <text x="38" y="15">{{ n.tag }}</text>
+      </svg>
+    </div>
+    {% endfor %}
+  </div><br />
+  <button id="reset" class="btn btn-lg btn-secondary float-right" role="button">Reset</button>
+  <br /><br />
+  {% for transcript in transcripts %}
+  {%assign transcript-name = transcript[0] %}
+  {% assign transcript_item = items | where_exp: 'item', 'item.objectid == transcript-name' | first %}
+   <section class="vizdiv" aria-labelledby="header{{ transcript-name }}visualization">
+    <h3 id="header{{ transcript-name }}visualization" class="mt-4 toggle_int {{ transcript-name }}" tabindex="0" style="cursor:pointer;" data-id="{{transcript-name}}" role="button">{{ transcript_item.interviewee | default: transcript_item.title }}<i class="fas fa-filter"></i> <small>Click to filter</small></h3>
+    <svg class="chart {{transcript-name}}" width="100%" height="100px" style="overflow: visible" role="img" aria-label="Visualization of interview segments">
+      {% for item in transcript[1] %}
+      {% assign my_integer = forloop.length %}
+      {% assign my_float = my_integer | times: 1.0 %}
+      {% assign rect-width = 100 | divided_by: my_float  %}
+      <a href="{{ forloop.index0 | prepend: transcript-name | prepend: '.html?line=' | prepend: transcript-name | prepend: '/items/' | relative_url }}" aria-label="Jump to this line (starting with '{{ item.words | truncatewords: 4}}'') in the webpage for this transcript"  tabindex="-1" >
+        <rect x="{{forloop.index0 | times: rect-width }}%" y="20" width="{{rect-width}}%" height="50" data-bs-toggle="tooltip" data-bs-placement="top" class="{%- assign tags = item.tags | split: ";" | compact | where_exp: 'item', 'item != " "' %}{% for tag in tags %}{{tag | slugify }} {% endfor %}" title="{{ item.words }}{% if item.tags %}(Subjects: {{ item.tags | replace: ';', ', ' }}){%endif%}"></rect>
+      </a>
+      <title id="segment0">{{ item.words }}{% if item.tags %}(Subjects: {{ item.tags | replace: ';', ', ' }}){%endif%}</title>
+      {%endfor%}</svg>
+    </section>{%endfor%}
+
+</div>
+<br />
+
+<hr /><br />
+{% unless site.data.theme.transcript-contents == false %}
+<div class="container" id="transcript-contents">
+  <h2>Contents</h2>
+
+
+  {% for transcript in site.data.transcripts %}
+  {%assign transcript-name = transcript[0] %}
+  {% assign transcript_item = items | where_exp: 'item', 'item.objectid == transcript-name' | first %}
+  {% for item in transcript[1] %}
+  {% if forloop.first %}
+  <section class="contentsdiv" aria-labelledby="header{{ forloop.parentloop.index }}">
+    <h3 class="my-4 {{transcript-name}}"><a href="{{transcript-name | prepend: '/items/' | append: '.html' | relative_url }}">{{ transcript_item.interviewee | default: transcript_item.title }}</a></h3>
+    <table id="contents-container" class="my-4 p-2 border {{transcript-name}} {%cycle 'bg-light','' %}">{%endif%}
+      <tr id="{{transcript-name}}row{{ forloop.index0 }}" class="{{item.tags | replace: ";", " "}}">
+        <td class="p-2" style="width:10%;vertical-align:top"><a href="{{ forloop.index0 | prepend: transcript-name | prepend: '.html?line=' | prepend: transcript-name | prepend: '/items/' | relative_url }}" aria-label="jump to Line {{ forloop.index0 }} from {{transcript-name}}'s interview, opens in new tab" class="small" tabindex="-1">Line {{ forloop.index0 }}</a></td>
+        <td class="words p-2">
+          <div id="spoken">{%if item.speaker%}{{item.speaker | remove: ":"}}: {%endif%}{{item.words}}</div>
+        </td>
+      </tr>
+
+      {% if forloop.last%}</table>
+    </section>{%endif%}
+  {% endfor %}{% endfor %}
+{% endunless %}
+
+</div>

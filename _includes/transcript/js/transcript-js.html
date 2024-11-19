@@ -1,0 +1,307 @@
+<script type="text/javascript">
+  let url = new URL(window.location);
+  let params = url.searchParams;
+  const filtersSearch = document.getElementById('filters-search');
+  const filterTab = document.getElementById('filter-tab');
+  const upperElement = document.getElementById('upper-content');
+
+  function vizFilter(x) {
+    var rects = document.getElementsByTagName('rect');
+    if (x != "hilite") {
+      params.set('filter', x);
+      var p = params.toString();
+      window.history.replaceState({}, '', location.pathname + '?' + p);
+      document.getElementById('filters').value = x;
+    }
+    for (i = 0; i < rects.length; i++) {
+      var classString = rects[i].classList;
+      classString.add('dark');
+      classString.forEach(item => {
+        if (item.startsWith('primary')) {
+          classString.remove(item);
+        }
+      });
+      if (x == "all") {
+        classString.remove('dark');
+        resetVals();
+      } else if (classString.contains(x)) {
+        classString.remove('dark');
+        classString.add("primary-" + x);
+      } else if (x == "darkforall") { }
+    }
+  }
+
+
+  function searchLines(x) {
+    resetVals();
+    var itemcontainer = document.getElementById("contents-container");
+    var lines = itemcontainer.getElementsByClassName("line");
+    // the line below seems superflous but without it, things break
+    var input, filter, p, span, i;
+    // get the value and pass it to the parameter for url
+    var input = x;
+    let params = url.searchParams;
+    params.set('q', input);
+    var p = params.toString();
+    window.history.replaceState({}, '', location.pathname + '?' + p);
+    var filter = input.toUpperCase();
+    // get the lines array
+    //start the dropdown search box html
+    var searchResults = '<option>Select and scroll to a matching line</option>';
+    for (i = 0; i < lines.length; i++) {
+      // get the text in the p element in each line
+      itemcontents = lines[i].getElementsByClassName("words")[0];
+      var index = itemcontents.innerHTML.indexOf(input);
+      // if there is text, make it upper case and search it with indexOf to see if it contains the query
+      if (itemcontents) {
+        if (itemcontents.innerHTML.toUpperCase().indexOf(filter) > -1) {
+          // if the text does have the query, add a 'featured class'
+          lines[i].classList.add("featured");
+          // and built out an option for the drop down scroll-to-line feature
+          searchResults += '<option class=text-truncate" style="max-width: 250px;" value="{{page.objectid}}' + i + '">Line ' + i + ' -- ' + itemcontents.innerHTML.substring(0, 125) + '...</option>';
+          // replace the matching query with red text of the query in the text
+          itemcontents.innerHTML = itemcontents.innerHTML.replace(input, "<span class='text-danger'>" + input + "</span>");
+          {% if site.data.filters %}var rectal = "rect" + i;
+          document.getElementById(rectal).classList.add("hilite");
+          vizFilter('hilite');{% endif %}
+        } else {
+          itemcontents.classList.add("small", "text-muted");
+        }
+      }
+      {% if site.data.filters %}{% unless site.data.theme.search-and-filters == false %}document.getElementById("filters").selectedIndex = 0;{% endunless %}{% endif %}
+      let numberofint = document.querySelectorAll('.featured').length;
+      document.getElementById("numberof").innerHTML = numberofint + " lines match your query --><i> " + x + "</i>";
+      document.getElementById("searchResults").innerHTML = searchResults;
+      document.getElementById("linecount").classList.remove("d-none");
+      document.getElementById("filtersearch").classList.remove("d-none");
+      {% unless site.data.theme.search-and-filters == false %}if (filtersSearch.classList.contains("retracted")) { setTimeout(function () { filtersSearch.classList.add("retracted"); }, 300); }{% endunless%}
+    }
+  }
+
+  {% if site.data.filters %} function filterLines(x) {
+    resetVals();
+    var itemcontainer = document.getElementById("contents-container");
+    var lines = itemcontainer.getElementsByClassName("line");
+    var filterClass = x;
+    vizFilter(filterClass);
+    params.set('filter', filterClass);
+    var p = params.toString();
+    window.history.replaceState({}, '', location.pathname + '?' + p);
+    var searchResults = '<option>Select and scroll to a matching line</option>';
+    for (i = 0; i < lines.length; i++) {
+      // itemcontents is used to get part of the text for the dropdown
+      itemcontents = lines[i].getElementsByClassName("words")[0];
+      if (itemcontents) {
+        if (lines[i].classList.contains(filterClass)) {
+          // if the line has the class add featured class
+          lines[i].classList.add("featured");
+          //get index numbers for previous and next lines
+          var prevLine = i - 1;
+          var nextLine = i + 1;
+          // create the sections to link to via the dropdown
+          if (!lines[prevLine].classList.contains(filterClass)) {
+            searchResults += '<option class="text-truncate" style="max-width: 250px;" value="{{page.objectid}}' + i + '">Line ' + i;
+            var startLine = itemcontents.innerHTML.substring(0, 125);
+            var startNumber = i;
+          }
+          else if (lines[nextLine].classList.contains(filterClass) && lines[prevLine].classList.contains(filterClass)) {
+            searchResults += '';
+          }
+          else if (!lines[nextLine].classList.contains(filterClass)) {
+            var lineTotal = i - startNumber + 1;
+            searchResults += ' to Line ' + i + ' (' + lineTotal + ' lines total) -- ' + startLine + '...</option>';
+          }
+        }
+        else {
+          itemcontents.classList.add("small", "text-muted");
+        }
+      }
+    }
+    document.getElementById("quicksearch").value = "";
+    document.getElementById("searchResults").innerHTML = searchResults;
+    document.getElementById("linecount").classList.remove("d-none");
+    document.getElementById("filtersearch").classList.remove("d-none");
+    countforFilter(filterClass);
+    {% unless site.data.theme.search-and-filters == false %}if (filtersSearch.classList.contains("retracted")) { setTimeout(function () { filtersSearch.classList.add("retracted"); }, 300); }{% endunless%}
+  }
+
+  function countforFilter(x) {
+    var numberofint = document.querySelectorAll('.' + x).length;
+    var sectnumber = document.getElementsByClassName('text-truncate').length;
+    if (sectnumber == 1) {
+      var sectnumber = sectnumber + " section "
+    } else {
+      var sectnumber = sectnumber + " sections "
+    }
+    document.getElementById("numberof").innerHTML = sectnumber + "(" + numberofint + " lines) are tagged as related to " + x;
+  }
+  {% endif %}
+
+  {% unless site.data.theme.search-and-filters == false %}
+  var elem = document.getElementById("quicksearch");
+  elem.onkeyup = function (e) {
+    if (e.keyCode == 13) {
+      var searchval = document.getElementById('quicksearch').value;
+      searchLines(searchval);
+    }
+  }{% endunless %}
+
+
+  function scrollToLine(x) {
+    {% if site.data.theme.media-scroll == true %} upperElement.classList.add("media-scroll-wrapper"); {% endif %}
+    var targetElement = document.getElementById(x);
+    if (targetElement) {
+      targetElement.classList.add("border-featured");
+    }
+    // Smoothly scroll to the element
+    targetElement.scrollIntoView({
+      behavior: 'smooth',  // Enables smooth scrolling
+      block: 'start'       // Aligns to the top of the viewport
+    });
+    {% unless site.data.theme.search-and-filters == false %}setTimeout(function () { filtersSearch.classList.add("retracted"); }, 300);{% endunless %}
+  }
+
+
+
+
+  function resetVals() {
+    params.delete('q');
+    params.delete('filter');
+    params.delete('line');
+    window.history.replaceState({}, '', location.pathname);
+    document.getElementById("linecount").classList.add("d-none");
+    document.getElementById("filtersearch").classList.add("d-none");
+    document.getElementById("quicksearch").value = "";
+    document.getElementById("filters").selectedIndex = 0;
+    var words = document.querySelectorAll("p.words")
+    var lines = document.querySelectorAll(".line")
+    for (i = 0; i < words.length; i++) {
+      words[i].classList.remove('text-muted', 'featured', 'border-featured', 'small');
+      lines[i].classList.remove('text-muted', 'featured', 'border-featured', 'small');
+      if (words[i].querySelector(".text-danger")) {
+        words[i].getElementsByClassName('text-danger')[0].classList.remove('text-danger');
+      }
+    }
+    {% if site.data.filters %} var svgContainer = document.getElementById("colorViz");
+    var rects = svgContainer.getElementsByTagName('rect');
+    for (i = 0; i < rects.length; i++) {
+      rects[i].classList.remove('dark');
+      rects[i].classList.remove('hilite');
+      rects[i].classList.remove('primary-hilite');
+    }{% endif %}
+  }
+
+
+  (function () {
+    // init bootstrap tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl);
+    })
+
+    var dataFilter = url.searchParams.get('q');
+    var codeFilter = url.searchParams.get('filter');
+    var lineFilter = url.searchParams.get('line');
+    var hashfilter = decodeURIComponent(location.hash.substr(1));//.replace(/%20/g, " ");
+
+    if (dataFilter) {
+      // code to be executed if a hash is contained in the url
+      document.getElementById('quicksearch').value = dataFilter;
+      document.getElementById('goButton').click();
+      params.delete('filter');
+      document.getElementById('quicksearch').scrollIntoView();
+
+      //$(hashfilterclass).addClass('active');
+    }
+    else if (codeFilter) {
+      // code to be executed if a filter is contained in the url search parameters
+      filterLines(codeFilter);
+      document.getElementById('colorViz').scrollIntoView();
+      params.delete('q');
+      document.getElementById('filters').value = codeFilter;
+    }
+    else if (hashfilter) {
+      // code to be executed if an anchor (#) is contained in the url
+      document.getElementById(hashfilter).classList.add('featured');
+      params.delete('q'); params.delete('filter');
+    }
+    else if (lineFilter) {
+      params.delete('q');
+      params.delete('filter');
+      scrollToLine(lineFilter);
+    }
+    else {
+    };
+  })();
+
+
+  //filters tab javascript + scroll-to-top retraction of filters
+  document.addEventListener('DOMContentLoaded', function () {
+    {% unless site.data.theme.search-and-filters == false %}filterTab.addEventListener('click', function () {
+      filtersSearch.classList.toggle('retracted');
+    });{% endunless %}
+    document.getElementById('scroll-to-top').addEventListener('click', function () {
+      {% unless site.data.theme.search-and-filters == false %}if (filtersSearch.classList.contains("retracted")) { filtersSearch.classList.remove("retracted"); }{% endunless %}
+      {% if site.data.theme.media-scroll == true %}
+      if (upperElement.classList.contains("media-scroll-wrapper")) { setTimeout(function () { upperElement.classList.remove("media-scroll-wrapper"); }, 300); console.log('scrollstopped?'); } {% endif %}
+    });
+  });
+
+  function throttle(mainFunction, delay) {
+    let timerFlag = null; // Variable to keep track of the timer
+
+    // Returning a throttled version 
+    return (...args) => {
+      if (timerFlag === null) { // If there is no timer currently running
+        mainFunction(...args); // Execute the main function 
+        timerFlag = setTimeout(() => { // Set a timer to clear the timerFlag after the specified delay
+          timerFlag = null; // Clear the timerFlag to allow the main function to be executed again
+        }, delay);
+      }
+    };
+  }
+
+  function checkStickyAndUpdate() {
+    // Get the element to check for stickiness
+    const stickyElement = document.getElementById('filters-search');
+    const filterTabElement = document.getElementById('filter-tab');
+    // Ensure both elements are present
+    if (!filtersSearch || !filterTab) {
+      console.warn('Required elements are not found in the DOM.');
+      return;
+    }
+
+    // Get the bounding rectangle of the sticky element
+    const stickyRect = filtersSearch.getBoundingClientRect();
+
+    // Determine if the sticky element is in its sticky state
+    const isSticky = stickyRect.top <= 0;
+
+    // Toggle display: none class based on status of is Sticky
+    filterTab.classList.toggle('d-none', !isSticky);
+
+    // Update the class of the filter tab element based on stickiness
+    if (isSticky) {
+      {% if site.data.theme.media-scroll == true %}
+      if (!upperElement.classList.contains("media-scroll-wrapper")) {
+        upperElement.classList.add("media-scroll-wrapper");
+      } {% endif %}
+
+    } else {
+      if (filtersSearch.classList.contains("retracted")) {
+        filtersSearch.classList.remove("retracted");
+        console.log("removing retracted");
+      };
+      {% if site.data.theme.media-scroll == true %} upperElement.classList.remove("media-scroll-wrapper"); {% endif %}
+    }
+  }
+
+  // Attach event listeners
+  // Throttle the checkStickyAndUpdate function with a delay of 200 ms
+  const throttleScrollCheck = throttle(checkStickyAndUpdate, 200);
+
+  // Add an event listener to the window scroll event that calls the throttleScrollCheck function
+  window.addEventListener("scroll", throttleScrollCheck);
+  window.addEventListener('load', checkStickyAndUpdate);
+
+</script>

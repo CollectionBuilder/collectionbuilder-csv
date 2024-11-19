@@ -1,0 +1,159 @@
+<script>
+const url = new URL(window.location);
+const params = url.searchParams;
+let urlCodeFilter = url.searchParams.get('filter');
+let urlPeepFilter = url.searchParams.get('id');
+
+function codeFilter(x) {
+    document.querySelectorAll("rect").forEach(rect => {
+      rect.classList.remove(...Array.from(rect.classList).filter(c => c.startsWith("primary-")));
+      rect.classList.add("black");
+    });
+    document.querySelectorAll('a[tabindex=""]').forEach(a => {
+        if (a.querySelector('rect')) {
+            a.setAttribute('tabindex', -1);
+        }
+    });
+    document.querySelectorAll('svg[aria-pressed="true"]').forEach(svg => {
+        svg.setAttribute('aria-pressed', 'false');
+    });
+    document.querySelectorAll("circle").forEach(circle => {
+        circle.classList.add("black");
+    });
+    document.querySelectorAll("tr").forEach(tr => {
+        tr.querySelector('a[tabindex="0"]')?.setAttribute('tabindex', -1);
+        tr.classList.add("hidden");
+        tr.removeAttribute("aria-hidden");
+    });
+    document.querySelectorAll("section.contentsdiv, section.vizdiv").forEach(section => {
+        section.classList.add("hidden");
+        section.removeAttribute("aria-hidden");
+    });
+    document.querySelectorAll('rect.' + x).forEach(rect => {
+        rect.classList.toggle("black");
+        rect.classList.add("primary-" + x);
+        rect.closest('a')?.setAttribute('tabindex', 0);
+    });
+    document.querySelectorAll('circle.' + x).forEach(circle => {
+        circle.classList.toggle("black");
+        circle.closest('svg')?.setAttribute('aria-pressed', 'true');
+    });
+    document.querySelectorAll('tr.' + x).forEach(tr => {
+        tr.classList.toggle("hidden");
+        tr.setAttribute('aria-hidden', 'false');
+    });
+    document.querySelectorAll("tr:not(.hidden)").forEach(tr => {
+        tr.closest('section.contentsdiv')?.classList.remove("hidden");
+        tr.closest('section.contentsdiv')?.setAttribute('aria-hidden', 'false');
+        tr.querySelector('a[tabindex="-1"]')?.setAttribute('tabindex', 0);
+    });
+    document.querySelectorAll("rect:not(.black)").forEach(rect => {
+        rect.closest('section.vizdiv')?.classList.remove("hidden");
+        rect.closest('section.vizdiv')?.setAttribute('aria-hidden', 'false');
+    });
+    params.set('filter', x);
+    var p = params.toString();
+    if (!urlPeepFilter){
+        params.delete('id');
+    }
+    window.history.replaceState({}, '', location.pathname + '?' + p);
+
+}
+/*
+function vizFilter(x) {
+    document.querySelectorAll("rect").forEach(rect => {
+      rect.classList.remove(...Array.from(rect.classList).filter(c => c.startsWith("primary-")));
+        rect.classList.add("dark");
+    });
+    document.querySelectorAll('a[tabindex="0"]').forEach(a => {
+        if (a.querySelector('rect')) {
+            a.setAttribute('tabindex', -1);
+        }
+    });
+    document.querySelectorAll('rect.' + x).forEach(rect => {
+        rect.classList.toggle("dark");
+        rect.classList.add("primary-" + x);
+        rect.closest('a')?.setAttribute('tabindex', 0);
+    });
+    document.querySelectorAll("rect:not(.dark)").forEach(rect => {
+        rect.closest('section.vizdiv')?.classList.remove("hidden");
+    });
+}*/
+
+function interviewFilter(x) {
+    document.querySelectorAll("table, svg").forEach(el => {
+        el.classList.remove("hidden");
+        el.removeAttribute("aria-hidden");
+    });
+    document.querySelectorAll(`table:not(.${x}), svg.chart:not(.${x}), h3:not(.${x})`).forEach(el => {
+        el.classList.toggle("hidden");
+        el.removeAttribute("aria-hidden");
+    });
+    params.set('id', x);
+    console.log(params.toString());
+    var p = params.toString();
+    window.history.replaceState({}, '', location.pathname + '?' + p);
+}
+
+document.querySelectorAll(".legend").forEach(legend => {
+    legend.addEventListener('click', function() {
+        var cFilter = this.getAttribute("data-id");
+        codeFilter(cFilter);
+    });
+});
+
+document.querySelectorAll("h3.toggle_int").forEach(h3 => {
+    h3.addEventListener('click', function() {
+        var intFilter = this.getAttribute("data-id");
+        interviewFilter(intFilter);
+    });
+});
+
+document.getElementById("reset").addEventListener('click', function() {
+    document.querySelectorAll("rect, circle, tr, table, svg, h3, div, section").forEach(el => {
+        el.classList.remove("black", "hidden", "dark");
+        el.removeAttribute("aria-hidden");
+    });
+    params.set('id', '');
+    params.set('filter', '');
+    window.history.replaceState({}, '', location.pathname);
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    var svgButtons = document.querySelectorAll('svg[role="button"]');
+    svgButtons.forEach(svg => {
+        svg.addEventListener('keydown', function(event) {
+            if (event.keyCode === 13 || event.keyCode === 32) {
+                event.preventDefault();
+                var clickEvent = new MouseEvent('click', {
+                    view: window,
+                    bubbles: true,
+                    cancelable: true
+                });
+                this.dispatchEvent(clickEvent);
+            }
+        });
+    });
+});
+
+(function(){
+    // init bootstrap tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+
+ if(urlCodeFilter && urlPeepFilter) { 
+     // code to be executed if a filter is contained in the url
+     codeFilter(urlCodeFilter);
+     interviewFilter(urlPeepFilter);
+ }
+ else if (urlCodeFilter){
+    codeFilter(urlCodeFilter);
+}
+ else if (urlPeepFilter){
+    interviewFilter(urlPeepFilter);
+ };
+})();
+  
+</script>

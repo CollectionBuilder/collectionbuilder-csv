@@ -1,0 +1,12 @@
+<div class="row meta">
+        {% for n in site.data.filters %}
+        {% if uniqueSubjects contains n.tag %}
+        <div class="col-md-2 col-4 ">
+          <svg class="legend" width="100%" height="25px" data-id="{{n.tag | slugify }}" style="cursor:pointer;" data-bs-toggle="tooltip" data-bs-placement="left" title="On {{ n.description | default: n.tag | escape }}" onclick="filterLines('{{n.tag | slugify }}')">
+            <circle cx="25" cy="10" r="10"  class="{{n.tag | slugify}}"></circle><text x="38" y="15">{{n.tag}}</text>
+          </svg>
+        </div>
+    {% endif %}
+    {%endfor%}
+            
+    </div>

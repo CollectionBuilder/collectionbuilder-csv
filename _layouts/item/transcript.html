@@ -1,0 +1,61 @@
+---
+# generic fallback item page layout
+# displays image or icon depending on "image_thumb"
+layout: item/item-page-base
+custom-foot: transcript/js/transcript-js.html
+---
+{%- comment -%} Determine if transcript filename is the objectid of the item or if it is determined by the metadata's object-transcript field {%- endcomment -%}
+{% if page.object-transcript contains ".csv"%}
+{% assign transcript = page.object-transcript | remove: ".csv" %}
+{% assign items = site.data.transcripts[transcript] %}
+{% elsif page.object-transcript %}
+{% assign items = site.data.transcripts[page.object-transcript] %}
+{% else %}
+{% assign items = site.data.transcripts[page.objectid] %}
+{% endif %}
+
+{%- comment -%} if using color-coded visualization find all words used in the subject metadata {%- endcomment -%}
+{% if site.data.filters %}
+{% include transcript/style/filter-style.html %}
+{%- assign min-count = 1 -%}
+{%- assign raw-subjects = items | map: "tags" | compact | join: ";" | split: ";" -%}
+{%- capture subjects -%}{% for s in raw-subjects %}{% if s != "" %}{{- s | strip | downcase -}};{% endif %}{%- endfor
+-%}{%-
+endcapture -%}
+{%- assign subjects = subjects | split: ";" -%}
+{%- assign uniqueSubjects = subjects | uniq | sort -%}
+{% endif %}
+
+{%- comment -%} determine AV component (if there is one) {%- endcomment -%}
+{% if page.object_location contains 'vimeo' %}
+{% assign av = "vimeo" %}
+{% assign vimeo_id = page.object_location | split: '/' | last %}
+{%- elsif page.object_location contains 'youtu' -%}
+{% assign av = "youtube" %}
+{% assign youtube_id = page.object_location | split: '/' | last %}
+{% if youtube_id contains 'v=' %}{% assign youtube_id = youtube_id | split: 'v=' | last | split: '&' | first %}
+{% elsif youtube_id contains '?' %}{% assign youtube_id = youtube_id | split: '?' | first %}{% endif %}
+{%- elsif page.object_location contains 'mp3' -%}
+{% assign av = "mp3" %}
+{%- elsif page.object_location contains 'soundcloud' -%}
+{% assign av = "soundcloud" %}
+{% assign soundcloud_id = page.object_location | split: '.com/' | last %}
+{%endif%}
+<div id="upper-content">
+{% if site.data.theme.media-scroll == true %}
+{% include transcript/style/media-scroll-wrapper.html %}
+{% endif %}
+{% if av %}
+{% include transcript/item/av.html %}
+{% endif %}
+<div id="transcript-metadata">
+  {% include transcript/item/transcript-metadata.html %}
+</div>
+{% if site.data.filters %}
+{% include transcript/item/transcript-viz.html %}
+{% endif %}
+</div>
+
+{% include transcript/item/transcript.html %}
+  
+ 
