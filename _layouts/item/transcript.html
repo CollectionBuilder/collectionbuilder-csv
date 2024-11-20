@@ -2,7 +2,7 @@
 # generic fallback item page layout
 # displays image or icon depending on "image_thumb"
 layout: item/item-page-base
-custom-foot: transcript/js/transcript-js.html
+custom-foot: transcript/js/transcript-js.html;transcript/js/scrollama-js.html
 ---
 {%- comment -%} Determine if transcript filename is the objectid of the item or if it is determined by the metadata's object-transcript field {%- endcomment -%}
 {% if page.object-transcript contains ".csv"%}
@@ -41,21 +41,26 @@ endcapture -%}
 {% assign av = "soundcloud" %}
 {% assign soundcloud_id = page.object_location | split: '.com/' | last %}
 {%endif%}
-<div id="upper-content">
-{% if site.data.theme.media-scroll == true %}
-{% include transcript/style/media-scroll-wrapper.html %}
-{% endif %}
-{% if av %}
-{% include transcript/item/av.html %}
-{% endif %}
-<div id="transcript-metadata">
-  {% include transcript/item/transcript-metadata.html %}
-</div>
-{% if site.data.filters %}
-{% include transcript/item/transcript-viz.html %}
-{% endif %}
-</div>
-
+<div id="scrolly">
+  <article>
+    <div class="step my-3 {% unless site.data.theme.media-scroll == false %}
+    pb-5{% endunless %}" id="step0" >
+      <div id="upper-content">
+        {% if site.data.theme.media-scroll == true %}
+        {% include transcript/style/media-scroll-wrapper.html %}
+        {% endif %}
+        {% if av %}
+        {% include transcript/item/av.html %}
+        {% endif %}
+        <div id="transcript-metadata">
+          {% include transcript/item/transcript-metadata.html %}
+        </div>
+        {% if site.data.filters %}
+        {% include transcript/item/transcript-viz.html %}
+        {% endif %}
+  </div>
+  </div>
+<div class="step my-3" id="step1" >
 {% include transcript/item/transcript.html %}
-  
+</div>
  

@@ -17,3 +17,10 @@
     </div>
   </div>
   {% include /transcript/style/visualization-filter-legend.html %}
+  {% if site.data.filters and site.data.theme.search-and-filters == false%}
+  <div class="row mt-3">
+    <div class='col-12'>
+      <button class="reset btn btn-sm btn-outline-primary float-end w-25" onclick="{% if site.data.filters %}vizFilter('all');{% else %}resetVals();{% endif %}">Reset Filters</button>
+    </div>
+  </div>
+  {% endif %}

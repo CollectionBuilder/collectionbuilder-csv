@@ -4,6 +4,7 @@
   const filtersSearch = document.getElementById('filters-search');
   const filterTab = document.getElementById('filter-tab');
   const upperElement = document.getElementById('upper-content');
+  const step0 = document.getElementById('step0');
 
   function vizFilter(x) {
     var rects = document.getElementsByTagName('rect');
@@ -11,7 +12,9 @@
       params.set('filter', x);
       var p = params.toString();
       window.history.replaceState({}, '', location.pathname + '?' + p);
+      {% unless site.data.theme.search-and-filters == false %} 
       document.getElementById('filters').value = x;
+      {% endunless %}
     }
     for (i = 0; i < rects.length; i++) {
       var classString = rects[i].classList;
@@ -68,17 +71,20 @@
           itemcontents.classList.add("small", "text-muted");
         }
       }
-      {% if site.data.filters %}{% unless site.data.theme.search-and-filters == false %}document.getElementById("filters").selectedIndex = 0;{% endunless %}{% endif %}
+      {% if site.data.filters %}
+      document.getElementById("filters").selectedIndex = 0;
+      {% endif %}
       let numberofint = document.querySelectorAll('.featured').length;
       document.getElementById("numberof").innerHTML = numberofint + " lines match your query --><i> " + x + "</i>";
       document.getElementById("searchResults").innerHTML = searchResults;
       document.getElementById("linecount").classList.remove("d-none");
-      document.getElementById("filtersearch").classList.remove("d-none");
-      {% unless site.data.theme.search-and-filters == false %}if (filtersSearch.classList.contains("retracted")) { setTimeout(function () { filtersSearch.classList.add("retracted"); }, 300); }{% endunless%}
+      document.getElementById("filtersearch-dropdown").classList.remove("d-none");
+      if (filtersSearch.classList.contains("retracted")) { setTimeout(function () { filtersSearch.classList.add("retracted"); }, 300); }
     }
   }
 
-  {% if site.data.filters %} function filterLines(x) {
+  {% if site.data.filters %} 
+  function filterLines(x) {
     resetVals();
     var itemcontainer = document.getElementById("contents-container");
     var lines = itemcontainer.getElementsByClassName("line");
@@ -120,9 +126,10 @@
     document.getElementById("quicksearch").value = "";
     document.getElementById("searchResults").innerHTML = searchResults;
     document.getElementById("linecount").classList.remove("d-none");
-    document.getElementById("filtersearch").classList.remove("d-none");
+    document.getElementById("filtersearch-dropdown").classList.remove("d-none");
     countforFilter(filterClass);
-    {% unless site.data.theme.search-and-filters == false %}if (filtersSearch.classList.contains("retracted")) { setTimeout(function () { filtersSearch.classList.add("retracted"); }, 300); }{% endunless%}
+    if (filtersSearch.classList.contains("retracted")) 
+    { setTimeout(function () { filtersSearch.classList.add("retracted"); }, 300); }
   }
 
   function countforFilter(x) {
@@ -158,10 +165,11 @@
       behavior: 'smooth',  // Enables smooth scrolling
       block: 'start'       // Aligns to the top of the viewport
     });
-    {% unless site.data.theme.search-and-filters == false %}setTimeout(function () { filtersSearch.classList.add("retracted"); }, 300);{% endunless %}
+      // if filters are not retracted, wait 300ms then retract them after scrolling function activated
+      if (!filtersSearch.classList.contains("retracted")) { 
+        setTimeout(function () { filtersSearch.classList.add("retracted"); }, 300); 
+      }
   }
-
-
 
 
   function resetVals() {
@@ -169,10 +177,12 @@
     params.delete('filter');
     params.delete('line');
     window.history.replaceState({}, '', location.pathname);
+    {% unless site.data.theme.search-and-filters == false %}
     document.getElementById("linecount").classList.add("d-none");
-    document.getElementById("filtersearch").classList.add("d-none");
+    document.getElementById("filtersearch-dropdown").classList.add("d-none");
     document.getElementById("quicksearch").value = "";
     document.getElementById("filters").selectedIndex = 0;
+    {% endunless %}
     var words = document.querySelectorAll("p.words")
     var lines = document.querySelectorAll(".line")
     for (i = 0; i < words.length; i++) {
@@ -182,7 +192,8 @@
         words[i].getElementsByClassName('text-danger')[0].classList.remove('text-danger');
       }
     }
-    {% if site.data.filters %} var svgContainer = document.getElementById("colorViz");
+    {% if site.data.filters %} 
+    var svgContainer = document.getElementById("colorViz");
     var rects = svgContainer.getElementsByTagName('rect');
     for (i = 0; i < rects.length; i++) {
       rects[i].classList.remove('dark');
@@ -234,19 +245,42 @@
     };
   })();
 
-
+  
   //filters tab javascript + scroll-to-top retraction of filters
   document.addEventListener('DOMContentLoaded', function () {
-    {% unless site.data.theme.search-and-filters == false %}filterTab.addEventListener('click', function () {
-      filtersSearch.classList.toggle('retracted');
-    });{% endunless %}
+      // check height of upper element containing av + metadata and viz
+      var upperHeight =  upperElement.offsetHeight;
+      // make the first sections minimum height equal to this height so that when the AV section moves down the page, the page height stays the same. First checks to see if the heigh is less than 300px and makes min-height 350px in that instance, which happens on mobile when going down to specific line. 
+          if (upperHeight < 300) {
+          step0.style.minHeight = "350px";
+        } else {
+          step0.style.minHeight = upperHeight + "px";
+        }
+      
+      {% unless site.data.theme.search-and-filters == false %}
+        // add event listener so that when tab is clicked, filters element retracts up the page
+        filterTab.addEventListener('click', function () {
+        filtersSearch.classList.toggle('retracted');
+          });
+      {% endunless %}
+    // listener for the scroll to top button clickc
     document.getElementById('scroll-to-top').addEventListener('click', function () {
-      {% unless site.data.theme.search-and-filters == false %}if (filtersSearch.classList.contains("retracted")) { filtersSearch.classList.remove("retracted"); }{% endunless %}
+      {% unless site.data.theme.search-and-filters == false %}
+        // if scroll-to-top button clicked and filters are retracted, un retract them
+        if (filtersSearch.classList.contains("retracted")) { 
+            filtersSearch.classList.remove("retracted"); }
+      {% endunless %}
       {% if site.data.theme.media-scroll == true %}
-      if (upperElement.classList.contains("media-scroll-wrapper")) { setTimeout(function () { upperElement.classList.remove("media-scroll-wrapper"); }, 300); console.log('scrollstopped?'); } {% endif %}
-    });
-  });
+          // if the AV section is classed as moving down the page, remove it after 200 ms upon the scroll-to-top button being pushed
+        if (upperElement.classList.contains("media-scroll-wrapper")) { 
+            setTimeout(function () { upperElement.classList.remove("media-scroll-wrapper"); }, 200); 
+             } 
+      {% endif %}
+      });// end scroll to top listener
+    }); // end content loaded listener function
 
+
+    /*
   function throttle(mainFunction, delay) {
     let timerFlag = null; // Variable to keep track of the timer
 
@@ -303,5 +337,5 @@
   // Add an event listener to the window scroll event that calls the throttleScrollCheck function
   window.addEventListener("scroll", throttleScrollCheck);
   window.addEventListener('load', checkStickyAndUpdate);
-
+*/
 </script>
