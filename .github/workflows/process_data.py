@@ -181,9 +181,12 @@ def extract_media_data(media, item_dc_identifier):
     display_template = infer_display_template(format_value)
 
     # Download the thumbnail image if available and valid
-    local_image_path = download_thumbnail(
-        media.get("thumbnail_display_urls", {}).get("large", "")
-    )
+    if "platzhalter" in media.get("o:source", ""):
+        local_image_path = "assets/img/placeholder.svg"
+    else:
+        local_image_path = download_thumbnail(
+            media.get("thumbnail_display_urls", {}).get("large", "")
+        )
 
     # Extract media data
     object_location = (

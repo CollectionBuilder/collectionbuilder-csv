@@ -6,7 +6,7 @@
     "populate": "uv run .github/workflows/process_data.py"
   },
   "dependencies": {
-    "@shopify/prettier-plugin-liquid": "^1.6.0",
+    "@shopify/prettier-plugin-liquid": "^1.6.1",
     "prettier": "^3.3.3"
   }
 }
