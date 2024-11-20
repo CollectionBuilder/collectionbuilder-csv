@@ -310,10 +310,10 @@ _includes:
         en: "Previous"
         es: "Anterior"
         de: "Vorherige"
-      back-to-browse:
-        en: "Back to Browse"
-        es: "Volver a Navegar"
-        de: "Zurück zum Durchsuchen"
+      back-to-collection:
+        en: "Back to Collection"
+        es: "Volver a la Colección"
+        de: "Zurück zur Sammlung"
       next:
         en: "Next"
         es: "Siguiente"

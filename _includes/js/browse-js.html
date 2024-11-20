@@ -44,10 +44,6 @@ const makeCard = (obj) => {
 
     card += `<p class="card-text">${generateFieldsContent(obj)}</p>`;
 
-    if (obj.template) {
-        card += createMediaTypeBadge(obj.template, obj.format);
-    }
-
     card += `<hr><a href="${itemHref}" class="btn btn-sm btn-outline-primary" title="link to ${obj.title}">` +
             `{{ site.data.translations['_includes']['js']['browse-js.html']['view-full-record'][site.lang] | default: 'View Full Record' }}</a>`;
     card += `</div></div></div>`;
@@ -82,13 +78,6 @@ const createButtonLinks = (fieldValue, baseUrl) => {
     const btns = fieldValue.split(";");
     return btns.map(btn => btn ? `<a class="btn btn-sm btn-secondary m-1 text-wrap" href="${baseUrl}#${encodeURIComponent(btn.trim())}">${btn.trim()}</a>` : '').join('');
 };
-
-/* Helper function to create media type badge */
-const createMediaTypeBadge = (template, format) => {
-    const mediaIcon = getIcon(template, format, "hidden");
-    return `<p class="card-text"><small><a class="btn btn-sm btn-outline-primary" href="{{ page.url | relative_url }}#${encodeURIComponent(template)}">${template.toUpperCase()} ${mediaIcon}</a></small></p>`;
-};
-
 
 /* Filter items function */
 const filterItems = (arr, q) => {

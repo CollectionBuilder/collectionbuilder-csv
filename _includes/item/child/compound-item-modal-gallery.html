@@ -59,8 +59,8 @@
                 <div class="modal-content text-start">
                   <div class="modal-header ">
                     <div class="modal-title w-100" id="{{ child.objectid }}ModalLabel">
-                      <div class="row">
-                        <div class="col-12 text-end">
+                      <div class="row d-flex align-items-center">
+                        <div class="col-12 text-end mb-2">
                           <button
                             type="button"
                             class="btn-close"
@@ -75,57 +75,61 @@
                         {% assign prev_index = prev_index | times: 1 %}
                         {% capture next_item_id %}{{ children[next_index].objectid }}{% endcapture %}
                         {% capture prev_item_id %}{{ children[prev_index].objectid }}{% endcapture %}
-                        <div class="col-1 col-md-2">
-                          <button
-                            data-bs-target="#{{ prev_item_id }}"
-                            data-bs-toggle="modal"
-                            onclick="stopMedia();window.location.hash='{{ prev_item_id }}'"
-                            class="btn btn-outline-dark btn-sm prev-child-button"
-                          >
-                            <svg
-                              class="bi icon-sprite"
-                              role="img"
-                              aria-label="{{ site.data.translations['_includes']['item']['child']['compound-item-modal-gallery.html']['previous'][site.lang] | default: "Previous Item" }}"
+                        {% if children.size > 1 %}
+                          <div class="col-2 col-md-3 d-flex justify-content-start">
+                            <button
+                              data-bs-target="#{{ prev_item_id }}"
+                              data-bs-toggle="modal"
+                              onclick="stopMedia();window.location.hash='{{ prev_item_id }}'"
+                              class="btn btn-outline-dark btn-sm prev-child-button"
                             >
-                              <use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#arrow-left"/>
-                            </svg>
-                            <span class="d-none d-md-inline">
-                              {{-
-                                site.data.translations._includes.item.child['compound-item-modal-gallery.html'].previous[site.lang]
-                                | default: 'Previous Item'
-                              -}}
-                            </span>
-                          </button>
-                        </div>
-                        <div class="col-9 col-md-8 text-center">
-                          <h3 class="h5">
+                              <svg
+                                class="bi icon-sprite"
+                                role="img"
+                                aria-label="{{ site.data.translations['_includes']['item']['child']['compound-item-modal-gallery.html']['previous'][site.lang] | default: "Previous Item" }}"
+                              >
+                                <use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#arrow-left"/>
+                              </svg>
+                              <span class="d-none d-md-inline">
+                                {{-
+                                  site.data.translations._includes.item.child['compound-item-modal-gallery.html'].previous[site.lang]
+                                  | default: 'Previous Item'
+                                -}}
+                              </span>
+                            </button>
+                          </div>
+                        {% endif %}
+                        <div class="{% if children.size > 1 %}col-8 col-md-6{% else %}col-12{% endif %} align-items-center text-center">
+                          <h3 class="h5 mb-0">
                             {{ page.title }}
-                            <span class="d-none d-md-inline">-</span><span class="d-md-none"><br></span>
+                            <span class="d-none d-md-inline">–</span><span class="d-md-none"><br></span>
                             {{ forloop.index }} / {{ children | size }}
                           </h3>
                         </div>
-                        <div class="col-1 col-md-2 text-end">
-                          <button
-                            data-bs-target="#{{ next_item_id }}"
-                            data-bs-toggle="modal"
-                            onclick="stopMedia();window.location.hash='{{ next_item_id }}'"
-                            class="ms-md-5 btn btn-outline-dark btn-sm next-child-button"
-                          >
-                            <span class="d-none d-md-inline">
-                              {{-
-                                site.data.translations._includes.item.child['compound-item-modal-gallery.html'].next[site.lang]
-                                | default: 'Next Item'
-                              -}}
-                            </span>
-                            <svg
-                              class="bi icon-sprite"
-                              role="img"
-                              aria-label="{{ site.data.translations['_includes']['item']['child']['compound-item-modal-gallery.html']['next'][site.lang] | default: "Next Item" }}"
+                        {% if children.size > 1 %}
+                          <div class="col-2 col-md-3 d-flex justify-content-end">
+                            <button
+                              data-bs-target="#{{ next_item_id }}"
+                              data-bs-toggle="modal"
+                              onclick="stopMedia();window.location.hash='{{ next_item_id }}'"
+                              class="btn btn-outline-dark btn-sm next-child-button"
                             >
-                              <use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#arrow-right"/>
-                            </svg>
-                          </button>
-                        </div>
+                              <span class="d-none d-md-inline">
+                                {{-
+                                  site.data.translations._includes.item.child['compound-item-modal-gallery.html'].next[site.lang]
+                                  | default: 'Next Item'
+                                -}}
+                              </span>
+                              <svg
+                                class="bi icon-sprite"
+                                role="img"
+                                aria-label="{{ site.data.translations['_includes']['item']['child']['compound-item-modal-gallery.html']['next'][site.lang] | default: "Next Item" }}"
+                              >
+                                <use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#arrow-right"/>
+                              </svg>
+                            </button>
+                          </div>
+                        {% endif %}
                       </div>
                     </div>
                   </div>
