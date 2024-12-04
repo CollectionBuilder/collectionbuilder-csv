@@ -27,7 +27,7 @@
 {%- assign types = templates | uniq | compact | sort -%}
 <div class="card mb-3" >
     <div class="card-body">
-        <{{ include.heading_level | default: 'h2' }} class="card-title h5">Objects</{{ include.heading_level | default: 'h2' }}>
+        <{{ include.heading_level | default: 'h2' | strip }} class="card-title h5">Objects</{{ include.heading_level | default: 'h2' | strip }}>
         <p class="card-text">
         {% for t in types %}
         {%- assign count = templates | where_exp: 'item', 'item contains t' | size -%}

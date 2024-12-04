@@ -40,9 +40,9 @@
     #imageCarousel .carousel-item { height: {{ include.height | remove: 'px' | strip | default: '300' }}px; }
 </style>
 <div class="card mb-3">
-    {% if include.header %}<{{ include.heading_level | default: 'h2' }} class="card-header h5">{{ include.header }}</{{ include.heading_level | default: 'h2' }}>{% endif %}
+    {% if include.header %}<{{ include.heading_level | default: 'h2' | strip }} class="card-header h5">{{ include.header }}</{{ include.heading_level | default: 'h2' | strip }}>{% endif %}
     <div class="card-body">
-        {% if include.title %}<{{ include.heading_level | default: 'h2' }} class="card-title h5">{{ include.title }}</{{ include.heading_level | default: 'h2' }}>{% endif %}
+        {% if include.title %}<{{ include.heading_level | default: 'h2' | strip }} class="card-title h5">{{ include.title }}</{{ include.heading_level | default: 'h2' | strip }}>{% endif %}
         
         <div id="imageCarousel" class="carousel slide bg-dark rounded mb-3" data-bs-ride="carousel">
             <div id="carouselIndicators" class="carousel-indicators">

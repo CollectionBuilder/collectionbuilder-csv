@@ -42,9 +42,9 @@
 {% assign topTerms = topTerms | split: ";" %}
 {%- endif -%}
 <div class="card mb-3">
-    {% if include.header %}<{{ include.heading_level | default: 'h2' }} class="card-header h5">{{ include.header }}</{{ include.heading_level | default: 'h2' }}>{% endif %}
+    {% if include.header %}<{{ include.heading_level | default: 'h2' | strip }} class="card-header h5">{{ include.header }}</{{ include.heading_level | default: 'h2' | strip }}>{% endif %}
     <div class="card-body">
-        {% if include.title %}<{{ include.heading_level | default: 'h2' }} class="card-title h5">{{ include.title }}</{{ include.heading_level | default: 'h2' }}>{% endif %}
+        {% if include.title %}<{{ include.heading_level | default: 'h2' | strip }} class="card-title h5">{{ include.title }}</{{ include.heading_level | default: 'h2' | strip }}>{% endif %}
         <p class="card-text">
             {% for s in topTerms %}
             <a class="btn btn-sm btn-{{ include.btn-color | default: 'primary' }} m-1" href="{{ s | strip | url_param_escape | prepend: '/browse.html#' | relative_url }}">{{ s | strip }}</a>{% endfor %}

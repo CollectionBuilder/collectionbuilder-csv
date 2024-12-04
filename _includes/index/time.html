@@ -24,7 +24,7 @@
 {%- assign date-range = clean-years | remove: " " | split: ";" | uniq | sort  -%}
 <div class="card mb-3">
     <div class="card-body">
-        <{{ include.heading_level | default: 'h2' }} class="card-title h5">Time Span</{{ include.heading_level | default: 'h2' }}>
+        <{{ include.heading_level | default: 'h2' | strip }} class="card-title h5">Time Span</{{ include.heading_level | default: 'h2' | strip }}>
         <p class="card-text h5">{{ date-range | first }} to {{ date-range | last }}
         <br><a href="{{ '/timeline.html' | relative_url }}" class="btn btn-sm btn-{{ include.btn-color | default: 'outline-secondary' }} mt-2">View Timeline</a></p>
     </div>
