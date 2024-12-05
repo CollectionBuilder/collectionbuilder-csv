@@ -5,168 +5,208 @@
 {% endif %}
 {%- assign fields = site.data['config-browse'] -%}
 <script>
-/* Add items */
-const items = [
+
+/* add items */
+var items = [
     {% for item in items %}
-    {
-        {% for f in fields %}
-            {% if item[f.field] %} {{ f.field | escape | jsonify }}: {{ item[f.field] | strip | jsonify }}, {% endif %}
-        {% endfor %}
-        {% if item.image_thumb %} "img": {{ item.image_thumb | relative_url | jsonify }}, {% endif %}
-        {% if item.display_template %} "template": {{ item.display_template | replace: "_", " " | jsonify }}, {% endif %}
-        {% if item.format %} "format": {{ item.format | jsonify }}, {% endif %}
-        {% if item.image_alt_text %} "alt": {{ item.image_alt_text | escape | jsonify }}, {% endif %}
-        "title": {{ item.title | strip | escape | jsonify }},
-        {% if item.parentid %} "parent": {{ item.parentid | jsonify }}, {% endif %}
-        "id": {{ item.objectid | jsonify }}
-    } {% unless forloop.last %},{% endunless %}
-    {% endfor %}
+    { {% for f in fields %}{% if item[f.field] %}{{ f.field | escape | jsonify }}:{{ item[f.field] | strip | jsonify }}, {%- endif -%}{%- endfor -%}
+        {% if item.image_thumb %}"img": {{ item.image_thumb | relative_url | jsonify }}, {%- endif -%} 
+        {% if item.display_template %}"template": {{ item.display_template | jsonify }}, {%- endif -%}
+        {% if item.format %}"format": {{ item.format | jsonify }}, {%- endif -%}
+        {% if item.image_alt_text %}"alt": {{ item.image_alt_text | escape | jsonify }}, {%- endif -%}
+        "title":{{ item.title | strip | escape | jsonify }},
+        {% if item.parentid %}"parent": {{ item.parentid | jsonify }}, {%- endif -%}
+        "id":{{ item.objectid | jsonify }} }{% unless forloop.last %},{% endunless %}{%- endfor -%}
 ];
 
-{% include js/get-icon.js %}
+{% include helpers/get-icon.js %}
 
-/* Function to create a card for each item */
-const makeCard = (obj) => {
-    const placeholder = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'%3E%3C/svg%3E";
-    const itemHref = `{{ '/items/' | relative_url }}${obj.parent ? obj.parent + ".html#" + obj.id : obj.id + ".html"}`;
-    const imgSrc = obj.img || getIcon(obj.template, obj.format, "thumb");
-    const imgAlt = obj.alt || obj.title;
-
-    // Build card HTML structure
-    let card = `<div class="item col-lg-4 col-md-6 mb-2"><div class="card">`;
-    card += createImageSection(imgSrc, itemHref, imgAlt, placeholder);
-    card += `<div class="card-body text-center">`;
-    card += `<h2 class="card-title h4"><a href="${itemHref}" class="text-dark">${obj.title}</a></h2>`;
-
-    if (!obj.img) {
-        card += `<p><a href="${itemHref}">${imgSrc}</a></p>`;
+/* function to create cards for each item */ 
+function makeCard(obj) {
+    // placeholder image for lazyload
+    var placeholder = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'%3E%3C/svg%3E";
+    // find item link
+    var itemHref = `{{ '/items/' | relative_url }}${ obj.parent ? obj.parent + ".html#" + obj.id : obj.id + ".html"}`; 
+    // find image
+    var imgSrc, thumbIcon;
+    // if there is a thumb in the csv display it
+    if(obj.img) {
+        imgSrc = obj.img;
+    // else add an icon based on display_template or format
+    } else {
+        thumbIcon = getIcon(obj.template,obj.format,"thumb");
     }
+    var imgAlt = obj.alt ? obj.alt : obj.title;
 
-    card += `<p class="card-text">${generateFieldsContent(obj)}</p>`;
-
-    card += `<hr><a href="${itemHref}" class="btn btn-sm btn-outline-primary" title="link to ${obj.title}">` +
-            `{{ site.data.translations['_includes']['js']['browse-js.html']['view-full-record'][site.lang] | default: 'View Full Record' }}</a>`;
-    card += `</div></div></div>`;
-
+    // start card
+    var card = '<div class="item col-lg-4 col-md-6 mb-2"><div class="card">';
+    // top image for items with image
+    if(imgSrc) {
+        card += '<a href="' + itemHref + '"> <img class="card-img-top lazyload" src="' + placeholder + '" data-src="' + imgSrc + '" alt="' + imgAlt + '"></a>';
+    }
+    // title
+    card += '<div class="card-body text-center"> <h3 class="card-title h4"><a href="' + itemHref + '" class="text-dark">' + obj.title + '</a></h3>';
+    // icon thumb for item without image
+    if(thumbIcon){
+        card += '<p><a href="' + itemHref + '">' + thumbIcon + '</a></p>';
+    }
+    // other fields
+    card += '<p class="card-text">';
+    {% for f in fields %}{% unless f.hidden == 'true' %}
+    if(obj[{{ f.field | jsonify }}]){
+    {% if f.display_name %}card += '<strong>{{ f.display_name }}:</strong> ';{% endif %}
+    {% if f.btn == 'true' %}
+    var btns = obj[{{ f.field | jsonify }}].split(";");
+    for (var i = 0, len = btns.length; i < len; i++) {
+        if(btns[i] != "") {
+        card += '<a class="btn btn-sm btn-secondary m-1 text-wrap" href="{{ page.url | relative_url }}#' + encodeURIComponent(btns[i].trim()) + '">' + btns[i].trim() + '</a>';
+        }
+    }
+    {% else %}
+    card += obj[{{ f.field | jsonify }}];
+    {% endif %}
+    {% unless forloop.last %}card += '<br>';{% endunless %}
+    }
+    {% endunless %}{% endfor %}
+    card += '</p>';
+    // media type
+    // if(obj.template && obj.template != "") {
+    //     mediaIcon = getIcon(obj.template,obj.format,"hidden");
+    //     card += '<p class="card-text"><small><a class="btn btn-sm btn-outline-secondary" href="{{ page.url | relative_url }}#' + encodeURIComponent(obj.template) + '">' + 
+    //     obj.template.toUpperCase().replace("_"," ") + ' ' + mediaIcon + '</a></small></p>';
+    // }
+    // view button
+    card += '<hr><a href="' + itemHref + '" class="btn btn-sm btn-light" title="link to ' + obj.title + '">View Full Record</a>';
+    // close divs
+    card += '</div></div></div>';
+    // send back big string
     return card;
-};
+}
 
-/* Helper function to create the image section of the card */
-const createImageSection = (imgSrc, itemHref, imgAlt, placeholder) => (
-    imgSrc ? `<a href="${itemHref}"><img class="card-img-top lazyload" src="${placeholder}" data-src="${imgSrc}" alt="${imgAlt}"></a>` : ''
-);
-
-/* Helper function to generate content for other fields */
-const generateFieldsContent = (obj) => {
-    let content = '';
-    {% for f in fields %} {% unless f.hidden == 'true' %}
-    if (obj[{{ f.field | jsonify }}]) {
-        {% if f.display_name %} content += `<strong>{{ f.display_name }}:</strong> `; {% endif %}
-        {% if f.btn == 'true' %}
-            content += createButtonLinks(obj[{{ f.field | jsonify }}], "{{ page.url | relative_url }}");
-        {% else %}
-            content += obj[{{ f.field | jsonify }}];
-        {% endif %}
-        content += '<br>';
-    }
-    {% endunless %} {% endfor %}
-    return content;
-};
-
-/* Helper function to create buttons for field values */
-const createButtonLinks = (fieldValue, baseUrl) => {
-    const btns = fieldValue.split(";");
-    return btns.map(btn => btn ? `<a class="btn btn-sm btn-secondary m-1 text-wrap" href="${baseUrl}#${encodeURIComponent(btn.trim())}">${btn.trim()}</a>` : '').join('');
-};
-
-/* Filter items function */
-const filterItems = (arr, q) => {
+/* filter items function */
+function filterItems(arr,q) {
+    // show loading icon
     loadingIcon.classList.remove("d-none");
-    const query = q.trim().toUpperCase();
-
-    const filteredItems = query === "" ? arr : arr.filter(item => {
-        const itemValues = Object.values(item).join(" ").toUpperCase();
-        return itemValues.includes(query);
-    });
-
-    document.querySelector("#numberOf").innerHTML = `${filteredItems.length} / {{ items | size }}`;
-    const cards = filteredItems.map(makeCard).join("");
+    // dont filter if no q 
+    if (q=="") { 
+        var filteredItems = arr; 
+    } else {
+        q = q.trim().toUpperCase(); 
+        // js indexOf filter
+        var filteredItems = [];
+        for (var i = 0, len = arr.length; i < len; i++) {
+            var val = "";
+        for (var k in arr[i]) { val += arr[i][k] + " "; }
+            if(val.toUpperCase().indexOf(q) != -1){
+                filteredItems.push(arr[i]);
+            }
+        }
+    }
+    // add number 
+    document.querySelector("#numberOf").innerHTML = filteredItems.length + " of {{ items | size }} items";
+    
+    // add stuff, make cards first in giant var, then add all at once to speed things up
+    var cards = "";
+    for (var i = 0, len = filteredItems.length; i < len; i++) {
+        cards += makeCard(filteredItems[i]);
+    }
     browseItemsDiv.innerHTML = cards;
 
-    filterTextBox.focus();
+    // finish
+    filterButton.focus();
     loadingIcon.classList.add("d-none");
 };
 
-
-/* Initialize browse page */
-
-/* Randomize items once at page load */
-items.sort(() => Math.random() - 0.5);
-
-/* Set elements */
-const loadingIcon = document.querySelector("#loadingIcon");
-const filterTextBox = document.querySelector('#filterTextBox');
-const filterButton = document.querySelector("#filterButton");
-const browseItemsDiv = document.querySelector("#browseItems");
-
-/* Filter if hash in initial URL */
-let query = "";
-if (window.location.hash) {
-    query = decodeURIComponent(location.hash.substr(1));
-    filterTextBox.value = query;
-    filterItems(items, query);
-} else {
-    filterItems(items, "");
+/* Fisher-Yates shuffle https://bost.ocks.org/mike/shuffle/ */
+function shuffle(array) {
+    var m = array.length, t, i;
+    while (m) {
+        i = Math.floor(Math.random() * m--);
+        t = array[m];
+        array[m] = array[i];
+        array[i] = t;
+    }
+    return array;
 }
 
-/* Filter form */
-const submitFilter = () => {
+/* init browse page */
+
+/* randomize items once at page load */
+shuffle(items);
+
+/* set some elements */ 
+var loadingIcon = document.querySelector("#loadingIcon");
+var filterTextBox = document.querySelector('#filterTextBox');
+var filterButton = document.querySelector("#filterButton");
+var browseItemsDiv = document.querySelector("#browseItems");
+
+/* filter if hash in initial URL */
+var query = "";
+if(window.location.hash) {
+    query = decodeURIComponent(location.hash.substr(1));
+    filterTextBox.value = query;
+    filterItems(items,query);
+} else {
+    query = "";
+    filterItems(items,query);
+}
+
+/* filter form */
+function submitFilter() {
     query = filterTextBox.value;
     window.location.hash = encodeURIComponent(query);
-};
-
-/* Reset filters */
-const resetFilter = () => {
+}
+/* reset filters */ 
+function resetFilter() {
     query = "";
     filterTextBox.value = query;
     window.location.hash = encodeURIComponent(query);
-};
+}
 
-/* Filter if hash changes */
-window.addEventListener("hashchange", () => {
+/* filter if hash changes */ 
+window.addEventListener("hashchange", function() {
+    // read hash
     query = decodeURIComponent(location.hash.substr(1));
     filterTextBox.value = query;
-    filterItems(items, query);
+    // filter
+    filterItems(items,query);
 });
 
-/* Sorting function */
-const sorting = (arr, key) => {
-    arr.sort((a, b) => (a[key] || "").localeCompare(b[key] || "", undefined, { sensitivity: 'base' }));
+/* item array sorting function */
+function sorting(json_object, key_to_sort_by) {
+    function sortByKey(a, b) {
+        var x = a[key_to_sort_by];
+        var y = b[key_to_sort_by];
+        if (typeof x === 'string' ) { x = x.toUpperCase(); }
+        if (typeof y === 'string' ) { y = y.toUpperCase(); }
+        return ((x==null) ? 1: (y==null) ? -1: (x < y) ? -1 : ((x > y) ? 1 : 0));
+    }
+    json_object.sort(sortByKey);
 };
 
-/* Add sort function on click of sort options */
-const sortFilter = document.querySelector("#sortFilter");
-const sortOptions = document.querySelectorAll(".browse-sort-item");
-
+/* add sort function on click of sort options */
+var sortFilter = document.querySelector("#sortFilter");
+var sortOptions = document.querySelectorAll(".browse-sort-item");
 sortOptions.forEach((button) => {
-    button.addEventListener("click", () => {
-        const field = button.dataset.filter;
-        const displayName = button.textContent;
-        const query = filterTextBox.value;
-
-        // Update active sort option
-        sortOptions.forEach(option => option.classList.remove("active"));
-        button.classList.add("active");
-        sortFilter.innerHTML = displayName;
-
-        // Perform sorting or random shuffle
-        if (field !== 'random') {
-            sorting(items, field);
-        } else {
-            items.sort(() => Math.random() - 0.5);
-        }
-        
+  button.addEventListener("click", (event) => {
+    // get the sort field
+    var field = button.dataset.filter;
+    var display_name = button.textContent;
+    // get current filter
+    var query = filterTextBox.value;
+    // switch active sort option
+    sortOptions.forEach((option) => { option.classList.remove("active"); } );
+    button.classList.add("active");
+    sortFilter.innerHTML = display_name;
+    // send to sort and filter
+    if (field != 'random') {
+        sorting(items, field);
         filterItems(items, query);
-    });
+    }
+    else {
+        shuffle(items);
+        filterItems(items, query);
+    }
+  });
 });
 </script>
