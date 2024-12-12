@@ -7,7 +7,7 @@ subject,Thema,true,,DCTERMS.subject,keywords
 era,Epoche,true,,DCTERMS.temporal,
 isPartOf,Gehört zu,,true,DCTERMS.isPartOf,isPartOf
 creator,Ersteller*in,,true,DCTERMS.creator,creator
-date,Datum,,,DCTERMS.date,dateCreated
+date,Datum <a href='/data.html#edtf'>ℹ️<a>,,,DCTERMS.date,dateCreated
 source,Quelle,,true,DCTERMS.source,
 publisher,Verantwortliche Gedächtnisinstitution,,true,DCTERMS.publisher,publisher
 type,Typ,,true,DCTERMS.type,
