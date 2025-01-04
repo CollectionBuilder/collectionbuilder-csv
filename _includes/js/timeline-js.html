@@ -11,5 +11,12 @@
         var hashfilter = decodeURIComponent(location.hash.substr(1));
         document.querySelector("tr#" + hashfilter).classList.add("table-info");
     }
+
+    // highlight year if hash change
+    window.addEventListener("hashchange", function() {
+        var hashfilter = decodeURIComponent(location.hash.substr(1));
+        document.querySelector("tr#" + hashfilter).classList.add("table-info");
+    });
+
 })();
 </script>
