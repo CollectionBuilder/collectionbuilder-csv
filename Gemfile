@@ -5,6 +5,8 @@ source 'https://rubygems.org'
 # needed for Jekyll
 gem 'jekyll'
 gem 'webrick', '~> 1.7'
+gem 'logger'
+gem 'base64'
 
 # needed for Rake tasks
 gem 'rake'
