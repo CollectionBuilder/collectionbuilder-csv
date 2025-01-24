@@ -5,15 +5,21 @@
 ---
 @charset "utf-8";
 
-/* base variables pulled from theme.yml */
-$base-font-family: {{ site.data.theme.base-font-family | default: '""' }};
-$base-font-size: {{ site.data.theme.base-font-size | default: '""' }};
-$text-color: {{ site.data.theme.text-color | default: '""' }};
-$link-color: {{ site.data.theme.link-color | default: '""' }};
+@forward "base" with (
+  /* base variables pulled from theme.yml */
+  $base-font-family: {{ site.data.theme.base-font-family | default: '""' }},
+  $base-font-size: {{ site.data.theme.base-font-size | default: '""' }},
+  $text-color: {{ site.data.theme.text-color | default: '""' }},
+  $link-color: {{ site.data.theme.link-color | default: '""' }}
+  
+);
+@use "pages"; 
+@use "custom";
 
 /* theme colors pulled from config-theme-colors */
 {% assign btns = site.data.config-theme-colors | where_exp: "item","item.color != nil" %}
 {% if btns != empty %}
+$link-color: {{ site.data.theme.link-color | default: '""' }};
 {% for btn in btns %}
 {% assign color = btn.color | strip %}{% if color != empty %}
 ${{ btn.color_class | slugify }}: {{ color }};{% endif %}
@@ -30,4 +36,3 @@ $theme-colors: map-merge(
 @import "theme-colors", "theme-utilities";
 {% endif %}
 
-@import "base", "pages", "custom";
