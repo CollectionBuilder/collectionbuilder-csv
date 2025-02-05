@@ -62,6 +62,13 @@ layout: page
         >
           {{ site.data.translations._layouts['browse.html'].eras[site.lang] | default: 'Eras' }}
         </a>
+        <a
+          href="{{ '/table.html' | relative_url }}"
+          class="btn btn-outline-primary btn-lg"
+          aria-label="{{ site.data.translations['_layouts']['browse.html'].view-table[site.lang] | default: 'Show collection as table' }}"
+        >
+          {{ site.data.translations._layouts['browse.html'].table[site.lang] | default: 'Table' }}
+        </a>
         <button
           class="btn btn-outline-primary btn-lg"
           aria-label="{{ site.data.translations['_layouts']['browse.html'].switch-view[site.lang] | default: 'Switch view' }}"

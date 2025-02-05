@@ -1,5 +1,11 @@
 {% assign fcount = site.data['config-table'] | size %}
 {% assign lang = site.lang %}
+{% assign quick_search = site.data.translations._includes.js['table-js.html'].quick_search[site.lang]
+  | default: 'Quick Search'
+%}
+{% assign advanced_search = site.data.translations._includes.js['table-js.html'].advanced_search[site.lang]
+  | default: 'Advanced Search'
+%}
 {% assign download_dropdown = site.data.translations._includes.js['table-js.html'].download[site.lang]
   | default: 'Download'
 %}
@@ -26,54 +32,149 @@
   /* use jquery to initialize DataTables and load collection data */
   $(document).ready( function () {
       $('#item-table').DataTable( {
-          {% if lang != "en" %}language: { url: '{{ "/assets/lib/datatables/" | append: lang | append: ".json" | relative_url }}' },{% endif %}
+        {% if lang != "en" %}language: { url: '{{ "/assets/lib/datatables/" | append: lang | append: ".json" | relative_url }}',
+            search: "",
+            searchBuilder:{ button: '{{ advanced_search }}'},
+          },{% endif %}
           // use DataTables ajax load
           ajax: { url: '{{ "/assets/js/metadata.min.json" | relative_url }}', dataSrc: 'objects' },
           // defer render to speed up large sets
           "deferRender": true,
-          // enable pagination
-          "paging": true,
-          "lengthMenu": [[ 25, 50, 100, -1], [ 25, 50, 100, "∞"]],
-          // add download features
-          dom: 'B<"d-flex justify-content-between align-items-center flex-nowrap mt-2"<"pagination-controls"l><"search-box"f>>t<"row"<"col-md-6"i><"col-md-6"p>>',
-          buttons: [
+          fixedHeader: true,
+          autoWidth: false,
+          scrollX: true,
+          scrollCollapse: true,
+
+          layout: {
+            topStart: [
               {
-                  extend: 'collection',
-                  text: '{{ download_dropdown }}',
-                  className: 'btn btn-outline-primary',
-                  buttons: [
-                      {
-                          text: '{{ excel_export }}',
-                          extend: 'excelHtml5',
-                          className: 'btn btn-outline-primary'
-                      },
-                      {
-                          text: '{{ csv_export }}',
-                          extend: 'csvHtml5',
-                          className: 'btn btn-outline-primary'
-                      }
-                  ]
+                search: {
+                text: '_INPUT_',
+                placeholder: '{{ quick_search }}',
+                },
               },
               {
-                  text: '{{ more_exports }}',
-                  action: function ( e, dt, node, config ) {
-                          $('#dataModal').modal('show');
-                      },
+                buttons: [
+                {
+                  extend: 'searchBuilder',
                   className: 'btn btn-outline-primary'
-               }
-          ],
+                },
+                {
+                  extend: 'colvis',
+                  columns: ':not(:first,:last)',
+                  className: 'btn btn-outline-primary'
+                },
+                ],
+              }
+            ],
+            topEnd: {
+              buttons: [
+                  {
+                      extend: 'collection',
+                      text: '{{ download_dropdown }}',
+                      className: 'btn btn-outline-primary',
+                      buttons: [
+                          {
+                            text: '{{ excel_export }}',
+                            extend: 'excelHtml5',
+                            className: 'btn btn-outline-primary',
+                            exportOptions: {
+                              columns: ':visible',
+                              orthogonal: 'export'
+                            }                              
+                          },
+                          {
+                            text: '{{ csv_export }}',
+                            extend: 'csvHtml5',
+                            className: 'btn btn-outline-primary',
+                            exportOptions: {
+                              columns: ':visible',
+                              orthogonal: 'export'
+                            }
+                          }
+                      ]
+                  },
+                  {
+                      text: '{{ more_exports }}',
+                      action: function ( e, dt, node, config ) {
+                              $('#dataModal').modal('show');
+                          },
+                      className: 'btn btn-outline-primary'
+                  }
+              ],
+            },
+            bottomEnd: {
+              paging: {
+                firstLast: false,
+                previousNext: false,
+                buttons: 7
+              }
+            },
+          },
+            
           // get the data from json
           columns: [ {% for i in (0..fcount) %}{ data: '{{ i }}' }{% unless forloop.last %},{% endunless %}{% endfor %} ],
           columnDefs: [
               // turn relative link into absolute
               { "render": function ( data ) { return '{{ "/" | relative_url }}' + data; },"targets": {{ fcount }} },
               // combine link with first column
-              { "render": function ( data, type, row ) { return '<a href="' + row['{{ fcount }}'] +'">'+ data +'</a>'; },"targets": 0 },
+              { "render": function ( data, type, row ) { return '<a href="' + row['{{ fcount }}'] +'" target="_blank">'+ data +'</a>'; },"targets": 0 },
               // hide the link column
-              { "visible": false,  "targets": [ {{ fcount }} ] }
+              { "visible": false,  "targets": [ {{ fcount }} ] },
+              // define certain columns to be hidden by default for better appearance
+              { "visible": false, "targets": [5,6,7,9,10,11,12,13] },
+              // handle keywords and eras: display as HTML, export raw text
+              {
+                "targets": [3,4], // keyword and era column IDs
+                "render": function (data, type, row) {
+                  if (!data) return '';
+
+                  const keywords = data.split(';').map(keyword => keyword.trim());
+
+                  if (type === 'display') {
+                    const links = keywords.map(keyword => {
+                      const url = `/browse.html#${encodeURIComponent(keyword)}`;
+                      return `<a href="${url}" target="_blank">${keyword}</a>`;
+                    });
+                    return links.join(', ');
+                  } else if (type === 'export') {
+                    return keywords.join(';');
+                  }
+                  return data;
+                }
+              },
+              // handle markdown links: display as HTML, export raw markdown
+              {
+                "targets": [5,7,8,9,10], // columns with markdown links
+                "render": function (data, type, row) {
+                    if (!data) return '';
+
+                    const links = data.split(';').map(link => {
+                        const match = link.match(/\[(.+?)\]\((.+?)\)/);
+                        if (match) {
+                            const label = match[1];
+                            const url = match[2];
+
+                            if (type === 'display') {
+                                return `<a href="${url}" target="_blank">${label}</a>`;
+                            } else if (type === 'export') {
+                                return `[${label}](${url})`;
+                            }
+                        }
+                        return link;
+                    });
+                    return type === 'display' ? links.join('<hr>') : links.join(';');
+                  }
+                }
           ],
           // sort based on the second column
-          order: [[ 1, "asc" ]]
+          order: [[ 1, "asc" ]],
+          initComplete: function () {
+            // hide the SearchBuilder container initially
+            $('.dtsb-searchBuilder').hide();
+            // align size of quick search bar
+            $('input[type="search"]').removeClass('form-control-sm').addClass('form-control-md');
+          }
       });
   });
 </script>

@@ -7,15 +7,78 @@ custom-foot: js/table-js.html
 
 {{ content }}
 
-<div class="table-responsive-md">
-  <table id="item-table" class="table table-striped">
-    <thead>
-      <tr>
-        {% for f in fields %}
-          <th scope="col">{{ f }}</th>
-        {% endfor %}
-        <th>{{ site.data.translations._layouts['data.html'].link[site.lang] | default: 'Link' }}</th>
-      </tr>
-    </thead>
-  </table>
+<div class="container-fluid px-0">
+  <div class="row align-items-center">
+    <div class="col-12 col-md-auto text-center text-md-center">
+      <div
+        id="switch-view"
+        class="btn-group btn-group-toggle d-flex justify-content-center"
+        data-toggle="buttons"
+        role="group"
+      >
+        <a
+          href="{{ '/browse.html' | relative_url }}"
+          class="btn btn-outline-primary btn-lg"
+          aria-pressed="true"
+          aria-label="{{ site.data.translations['_layouts']['browse.html'].view-objects[site.lang] | default: 'Show object view' }}"
+        >
+          {{ site.data.translations._layouts['browse.html'].objects[site.lang] | default: 'Objects' }}
+        </a>
+        <a
+          href="{{ '/timeline.html' | relative_url }}"
+          class="btn btn-outline-primary btn-lg"
+          aria-label="{{ site.data.translations['_layouts']['browse.html'].view-timeline[site.lang] | default: 'Show objects on timeline' }}"
+        >
+          {{ site.data.translations._layouts['browse.html'].timeline[site.lang] | default: 'Timeline' }}
+        </a>
+        <a
+          href="{{ '/subjects.html' | relative_url }}"
+          class="btn btn-outline-primary btn-lg"
+          aria-label="{{ site.data.translations['_layouts']['browse.html'].view-subjects[site.lang] | default: 'Show list of subjects' }}"
+        >
+          {{ site.data.translations._layouts['browse.html'].subjects[site.lang] | default: 'Subjects' }}
+        </a>
+        <a
+          href="{{ '/eras.html' | relative_url }}"
+          class="btn btn-outline-primary btn-lg"
+          aria-label="{{ site.data.translations['_layouts']['browse.html'].view-eras[site.lang] | default: 'Show list of eras' }}"
+        >
+          {{ site.data.translations._layouts['browse.html'].eras[site.lang] | default: 'Eras' }}
+        </a>
+        <a
+          href="{{ '/table.html' | relative_url }}"
+          class="btn btn-primary btn-lg active"
+          aria-label="{{ site.data.translations['_layouts']['browse.html'].view-table[site.lang] | default: 'Show collection as table' }}"
+        >
+          {{ site.data.translations._layouts['browse.html'].table[site.lang] | default: 'Table' }}
+        </a>
+        <button
+          class="btn btn-outline-primary btn-lg"
+          aria-label="{{ site.data.translations['_layouts']['browse.html'].switch-view[site.lang] | default: 'Switch view' }}"
+          onclick="toggleButtonView()"
+        >
+          {{ site.data.translations._layouts['browse.html']['switch-view'][site.lang] | default: 'Switch View' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% include js/switch-view-js.html %}
+
+<div class="card mt-2">
+  <div class="container-fluid mb-2">
+    <div class="table-responsive-md">
+      <table id="item-table" class="table table-striped collection-table">
+        <thead class="rounded">
+          <tr>
+            {% for f in fields %}
+              <th scope="col">{{ f }}</th>
+            {% endfor %}
+            <th>{{ site.data.translations._layouts['data.html'].link[site.lang] | default: 'Link' }}</th>
+          </tr>
+        </thead>
+      </table>
+    </div>
+  </div>
 </div>

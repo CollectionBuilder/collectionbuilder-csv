@@ -442,6 +442,14 @@ _includes:
         en: "More Exports"
         es: "Más Exportaciones"
         de: "Weitere Exporte"
+      quick_search:
+        en: "Quick Search"
+        es: "Búsqueda Rápida"
+        de: "Schnellsuche"
+      advanced_search:
+        en: "Advanced Search"
+        es: "Búsqueda Avanzada"
+        de: "Erweiterte Suche"
     timeline-js.html:
   collection-banner.html:
     featured-items:
@@ -638,6 +646,10 @@ _layouts:
       en: "Eras"
       es: "Épocas"
       de: "Epochen"
+    table:
+      en: "Table"
+      es: "Tabla"
+      de: "Tabelle"
     view-objects:
       en: "Show object view"
       de: "Zeige Objektansicht"
@@ -650,6 +662,10 @@ _layouts:
     view-eras:
       en: "Show list of eras"
       de: "Zeige Liste der Epochen"
+    view-table:
+      en: "Show collection as table"
+      es: "Mostrar colección como tabla"
+      de: "Zeige Sammlung als Tabelle"
     switch-view:
       en: "Switch view"
       es: "Cambiar Vista"
