@@ -48,21 +48,23 @@
           layout: {
             topStart: [
               {
-                search: {
-                text: '_INPUT_',
-                placeholder: '{{ quick_search }}',
-                },
+                features: {
+                      search: {
+                      text: '_INPUT_',
+                      placeholder: '{{ quick_search }}',
+                      },
+                  },
               },
               {
                 buttons: [
                 {
                   extend: 'searchBuilder',
-                  className: 'btn btn-outline-primary'
+                  className: 'btn btn-outline-primary mt-2 mt-md-0'
                 },
                 {
                   extend: 'colvis',
                   columns: ':not(:first,:last)',
-                  className: 'btn btn-outline-primary'
+                  className: 'btn btn-outline-primary mt-2 mt-md-0'
                 },
                 ],
               }
@@ -72,7 +74,7 @@
                   {
                       extend: 'collection',
                       text: '{{ download_dropdown }}',
-                      className: 'btn btn-outline-primary',
+                      className: 'btn btn-outline-primary mt-md-2 mt-lg-0',
                       buttons: [
                           {
                             text: '{{ excel_export }}',
@@ -99,7 +101,7 @@
                       action: function ( e, dt, node, config ) {
                               $('#dataModal').modal('show');
                           },
-                      className: 'btn btn-outline-primary'
+                      className: 'btn btn-outline-primary mt-md-2 mt-lg-0'
                   }
               ],
             },

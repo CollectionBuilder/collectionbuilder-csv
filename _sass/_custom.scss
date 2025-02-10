@@ -197,7 +197,6 @@ a {
 
 .datatable-border {
     border-color: #ffe880 !important;
-    border-width: 6.5px !important;
     border-top: none !important;
 }
 
@@ -236,6 +235,12 @@ div.dtsb-searchBuilder div.dtsb-group div.dtsb-criteria input.dtsb-value {
 
 .dt-buttons {
     flex-grow: 1;
+    flex-wrap: nowrap !important;
+}
+
+.dt-buttons .btn {
+    flex: 1 1 50%;
+    min-width: 50px;
 }
 
 .dt-buttons .dropdown-menu {
@@ -251,8 +256,16 @@ div.dtsb-searchBuilder div.dtsb-group div.dtsb-criteria input.dtsb-value {
     background-color: #ffe880;
 }
 
+#wrap .table {
+    border-collapse: separate;
+}
+
 .dataTables_wrapper {
     overflow-x: auto;
+}
+
+.table-responsive-md, #csvTable_wrapper {
+    overflow-x: hidden;
 }
 
 #csvTable {
@@ -268,6 +281,18 @@ div.dtsb-searchBuilder div.dtsb-group div.dtsb-criteria input.dtsb-value {
     justify-content: space-between;
     align-items: center;
     margin: 0px !important;
+}
+
+@media screen and (max-width: 767px) {
+    .dt-container .row {
+        --bs-gutter-y: none !important;
+    }
+}
+
+@media screen and (max-width: 991px) {
+    .row > :not(:has(.pagination)) {
+        flex-grow: 1;
+    }
 }
 
 .footer-container {
@@ -331,7 +356,6 @@ div.dtsb-searchBuilder div.dtsb-group div.dtsb-criteria input.dtsb-value {
         box-shadow:inset 0 0 0 .10rem #3a1e3e;
     }
 }
-
 
 .collection-table {
     border: hidden;
@@ -407,15 +431,5 @@ thead, tbody, th, td {
     #filterButton {
         border-top-right-radius: .25rem;
         border-bottom-right-radius: .25rem;
-    }
-}
-
-@media screen and (max-width: 991px) {
-    #dt-search-0, .dt-layout-start .dt-buttons {
-        margin-bottom: .5rem;
-    }
-
-    .row > :not(:has(.pagination)) {
-        flex-grow: 1;
     }
 }

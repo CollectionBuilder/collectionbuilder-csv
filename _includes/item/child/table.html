@@ -3,6 +3,10 @@
 
 {% assign data = child.object_location %}
 {% assign lang = site.lang %}
+{%
+  assign quick_search = site.data.translations._includes.item.child.['table.html'].quick_search[site.lang]
+  | default: 'Quick Search'
+%}
 
 <link rel="stylesheet" type="text/css" href="/assets/lib/datatables/datatables.min.css">
 <script
@@ -57,13 +61,29 @@
                               // Initialize DataTables
                               $('#csvTable').DataTable({
                                   {% if lang != "en" %}language: { url: '{{ "/assets/lib/datatables/" | append: lang | append: ".json" | relative_url }}' },{% endif %}
-                                  "deferRender": true,
-                                  dom: '<<"col-12"l>>t<"row"<"col-md-6"><"col-md-6"p><"col-12">><"footer-container"if>',
-                                  paging: false,
-                                  ordering: true,
+                                  ajax: false, // No AJAX since data is already loaded
+                                  deferRender: true,
+                                  fixedHeader: true,
+                                  autoWidth: false,
                                   scrollX: true,
                                   scrollCollapse: true,
-                                  scrollY: '400px'
+                                  scrollY: '400px',
+                                  paging: false,
+                                  layout: {
+                                      bottomStart: [
+                                          {
+                                            rowClass: 'm-2',
+                                            features: {
+                                                search: {
+                                                    text: '_INPUT_',
+                                                    placeholder: '{{ quick_search }}'
+                                                }
+                                              }
+                                          }
+                                      ],
+                                      topEnd: null,
+                                  },
+                                  order: [[ 1, "asc" ]],
                               });
                           } else {
                               console.error('No data found or data format is incorrect.');

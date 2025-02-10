@@ -40,7 +40,12 @@
     </a>
   {%- endif -%}
   {%- if child.object_location -%}
-    <a target="_blank" rel="noopener" href="{{ child.object_location | relative_url }}" class="btn btn-outline-primary">
+    <a
+      target="_blank"
+      rel="noopener"
+      href="{{ child.object_location | relative_url }}"
+      class="btn btn-outline-primary d-flex align-items-center"
+    >
       {% if child.display_template == 'video' and child.object_location contains 'vimeo' -%}
         {{-
           site.data.translations._includes.item.child['download-buttons.html'].vimeo[site.lang]

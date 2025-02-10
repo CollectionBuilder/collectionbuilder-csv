@@ -272,6 +272,11 @@ _includes:
           en: "Standardized Rights"
           es: "Derechos Estandarizados"
           de: "Standardisierte Rechte"
+      table.html:
+        quick_search:
+          en: "Quick Search"
+          es: "Búsqueda Rápida"
+          de: "Schnellsuche"
       video-embed.html:
       video-player.html:
         error:
