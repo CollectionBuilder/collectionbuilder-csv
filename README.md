@@ -19,7 +19,7 @@ This project is the open-source code of the digital platform for research data o
 
 - **Fast Static Website**: Built with CollectionBuilder-CSV using open source static site generator [Jekyll](https://jekyllrb.com/) and a modern static web stack.
 - **Explorative Access to Metadata**: Interactive features for exploring collection metadata such as a timeline, filtering and comprehensive annotation.
-- **Sensitive Content Annotation**: Collection items are annotated using the [GenderOpen Index](https://opengenderplatform.de/schlagwortindex), a controlled vocabulary for sensitive content.
+- **Sensitive Content Annotation**: Annotation of collection items following the [Manual for Creating Non-Discriminatory Metadata for Historical Sources and Research Data](https://maehr.github.io/diskriminierungsfreie-metadaten/) developed by Stadt.Geschichte.Basel.
 - **Accessibility-Focused Design**: Ensuring inclusivity for all users by complying with WCAG standards and observing neurodiversity design guidelines. More at our [accessibility statement](https://stadtgeschichtebasel.ch/barrierefreiheitserklaerung/).
 
 ### CollectionBuilder
@@ -27,10 +27,23 @@ This project is the open-source code of the digital platform for research data o
 The technical basis for Stadt.Geschichte.Basel's research data platform is provided by [CollectionBuilder](https://collectionbuilder.github.io/), an open source framework for creating metadata-driven digital collections. CollectionBuilder is a project maintained by the University of Idaho Library's [Digital Initiatives](https://www.lib.uidaho.edu/digital/) and the [Center for Digital Inquiry and Learning](https://cdil.lib.uidaho.edu) (CDIL) following the [Lib-Static](https://lib-static.github.io/) methodology.
 
 The basic theme is created using [Bootstrap](https://getbootstrap.com/).
-Metadata visualizations are built using open source libraries such as [DataTables](https://datatables.net/), [Spotlight gallery](https://github.com/nextapps-de/spotlight), [lazysizes](https://github.com/aFarkas/lazysizes), and [Lunr.js](https://lunrjs.com/).
+Metadata visualizations are built using open source libraries such as [DataTables](https://datatables.net/), [Spotlight gallery](https://github.com/nextapps-de/spotlight), [lazysizes](https://github.com/aFarkas/lazysizes), [Lunr.js](https://lunrjs.com/) and [Leaflet](https://leafletjs.com/).
 Object metadata is exposed using [Schema.org](http://schema.org) and [Open Graph protocol](http://ogp.me/) standards.
 
 For more information on CollectionBuilder, visit the [Docs](https://collectionbuilder.github.io/cb-docs/).
+
+Stadt.Geschichte.Basel has extended CollectionBuilder with some features that are not (yet) included in the CollectionBuilder project. These are the following extensions:
+
+- **List Visualization**: In addition to wordclouds, fields can be visualized in a list including their frequencies.
+- **EDTF Timeline Page**: Based on the existing solution, an enhanced timeline was created that supports year numbers in Extended Date/Time Format ([EDTF](https://www.loc.gov/standards/datetime/)).
+- **Item Layout "Geodata"**: Definition of a new display_template ("geodata"). An interactive map was created as a new item view to display `geojson` files.
+- **Item Layout "Table"**: Tabular data is read from `csv` files and displayed as an interactive table with search and filter features directly on the item page.
+- **Multi-Language Support for Theming**: So far, German and Spanish are supported. English is the default language.
+- **Trigger Warning**: To draw attention to possibly sensitive contents of the collection, a trigger warning has been added, which appears once when the page is visited.
+- **Report Button**: A button has been added to the item view that allows the user to report incorrect data.
+- **Website Layout**: The different collection display options were reorganized and are now accessible on a central collection page, with buttons to switch views. Webdesign adjustments and were incorporated with the [Neurodiversity Design System](https://neurodiversity.design/) in mind to provide a coherent visual appearance.
+- **GitHub Actions**: GitHub actions have been added to check code for correct formatting and to automatically build the site, including processing the data from [Omeka S](https://omeka.unibe.ch/s/stadtgeschichtebasel/page/sgb).
+- **Use of prettier**: All files were formatted using [prettier](https://prettier.io/).
 
 ## Data Model
 
