@@ -96,7 +96,9 @@ function filterItems(arr,q) {
         var filteredItems = [];
         for (var i = 0, len = arr.length; i < len; i++) {
             var val = "";
-        for (var k in arr[i]) { val += arr[i][k] + " "; }
+            for (var k in arr[i]) { 
+                if (k != "img") { val += arr[i][k] + " "; }
+            }
             if(val.toUpperCase().indexOf(q) != -1){
                 filteredItems.push(arr[i]);
             }
