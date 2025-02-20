@@ -115,7 +115,9 @@ function filterItems(arr,q) {
     browseItemsDiv.innerHTML = cards;
 
     // finish
-    filterButton.focus();
+    if (q != "") {
+        filterTextBox.focus();
+    }
     loadingIcon.classList.add("d-none");
 };
 
@@ -145,7 +147,12 @@ var browseItemsDiv = document.querySelector("#browseItems");
 /* filter if hash in initial URL */
 var query = "";
 if(window.location.hash) {
-    query = decodeURIComponent(location.hash.substr(1));
+    var hashValue = decodeURIComponent(location.hash.substr(1));
+    if (hashValue != 'maincontent') { 
+        query = hashValue;
+    } else {
+        query = "";
+    }
     filterTextBox.value = query;
     filterItems(items,query);
 } else {
@@ -168,10 +175,13 @@ function resetFilter() {
 /* filter if hash changes */ 
 window.addEventListener("hashchange", function() {
     // read hash
-    query = decodeURIComponent(location.hash.substr(1));
-    filterTextBox.value = query;
-    // filter
-    filterItems(items,query);
+    var hashValue = decodeURIComponent(location.hash.substr(1));
+    if (hashValue != 'maincontent') { 
+        query = hashValue;
+        filterTextBox.value = query;
+        // filter
+        filterItems(items,query);
+    }
 });
 
 /* item array sorting function */
