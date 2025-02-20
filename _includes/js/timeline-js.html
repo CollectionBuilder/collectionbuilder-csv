@@ -10,10 +10,10 @@
     function highlightYear() {
         var hashfilter = "tr#" + decodeURIComponent(location.hash.substr(1));
         document.querySelectorAll("table#timeline tr").forEach(row => { row.classList.remove('table-info'); });
-        document.querySelector(hashfilter).classList.add("table-info");
+        if (document.querySelector(hashfilter)) { document.querySelector(hashfilter).classList.add("table-info"); }
     }
     // if in initial hash
-    if(window.location.hash) { highlightYear(); }
+    if (window.location.hash) { highlightYear(); }
     // on hash change
     window.addEventListener("hashchange", highlightYear);
 
