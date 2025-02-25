@@ -1,0 +1,78 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .:
+    dependencies:
+      '@shopify/prettier-plugin-liquid':
+        specifier: ^1.8.2
+        version: 1.8.2(prettier@3.5.2)
+      prettier:
+        specifier: ^3.5.2
+        version: 3.5.2
+
+packages:
+
+  '@shopify/liquid-html-parser@2.5.0':
+    resolution: {integrity: sha512-5Kv2XUk8l6Rvkmwjw1sdgwaTTzXLHs3c8fPcrnfn1qoVcVmfixL3nV2eSkvjf7nRRFiBCu6hOjcMZ/kq0iSPrw==}
+
+  '@shopify/prettier-plugin-liquid@1.8.2':
+    resolution: {integrity: sha512-8QyyxzYsLOJ97EAiSOy3a8r5/PnIrjhQC2IPGf8CgRuYdPxHYto8QXjAku4u1bzzqMBJd730o9JLjTNQFl1uFw==}
+    peerDependencies:
+      prettier: ^2.0.0 || ^3.0.0
+
+  html-styles@1.0.0:
+    resolution: {integrity: sha512-cDl5dcj73oI4Hy0DSUNh54CAwslNLJRCCoO+RNkVo+sBrjA/0+7E/xzvj3zH/GxbbBLGJhE0hBe1eg+0FINC6w==}
+
+  isarray@1.0.0:
+    resolution: {integrity: sha512-VLghIWNM6ELQzo7zwmcg0NmTVyWKYjvIeM83yjp0wRDTmUnrM678fQbcKBo6n2CJEF0szoG//ytg+TKla89ALQ==}
+
+  isobject@2.1.0:
+    resolution: {integrity: sha512-+OUdGJlgjOBZDfxnDjYYG6zp487z0JGNQq3cYQYg5f5hKR+syHMsaztzGeml/4kGG55CSpKSpWTY+jYGgsHLgA==}
+    engines: {node: '>=0.10.0'}
+
+  line-column@1.0.2:
+    resolution: {integrity: sha512-Ktrjk5noGYlHsVnYWh62FLVs4hTb8A3e+vucNZMgPeAOITdshMSgv4cCZQeRDjm7+goqmo6+liZwTXo+U3sVww==}
+
+  ohm-js@16.6.0:
+    resolution: {integrity: sha512-X9P4koSGa7swgVQ0gt71UCYtkAQGOjciJPJAz74kDxWt8nXbH5HrDOQG6qBDH7SR40ktNv4x61BwpTDE9q4lRA==}
+    engines: {node: '>=0.12.1'}
+
+  prettier@3.5.2:
+    resolution: {integrity: sha512-lc6npv5PH7hVqozBR7lkBNOGXV9vMwROAPlumdBkX0wTbbzPu/U1hk5yL8p2pt4Xoc+2mkT8t/sow2YrV/M5qg==}
+    engines: {node: '>=14'}
+    hasBin: true
+
+snapshots:
+
+  '@shopify/liquid-html-parser@2.5.0':
+    dependencies:
+      line-column: 1.0.2
+      ohm-js: 16.6.0
+
+  '@shopify/prettier-plugin-liquid@1.8.2(prettier@3.5.2)':
+    dependencies:
+      '@shopify/liquid-html-parser': 2.5.0
+      html-styles: 1.0.0
+      prettier: 3.5.2
+
+  html-styles@1.0.0: {}
+
+  isarray@1.0.0: {}
+
+  isobject@2.1.0:
+    dependencies:
+      isarray: 1.0.0
+
+  line-column@1.0.2:
+    dependencies:
+      isarray: 1.0.0
+      isobject: 2.1.0
+
+  ohm-js@16.6.0: {}
+
+  prettier@3.5.2: {}

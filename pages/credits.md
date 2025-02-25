@@ -10,7 +10,7 @@ permalink: /credits.html
 
 [forschung.stadtgeschichtebasel.ch](https://forschung.stadtgeschichtebasel.ch) wurde vom Team für Research Data Management und Public History entwickelt und gestaltet. Namentlich von
 
-- Cristina Wildisen-Münch
+- Cristina Münch
 - Moritz Mähr
 - Moritz Twente
 - Nico Görlich

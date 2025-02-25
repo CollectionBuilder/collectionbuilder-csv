@@ -76,7 +76,7 @@ Weitere Lehrmittel von Kooperationspartner\*innen und Dritten finden sich auf de
 
 Stiftung Stadt.Geschichte.Basel, Hirschgässlein 21, 4051 Basel. [info@stadtgeschichtebasel.ch](mailto:info@stadtgeschichtebasel.ch)
 
-Redaktion: Moritz Mähr, Noëlle Schnegg und Cristina Wildisen-Münch
+Redaktion: Moritz Mähr, Noëlle Schnegg und Cristina Münch
 
 ## Datenschutz
 
