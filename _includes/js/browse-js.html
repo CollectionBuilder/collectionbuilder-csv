@@ -3,10 +3,25 @@
 {% else %}
 {%- assign items = site.data[site.metadata] | where_exp: 'item','item.objectid and item.parentid == nil' -%}
 {% endif %}
+
 {%- assign fields = site.data.config-browse -%}
 <script>
 
-/* add items */
+/**
+ * BROWSE PAGE JAVASCRIPT
+ * 
+ * This script handles collection browsing functionality including:
+ * - Loading and displaying collection items
+ * - Basic and advanced searching/filtering
+ * - URL-based state management
+ * - Sorting
+ * - Browser history management
+ */
+
+/**
+ * Initialize items array from site data
+ * Each item contains field values, image information, and display settings
+ */
 var items = [
     {% for item in items %}
     { {% for f in fields %}{% if item[f.field] %}{{ f.field | escape | jsonify }}:{{ item[f.field] | strip | jsonify }}, {%- endif -%}{%- endfor -%}
@@ -21,7 +36,12 @@ var items = [
 
 {% include helpers/get-icon.js %}
 
-/* function to create cards for each item */ 
+/**
+ * Creates an HTML card for displaying a collection item
+ * 
+ * @param {Object} obj - The item object with fields and metadata
+ * @return {string} HTML string for the item card
+ */
 function makeCard(obj) {
     // placeholder image for lazyload
     var placeholder = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'%3E%3C/svg%3E";
@@ -59,7 +79,7 @@ function makeCard(obj) {
     var btns = obj[{{ f.field | jsonify }}].split(";");
     for (var i = 0, len = btns.length; i < len; i++) {
         if(btns[i] != "") {
-        card += '<a class="btn btn-sm btn-secondary m-1 text-wrap" href="{{ page.url | relative_url }}#' + encodeURIComponent(btns[i].trim()) + '">' + btns[i].trim() + '</a>';
+        card += '<a class="btn btn-sm btn-secondary m-1 text-wrap" href="{{ page.url | relative_url }}#{{ f.field }}:' + encodeURIComponent(btns[i].trim()) + '">' + btns[i].trim() + '</a>';
         }
     }
     {% else %}
@@ -83,9 +103,15 @@ function makeCard(obj) {
     return card;
 }
 
-/* filter items function */
-function filterItems(arr,q) {
-    // show loading icon
+/**
+ * Filter items based on search query and optional field
+ * This is the main filter function for basic searches
+ * 
+ * @param {Array} arr - Array of items to filter
+ * @param {string} q - Search query
+ * @param {string} field - Field to search in, "all" for all fields
+ */
+function filterItems(arr, q, field="all") {
     loadingIcon.classList.remove("d-none");
     // dont filter if no q 
     if (q=="") { 
@@ -94,16 +120,28 @@ function filterItems(arr,q) {
         q = q.trim().toUpperCase(); 
         // js indexOf filter
         var filteredItems = [];
+        
         for (var i = 0, len = arr.length; i < len; i++) {
-            var val = "";
-            for (var k in arr[i]) { 
-                if (k != "img") { val += arr[i][k] + " "; }
-            }
-            if(val.toUpperCase().indexOf(q) != -1){
-                filteredItems.push(arr[i]);
+            // If searching all fields, use original search behavior
+            if (field === "all") {
+                var val = "";
+                for (var k in arr[i]) { 
+                    if (k != "img") { val += arr[i][k] + " "; }
+                }
+                if(val.toUpperCase().indexOf(q) != -1){
+                    filteredItems.push(arr[i]);
+                }
+            } 
+            // If searching specific field, handle semicolon-separated values
+            else if (arr[i][field]) {
+                let fieldValues = arr[i][field].toString().split(";");
+                if (fieldValues.some(value => value.trim().toUpperCase().indexOf(q) != -1)) {
+                    filteredItems.push(arr[i]);
+                }
             }
         }
     }
+    
     // add number 
     document.querySelector("#numberOf").innerHTML = filteredItems.length + " of {{ items | size }} items";
     
@@ -121,7 +159,363 @@ function filterItems(arr,q) {
     loadingIcon.classList.add("d-none");
 };
 
-/* Fisher-Yates shuffle https://bost.ocks.org/mike/shuffle/ */
+/**
+ * Filter items based on advanced search criteria with boolean logic
+ * 
+ * @param {Array} arr - Array of items to filter
+ * @param {Array} searchCriteria - Array of objects with boolean, field, value properties
+ */
+ function advancedFilterItems(arr, searchCriteria) {
+    loadingIcon.classList.remove("d-none");
+    
+    var filteredItems = arr.filter(item => {
+        // If no criteria, return all items
+        if (!searchCriteria || !searchCriteria.length) return true;
+        
+        let result = true;
+        let previousResult = true;
+        
+        for (let i = 0; i < searchCriteria.length; i++) {
+            const {boolean, field, value} = searchCriteria[i];
+            
+            // Skip empty criteria
+            if (!value) continue;
+            
+            // Handle "all fields" search
+            if (field === 'all') {
+                // Search across all item fields
+                let itemMatches = false;
+                for (let k in item) {
+                    if (item[k] && typeof item[k] === 'string' && 
+                        item[k].toUpperCase().includes(value.trim().toUpperCase())) {
+                        itemMatches = true;
+                        break;
+                    }
+                }
+                
+                switch(boolean) {
+                    case 'AND':
+                        result = previousResult && itemMatches;
+                        break;
+                    case 'OR':
+                        result = previousResult || itemMatches;
+                        break;
+                    case 'NOT':
+                        result = previousResult && !itemMatches;
+                        break;
+                    default:
+                        result = itemMatches;
+                }
+            } 
+            // Regular field search
+            else {
+                const itemValue = item[field];
+                const fieldValues = itemValue ? itemValue.toString().split(";") : [];
+                const matches = fieldValues.some(v => 
+                    v.trim().toUpperCase().includes(value.trim().toUpperCase())
+                );
+                
+                switch(boolean) {
+                    case 'AND':
+                        result = previousResult && matches;
+                        break;
+                    case 'OR':
+                        result = previousResult || matches;
+                        break;
+                    case 'NOT':
+                        result = previousResult && (!itemValue || !matches);
+                        break;
+                    default:
+                        result = matches;
+                }
+            }
+            
+            previousResult = result;
+        }
+        return result;
+    });
+    
+    document.querySelector("#numberOf").innerHTML = filteredItems.length + " of {{ items | size }} items";
+    
+    var cards = "";
+    for (var i = 0, len = filteredItems.length; i < len; i++) {
+        cards += makeCard(filteredItems[i]);
+    }
+    browseItemsDiv.innerHTML = cards;
+    
+    loadingIcon.classList.add("d-none");
+}
+
+/**
+ * Process the basic search form and execute search
+ * Uses simple direct URL manipulation to maintain compatibility with links
+ */
+ function submitFilter() {
+    const query = filterTextBox.value;
+    const field = document.querySelector("#fieldSelect").value;
+    
+    // Update the URL directly - this is more compatible with existing code
+    if (field === "all") {
+        window.location.hash = encodeURIComponent(query);
+    } else {
+        window.location.hash = encodeURIComponent(field + ":" + query);
+    }
+    return false;
+}
+
+/**
+ * Reset all filters and clear the URL
+ */
+function resetFilter() {
+    // Clear the search UI first (without triggering events)
+    query = "";
+    filterTextBox.value = query;
+    document.querySelector("#fieldSelect").value = "all";
+    
+    // Clear both hash and search params for a complete reset
+    if (window.location.hash || window.location.search) {
+        window.location = window.location.pathname;
+        return false;
+    }
+    
+    // If we're already at the base URL, just reset the display
+    // Reset advanced search form if it exists
+    const advancedForm = document.getElementById('advancedSearchForm');
+    if (advancedForm) {
+        const searchRows = document.getElementById('searchRows');
+        // Clear existing rows
+        searchRows.innerHTML = '';
+        // Add back empty default rows
+        for (let i = 0; i < 3; i++) {
+            addSearchRow();
+        }
+    }
+    
+    // Show all items
+    filterItems(items, "", "all");
+    return false;
+}
+
+/**
+ * Create a list of valid field names from the configuration
+ * Used to validate field names in hash-based searches
+ */
+const validFields = [{% for f in fields %}"{{ f.field }}",{% endfor %}];
+/**
+ * Handle changes to the hash portion of the URL
+ * This is triggered by both manual URL changes and links with hash targets
+ */
+ function handleHashChange() {
+    var hash = decodeURIComponent(location.hash.substr(1));
+    
+    // If empty hash but we have search parameters, don't interfere
+    if (!hash && window.location.search) {
+        return;
+    }
+    
+    // Clear any existing search params if we're using a hash search
+    // This prevents mixing of search types
+    if (hash && window.location.search) {
+        window.location = window.location.pathname + "#" + hash;
+        return;
+    }
+    
+    // If no hash and no search params, show all items
+    if (!hash) {
+        query = "";
+        filterTextBox.value = query;
+        document.querySelector("#fieldSelect").value = "all";
+        filterItems(items, query, "all");
+        
+        // Update the advanced search modal to reflect empty search
+        updateAdvancedSearchModal([]);
+        return;
+    }
+    
+    // Process the hash value
+    let field = 'all';
+    let q = hash;
+    
+    if (hash.includes(":")) {
+        var [potentialField, hashQ] = hash.split(":");
+        
+        // Check if it's a valid field
+        if (validFields.includes(potentialField)) {
+            // Valid field search
+            field = potentialField;
+            q = hashQ;
+            filterTextBox.value = q;
+            document.querySelector("#fieldSelect").value = field;
+            filterItems(items, q, field);
+        } else {
+            // Invalid field, search all fields with original hash
+            filterTextBox.value = hash;
+            document.querySelector("#fieldSelect").value = "all";
+            filterItems(items, hash, "all");
+        }
+    } else {
+        // No colon, regular search across all fields
+        query = hash;
+        filterTextBox.value = query;
+        document.querySelector("#fieldSelect").value = "all";
+        filterItems(items, query, "all");
+    }
+    
+    // Update the advanced search modal to reflect the current hash search
+    if (q) {
+        const searchCriteria = [{
+            boolean: 'AND',
+            field: field,
+            value: q
+        }];
+        updateAdvancedSearchModal(searchCriteria, true); // Force update on hash change
+    }
+}
+
+/**
+ * Update the advanced search modal to reflect the current search criteria
+ * This preserves any existing rows and adds new rows from current searches
+ * 
+ * @param {Array} searchCriteria - Array of search criteria objects
+ * @param {boolean} forceUpdate - Whether to force update even if rows exist
+ */
+ function updateAdvancedSearchModal(searchCriteria, forceUpdate = false) {
+    const searchRows = document.getElementById('searchRows');
+    if (!searchRows) return;
+    
+    // If there are no search criteria and no existing rows, add empty default rows
+    if (!searchCriteria.length && searchRows.children.length === 0) {
+        for (let i = 0; i < 3; i++) {
+            addSearchRow();
+        }
+        return;
+    }
+    
+    // If we have search criteria but no rows, or if forced update,
+    // recreate all rows using the current search criteria
+    if (searchCriteria.length && (searchRows.children.length === 0 || forceUpdate)) {
+        // Clear existing rows
+        searchRows.innerHTML = '';
+        
+        // Add each search criteria as a row
+        searchCriteria.forEach((criteria, i) => {
+            addSearchRow(criteria);
+        });
+        
+        // Add one extra empty row for convenience
+        addSearchRow();
+    }
+}
+
+/**
+ * Add a new search row to the advanced search modal
+ * 
+ * @param {Object} values - Optional initial values for the row
+ */
+function addSearchRow(values = {}) {
+    const template = document.getElementById('searchRowTemplate');
+    const searchRows = document.getElementById('searchRows');
+    const newRow = template.content.cloneNode(true);
+    const row = newRow.querySelector('.search-row');
+    
+    // Set values if provided
+    if (values.boolean) {
+        row.querySelector('.boolean-operator').value = values.boolean;
+    }
+    if (values.field) {
+        row.querySelector('.field-select').value = values.field;
+    }
+    if (values.value) {
+        row.querySelector('.search-input').value = values.value;
+    }
+    
+    // Hide boolean operator for first row
+    if (searchRows.children.length === 0) {
+        row.querySelector('.boolean-operator').style.visibility = 'hidden';
+    }
+    
+    // Add remove button handler
+    row.querySelector('.remove-row').addEventListener('click', function() {
+        row.remove();
+        // Show first boolean operator if this was the second row
+        if (searchRows.children.length === 1) {
+            searchRows.querySelector('.boolean-operator').style.visibility = 'hidden';
+        }
+    });
+    
+    // Add enter key handler for the input field
+    row.querySelector('.search-input').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            submitAdvancedSearch();
+            return false;
+        }
+    });
+    
+    searchRows.appendChild(row);
+}
+
+/**
+ * Handle form submission from the advanced search modal
+ * 
+ * @param {Event} event - Optional event object if triggered by a form submit
+ * @return {boolean} False to prevent default form submission
+ */
+function submitAdvancedSearch(event) {
+    // Prevent default if this was from a form submit
+    if (event && event.preventDefault) {
+        event.preventDefault();
+    }
+    
+    const form = document.getElementById('advancedSearchForm');
+    const rows = form.querySelectorAll('.search-row');
+    const searchParams = {};
+    
+    // Build URL parameters from form values
+    rows.forEach((row, index) => {
+        const boolean = index === 0 ? 'AND' : row.querySelector('.boolean-operator').value;
+        const field = row.querySelector('.field-select').value;
+        const value = row.querySelector('.search-input').value.trim();
+        
+        if (value) {
+            searchParams[`b${index}`] = boolean;
+            searchParams[`f${index}`] = field;
+            searchParams[`v${index}`] = value;
+        }
+    });
+    
+    // Create URL parameters
+    const queryString = new URLSearchParams();
+    Object.entries(searchParams).forEach(([key, value]) => {
+        queryString.append(key, value);
+    });
+    
+    // Update URL directly for better compatibility
+    // Clear any existing hash to avoid confusion between search types
+    window.location = window.location.pathname + "?" + queryString.toString();
+    
+    // Don't process the search here - it will be handled by page load
+    
+    // Close modal
+    try {
+        const modal = bootstrap.Modal.getInstance(document.getElementById('advancedSearchModal'));
+        if (modal) {
+            modal.hide();
+        }
+    } catch (e) {
+        console.error('Could not close modal:', e);
+    }
+    
+    return false;
+}
+
+/**
+ * Fisher-Yates shuffle algorithm for randomizing item order
+ * From: https://bost.ocks.org/mike/shuffle/
+ * 
+ * @param {Array} array - Array to shuffle
+ * @return {Array} Shuffled array (modified in-place)
+ */
 function shuffle(array) {
     var m = array.length, t, i;
     while (m) {
@@ -133,58 +527,12 @@ function shuffle(array) {
     return array;
 }
 
-/* init browse page */
-
-/* randomize items once at page load */
-shuffle(items);
-
-/* set some elements */ 
-var loadingIcon = document.querySelector("#loadingIcon");
-var filterTextBox = document.querySelector('#filterTextBox');
-var filterButton = document.querySelector("#filterButton");
-var browseItemsDiv = document.querySelector("#browseItems");
-
-/* filter if hash in initial URL */
-var query = "";
-if(window.location.hash) {
-    var hashValue = decodeURIComponent(location.hash.substr(1));
-    if (hashValue != 'maincontent') { 
-        query = hashValue;
-    } else {
-        query = "";
-    }
-    filterTextBox.value = query;
-    filterItems(items,query);
-} else {
-    query = "";
-    filterItems(items,query);
-}
-
-/* filter form */
-function submitFilter() {
-    query = filterTextBox.value;
-    window.location.hash = encodeURIComponent(query);
-}
-/* reset filters */ 
-function resetFilter() {
-    query = "";
-    filterTextBox.value = query;
-    window.location.hash = encodeURIComponent(query);
-}
-
-/* filter if hash changes */ 
-window.addEventListener("hashchange", function() {
-    // read hash
-    var hashValue = decodeURIComponent(location.hash.substr(1));
-    if (hashValue != 'maincontent') { 
-        query = hashValue;
-        filterTextBox.value = query;
-        // filter
-        filterItems(items,query);
-    }
-});
-
-/* item array sorting function */
+/**
+ * Sort items array by a specified key
+ * 
+ * @param {Array} json_object - Array of items to sort
+ * @param {string} key_to_sort_by - Field name to sort by
+ */
 function sorting(json_object, key_to_sort_by) {
     function sortByKey(a, b) {
         var x = a[key_to_sort_by];
@@ -194,9 +542,53 @@ function sorting(json_object, key_to_sort_by) {
         return ((x==null) ? 1: (y==null) ? -1: (x < y) ? -1 : ((x > y) ? 1 : 0));
     }
     json_object.sort(sortByKey);
-};
+}
 
-/* add sort function on click of sort options */
+/* 
+ * INITIALIZATION
+ * Set up event handlers and handle initial page load state
+ */
+
+// Initialize page elements
+var loadingIcon = document.querySelector("#loadingIcon");
+var filterTextBox = document.querySelector('#filterTextBox');
+var filterButton = document.querySelector("#filterButton");
+var browseItemsDiv = document.querySelector("#browseItems");
+
+/* initialize sort options */
+{% if site.data.theme.default-sort-field %}
+// If default sort field is configured, use it
+const sortFilterElement = "{{ site.data.theme.default-sort-field }}".toLowerCase();
+// Find the dropdown item with matching data-filter attribute
+const matchingDropdownItem = document.querySelector(".dropdown-item[data-filter='" + sortFilterElement + "']");
+if (matchingDropdownItem) {
+    // sort the items by the configured field
+    sorting(items, sortFilterElement);
+    // add an active class to the matching dropdown item
+    matchingDropdownItem.classList.add("active");
+    // update the sort filter display
+    document.getElementById("sortFilter").innerHTML = matchingDropdownItem.textContent;
+} else {
+    // if configured field doesn't match any sort options, fall back to random
+    shuffle(items);
+}
+{% else %}
+// Find the sortFilter element and get its text in lowercase
+const sortFilterElement = document.getElementById("sortFilter").innerHTML.toLowerCase();
+// Find the dropdown item with matching data-filter attribute
+const matchingDropdownItem = document.querySelector(".dropdown-item[data-filter='" + sortFilterElement + "']");
+if (matchingDropdownItem) {
+    //sort the items by the sortFilterElement
+    sorting(items, sortFilterElement);
+    // add an active class to the matching dropdown item
+    matchingDropdownItem.classList.add("active");
+} else {
+    // shuffle the items if there is no matching dropdown item
+    shuffle(items);
+}
+{% endif %}
+
+/* Add sort function on click of sort options */
 var sortFilter = document.querySelector("#sortFilter");
 var sortOptions = document.querySelectorAll(".browse-sort-item");
 sortOptions.forEach((button) => {
@@ -204,22 +596,180 @@ sortOptions.forEach((button) => {
     // get the sort field
     var field = button.dataset.filter;
     var display_name = button.textContent;
-    // get current filter
-    var query = filterTextBox.value;
+    
     // switch active sort option
-    sortOptions.forEach((option) => { option.classList.remove("active"); } );
+    sortOptions.forEach((option) => { option.classList.remove("active"); });
     button.classList.add("active");
     sortFilter.innerHTML = display_name;
-    // send to sort and filter
-    if (field != 'random') {
-        sorting(items, field);
-        filterItems(items, query);
+    
+    // Check if we're in an advanced search state
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchCriteria = [];
+    let index = 0;
+    
+    while (urlParams.has(`f${index}`)) {
+      searchCriteria.push({
+        boolean: urlParams.get(`b${index}`),
+        field: urlParams.get(`f${index}`),
+        value: urlParams.get(`v${index}`)
+      });
+      index++;
     }
-    else {
+    
+    // If we have active advanced search criteria
+    if (searchCriteria.length > 0) {
+      if (field != 'random') {
+        sorting(items, field);
+        advancedFilterItems(items, searchCriteria);
+      } else {
         shuffle(items);
-        filterItems(items, query);
+        advancedFilterItems(items, searchCriteria);
+      }
+    } 
+    // Otherwise handle hash-based or simple search
+    else {
+      // get current filter and field
+      var query = filterTextBox.value;
+      var searchField = document.querySelector("#fieldSelect").value;
+      
+      if (field != 'random') {
+        sorting(items, field);
+        filterItems(items, query, searchField);
+      } else {
+        shuffle(items);
+        filterItems(items, query, searchField);
+      }
     }
   });
-}); 
+});
 
+/* Update selected field display when dropdown changes */
+document.querySelector("#fieldSelect").addEventListener("change", function(e) {
+    document.querySelector("#selectedField").textContent = 
+        e.target.options[e.target.selectedIndex].text;
+});
+
+/**
+ * Initialize the page on load
+ */
+ window.addEventListener('load', function() {
+    // Initialize search state based on URL
+    const urlParams = new URLSearchParams(window.location.search);
+    
+    // If we have URL search parameters, handle advanced search
+    if (urlParams.toString()) {
+        // Process URL parameters for advanced search
+        const searchRows = document.getElementById('searchRows');
+        if (searchRows) {
+            searchRows.innerHTML = '';
+        }
+        
+        let index = 0;
+        const searchCriteria = [];
+        
+        // Read parameters and build search criteria
+        while (urlParams.has(`f${index}`)) {
+            const boolean = urlParams.get(`b${index}`);
+            const field = urlParams.get(`f${index}`);
+            const value = urlParams.get(`v${index}`);
+            
+            searchCriteria.push({
+                boolean, field, value
+            });
+            
+            // Add row to the modal
+            if (searchRows) {
+                addSearchRow({boolean, field, value});
+            }
+            
+            index++;
+        }
+        
+        // Add one extra empty row for convenience
+        if (searchRows && searchCriteria.length > 0) {
+            addSearchRow();
+        }
+        
+        // Apply the advanced filter
+        advancedFilterItems(items, searchCriteria);
+    }
+    // If we have a hash but no search params, handle hash-based search
+    else if (window.location.hash) {
+        handleHashChange();
+    }
+    // No search parameters or hash, initialize with default view
+    else {
+        // Initialize modal with empty rows if it exists
+        const searchRows = document.getElementById('searchRows');
+        if (searchRows) {
+            searchRows.innerHTML = '';
+            for (let i = 0; i < 3; i++) {
+                addSearchRow();
+            }
+        }
+        
+        // Show all items
+        filterItems(items, "", "all");
+    }
+    
+    // Set up form submission handlers
+    const advancedSearchForm = document.getElementById('advancedSearchForm');
+    if (advancedSearchForm) {
+        advancedSearchForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            submitAdvancedSearch(e);
+            return false;
+        });
+    }
+    
+    // Basic search form submission
+    document.getElementById('browseFilter').addEventListener('submit', function(e) {
+        e.preventDefault();
+        submitFilter();
+        return false;
+    });
+    
+    // Intercept modal open event to ensure search rows are updated
+    const advancedSearchModal = document.getElementById('advancedSearchModal');
+    if (advancedSearchModal) {
+        advancedSearchModal.addEventListener('show.bs.modal', function() {
+            // If we have a hash-based search, reflect it in the modal
+            if (window.location.hash && !window.location.search) {
+                const hash = decodeURIComponent(location.hash.substr(1));
+                if (!hash) return;
+                
+                let field = 'all';
+                let q = hash;
+                
+                if (hash.includes(":")) {
+                    var [potentialField, hashQ] = hash.split(":");
+                    if (validFields.includes(potentialField)) {
+                        field = potentialField;
+                        q = hashQ;
+                    }
+                }
+                
+                const searchCriteria = [{
+                    boolean: 'AND',
+                    field: field,
+                    value: q
+                }];
+                
+                updateAdvancedSearchModal(searchCriteria);
+            }
+        });
+    }
+});
+
+document.getElementById('fieldSelect').addEventListener('change', function(e) {
+    if (e.target.value === 'advanced') {
+        // Reset the select back to "All Fields"
+        e.target.value = 'all';
+        // Show the advanced search modal
+        new bootstrap.Modal(document.getElementById('advancedSearchModal')).show();
+    }
+});
+
+// Event listener for hash changes
+window.addEventListener("hashchange", handleHashChange);
 </script>

@@ -1,0 +1,65 @@
+<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#advancedSearchModal">
+    Advanced<span class="d-none d-md-inline"> Search</span>
+</button>
+<div class="modal fade" id="advancedSearchModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title h4" id="advancedSearchModalLabel">Advanced Search</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="advancedSearchForm">
+            <div id="searchRows">
+              <!-- Initial search rows will be inserted here -->
+            </div>
+            <div class="mt-3">
+              <button type="button" class="btn btn-outline-secondary btn-sm" onclick="addSearchRow()">
+                {% include feature/icon.html icon="plus-circle" label="plus circle" %}
+                Add Another Field
+              </button>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="submitAdvancedSearch()">Search</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- Template for search row -->
+<template id="searchRowTemplate">
+  <div class="search-row mb-3">
+    <div class="row g-3 align-items-center">
+      <div class="col-auto">
+        <select class="form-select form-select-sm boolean-operator" aria-label="Boolean Operator">
+          <option value="AND">AND</option>
+          <option value="OR">OR</option>
+          <option value="NOT">NOT</option>
+        </select>
+      </div>
+      <div class="col-auto">
+        <select class="form-select form-select-sm field-select" aria-label="Search Field">
+          <option value="all">All Fields</option>
+          {% for f in site.data.config-browse %}
+          {% unless f.hidden == 'true' %}
+          <option value="{{ f.field }}">{{ f.display_name | default: f.field }}</option>
+          {% endunless %}
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col">
+        <input type="text" class="form-control form-control-sm search-input" 
+          aria-label="Search Term" 
+          placeholder="Enter search term">
+      </div>
+      <div class="col-auto">
+        <button type="button" class="btn btn-sm btn-outline-danger remove-row" aria-label="Remove search row">
+          {% include feature/icon.html icon="x-circle" label="remove/x circle" %}
+        </button>
+      </div>
+    </div>
+  </div>
+</template>

@@ -3,16 +3,29 @@
 layout: page
 custom-foot: js/browse-js.html
 ---
+{%- assign fields = site.data.config-browse -%}
 
-{{ content }}
+<div class="row mb-2">
+<div class="col-9">{{ content }}</div>
 
+<div class="col-3 justify-content-center">{% if site.data.theme.advanced-search == true %}{% include advanced-search-modal.html %}{% endif %}</div>
+</div>
 <div class="row mb-3 justify-content-center">
     <div class="col-md-8 text-center">
         <form role="search" id="browseFilter" onsubmit="submitFilter(); return false;">
             <div class="input-group input-group-lg">
+                <select class="form-control form-select {% unless site.data.theme.faceted-search == true %} d-none{% endunless %}" id="fieldSelect" style="max-width: 200px;" aria-label="select search field to filter">
+                    <option value="all">All Fields</option>
+                    <option value="title">Title</option>
+                    {% for f in fields %}{% unless f.hidden == 'true' and f.sort == '' %}
+                    <option value="{{ f.field }}">{{ f.display_name | default: f.field }}</option>
+                    {% endunless %}{% endfor %}
+                    <option value="" disabled>─────────────</option>
+                    <option value="advanced">Advanced Search...</option>
+                </select>
                 <input type="text" class="form-control" id="filterTextBox" placeholder="Filter ... " aria-label="Search"> 
                 <button class="btn btn-success" type="submit" title="Filter items" id="filterButton" >Search</button>
-                <button class="btn btn-outline-secondary filter" onclick="resetFilter(); return false;" data-filter="">Reset</button>
+                <button class="btn btn-outline-secondary filter d-none d-md-flex" onclick="resetFilter(); return false;" data-filter="">Reset</button>
             </div>
         </form>
         <div class="h2" id="numberOf"></div>
@@ -30,7 +43,9 @@ custom-foot: js/browse-js.html
                 <button class="dropdown-item browse-sort-item" data-filter="{{ o.field | escape }}">{{ o.sort_name }}</button>
                 {% endfor %}
             </div>
+            <button class="btn btn-outline-secondary filter p-1 d-md-none float-end" onclick="resetFilter(); return false;" data-filter="">Reset</button>
         </div>
+       
     </div>
 </div>
 
