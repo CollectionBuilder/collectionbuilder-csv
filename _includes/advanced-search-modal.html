@@ -44,9 +44,7 @@
         <select class="form-select form-select-sm field-select" aria-label="Search Field">
           <option value="all">All Fields</option>
           {% for f in site.data.config-browse %}
-          {% unless f.hidden == 'true' %}
           <option value="{{ f.field }}">{{ f.display_name | default: f.field }}</option>
-          {% endunless %}
           {% endfor %}
         </select>
       </div>

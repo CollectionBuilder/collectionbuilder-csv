@@ -17,9 +17,9 @@ custom-foot: js/browse-js.html
                 <select class="form-control form-select {% unless site.data.theme.faceted-search == true %} d-none{% endunless %}" id="fieldSelect" style="max-width: 200px;" aria-label="select search field to filter">
                     <option value="all">All Fields</option>
                     <option value="title">Title</option>
-                    {% for f in fields %}{% unless f.hidden == 'true' and f.sort == '' %}
+                    {% for f in fields %}
                     <option value="{{ f.field }}">{{ f.display_name | default: f.field }}</option>
-                    {% endunless %}{% endfor %}
+                    {% endfor %}
                     <option value="" disabled>─────────────</option>
                     <option value="advanced">Advanced Search...</option>
                 </select>
