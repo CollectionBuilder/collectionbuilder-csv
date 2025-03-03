@@ -300,7 +300,7 @@ function resetFilter() {
  * Create a list of valid field names from the configuration
  * Used to validate field names in hash-based searches
  */
-const validFields = [{% for f in fields %}"{{ f.field }}",{% endfor %}];
+const validFields = [{% for f in fields %}"{{ f.field }}",{% endfor %}"title"];
 /**
  * Handle changes to the hash portion of the URL
  * This is triggered by both manual URL changes and links with hash targets

@@ -46,6 +46,7 @@
     <div class="col-auto">
       <select class="form-select form-select-sm field-select" aria-label="Search Field">
         <option value="all">All Fields</option>
+        <option value="title">Title</option>
         {% for f in site.data.config-browse %}
         <option value="{{ f.field }}">{{ f.display_name | default: f.field }}</option>
         {% endfor %}
