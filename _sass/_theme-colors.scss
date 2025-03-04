@@ -132,9 +132,9 @@ $_luminance-list: .0008 .001 .0011 .0013 .0015 .0017 .002 .0022 .0025 .0027 .003
 // Return WCAG2.0 relative luminance
 @function luminance($color) {
     $rgb: (
-        "r": red($color),
-        "g": green($color),
-        "b": blue($color)
+        "r": color.red($color),
+        "g": color.green($color),
+        "b": color.blue($color)
     );
 
     @each $name, $value in $rgb {
@@ -237,7 +237,7 @@ $_luminance-list: .0008 .001 .0011 .0013 .0015 .0017 .002 .0022 .0025 .0027 .003
     }
     a#{$parent} {
         &:hover, &:focus {
-            color: color.adjust($color, $lightness: -15%) !important;
+            color: color.scale($color, $lightness: -30%) !important;
         }
     }  
 }
@@ -264,7 +264,7 @@ $_luminance-list: .0008 .001 .0011 .0013 .0015 .0017 .002 .0022 .0025 .0027 .003
     a#{$parent},
     button#{$parent} {
         &:hover, &:focus {
-            background-color: color.adjust($color, $lightness: -10%) !important;
+            background-color: color.scale($color, $lightness: -20%) !important;
         }
     }
 }
