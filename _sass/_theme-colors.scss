@@ -132,13 +132,12 @@ $_luminance-list: .0008 .001 .0011 .0013 .0015 .0017 .002 .0022 .0025 .0027 .003
 // Return WCAG2.0 relative luminance
 @function luminance($color) {
     $rgb: (
-        "r": color.red($color),
-        "g": color.green($color),
-        "b": color.blue($color)
+        "r": color.channel($color, "red", $space: rgb),
+        "g": color.channel($color, "green", $space: rgb),
+        "b": color.channel($color, "blue", $space: rgb)
     );
-
     @each $name, $value in $rgb {
-        $value: if(divide($value, 255) < .03928, divide(divide($value, 255), 12.92), list.nth($_luminance-list, $value + 1));
+        $value: if(divide($value, 255) < .03928, divide(divide($value, 255), 12.92), list.nth($_luminance-list, math.floor($value) + 1));
         $rgb: map.merge($rgb, ($name: $value));
     }
 
