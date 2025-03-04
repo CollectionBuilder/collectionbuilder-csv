@@ -48,7 +48,8 @@
         <option value="all">All Fields</option>
         <option value="title">Title</option>
         {% for f in site.data.config-browse %}
-        <option value="{{ f.field }}">{{ f.display_name | default: f.field }}</option>
+        {% assign cap-field = f.field | capitalize %}
+        <option value="{{ f.field }}">{{ f.facet_name | default: f.display_name | default: cap-field }}</option>
         {% endfor %}
       </select>
     </div>

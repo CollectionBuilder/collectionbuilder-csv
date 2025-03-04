@@ -18,8 +18,9 @@ custom-foot: js/browse-js.html
                     <option value="all">All Fields</option>
                     <option value="title">Title</option>
                     {% for f in fields %}
-                    <option value="{{ f.field }}">{{ f.display_name | default: f.field }}</option>
-                    {% endfor %}
+                    {% assign cap-field = f.field | capitalize %}
+                    <option value="{{ f.field }}">{{ f.facet_name | default: f.display_name | default: cap-field }}</option>
+                   {% endfor %}
                     <option value="" disabled>─────────────</option>
                     <option value="advanced">Advanced Search...</option>
                 </select>
