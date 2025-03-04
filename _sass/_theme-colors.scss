@@ -4,6 +4,10 @@
     It is not complete Bootstrap theming! 
 */
 
+/* set up base variable to override from cb.scss */
+$link-color-base: "" !default;
+$theme-colors: () !default;
+
 /* variables needed from Bootstrap */ 
 
 $white:    #fff !default;
@@ -18,7 +22,7 @@ $component-active-color:      $white !default;
 $component-active-bg:         $primary !default;
 
 $link-shade-percentage:                   20% !default;
-$link-hover-color:                        shift-color($link-color, $link-shade-percentage) !default;
+$link-hover-color:                        shift-color($link-color-base, $link-shade-percentage) !default;
 
 $btn-focus-width:             .25rem !default;
 
@@ -243,6 +247,19 @@ $_luminance-list: .0008 .001 .0011 .0013 .0015 .0017 .002 .0022 .0025 .0027 .003
             background-color: darken($color, 10%) !important;
         }
     }
+}
+/* bg-opacity classes needed to override */ 
+.bg-opacity-75 {
+    --bs-bg-opacity: 0.75;
+}
+.bg-opacity-50 {
+    --bs-bg-opacity: 0.50;
+}
+.bg-opacity-25 {
+    --bs-bg-opacity: 0.25;
+}
+.bg-opacity-10 {
+    --bs-bg-opacity: 0.10;
 }
 
 /* 
