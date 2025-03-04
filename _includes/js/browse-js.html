@@ -573,19 +573,8 @@ if (matchingDropdownItem) {
     shuffle(items);
 }
 {% else %}
-// Find the sortFilter element and get its text in lowercase
-const sortFilterElement = document.getElementById("sortFilter").innerHTML.toLowerCase();
-// Find the dropdown item with matching data-filter attribute
-const matchingDropdownItem = document.querySelector(".dropdown-item[data-filter='" + sortFilterElement + "']");
-if (matchingDropdownItem) {
-    //sort the items by the sortFilterElement
-    sorting(items, sortFilterElement);
-    // add an active class to the matching dropdown item
-    matchingDropdownItem.classList.add("active");
-} else {
-    // shuffle the items if there is no matching dropdown item
+
     shuffle(items);
-}
 {% endif %}
 
 /* Add sort function on click of sort options */
