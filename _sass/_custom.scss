@@ -433,3 +433,10 @@ thead, tbody, th, td {
         border-bottom-right-radius: .25rem;
     }
 }
+
+.random-card-img-top {
+    height: 33vh;
+    width: 100%;
+    object-fit: contain; /* to maintain aspect ratio */
+    object-position: center;
+}

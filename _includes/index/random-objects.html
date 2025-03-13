@@ -1,0 +1,78 @@
+{% comment %}
+  Randomized image item grid.
+  This include adds a grid populated with three randomly selected image items, designed with index page in mind.
+
+  E.G. --> {% include index/random-objects.html title="Sample Items" %}
+{% endcomment %}
+
+{% assign items = site.data[site.metadata] | where_exp: 'item', 'item.objectid and item.parentid == nil' %}
+
+<script>
+    var collectionItems = [
+        {% for item in items %}
+        {
+            "title": {{ item.title | jsonify }},
+            "image_url": {% if item.image_thumb %}{{ item.image_thumb | relative_url | jsonify }}{% elsif item.image_small %}{{ item.image_small | relative_url | jsonify }}{% else %}null{% endif %},
+            "objectid": "{{ item.objectid }}",
+            "parentid": {{ item.parentid | jsonify }},
+            "image_alt_text": {{ item.image_alt_text | default: item.title | jsonify }}
+        }{% unless forloop.last %},{% endunless %}
+        {% endfor %}
+    ];
+
+    function getRandomItems(array, num) {
+        let shuffled = array.sort(() => 0.5 - Math.random());
+        return shuffled.slice(0, num);
+    }
+
+    function displayRandomCards() {
+        let container = document.getElementById("random-cards-container");
+        container.innerHTML = "";
+
+        if (collectionItems.length === 0) {
+            container.innerHTML = `<div class="col-12 text-danger fw-bold">{{ site.data.translations['_includes']['index']['random-objects.html']['no-items-found'][site.lang] | default: 'No items found.' }}</div>`;
+            return;
+        }
+
+        let selectedItems = getRandomItems(collectionItems, 3);
+
+        selectedItems.forEach(item => {
+            let itemLink = item.parentid 
+                ? `{{ '/items/' | relative_url }}` + item.parentid + ".html#" + item.objectid 
+                : `{{ '/items/' | relative_url }}` + item.objectid + ".html";
+
+            let imageTag = item.image_url
+                ? `<a href="${itemLink}"><img src="${item.image_url}" class="random-card-img-top" alt="${item.image_alt_text}"></a>`
+                : `<a href="${itemLink}"><img src="assets/img/no-image.svg" class="random-card-img-top" alt="{{ site.data.translations['_includes']['index']['random-objects.html']['placeholder'][site.lang] | default: 'Placeholder Image' }}"></a>`;
+
+            let card = `
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        ${imageTag}
+                        <div class="card-body text-center d-flex flex-column justify-content-between">
+                            <h5 class="card-title">
+                                <a href="${itemLink}" class="text-decoration-none text-dark">${item.title}</a>
+                            </h5>
+                            <div class="mt-auto">
+                                <button class="btn btn-sm btn-outline-primary" onclick="location.href='${itemLink}'">
+                                    {{ site.data.translations['_includes']['index']['random-objects.html']['view-full-record'][site.lang] | default: 'View Full Record' }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.innerHTML += card;
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", displayRandomCards);
+</script>
+
+<h2 class="text-start">
+  {{
+    site.data.translations._includes.index['random-objects.html']['collection-insights'][site.lang]
+    | default: 'A first glimpse of the collection'
+  }}
+</h2>
+<div class="row" id="random-cards-container"></div>
