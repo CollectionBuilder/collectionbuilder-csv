@@ -39,13 +39,13 @@ metadata: demo-compoundobjects-metadata
 # [optional: only used if you need to tweak CB defaults or generate from more than one data file]
 page_gen:
   - data: demo-compoundobjects-metadata
-  - data: 'demo-compoundobjects-metadata'
+  - data: demo-compoundobjects-metadata
     template: 'manifest'
     template_override: true
     name: 'objectid'
     dir: 'manifests'
-    extension: 'json' 
-    filter: 'objectid'  
+    extension: 'json'
+    filter: 'objectid' 
 
 ##########
 # Site/Organization Branding 

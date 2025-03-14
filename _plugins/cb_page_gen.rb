@@ -123,20 +123,24 @@ module CollectionBuilderPageGenerator
         end
 
         # Generate pages for each record
-        records.each_with_index do |record, index|
+        records.each_with_index do |original_record, index|
+
+          # create a fresh copy of the record to avoid modifying the original record
+          page_data = Marshal.load(Marshal.dump(original_record))
+
           # Check for valid name, skip page gen if none
-          if record[name].nil? || record[name].strip.empty?
+          if page_data[name].nil? || page_data[name].strip.empty?
             puts color_text("Notice cb_page_gen: record '#{index}' in '#{data_file}' does not have a value in '#{name}'! This record will be skipped.", :yellow)
             next
           end
 
           # create clean filename with Jekyll Slugify pretty mode
           # this ensures safe filenames, but may cause unintended issues with links if objectid are not well formed
-          record['base_filename'] = slugify(record[name], mode: "pretty").to_s
-          puts color_text("Notice cb_page_gen: record '#{index}' in '#{data_file}', '#{record[name]}' is being sanitized to create a valid filename. This may cause issues with links generated on other pages. Please check the naming convention used in '#{name}' field.", :yellow) if record['base_filename'] != record[name]
+          page_data['base_filename'] = slugify(page_data[name], mode: "pretty").to_s
+          puts color_text("Notice cb_page_gen: record '#{index}' in '#{data_file}', '#{page_data[name]}' is being sanitized to create a valid filename. This may cause issues with links generated on other pages. Please check the naming convention used in '#{name}' field.", :yellow) if page_data['base_filename'] != page_data[name]
 
           # Provide index number for page object
-          record['index_number'] = index 
+          page_data['index_number'] = index 
           
           # Find next item 
           if index == records.size - 1
@@ -144,37 +148,38 @@ module CollectionBuilderPageGenerator
           else
             next_item = records[index + 1][name]
           end
-          record['next_item'] = "/" + dir + "/" + slugify(next_item, mode: "pretty").to_s + "." + extension.to_s
+          page_data['next_item'] = "/" + dir + "/" + slugify(next_item, mode: "pretty").to_s + "." + extension.to_s
           # Find previous item
           if index == 0
             previous_item = records[records.size - 1][name]
           else
-            previous_item = records[index -1][name]
+            previous_item = records[index - 1][name]
           end
-          record['previous_item'] = "/" + dir + "/" + slugify(previous_item, mode: "pretty").to_s + "." + extension.to_s
-          
-          # override display_template?
+          page_data['previous_item'] = "/" + dir + "/" + slugify(previous_item, mode: "pretty").to_s + "." + extension.to_s
+
+          # add layout value from display_template or override without altering original_record
           if template_override == true
-            record['layout'] = template
-          elsif record[display_template]
+            page_data['layout'] = template
+          elsif display_template && page_data[display_template] && !page_data[display_template].to_s.strip.empty?
             # Add layout value from display_template 
-            record['layout'] = template_location + record[display_template].strip
+            page_data['layout'] = template_location + page_data[display_template].strip
             # if not valid layout, fall back to template default
-            if !all_layouts.include? record['layout']
-              record['layout'] = template
+            if !all_layouts.include? page_data['layout']
+              page_data['layout'] = template
             end
           else
             # fall back to the default
-            record['layout'] = template
+            page_data['layout'] = template
           end
+        
           # Check if layout exists, if not provide error message and skip
-          if !all_layouts.include? record['layout']
-            puts color_text("Error cb_page_gen: Could not find layout '#{record['layout']}'. Please check configuration or add the layout. Item page NOT generated for record '#{index}' in '#{data_file}'!", :red)
+          if !all_layouts.include? page_data['layout']
+            puts color_text("Error cb_page_gen: Could not find layout '#{page_data['layout']}'. Please check configuration or add the layout. Item page NOT generated for record '#{index}' in '#{data_file}'!", :red)
             next
           end
 
           # Pass the page data to the ItemPage generator
-          site.pages << ItemPage.new(site, record, dir, extension)
+          site.pages << ItemPage.new(site, page_data, dir, extension)
         end
       end
     end
