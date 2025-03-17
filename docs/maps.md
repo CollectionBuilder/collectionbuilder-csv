@@ -16,6 +16,7 @@ Set base configuration in `_data/theme.yml` map section, including:
 ```
 latitude: 46.727485 #to determine center of map
 longitude: -117.014185 #to determine center of map
+auto-center-map: true # have the map auto fit all features into its view, overrides configured latitude and longitude, will not do anything if location coordinates were specified in the URL query parameters
 zoom-level: 5 # zoom level for map 
 map-search: true # not suggested with large collections
 map-search-fuzziness: 0.35 # fuzzy search range from 1 = anything to 0 = exact match only
