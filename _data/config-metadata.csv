@@ -13,6 +13,6 @@ publisher,Verantwortliche Gedächtnisinstitution,,true,DCTERMS.publisher,publish
 type,Typ,,true,DCTERMS.type,
 format,Format,,,DCTERMS.format,encodingFormat
 extent,Auflösung,,,DCTERMS.extent,
-language,Sprache,true,,DCTERMS.language,inLanguage
+language,Sprache,,,DCTERMS.language,inLanguage
 rights,Rechte,,,DCTERMS.rights,usageInfo
 license,Lizenz,,true,DCTERMS.license,license

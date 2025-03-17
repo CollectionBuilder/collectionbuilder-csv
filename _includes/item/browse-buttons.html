@@ -4,19 +4,31 @@
   The item order follows the order in the metadata CSV, so pre-sort the CSV to the desired order.
 {% endcomment %}
 <div class="text-center">
-  <a class="btn btn-outline-primary" href="{{ page.previous_item | relative_url }}" id="prev-page-button"
-    >&laquo;
-    {{ site.data.translations._includes.item['browse-buttons.html'].previous[site.lang] | default: 'Previous' -}}
-  </a>
-  <a class="btn btn-outline-primary" href="{{ '/browse.html' | relative_url }}">
-    {{-
-      site.data.translations._includes.item['browse-buttons.html']['back-to-collection'][site.lang]
-      | default: 'Back to Collection'
-    -}}
-  </a>
-  <a class="btn btn-outline-primary" href="{{ page.next_item | relative_url }}" id="next-page-button">
-    {{- site.data.translations._includes.item['browse-buttons.html'].next[site.lang] | default: 'Next' }} &raquo;</a
-  >
+  <div class="btn-group" role="group" aria-label="Navigation buttons">
+    <a
+      class="btn btn-outline-primary d-flex align-items-center justify-content-center"
+      href="{{ page.previous_item | relative_url }}"
+      id="prev-page-button"
+    >
+      {{ site.data.translations._includes.item['browse-buttons.html'].previous[site.lang] | default: 'Previous' }}
+    </a>
+    <a
+      class="btn btn-outline-primary d-flex align-items-center justify-content-center"
+      href="{{ '/browse.html' | relative_url }}"
+    >
+      {{
+        site.data.translations._includes.item['browse-buttons.html']['back-to-collection'][site.lang]
+        | default: 'Back to Collection'
+      }}
+    </a>
+    <a
+      class="btn btn-outline-primary d-flex align-items-center justify-content-center"
+      href="{{ page.next_item | relative_url }}"
+      id="next-page-button"
+    >
+      {{ site.data.translations._includes.item['browse-buttons.html'].next[site.lang] | default: 'Next' }}
+    </a>
+  </div>
 </div>
 <div id="item-nav">
   <div class="d-none d-md-block">

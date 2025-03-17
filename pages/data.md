@@ -10,11 +10,15 @@ Die Stadt.Geschichte.Basel macht projektbezogene Daten in verschiedenen Formaten
 
 ## Projektbezogene Publikationen
 
-Wissenschaftliche Veröffentlichungen, die im Zusammenhang mit dem Forschungsprojekt stehen, sind [auf Zenodo archiviert](https://zenodo.org/communities/stadt-geschichte-basel){:target="\_blank"}. Die im Rahmen von Konferenzen und Workshops publizierten Beiträge des Teams für Forschungsdatenmanagement und Public History befassen sich mit der Entwicklung dieser Plattform und übergreifend mit (digitalem) Forschungsdatenmanagement und Public History in den Geschichtswissenschaften.
+Die Arbeit des Teams für Forschungsdatenmanagement und Public History an dieser Plattform und weiteren Produkten wird ausführlich auf [dokumentation.stadtgeschichtebasel.ch](https://dokumentation.stadtgeschichtebasel.ch){:target="\_blank"} beschrieben. Dort werden neben projektbezogenen Publikationen auch Workflows, Guidelines und weitere Produkte zur Weiterverwendung präsentiert.
+
+[![Screenshot der Dokumentationswebsite](assets/img/dokumentation_screenshot.png){:style="max-width: 50%; display: block; margin: auto;"}](https://dokumentation.stadtgeschichtebasel.ch){:target="\_blank"}
+
+Wissenschaftliche Veröffentlichungen, die im Zusammenhang mit dem Forschungsprojekt stehen, sind auch [auf Zenodo archiviert](https://zenodo.org/communities/stadt-geschichte-basel){:target="\_blank"}. Die im Rahmen von Konferenzen und Workshops publizierten Beiträge des Teams für Forschungsdatenmanagement und Public History befassen sich mit der Entwicklung dieser Plattform und übergreifend mit (digitalem) Forschungsdatenmanagement und Public History in den Geschichtswissenschaften.
 
 ## Datenmodell
 
-Metadaten für die auf der Forschungsdatenplattform vorgestellten Elemente werden gemäss einem Datenmodell bereitgestellt, das vom Team für Forschungdatenmanagement der Stadt.Geschichte.Basel entwickelt wurde, um den Anforderungen der vielfältigen im Projekt verwendeten Quellen gerecht zu werden. Das Datenmodell (und der anschliessende Annotationsprozess) folgen dem [Handbuch zur Erstellung diskriminerungsfreier Metadaten für historische Quellen und Forschungsdaten](https://maehr.github.io/diskriminierungsfreie-metadaten/), das ebenfalls von Stadt.Geschichte.Basel entwickelt wurde.
+Metadaten für die auf der Forschungsdatenplattform vorgestellten Elemente werden gemäss einem Datenmodell bereitgestellt, das vom Team für Forschungdatenmanagement der Stadt.Geschichte.Basel entwickelt wurde, um den Anforderungen der vielfältigen im Projekt verwendeten Quellen gerecht zu werden. Das Datenmodell (und der anschliessende Annotationsprozess) folgen dem [Handbuch zur Erstellung diskriminerungsfreier Metadaten für historische Quellen und Forschungsdaten](https://maehr.github.io/diskriminierungsfreie-metadaten/){:target="\_blank"}, das ebenfalls von Stadt.Geschichte.Basel entwickelt wurde.
 
 Die folgende Grafik veranschaulicht das Datenmodell mit Metadatenfeldern für ein Beispiel-Metadatenobjekt `sgb01313`, das ein untergeordnetes Medienobjekt `m01313` hat. Wenn ein Metadatenobjekt mehr als ein untergeordnetes Medienobjekt hat, werden die `id`-Nummern der untergeordneten Objekte fortlaufend nummeriert: `m01313_1`, `m01313_2` usw.
 
@@ -22,7 +26,7 @@ Die folgende Grafik veranschaulicht das Datenmodell mit Metadatenfeldern für ei
 
 ## EDTF
 
-Das [Extended Date Time Format (EDTF)](https://www.loc.gov/standards/datetime/) ist ein auf [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) aufbauender Standard, der über einfache Datumsangaben hinausgeht und es ermöglicht, komplexe, unsichere, ungefähre oder mehrdeutige Zeitangaben strukturiert und maschinenlesbar festzuhalten. Die wichtigsten Funktionalitäten und Merkmale sind:
+Das [Extended Date Time Format (EDTF)](https://www.loc.gov/standards/datetime/){:target="\_blank"} ist ein auf [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html){:target="\_blank"} aufbauender Standard, der über einfache Datumsangaben hinausgeht und es ermöglicht, komplexe, unsichere, ungefähre oder mehrdeutige Zeitangaben strukturiert und maschinenlesbar festzuhalten. Die wichtigsten Funktionalitäten und Merkmale sind:
 
 1. **Einfache Datumsangaben**  
    Wie bei ISO 8601 üblich, kann man präzise Daten im Format `YYYY-MM-DD` angeben, z. B. `2024-12-11` für den 11. Dezember 2024.  

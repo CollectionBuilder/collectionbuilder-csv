@@ -331,7 +331,7 @@ _includes:
       previous:
         en: "Previous"
         es: "Anterior"
-        de: "Vorherige"
+        de: "Vorheriges"
       back-to-collection:
         en: "Back to Collection"
         es: "Volver a la Colección"
@@ -339,7 +339,7 @@ _includes:
       next:
         en: "Next"
         es: "Siguiente"
-        de: "Nächste"
+        de: "Nächstes"
     citation-box.html:
       title:
         en: "Source"
