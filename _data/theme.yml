@@ -40,6 +40,7 @@ locations-stopwords: # set of subjects separated by ; that will be removed from 
 # see _data/map-config.csv for field display options
 latitude: 46.727485 #to determine center of map
 longitude: -117.014185 #to determine center of map
+auto-center-map: true # have the map auto fit all features into its view, overrides configured latitude and longitude, will not do anything if location coordinates were specified in the URL query parameters
 zoom-level: 5 # zoom level for map 
 map-base: Esri_WorldStreetMap # set default base map, choose from: Esri_WorldStreetMap, Esri_NatGeoWorldMap, Esri_WorldImagery, OpenStreetMap_Mapnik
 map-search: true # not suggested with large collections
