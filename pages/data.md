@@ -12,7 +12,7 @@ Die Stadt.Geschichte.Basel macht projektbezogene Daten in verschiedenen Formaten
 
 Die Arbeit des Teams für Forschungsdatenmanagement und Public History an dieser Plattform und weiteren Produkten wird ausführlich auf [dokumentation.stadtgeschichtebasel.ch](https://dokumentation.stadtgeschichtebasel.ch){:target="\_blank"} beschrieben. Dort werden neben projektbezogenen Publikationen auch Workflows, Guidelines und weitere Produkte zur Weiterverwendung präsentiert.
 
-[![Screenshot der Dokumentationswebsite](assets/img/dokumentation_screenshot.png){:style="max-width: 50%; display: block; margin: auto;"}](https://dokumentation.stadtgeschichtebasel.ch){:target="\_blank"}
+[![Screenshot der Dokumentationswebsite](assets/img/screenshots/dokumentation.png){:style="max-width: 50%; display: block; margin: auto;"}](https://dokumentation.stadtgeschichtebasel.ch){:target="\_blank"}
 
 Wissenschaftliche Veröffentlichungen, die im Zusammenhang mit dem Forschungsprojekt stehen, sind auch [auf Zenodo archiviert](https://zenodo.org/communities/stadt-geschichte-basel){:target="\_blank"}. Die im Rahmen von Konferenzen und Workshops publizierten Beiträge des Teams für Forschungsdatenmanagement und Public History befassen sich mit der Entwicklung dieser Plattform und übergreifend mit (digitalem) Forschungsdatenmanagement und Public History in den Geschichtswissenschaften.
 
