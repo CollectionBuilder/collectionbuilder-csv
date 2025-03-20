@@ -157,10 +157,10 @@ module CollectionBuilderPageGenerator
           end
           page_data['previous_item'] = "/" + dir + "/" + slugify(previous_item, mode: "pretty").to_s + "." + extension.to_s
 
-          # add layout value from display_template or override without altering original_record
+          # override display_template
           if template_override == true
             page_data['layout'] = template
-          elsif display_template && page_data[display_template] && !page_data[display_template].to_s.strip.empty?
+          elsif page_data[display_template]
             # Add layout value from display_template 
             page_data['layout'] = template_location + page_data[display_template].strip
             # if not valid layout, fall back to template default
