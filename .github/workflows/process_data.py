@@ -185,6 +185,10 @@ def extract_media_data(media, item_dc_identifier):
     # Download the thumbnail image if available and valid
     if "platzhalter" in media.get("o:source", ""):
         local_image_path = "assets/img/placeholder.svg"
+    elif "application/geo+json" in format_value:
+        local_image_path = "assets/lib/icons/sgb-globe.svg"
+    elif "text/csv" in format_value:
+        local_image_path = "assets/lib/icons/table.svg"
     else:
         local_image_path = (
             download_thumbnail(media.get("thumbnail_display_urls", {}).get("large", ""))

@@ -440,3 +440,14 @@ thead, tbody, th, td {
     object-fit: contain; /* to maintain aspect ratio */
     object-position: center;
 }
+
+.timeline-thumb[src$=".svg"] {
+    width: 100%;
+    height: 100%;
+}
+
+.compound-thumb[src$=".svg"] {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
