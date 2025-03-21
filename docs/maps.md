@@ -11,34 +11,50 @@ With plugins:
 - cluster plugin (for search and cluster to work together), https://github.com/ghybs/Leaflet.MarkerCluster.Freezable
 - full screen, https://github.com/Leaflet/Leaflet.fullscreen
 
-Set base configuration in `_data/theme.yml` map section, including:
+## theme Configuration Options
+
+Set base configuration in "_data/theme.yml" Map section, including:
 
 ```
-latitude: 46.727485 #to determine center of map
-longitude: -117.014185 #to determine center of map
-zoom-level: 5 # zoom level for map 
+auto-center-map: true # have the map auto fit all features into its view
+latitude: 46.727485 # to manually center map if not using auto-center-map option
+longitude: -117.014185 # to manually center map if not using auto-center-map option
+zoom-level: 5 # zoom level for map if not using auto-center-map option
+map-base: Esri_WorldStreetMap # set default base map, choose from: Esri_WorldStreetMap, Esri_NatGeoWorldMap, Esri_WorldImagery, OpenStreetMap_Mapnik
 map-search: true # not suggested with large collections
 map-search-fuzziness: 0.35 # fuzzy search range from 1 = anything to 0 = exact match only
 map-cluster: true # suggested for large collection or with many items in same location
 map-cluster-radius: 25 # size of clusters, from ~ 10 to 80
 ```
 
-These `theme` options will load the correct CSS and JS for leaflet features, while setting some JS configuration variables. 
-`map-cluster-radius` sets the `maxClusterRadius` which corresponds to the maximum radius a cluster can cover in pixels on the map.
+These "theme" options will load the correct CSS and JS for leaflet features, while setting some configuration variables in the javascript.
+
+With the default `auto-center-map: true` option, Leaflet will automatically center and zoom the map based on all the items added to the map--you do not need to set the latitude, longitude, or zoom-level. 
+If you would like to manually set the center and zoom level for the map, set `auto-center-map: false` and set values for the latitude, longitude, and zoom-level.
+
+The `map-search: true` option adds a Fuse-based client-side text search of the configured metadata fields (using leaflet-fusesearch plugin). 
+The index is relatively slow, so you may want to set this option to `false` if you find the map lagging.
+
+The `map-cluster: true` option clusters features on the map (using Leaflet.markercluster plugin).
+Because of the way markers are handled, for larger collections it is strongly suggested to keep cluster on, since it makes loading and navigating the map significantly more efficient.
+The `map-cluster-radius` sets the maximum radius a cluster can cover in pixels on the map.
 A smaller radius will create more, smaller clusters, and increasing will create fewer, larger clusters on the map.
 
-Next, configure the display using `_data/map-config.csv`, which controls the metadata displayed on object popups and included in search:
+## map-config.csv Options
+
+The metadata displayed on object popups and included in search is configured using using "_data/map-config.csv":
 
 - `field`: matches a column name in the metadata csv that will be displayed in object popups.
 - `display`: display name for the field to appear on popup. if blank, field will not be displayed (but could be used in search)
 - `search`: `true` or `false`/blank. If theme has `map-search` as `true`, then fields with true in this column will be indexed and displayed on the map search feature.
 
-Because of the way markers are handled, for larger collections it is strongly suggested to turn search off and cluster on.
-Cluster makes loading and navigating the map significantly more efficient.
+## URL parameters 
 
-Object pages that have lat/long will generate a "View on Map" button link. 
-These link to the `map.html` page with a query string created from their lat long and objectid.
+The map page supports parsing a query string to set the center and display an Item popup. 
 If the url includes a query string, it will be parsed and set as the map view box with full zoom and open the popup.
+
+Item pages that have lat/long will generate a "View on Map" button link. 
+These link to the "map.html" page with a query string created from their lat long and objectid.
 
 For example: 
 `/map.html?location=46.726113,-117.015671&marker=example_004`

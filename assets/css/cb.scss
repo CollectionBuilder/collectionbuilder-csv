@@ -6,28 +6,30 @@
 @charset "utf-8";
 
 /* base variables pulled from theme.yml */
-$base-font-family: {{ site.data.theme.base-font-family | default: '""' }};
-$base-font-size: {{ site.data.theme.base-font-size | default: '""' }};
-$text-color: {{ site.data.theme.text-color | default: '""' }};
-$link-color: {{ site.data.theme.link-color | default: '""' }};
+@forward "base" with (
+  $base-font-family: {{ site.data.theme.base-font-family | default: '""' }},
+  $base-font-size: {{ site.data.theme.base-font-size | default: '""' }},
+  $text-color: {{ site.data.theme.text-color | default: '""' }},
+  $link-color: {{ site.data.theme.link-color | default: '""' }}
+);
+
+/* individual CB page styles */
+@use "pages"; 
 
 /* theme colors pulled from config-theme-colors */
 {% assign btns = site.data.config-theme-colors | where_exp: "item","item.color != nil" %}
 {% if btns != empty %}
-{% for btn in btns %}
-{% assign color = btn.color | strip %}{% if color != empty %}
-${{ btn.color_class | slugify }}: {{ color }};{% endif %}
-{% endfor %}
-$theme-colors: () !default;
-$theme-colors: map-merge(
-  (
+@use "sass:map";
+@forward "theme-colors" with (
+  $link-color-base: {{ site.data.theme.link-color | default: '""' }},
+  $theme-colors: (
     {% for btn in btns %}{% assign color = btn.color | strip %}{% if color != empty %}
-    "{{ btn.color_class | slugify }}": ${{ btn.color_class | slugify }}{% unless forloop.last %},{% endunless %}
+    "{{ btn.color_class | slugify }}": {{ color }}{% unless forloop.last %},{% endunless %}
     {% endif %}{% endfor %}
-  ),
-  $theme-colors
+  )
+
 );
-@import "theme-colors", "theme-utilities";
 {% endif %}
 
-@import "base", "pages", "custom";
+/* pull in custom styles to override everything else */
+@use "custom";

@@ -8,24 +8,30 @@
 
     Options:
 
-    - "height" - the height of the carousel in px, just give the number (optional, default 300)
-    - "carousel-type" - the selection of items featured in the carousel, choose from thumb (all items with image_thumb) or small (all items with image_small). (optional, default thumb)
-    - "title" - card title text inside card content area (optional)
+    - "height" = the height of the carousel in px, just give the number (optional, default 300)
+    - "carousel-type" = the selection of items featured in the carousel, choose from thumb (all items with image_thumb) or small (all items with image_small). (optional, default thumb)
+    - "child-objects" = include child items in count or only parents, true or false (optional, default false)
+    - "title" = card title text inside card content area (optional)
     - "header" = card header text in bar above card content (optional)
+    - "heading_level" = customize the level of the heading if necessary for accessibility, choose "h1", "h2", "h3", etc (optional, default "h2")
     - "max" = maximum images selected for slide show (optional, default 9. Do not make too big!)
-    - "btn-color" - a bootstrap color class to theme the buttons. Can be any bootstrap template color (e.g. info, success) or outline (e.g. outline-info, outline-success), including colors created in config-theme-colors. (optional, default "primary")
-    - "btn-text" - the label used in the link btn to view the carousel item (optional, default "View Item")
+    - "btn-color" = a bootstrap color class to theme the buttons. Can be any bootstrap template color (e.g. info, success) or outline (e.g. outline-info, outline-success), including colors created in config-theme-colors. (optional, default "primary")
+    - "btn-text" = the label used in the link btn to view the carousel item (optional, default "View Item")
+    - "filter-field" and "filter-value" = use these options together to filter which set of items will appear in the carousel based on a particular metadata field and value in that field. filter-field must match a column in your metadata. any item with a value in the filter-field that "contains" the filter-value will be included, it does not need to be an exact match. (optional)
     
 {%- endcomment -%}
 
 {%- assign carousel-max = include.max | default: 9 -%}
 {%- assign btn-color = include.btn-color | default: "primary" -%}
 {%- assign btn-text = include.btn-text | default: "View Item" -%}
-{% if site.data.theme.carousel-child-objects == true %}
+{% if include.child-objects == true %}
 {%- assign carousel-items = site.data[site.metadata] | where_exp: 'item','item.objectid' | where_exp: "item","item.image_small != nil or item.image_thumb != nil"-%}
 {% else %}
 {%- assign carousel-items = site.data[site.metadata] | where_exp: 'item','item.objectid and item.parentid == nil' | where_exp: "item","item.image_small != nil or item.image_thumb != nil" -%}
 {% endif %}
+{%- if include.filter-field and include.filter-value -%}
+{% assign carousel-items = carousel-items | where_exp: 'item','item[include.filter-field] contains include.filter-value' %}
+{%- endif -%}
 
 {%- comment -%}
     Set up carousel div
@@ -34,9 +40,9 @@
     #imageCarousel .carousel-item { height: {{ include.height | remove: 'px' | strip | default: '300' }}px; }
 </style>
 <div class="card mb-3">
-    {% if include.header %}<h2 class="card-header h5">{{ include.header }}</h2>{% endif %}
+    {% if include.header %}<{{ include.heading_level | default: 'h2' | strip }} class="card-header h5">{{ include.header }}</{{ include.heading_level | default: 'h2' | strip }}>{% endif %}
     <div class="card-body">
-        {% if include.title %}<h2 class="card-title h5">{{ include.title }}</h2>{% endif %}
+        {% if include.title %}<{{ include.heading_level | default: 'h2' | strip }} class="card-title h5">{{ include.title }}</{{ include.heading_level | default: 'h2' | strip }}>{% endif %}
         
         <div id="imageCarousel" class="carousel slide bg-dark rounded mb-3" data-bs-ride="carousel">
             <div id="carouselIndicators" class="carousel-indicators">

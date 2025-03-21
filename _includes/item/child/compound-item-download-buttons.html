@@ -6,6 +6,7 @@
 
 {%- endcomment -%}
 <div class="btn-group my-3" role="group" aria-label="Item options">
+    {% if page.object_transcript %}<button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTranscript" aria-expanded="false" aria-controls="collapseExample">View Transcript</button>{% endif %}
     {% if page.date %}{%- capture year -%}{% if page.date contains "-" %}{{ page.date | split: "-" | first }}{% elsif page.date contains "/" %}{{ page.date | split: "/" | last }}{% else %}{{ page.date }}{% endif %}{%- endcapture -%}
     <a href="{{ year | strip | prepend: '/timeline.html#y' | relative_url }}" class="btn btn-outline-primary">View on Timeline</a>{% endif %}
     {% if page.latitude and page.longitude %}
@@ -30,3 +31,17 @@
         </ul>
     </div>
 </div>
+{% if page.object_transcript %}
+<div class="collapse mt-3" id="collapseTranscript">
+    <div class="card card-body text-start">
+        {% assign transcript_type = page.object_transcript | slice: 0,1 %}
+        {% if transcript_type == '/' %}
+        {% assign transcript_location = page.object_transcript | remove_first: '/' %}
+        {% assign transcript = site.pages | where: 'path', transcript_location | first %}
+        {{ transcript.content | markdownify }}
+        {% else %}
+        {{ page.object_transcript | markdownify }}
+        {% endif %}
+    </div>
+</div>
+{% endif %} 

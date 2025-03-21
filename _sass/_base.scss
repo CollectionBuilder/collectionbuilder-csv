@@ -3,6 +3,21 @@
     these values are configurable using theme.yml > Theme Fonts area 
     or by editing base variables in cb.scss
 */
+
+/* set up base variable to override from cb.scss */
+$base-font-family: "" !default;
+$base-font-size: "" !default;
+$text-color: "" !default;
+$link-color: "" !default;
+
+/* smooth scroll for back to top, unless user opt out */
+html {
+    @media (prefers-reduced-motion: no-preference) {
+      scroll-behavior: smooth;
+    }
+}
+
+/* set font base set in theme.yml */
 body {
     @if $base-font-family != "" { font-family: $base-font-family; }
     @if $base-font-size != "" { font-size: $base-font-size; }
