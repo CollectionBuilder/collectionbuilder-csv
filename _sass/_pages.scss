@@ -2,6 +2,10 @@
     pages - style tweaks related to individual CB pages
     although most presentation is controlled by Bootstrap classes, these styles are necessary for default visualization pages to function correctly
 */
+
+/* set up base variable to override from cb.scss */
+$toc-a-color: #191919 !default;
+
 /* index */
 .carousel-item-title{
     background-color: rgba(37, 36, 36, 0.72);
@@ -115,7 +119,7 @@
     }
 
     a {
-        color: $text-color !important;
+        color: $toc-a-color !important;
     }
 }
 #about-contents-wrapper { 
@@ -200,7 +204,7 @@
         }
 
         a {
-            color: $text-color !important;
+            color: $toc-a-color !important;
         }
     }
 }
