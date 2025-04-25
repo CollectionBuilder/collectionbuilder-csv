@@ -6,17 +6,13 @@ object-id: about
 permalink: /about.html
 ---
 
-## About this page ... 
+## About This Template/Demo Site 
 
-Below is some information about OHD. To create your own About page for your project, just delete everything here and use Markdown to write your content. 
+This is the Oral History as Data (OHD) template/demo site. It features several coded transcripts from [CTRL+Shift](https://ctrl-shift.org/){:target="_blank"} to demonstrate the various AV sources and options for a OHD project. . 
 
-For more information on writing an about page, [see our CollectionBuilder documentation](https://collectionbuilder.github.io/cb-docs/docs/pages/interpretive/). OHD is built on CB, so you can use that documentation to edit it.
+If you'd like to copy an Oral History as Data template and get started, go to this site's repo--[the OHD GitHub Template repository](https://github.com/oralhistoryasdata/template){:target="_blank"}--and click the green "Use This Template" button at the right. 
 
-## About This Template Site 
-
-This is the Oral History as Data (OHD) template site. It features a few transcripts and visualizations from [CTRL+Shift](https://ctrl-shift.org/){:target="_blank"} as its content. 
-
-If you'd like to copy an Oral History as Data template and get started, go to our [OHD GitHub Template repository](https://github.com/oralhistoryasdata/template){:target="_blank"} and click the green "Use This Template" button at the right. 
+***To create your own About page for your project, just delete everything here and use Markdown to write your content.***
 
 For more instruction, [see our documentation](https://oralhistoryasdata.github.io/docs/)
 
