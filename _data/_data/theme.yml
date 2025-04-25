@@ -16,14 +16,8 @@ search-and-filters-sticky: true ## true/false --> determines if the search and f
 # 
 as-data: true ## true/false --> determines if the "As Data" button and modal that pops up if you click it will appear at the top right of the visualization page
 transcript-contents: true ## true/false --> determines if the contents of the individual interviews will appear and be filtered at the bottom of the visualization page (below the color coded portion)
-
-### For Large Collections -- !!!! Warning ###
-
-# If you turn the below option `json-generation` to true, you'll need to run the rake command `generate_json` -- that command will generate the necessary json files for your collection. 
-
-json-generation: false ## true/false --> defaults to false (see note below if you turn to true!). This determines if JSON files will be accessed for the visualization page. 
-
-### !!!! Warning ####
+json-generation: true ## true/false --> defaults to false (see note below if you turn to true!). This determines if JSON files will be accessed for the visualization page. 
+### Warning!!! If you turn the above option `json-generation` to true, you'll need to run the rake command `generate_json` -- that command will generate the necessary json files for your collection. 
 
 ##########
 # OHD + CollectionBuilder Theme Customization

@@ -1,0 +1,108 @@
+/* 
+    SCSS from the Oral History as Data project
+*/
+
+.words {
+   @media screen and (max-width: 576px) {
+        min-width: 250px;
+    }
+}
+
+.toggle_int:hover {
+    color: pink
+}
+
+.toggle_int small {
+    font-size: 12px;
+}
+
+.featured {
+    background-color: aquamarine !important;
+    color: black !important;
+}
+
+.border-featured {
+    border-left: 1px solid black !important;
+    border-left-width: thick !important;
+    background-color: aquamarine !important;
+}
+
+.btn-outline-dark:hover {
+    background-color: #212529 !important;
+}
+
+// tab to show/hide  filters options for transcripts
+
+.filter-tab {
+    position: absolute;
+    bottom:-17px;
+    right: 0%;
+    transform: translateY(50%);    
+    border-radius: 0 0 5px 5px;
+    cursor: pointer;
+    transition: all 0.5s ease;
+  }
+
+  .filter-tab:hover {
+    background-color: #0056b3;
+  }
+
+  #filters-search.retracted {
+    transform: translateY(-100%);
+    transition: all 0.5s ease;
+    #show-filters-text{
+        display:block;
+    }
+    #hide-filters-text{
+        display:none;
+    }
+  }
+
+  #filters-search {
+    transition: transform 0.5s ease;
+    #show-filters-text{
+        display:none;
+    }
+    #hide-filters-text{
+        display:block;
+    }
+}
+
+.timestamp-link{
+    color: #436a71 !important;
+    text-decoration: none !important;
+}
+
+.skip-link {
+    position: absolute;
+    background: white;
+    z-index: 1000;
+    border: 1px solid #333;
+    text-decoration: underline;
+  }
+  .skip-link:focus {
+    clip: auto;
+    height: auto;
+    width: auto;
+  }
+
+@media print {
+
+    html,
+    body {
+        height: 100%;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: visible;
+        display: block;
+        font-size: 1.2rem;
+    }
+
+    .transcript-content {
+        height: auto;
+        min-height: 5000px;
+        overflow: visible;
+        display: block;
+    }
+
+}

@@ -1,6 +1,6 @@
 ---
 layout: home-infographic
 title: Home
-permalink: /
+permalink: /oldindex.html
 ---
 
