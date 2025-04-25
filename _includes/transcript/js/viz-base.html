@@ -44,7 +44,7 @@ function setFocus(selector, fallbackSelector = null) {
     const element = document.querySelector(selector);
     if (element) {
       if (element.tagName === 'A' || element.getAttribute('tabindex') === '0') {
-        element.focus();
+        element.focus({ preventScroll: true }); // Use preventScroll option
       } else {
         element.setAttribute('tabindex', '0');
         element.focus({ preventScroll: true });
