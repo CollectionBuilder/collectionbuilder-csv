@@ -37,8 +37,5 @@ $theme-link-color: {{ site.data.theme.link-color | default: '""' }};
 );
 {% endif %}
 
-/* pull in Oral History as Data styles to override everything but Custom style changes */
-@use "ohd";
-
 /* pull in custom styles to override everything else */
 @use "custom";

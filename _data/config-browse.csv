@@ -1,4 +1,6 @@
 field,display_name,btn,hidden,sort_name
-interviewer,Interviwed by
 date,Date,,,Date
+creator,Creator,,,
+subject,,true
 location,,true
+identifier,,,true,Identifier

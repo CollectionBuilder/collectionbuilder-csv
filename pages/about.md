@@ -1,37 +1,33 @@
 ---
-layout: page-narrow
-title: About Oral History as Data
-order: 1
-object-id: about
+title: About
+layout: about
 permalink: /about.html
+# include CollectionBuilder info at bottom
+credits: true
+# Edit the markdown on in this file to describe your collection
+# Look in _includes/feature for options to easily add features to the page
 ---
 
-## About This Template/Demo Site 
+{% include feature/jumbotron.html objectid="https://cdil.lib.uidaho.edu/images/palouse_sm.jpg" %} 
 
-This is the Oral History as Data (OHD) template/demo site. It features several coded transcripts from [CTRL+Shift](https://ctrl-shift.org/){:target="_blank"} to demonstrate the various AV sources and options for a OHD project. . 
+{% include feature/nav-menu.html sections="About CollectionBuilder CSV;About the About Page" %}
 
-If you'd like to copy an Oral History as Data template and get started, go to this site's repo--[the OHD GitHub Template repository](https://github.com/oralhistoryasdata/template){:target="_blank"}--and click the green "Use This Template" button at the right. 
+## About CollectionBuilder CSV
 
-***To create your own About page for your project, just delete everything here and use Markdown to write your content.***
+This demo collection features items from the University of Idaho Library's [Digital Collections](https://www.lib.uidaho.edu/digital/), and is build using [CollectionBuilder-CSV](https://github.com/CollectionBuilder/collectionbuilder-csv).
 
-For more instruction, [see our documentation](https://oralhistoryasdata.github.io/docs/)
+CollectionBuilder-CSV is a "Stand Alone" template for creating digital collection and exhibit websites using Jekyll, given:
 
-## About Oral History as Data
+- a CSV of collection metadata
+- a folder of images, PDFs, audio, or video files
 
-The [Oral History as Data (OHD)](https://github.com/oralhistoryasdata/) framework is a static website generator that allows users to analyze and publish coded oral history or qualitative interview files. By turning transcriptions into tagged/coded CSV files, adding a list of filters, and creating a simple markdown file for each interview (to be included in the _transcripts collection), OHD will provide filterable transcripts and a color coded visualization for all transcripts included. 
+Driven by your collection metadata, the template generates engaging visualizations to browse and explore your objects.
+The resulting static site can be hosted on any basic web server.
 
+[CollectionBuilder](https://github.com/CollectionBuilder/) is an set of open source tools for creating digital collection and exhibit websites that are driven by metadata and powered by modern static web technology.
+See [CB Docs](https://collectionbuilder.github.io/cb-docs/) for detailed information.
 
-## Documentation
+{% include feature/image.html objectid="demo_001" width="75" %} 
 
-- **[Full OHD Documentation](https://oralhistoryasdata.github.io/docs/) -** Our documentation provides how to guides, tutorials, and stepped instruction for building your own Oral History as Data project.  
-
-- **[CollectionBuilder Documentation](https://oralhistoryasdata.github.io/docs/) -** OHD is built on top of a CollectionBuilder-CSV template, so any options used in CSV can be used here. 
-
-
-Please feel free to contact me with any questions. I'm happy to help. <dbecker@uidaho.edu>
-
-
- 
-
-
-
+<!-- IMPORTANT!!! DELETE this comment and the include below when you are finished editing this page for your collection. The include below introduces about page features. They will show up on your collection's about page until you delete it.  -->
+{% include cb/about_the_about.md %} 

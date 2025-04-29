@@ -1,51 +1,14 @@
-##################################################
-########## ORAL HISTORY as Data OPTIONS ##########
-##################################################
-
 ##########
-# Transcript Page / Oral History as Data Options 
-# 
-transcript-fields: "description,date,location,interviewer,image" # choose from the following fields --> description,date,location,interviewer,interviewee,bio,image 
-# list the fields you'd like displayed, separated by comma
-media-scroll: true ## true/false or blank --> determines if the media and visualization will appear to the lower right as a user scrolls down a transcript. This only appears on larger screens (min width 1024px).
-search-and-filters: true ## true/false --> determines if the search and filter options that appears above the text of an interview/transcript 
-search-and-filters-sticky: true ## true/false --> determines if the search and filter options are sticky to the top of the page as a user scrolls down a transcript
-
-##########
-# Visualization page / Oral History as Data Options 
-# 
-as-data: true ## true/false --> determines if the "As Data" button and modal that pops up if you click it will appear at the top right of the visualization page
-transcript-contents: true ## true/false --> determines if the contents of the individual interviews will appear and be filtered at the bottom of the visualization page (below the color coded portion)
-
-### For Large Collections -- !!!! Warning ###
-
-# If you turn the below option `json-generation` to true, you'll need to run the rake command `generate_json` -- that command will generate the necessary json files for your collection. 
-
-json-generation: false ## true/false --> defaults to false (see note below if you turn to true!). This determines if JSON files will be accessed for the visualization page. 
-
-
-
-##########
-# OHD + CollectionBuilder Theme Customization
+# CollectionBuilder Theme Customization
 # values set here help configure details of individual pages in the website
 ##########
 
 ##########
-# Base Layout (OHD or CollectionBuilder)
-# If you'd like the site to look like CollectionBuilder instead of the OHD look, just change the below value for base-layout to CB rather than ohd
-base-layout: OHD # OHD or CB
-
-##########
 # HOME PAGE
-# The optional visualization on the home page is a composite of the transcripts color-coded representation 
-# To turn it off, either don't include a filters.
-home-page-visualization: true # true / false, if true, the visualization will appear on the home page
-# This will determine the height of the visualization on the home page
-home-page-visualization-size: 30%
+#
 # featured image is used in home page banner and in meta markup to represent the collection
-# use either an objectid (from an item in this collect), a relative location of an image in this repo, or a full url to an image elsewhere. 
-# Note: if you are using the CB base layout as determined above, the featured image defined here will show up as the large image at top of the home page
-featured-image: gluck
+# use either an objectid (from an item in this collect), a relative location of an image in this repo, or a full url to an image elsewhere
+featured-image: demo_001
 # optional: add extra padding around collection title for a larger image feature. 
 home-title-y-padding: 12em # the margin from the top your title portion will appear.
 # optional: change position of background image, center, top, bottom
@@ -60,7 +23,7 @@ browse-buttons: true # true / false, adds previous/next arrows to items, but inc
 ##########
 # SUBJECTS PAGE
 #
-subjects-fields: subject # set of fields separated by ; to be featured in the cloud (leave blank or comment out to not generate)
+subjects-fields: subject;creator # set of fields separated by ; to be featured in the cloud (leave blank or comment out to not generate)
 subjects-min: 1 # min size for subject cloud, too many terms = slow load time!
 subjects-stopwords: # set of subjects separated by ; that will be removed from display, e.g. boxers;boxing
 
@@ -75,10 +38,11 @@ locations-stopwords: # set of subjects separated by ; that will be removed from 
 # MAP PAGE
 #
 # see _data/map-config.csv for field display options
-latitude: 38.21805047796112 #to determine center of map
-longitude: -117.014185 #to determine center of map
-zoom-level: 3 # zoom level for map 
-map-base: Esri_WorldImagery # set default base map, choose from: Esri_WorldStreetMap, Esri_NatGeoWorldMap, Esri_WorldImagery, OpenStreetMap_Mapnik
+auto-center-map: true # have the map auto fit all features into its view
+latitude: 46.727485 # to manually center map if not using auto-center-map option
+longitude: -117.014185 # to manually center map if not using auto-center-map option
+zoom-level: 5 # zoom level for map if not using auto-center-map option
+map-base: Esri_WorldStreetMap # set default base map, choose from: Esri_WorldStreetMap, Esri_NatGeoWorldMap, Esri_WorldImagery, OpenStreetMap_Mapnik
 map-search: true # not suggested with large collections
 map-search-fuzziness: 0.35 # fuzzy search range from 1 = anything to 0 = exact match only
 map-cluster: true # suggested for large collection or with many items in same location
@@ -96,9 +60,9 @@ year-nav-increment: 5 # set increments to auto gen nav years
 # 
 # add metadata fields for export in data downloads (tip: paste in first row of csv)
 # comma delimited list, reference url is automatic
-metadata-export-fields: "objectid,parentid,title,creator,interviewer,date,description,subject,location,latitude,longitude,source,identifier,type,format,language,rightsstatement,rights,display_template,object_location,image_small,image_thumb,pdf,bio"
+metadata-export-fields: "title,creator,date,description,subject,location,latitude,longitude,source,identifier,type,format,language,rights,rightsstatement"
 # generate a facets list for given fields, comma delimited
-metadata-facets-fields: "subject,interviewer,format"
+metadata-facets-fields: "subject,creator,format"
 
 ##########
 # Compound Objects 
@@ -109,7 +73,6 @@ metadata-facets-fields: "subject,interviewer,format"
 map-child-objects: true # true / false - if true, and if child item has latitude and longitude, child objects will be displayed on map
 timeline-child-objects: true # true / false - if true, and if child object has date, child objects will appear as thumbnails on timeline page
 data-child-objects: false # true / false - if true, child objects will appear linked in table on data page
-carousel-child-objects: false # true / false - if true, child objects will appear on homepage carousel
 browse-child-objects: false # true / false - if true, child objects will appear on browse page and child objects' metadata will populate cloud pages like Subjects page and Locations page, as well as featured terms boxes on the home page
 search-child-objects: true # true / false - if true, child objects will appear on on search page along with parent objects
 
