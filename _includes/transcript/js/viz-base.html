@@ -1,0 +1,291 @@
+<script>
+  // Store frequently accessed elements and state
+const state = {
+  filterStatus: document.getElementById('filter-status'),
+  transcriptContents: document.getElementById('transcript-contents'),
+  resetButton: document.getElementById('reset')
+};
+
+// Initialize URL parameters
+const url = new URL(window.location);
+const params = url.searchParams;
+const urlCodeFilter = params.get('filter');
+const urlPeepFilter = params.get('id');
+
+// Helper functions for common operations
+function updateUrlParams(key, value) {
+  if (value) {
+    params.set(key, value);
+  } else {
+    params.delete(key);
+  }
+  const paramString = params.toString();
+  window.history.replaceState(
+    {}, 
+    '', 
+    paramString ? `${location.pathname}?${paramString}` : location.pathname
+  );
+}
+
+function announce(message, delay = 0) {
+  if (!state.filterStatus) return;
+  
+  if (delay) {
+    setTimeout(() => {
+      state.filterStatus.textContent = message;
+    }, delay);
+  } else {
+    state.filterStatus.textContent = message;
+  }
+}
+
+function setFocus(selector, fallbackSelector = null) {
+  setTimeout(() => {
+    const element = document.querySelector(selector);
+    if (element) {
+      if (element.tagName === 'A' || element.getAttribute('tabindex') === '0') {
+        element.focus({ preventScroll: true }); // Use preventScroll option
+      } else {
+        element.setAttribute('tabindex', '0');
+        element.focus({ preventScroll: true });
+      }
+    } else if (fallbackSelector) {
+      const fallback = document.querySelector(fallbackSelector);
+      if (fallback) {
+        fallback.setAttribute('tabindex', '-1');
+        fallback.focus({ preventScroll: true });
+      }
+    }
+  }, 100);
+}
+
+// Main filter functions
+function codeFilter(filterClass) {
+  try {
+    // Reset all visual elements
+    resetVisualElements();
+
+    // Apply the filter to rectangles
+    document.querySelectorAll(`rect.${filterClass}`).forEach(rect => {
+      rect.classList.toggle("black");
+      rect.classList.add(`primary-${filterClass}`);
+    });
+
+    // Apply the filter to circles and their SVG containers
+    document.querySelectorAll(`circle.${filterClass}`).forEach(circle => {
+      circle.classList.toggle("black");
+      const parentSvg = circle.closest('svg');
+      if (parentSvg) {
+        parentSvg.setAttribute('aria-pressed', 'true');
+      }
+    });
+
+    // Show matching table rows
+    document.querySelectorAll(`tr.${filterClass}`).forEach(tr => {
+      tr.classList.toggle("hidden");
+      tr.setAttribute('aria-hidden', 'false');
+    });
+
+    // Make parent sections visible for visible elements
+    makeParentSectionsVisible();
+    
+    // Update URL and focus
+    updateUrlParams('filter', filterClass);
+    if (!urlPeepFilter) {
+      updateUrlParams('id', null);
+    }
+
+    // Update status for screen readers
+    const filterNameEl = document.querySelector(`svg[data-id="${filterClass}"] text`);
+    const filterName = filterNameEl ? filterNameEl.textContent : filterClass;
+    const matchCount = document.querySelectorAll(`tr.${filterClass}`).length;
+    announce(`Content filtered by ${filterName}. ${matchCount} matching segments found.`);
+
+    // Move focus to first result
+    setFocus('tr:not(.hidden) a', '#transcript-contents');
+  } catch (error) {
+    console.error('Error in codeFilter:', error);
+    announce('An error occurred while applying filters. Please try again.');
+  }
+}
+
+function interviewFilter(interviewId) {
+  try {
+    // Show all tables and SVGs initially
+    document.querySelectorAll("table, svg").forEach(el => {
+      el.classList.remove("hidden");
+      el.removeAttribute("aria-hidden");
+    });
+
+    // Hide non-matching elements
+    document.querySelectorAll(`table:not(.${interviewId}), svg.chart:not(.${interviewId}), h3:not(.${interviewId})`).forEach(el => {
+      el.classList.add("hidden");
+      el.removeAttribute("aria-hidden");
+    });
+
+    // Update URL
+    updateUrlParams('id', interviewId);
+
+    // Update status for screen readers
+    const title = document.querySelector(`h3.${interviewId}`)?.textContent || interviewId;
+    announce(`Filtered to show only: ${title}`);
+  } catch (error) {
+    console.error('Error in interviewFilter:', error);
+    announce('An error occurred while filtering interviews. Please try again.');
+  }
+}
+
+function resetFilters() {
+  try {
+    // Reset all visual elements
+    document.querySelectorAll("rect, circle, tr, table, svg, h3, div, section").forEach(el => {
+      el.classList.remove("black", "hidden", "dark");
+      el.removeAttribute("aria-hidden");
+    });
+
+    // Reset all tabindex values
+    document.querySelectorAll('a[tabindex="0"]').forEach(a => {
+      if (a.querySelector('rect')) {
+        a.setAttribute('tabindex', -1);
+      }
+    });
+
+    // Reset all svg buttons
+    document.querySelectorAll('svg[aria-pressed="true"]').forEach(svg => {
+      svg.setAttribute('aria-pressed', 'false');
+    });
+
+    // Clear URL parameters
+    updateUrlParams('id', null);
+    updateUrlParams('filter', null);
+
+    // Update status for screen readers
+    announce("All filters have been reset. Showing all content.");
+    
+    // Set focus to reset button
+    if (state.resetButton) {
+      state.resetButton.focus();
+    }
+    
+    // Announce the reset action after a delay
+    announce("View reset. All transcript segments are now visible.", 1000);
+  } catch (error) {
+    console.error('Error in resetFilters:', error);
+    announce('An error occurred while resetting filters. Please refresh the page.');
+  }
+}
+
+// Helper functions for filtering
+function resetVisualElements() {
+  // Reset all rectangles
+  document.querySelectorAll("rect").forEach(rect => {
+    rect.classList.remove(...Array.from(rect.classList)
+      .filter(c => c.startsWith("primary-")));
+    rect.classList.add("black");
+  });
+
+  // Reset SVG pressed state
+  document.querySelectorAll('svg[aria-pressed="true"]').forEach(svg => {
+    svg.setAttribute('aria-pressed', 'false');
+  });
+
+  // Reset all circles
+  document.querySelectorAll("circle").forEach(circle => {
+    circle.classList.add("black");
+  });
+
+  // Hide all table rows and reset tabindex
+  document.querySelectorAll("tr").forEach(tr => {
+    const focusableLink = tr.querySelector('a[tabindex="0"]');
+    if (focusableLink) {
+      focusableLink.setAttribute('tabindex', -1);
+    }
+    tr.classList.add("hidden");
+    tr.removeAttribute("aria-hidden");
+  });
+
+  // Hide all sections
+  document.querySelectorAll("section.contentsdiv, section.vizdiv").forEach(section => {
+    section.classList.add("hidden");
+    section.removeAttribute("aria-hidden");
+  });
+}
+
+function makeParentSectionsVisible() {
+  // Make sections visible for filtered content
+  document.querySelectorAll("tr:not(.hidden)").forEach(tr => {
+    const parentSection = tr.closest('section.contentsdiv');
+    if (parentSection) {
+      parentSection.classList.remove("hidden");
+      parentSection.setAttribute('aria-hidden', 'false');
+    }
+    
+    const focusableLink = tr.querySelector('a[tabindex="-1"]');
+    if (focusableLink) {
+      focusableLink.setAttribute('tabindex', 0);
+    }
+  });
+
+  // Show visualization sections
+  document.querySelectorAll("rect:not(.black)").forEach(rect => {
+    const parentSection = rect.closest('section.vizdiv');
+    if (parentSection) {
+      parentSection.classList.remove("hidden");
+      parentSection.setAttribute('aria-hidden', 'false');
+    }
+  });
+}
+
+// Initialize event listeners and initial state
+document.addEventListener('DOMContentLoaded', function() {
+  // Set up click handlers for filters
+  document.querySelectorAll(".legend").forEach(legend => {
+    legend.addEventListener('click', function() {
+      const filterClass = this.getAttribute("data-id");
+      codeFilter(filterClass);
+    });
+  });
+
+  // Set up interview filter handlers
+  document.querySelectorAll("h3.toggle_int").forEach(h3 => {
+    h3.addEventListener('click', function() {
+      const interviewId = this.getAttribute("data-id");
+      interviewFilter(interviewId);
+    });
+  });
+
+  // Set up reset button handler
+  const resetBtn = document.getElementById("reset");
+  if (resetBtn) {
+    resetBtn.addEventListener('click', resetFilters);
+  }
+
+  // Handle keyboard interactions for SVG buttons
+  document.querySelectorAll('svg[role="button"]').forEach(svg => {
+    svg.addEventListener('keydown', function(event) {
+      if (event.key === 'Enter' || event.key === ' ' || event.keyCode === 13 || event.keyCode === 32) {
+        event.preventDefault();
+        this.click();
+      }
+    });
+  });
+
+  // Initialize tooltips
+  if (window.bootstrap && typeof bootstrap.Tooltip === 'function') {
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+  }
+
+  // Apply URL parameters if present
+  if (urlCodeFilter && urlPeepFilter) {
+    codeFilter(urlCodeFilter);
+    interviewFilter(urlPeepFilter);
+  } else if (urlCodeFilter) {
+    codeFilter(urlCodeFilter);
+  } else if (urlPeepFilter) {
+    interviewFilter(urlPeepFilter);
+  }
+});
+</script>

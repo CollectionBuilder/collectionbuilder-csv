@@ -1,0 +1,15 @@
+filename,object_location,image_small,image_thumb
+210a.jpg,/objects/210a.jpg,/objects/small/210a_sm.jpg,/objects/thumbs/210a_th.jpg
+210b.jpg,/objects/210b.jpg,/objects/small/210b_sm.jpg,/objects/thumbs/210b_th.jpg
+armantrout.jpg,/objects/armantrout.jpg,/objects/small/armantrout_sm.jpg,/objects/thumbs/armantrout_th.jpg
+demo_001.jpg,/objects/demo_001.jpg,/objects/small/demo_001_sm.jpg,/objects/thumbs/demo_001_th.jpg
+demo_002.pdf,/objects/demo_002.pdf,/objects/small/demo_002_sm.jpg,/objects/thumbs/demo_002_th.jpg
+demo_003.mp3,/objects/demo_003.mp3,,
+demo_004.jpg,/objects/demo_004.jpg,/objects/small/demo_004_sm.jpg,/objects/thumbs/demo_004_th.jpg
+demo_005.txt,/objects/demo_005.txt,,
+demo_012.md,/objects/demo_012.md,,
+gluck.jpg,/objects/gluck.jpg,/objects/small/gluck_sm.jpg,/objects/thumbs/gluck_th.jpg
+hells_half_theta.jpg,/objects/hells_half_theta.jpg,/objects/small/hells_half_theta_sm.jpg,/objects/thumbs/hells_half_theta_th.jpg
+hughes_article.png,/objects/hughes_article.png,/objects/small/hughes_article_sm.jpg,/objects/thumbs/hughes_article_th.jpg
+mohammad.jpg,/objects/mohammad.jpg,/objects/small/mohammad_sm.jpg,/objects/thumbs/mohammad_th.jpg
+wrigley.jpg,/objects/wrigley.jpg,/objects/small/wrigley_sm.jpg,/objects/thumbs/wrigley_th.jpg

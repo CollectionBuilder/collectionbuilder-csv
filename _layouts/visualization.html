@@ -1,0 +1,139 @@
+---
+layout: default
+custom-foot: transcript/js/visualization-js.html
+---
+{% include transcript/style/filter-style.html %}
+{% assign transcripts = site.data.transcripts | sort %}
+{% assign items = site.data[site.metadata] %}
+
+<div class="container p-4 p-md-5">
+  {% unless site.data.theme.as-data == false %}
+    {% include transcript/filters-data-download-modal.html %}
+  {% endunless %}
+  
+  <h2 id="visualize-by-subject">Color-coded Subject Visualization</h2>
+
+  <p>Click a colored circle/subject to see corresponding sections. 
+    {% unless site.data.theme.transcript-contents == false %}
+      You can also filter by subject and view/print related <a href="#transcript-contents">contents</a> below.
+    {% endunless %}
+  </p>
+
+  <div class="row" role="group" aria-labelledby="filterGroupLabel">
+    <div id="filterGroupLabel" class="visually-hidden d-none">Filter transcripts by subject</div>
+    {% for n in site.data.filters %}
+    <div class="col-md-3 col-4">
+      <svg class="legend" width="100%" height="25px" data-id="{{ n.tag | slugify }}"
+           aria-labelledby="legendTitle{{ forloop.index }}" role="button"
+           aria-label="Filter by {{ n.tag }}" tabindex="0" style="cursor:pointer;"
+           data-bs-toggle="tooltip" data-bs-placement="left"
+           title="{{ n.description | escape }}" aria-pressed="false">
+        <title id="legendTitle{{ forloop.index }}">Filter by {{ n.tag }}</title>
+        <circle cx="25" cy="10" r="10" class="{{ n.tag | slugify }}"></circle>
+        <text x="38" y="15">{{ n.tag }}</text>
+      </svg>
+    </div>
+    {% endfor %}
+  </div>
+  
+  <a href="#transcript-contents" class="visually-hidden-focusable visually-hidden skip-link mb-3 d-inline-block p-2">
+    Skip to filtered transcript content
+  </a><br />
+  
+  <button id="reset" class="btn btn-lg btn-secondary float-right" role="button">Reset</button>
+  
+  <div class="visually-hidden" aria-live="polite" id="filter-status">
+    No filters currently applied.
+  </div>
+
+  <br /><br />
+
+  {% for transcript in transcripts %}
+  {% assign transcript-name = transcript[0] %}
+  {% assign transcript_item = items | where_exp: 'item', 'item.objectid == transcript-name' | first %}
+   <section class="vizdiv" aria-labelledby="header{{ transcript-name }}visualization">
+    <h3 id="header{{ transcript-name }}visualization" class="mt-4 toggle_int {{ transcript-name }}" tabindex="-1" style="cursor:pointer;" data-id="{{transcript-name}}" role="button" aria-hidden="true">{{ transcript_item.title | default: transcript_item.title }}<i class="fas fa-filter"></i> <small>Click to filter</small></h3>
+    <svg class="chart {{transcript-name}}" width="100%" height="100px" style="overflow: visible" role="img" aria-label="Visualization of interview segments" data-transcript-id="{{ transcript-name }}">
+      {% for item in transcript[1] %}
+      {% assign my_integer = forloop.length %}
+      {% assign my_float = my_integer | times: 1.0 %}
+      {% assign rect-width = 100 | divided_by: my_float  %}
+{% assign tags = item.tags | split: ";" | compact | where_exp: 'tag', 'tag != " "' %}
+  {% capture tag_classes %}{% for tag in tags %}{{ tag | slugify }} {% endfor %}{% endcapture %}
+      <a href="{{ forloop.index0 | prepend: transcript-name | prepend: '.html?line=' | prepend: transcript-name | prepend: '/items/' | relative_url }}" aria-label="Jump to line {{ forloop.index0 }} in the webpage for this transcript" tabindex="-1" aria-hidden="true" data-segment-id="{{ forloop.index0 }}">
+        <rect 
+          x="{{forloop.index0 | times: rect-width }}%" 
+          y="20" 
+          width="{{rect-width}}%" 
+          height="50" 
+          data-bs-toggle="tooltip" 
+          data-bs-placement="top" 
+          class="{{ tag_classes }}" 
+          data-segment-index="{{ forloop.index0 }}"
+          tabindex="-1" 
+          aria-hidden="true">
+        </rect>
+      </a>
+      {% endfor %}
+    </svg>
+  </section>
+  {% endfor %}
+</div>
+
+<br />
+<hr /><br />
+
+{% unless site.data.theme.transcript-contents == false %}
+{% if site.data.theme.json-generation %}
+<div class="container" id="transcript-contents">
+  <h2>Contents</h2>
+  <div id="transcript-content-container">
+    <div class="initial-message">
+      <p>Click on one of the colored circles above to load transcript data and filter by that subject.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  // This script just defines which transcripts are available
+  // The actual content loading happens in visualization-json.js
+  window.availableTranscripts = [
+    {% for transcript in transcripts %}
+    {% assign transcript-name = transcript[0] %}
+    "{{ transcript-name }}"{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+  ];
+</script>
+{% else %}
+<div class="container" id="transcript-contents">
+  <h2>Contents</h2>
+
+
+  {% for transcript in site.data.transcripts %}
+  {%assign transcript-name = transcript[0] %}
+  {% assign transcript_item = items | where_exp: 'item', 'item.objectid == transcript-name' | first %}
+  {% for item in transcript[1] %}
+  {% if forloop.first %}
+  <section class="contentsdiv" >
+    <h3 class="my-4 {{transcript-name}}"><a href="{{transcript-name | prepend: '/items/' | append: '.html' | relative_url }}">{{ transcript_item.interviewee | default: transcript_item.title }}</a></h3>
+    <table class="my-4 p-2 border {{transcript-name}} {%cycle 'bg-light','' %}">{%endif%}
+      <tr id="{{transcript-name}}row{{ forloop.index0 }}" class="{{item.tags | replace: ";", " "}}">
+        <td class="p-2" style="width:10%;vertical-align:top"><a href="{{ forloop.index0 | prepend: transcript-name | prepend: '.html?line=' | prepend: transcript-name | prepend: '/items/' | relative_url }}" aria-label="jump to Line {{ forloop.index0 }} from {{transcript-name}}'s interview, opens in new tab" class="small btn-link text-dark" tabindex="-1">Line {{ forloop.index0 }}</a></td>
+        <td class="words p-2">
+          <div id="spoken">{%if item.speaker%}{{item.speaker | remove: ":"}}: {%endif%}{{item.words}}</div>
+        </td>
+      </tr>
+
+      {% if forloop.last%}</table>
+    </section>{%endif%}
+  {% endfor %}{% endfor %}
+  {% endif %}
+{% endunless %}
+
+<br />
+<hr /><br />
+<!-- Add download button for JSON data -->
+<div class="container mb-5">
+  <h3>Data Access</h3>
+  {% include transcript/download-json-button.html %}
+</div>

@@ -11,5 +11,4 @@ source,Source,,,,
 identifier,Source Identifier,,,,
 type,Type,,,DCTERMS.type,
 format,Format,,,,encodingFormat
-language,Language,,,DCTERMS.language,
 rightsstatement,,,,DCTERMS.rights,license
