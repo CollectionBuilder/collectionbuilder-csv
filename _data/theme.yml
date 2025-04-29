@@ -23,12 +23,17 @@ transcript-contents: true ## true/false --> determines if the contents of the in
 
 json-generation: false ## true/false --> defaults to false (see note below if you turn to true!). This determines if JSON files will be accessed for the visualization page. 
 
-### !!!! Warning ####
+
 
 ##########
 # OHD + CollectionBuilder Theme Customization
 # values set here help configure details of individual pages in the website
 ##########
+
+##########
+# Base Layout (OHD or CollectionBuilder)
+# If you'd like the site to look like CollectionBuilder instead of the OHD look, just change the below value for base-layout to CB rather than ohd
+base-layout: OHD # OHD or CB
 
 ##########
 # HOME PAGE
@@ -38,7 +43,8 @@ home-page-visualization: true # true / false, if true, the visualization will ap
 # This will determine the height of the visualization on the home page
 home-page-visualization-size: 30%
 # featured image is used in home page banner and in meta markup to represent the collection
-# use either an objectid (from an item in this collect), a relative location of an image in this repo, or a full url to an image elsewhere
+# use either an objectid (from an item in this collect), a relative location of an image in this repo, or a full url to an image elsewhere. 
+# Note: if you are using the CB base layout as determined above, the featured image defined here will show up as the large image at top of the home page
 featured-image: gluck
 # optional: add extra padding around collection title for a larger image feature. 
 home-title-y-padding: 12em # the margin from the top your title portion will appear.
