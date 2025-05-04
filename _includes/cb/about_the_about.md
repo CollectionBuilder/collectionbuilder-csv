@@ -62,7 +62,7 @@ These features allow you to better organize and highlight your content.
 
 - Card -- > `{% raw %}{% include feature/card.html header="This is a Card" text="The card features an image from the collection as a cap" objectid="demo004" width="25" centered=true %}{% endraw %}`
 
-{% include feature/card.html header="This is a Card" text="The card features an image from the collection as a cap" objectid=imagesampleid width="25" centered=true %}
+{% include feature/card.html header="This is a Card" text="The card features an image from the collection as a cap" objectid=imagesampleid width="50" centered=true %}
 
 #### Include a Button 
 
