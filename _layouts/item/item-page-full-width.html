@@ -11,8 +11,15 @@ item-meta: true
 <div class="container-fluid py-3">
   {% include item/breadcrumbs.html %}
   <div class="my-0 h5 small">
-    {{ page.display_template | replace: '_', ' ' | upcase }}
-    {% if page.display_template == 'compound_object' %} ({{ children | size }} Items){% endif %}
+    {% if page.display_template == 'compound_object' or page.display_template == 'multiple' -%}
+      {%- assign children = site.data[site.metadata] | where_exp: 'item', 'item.parentid == page.objectid' %}
+      {{- children | size }}
+      {% if children.size == 1 %}
+        {{ site.data.translations._layouts.item['item-page-base.html'].item[site.lang] | default: 'Item' }}
+      {% else %}
+        {{ site.data.translations._layouts.item['item-page-base.html'].items[site.lang] | default: 'Items' }}
+      {% endif %}
+    {%- endif %}
   </div>
   <h2 class="mb-3">
     {{ page.title }}

@@ -592,6 +592,10 @@ _layouts:
     compound-object.html:
     image.html:
     item-page-base.html:
+      item:
+        en: "Item"
+        es: "Elemento"
+        de: "Objekt"
       items:
         en: "Items"
         es: "Elementos"

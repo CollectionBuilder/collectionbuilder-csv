@@ -6,7 +6,8 @@
   This include requires the Liquid object "child" to be present! The item display requires the compound object item includes in "item/child/".
 {% endcomment %}
 <div class="row row-cols-2 row-cols-lg-4 g-2">
-  {% for child in children %}
+  {%- assign children_sorted = children | sort: 'objectid' -%}
+  {% for child in children_sorted %}
     <div class="col">
       <div class="card h-100">
         <div class="my-auto">

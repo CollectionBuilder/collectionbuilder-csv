@@ -185,7 +185,8 @@ custom-foot: js/timeline-js.html
         <td>
           <div class="row">
             {%- assign inYear = items | filter_items_by_year: year[1], '[-]?[\dXu]{4,}' -%}
-            {% for item in inYear %}
+            {%- assign inYear_sorted = inYear | sort: 'objectid' -%}
+            {% for item in inYear_sorted %}
               <div class="col-lg-4 col-md-6">
                 <figure class="figure">
                   <a href="{% if item.parentid == nil %}{{ '/items/' | append: item.objectid | append: '.html' | relative_url }}{% elsif item.parentid %}{{ '/items/' | append: item.parentid | append: '.html' | relative_url }}#{{item.objectid }}{% endif %}">
