@@ -13,7 +13,7 @@
             {% if f.browse_link == "true" %}
             {% assign topics = page[f.field] | split: ";" %}
             {% for t in topics %}
-            <a class="me-3" href="{{ t | strip | url_param_escape | prepend: '/browse.html#' | relative_url }}">{{ t | strip }}</a>
+            <a class="me-3" href="{{ t | strip | url_param_escape | prepend: ':' | prepend: f.field | prepend: '/browse.html#' | relative_url }}">{{ t | strip }}</a>
             {% endfor %}
             {% elsif f.external_link == "true" %}
             <a href="{{ page[f.field] }}">{{ page[f.field] }}</a>
