@@ -33,13 +33,16 @@ function getIcon(objectTemplate,objectFormat,svgType) {
     } else if (iconTemplate.includes("multiple")) {
         iconId = "icon-multiple";
         iconTitle = "multiple object icon";
+    } else if (iconTemplate.includes("record")) {
+        iconId = "icon-record";
+        iconTitle = "record object icon";
     } else {
         iconId = "icon-default";
         iconTitle = "file icon";
     }
     if (svgType == "thumb") {
         // svg sprite as thumb
-        return '<svg class="bi text-body" fill="currentColor" role="img"><title>' + iconTitle + '</title><use xlink:href="{{ "/assets/lib/cb-icons.svg" | relative_url }}#' + iconId + '"/></svg>';
+        return '<svg class="bi text-body img-fluid" fill="currentColor" role="img"><title>' + iconTitle + '</title><use xlink:href="{{ "/assets/lib/cb-icons.svg" | relative_url }}#' + iconId + '"/></svg>';
     } else if (svgType == "hidden") {
         // svg as sprite with aria-hidden
         return '<svg class="bi icon-sprite" aria-hidden="true"><use xlink:href="{{ "/assets/lib/cb-icons.svg" | relative_url }}#' + iconId + '"/></svg>';

@@ -22,7 +22,7 @@
         "media": {
           "url": "{{ item.image_small | default: item.image_thumb | default: item.object_location | relative_url }}",
           "caption": {{ item.title | jsonify }},
-          "link": {% if item.parentid %}{{ '/items/' | append: item.parentid | append: '.html#' | append: item.objectid | relative_url | jsonify }}{% else %}{{ '/items/' | append: item.objectid | append: '.html' | relative_url | jsonify }}{% endif %}
+          "link": "{{ '/items/' | relative_url }}{% if item.parentid %}{{ item.parentid }}.html#{{ item.objectid }}{% else %}{{ item.objectid }}.html{% endif %}"
         },
         "start_date": { 
           {% if item.date contains '-' %}{% assign dates = item.date | strip | split: '-' %}

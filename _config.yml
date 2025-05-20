@@ -25,7 +25,7 @@ tagline: Digital Collection Magic with Static Web Technologies
 # this description might appear in search result lists, keep around 160 characters max
 description: "CollectionBuilder-CSV is a template for creating digital collection exhibits using static web technology."
 # keywords, a short list of subjects describing the collection, separated by semicolon, to appear in rich markup
-keywords: idaho;history;inland northwest
+keywords: idaho; history; inland northwest
 # creator of the digital collection, to appear in meta tags; we typically use our GitHub usernames but feel free to just use your name
 author: CollectionBuilder
 
@@ -56,14 +56,6 @@ organization-logo-banner: https://cdil.lib.uidaho.edu/storying-extinction/assets
 organization-logo-nav: https://cdil.lib.uidaho.edu/assets/img/logo.png
 
 ##########
-# GOOGLE SERVICES [optional!]
-#
-# leave these blank or comment out to NOT include google code
-# if present, used to add analytics during "production" build only
-# google-analytics-id: "G-XXXXXXXXX"
-# google-cse-id: "002151703305773322890:1pu3smhw1t8"
-
-##########
 # ROBOTS EXCLUDE
 #
 # set noindex to true if you do NOT want Google to index your site
@@ -77,7 +69,7 @@ noindex: true
 # (this is done automatically by gh-pages build)
 #
 # ignore stuff
-exclude: [docs/, Rakefile, README.md, LICENSE, CITATION.cff, CODE_OF_CONDUCT.md, CONTRIBUTING.md, SECURITY.md]
+exclude: [docs/, Rakefile, rakelib/, README.md, LICENSE, CITATION.cff, CODE_OF_CONDUCT.md, CONTRIBUTING.md, SECURITY.md]
 # compress CSS output
 sass:
   style: compressed

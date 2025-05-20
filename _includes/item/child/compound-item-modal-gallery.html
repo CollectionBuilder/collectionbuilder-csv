@@ -46,9 +46,10 @@
                                 <div class="modal-header ">
                                     <div class="modal-title w-100" id="{{ child.objectid }}ModalLabel">
                                         <div class="row">
+                                            {% capture stopMedia %}{% if child.display_template == 'video' %}{% if child.object_location contains 'vimeo' %}vimeo{% elsif child.object_location contains 'youtu' %}youtube{% else %}video{% endif %}{% elsif child.display_template == 'audio' %}audio{% else %}{% endif %}{% endcapture %}
                                             <div class="col-12 text-end">
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
-                                                onclick="history.pushState('', '', window.location.pathname)"></button>
+                                                onclick="{% if stopMedia != '' %}stopMedia('{{ child.objectid }}','{{ stopMedia }}');{% endif %}history.pushState('', '', window.location.pathname)"></button>
                                             </div>
                                             {% capture next_index %}{% if forloop.index == forloop.length %}0{% else %}{{ forloop.index0 | plus: 1 }}{% endif %}{% endcapture %}
                                             {% assign next_index = next_index | times: 1 %}
@@ -57,7 +58,7 @@
                                             {% capture next_item_id %}{{ children[next_index].objectid }}{% endcapture %}
                                             {% capture prev_item_id %}{{ children[prev_index].objectid }}{% endcapture %}
                                             <div class="col-1 col-md-2">
-                                                <button data-bs-target="#{{ prev_item_id }}" data-bs-toggle="modal" onclick="window.location.hash='{{ prev_item_id }}'" class="btn btn-outline-dark btn-sm prev-child-button" >
+                                                <button data-bs-target="#{{ prev_item_id }}" data-bs-toggle="modal" onclick="{% if stopMedia != '' %}stopMedia('{{ child.objectid }}','{{ stopMedia }}');{% endif %}window.location.hash='{{ prev_item_id }}'" class="btn btn-outline-dark btn-sm prev-child-button" >
                                                     <svg class="bi icon-sprite" role="img" aria-label="Previous Item">
                                                         <use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#arrow-left"/>
                                                     </svg>
@@ -71,7 +72,7 @@
                                                 </h3>
                                             </div>
                                             <div class="col-1 col-md-2 text-end">
-                                                <button  data-bs-target="#{{ next_item_id }}" data-bs-toggle="modal" onclick="window.location.hash='{{ next_item_id }}'" class="ms-md-5 btn btn-outline-dark btn-sm next-child-button">
+                                                <button  data-bs-target="#{{ next_item_id }}" data-bs-toggle="modal" onclick="{% if stopMedia != '' %}stopMedia('{{ child.objectid }}','{{ stopMedia }}');{% endif %}window.location.hash='{{ next_item_id }}'" class="ms-md-5 btn btn-outline-dark btn-sm next-child-button">
                                                     <span class="d-none d-md-inline">Next Item</span>
                                                     <svg class="bi icon-sprite" role="img" aria-label="Next Item">
                                                         <use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#arrow-right"/>
@@ -137,3 +138,28 @@
     </div>
     {% endfor %}
 </div>
+
+<script>
+function stopMedia(objectid, type) {
+    // stop media based on type
+    if (type == "audio") {
+        const mediaElement = document.querySelector(`#${ objectid } audio`);
+        mediaElement.pause();
+        //mediaElement.currentTime = 0;
+    }
+    if (type == "video") {
+        const mediaElement = document.querySelector(`#${ objectid } video`);
+        mediaElement.pause();
+        //mediaElement.currentTime = 0;   
+    }
+    if (type == "youtube") {
+        const mediaElement = document.querySelector(`#${ objectid } iframe`);
+        const message = JSON.stringify({ event: 'command', func: 'pauseVideo', args: '' });
+        mediaElement.contentWindow.postMessage(message, '*');
+    }
+    if (type == "vimeo") {
+        const mediaElement = document.querySelector(`#${ objectid } iframe`);
+        mediaElement.contentWindow.postMessage('{"method":"pause"}', '*');
+    }
+} 
+</script>

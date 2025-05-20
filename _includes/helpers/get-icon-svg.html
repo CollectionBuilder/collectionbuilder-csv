@@ -1,0 +1,18 @@
+{% comment %}
+
+    Liquid utility to get a theme icon based on display_template or format.
+    returns an svg sprite (in html)
+
+    E.G. --> {% include helpers/get-icon-svg.html template="pdf" type="hidden" %}
+
+    Options: 
+
+    - "template" - the display_template to represent (usually provided from an item metadata "display_template" or "format")
+    - "type" - choose from "thumb" (svg like an image), "hidden" (svg aria-hidden), or "sprite" (svg sprite) (optional, default "sprite")
+
+{%- endcomment -%}
+{%- capture iconId -%}{% if include.template contains 'image' %}icon-image{% elsif include.template contains 'pdf' %}icon-pdf{% elsif include.template contains 'video' %}icon-video{% elsif include.template contains 'audio' %}icon-audio{% elsif include.template contains 'panorama' %}icon-panorama{% elsif include.template contains 'compound' %}icon-compound-object{% elsif include.template contains 'multiple' %}icon-multiple{% elsif include.template contains 'record' %}icon-record{% else %}icon-default{% endif %}{%- endcapture -%}
+{% if include.type == "thumb" %}
+<svg class="bi text-body img-fluid" fill="currentColor" role="img"><title>{{ include.template }} file icon</title><use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#{{ iconId }}"/></svg>
+{%- else -%}
+<svg class="bi icon-sprite"{% if include.type == 'hidden' %} aria-hidden="true"{% endif %}><use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#{{ iconId }}"/></svg>{% endif %}

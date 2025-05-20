@@ -1,36 +1,47 @@
-{%- assign templates = site.data[site.metadata] | where_exp: 'item','item.parentid == nil ' | map: "display_template" -%}
-{%- assign types = "image;audio;video;pdf;panorama;record;compound_object;multiple" | split: ";" -%}
+{% comment %}
+
+    Collection objects summary.
+    Counts item types based on "display_template" providing link to Browse page.
+
+    E.G. --> {% include index/objects.html %}
+
+    E.G. --> {% include index/objects.html object_field="format" others=true total=true %}
+
+    Options:
+
+    - "btn-color" - a bootstrap color class to theme the buttons. Can be any bootstrap template color (e.g. info, success) or outline (e.g. outline-info, outline-success), including colors created in config-theme-colors. (optional, default "outline-secondary")
+    - "heading_level" = customize the level of the heading if necessary for accessibility, choose "h1", "h2", "h3", etc (optional, default "h2")
+    - "object_field" = optionally change the field used to count items. Typically this is either "display_template" (default) or "format". The field should be available on the Browse page to filter! The icons assume you use something like "display_template" or "format" to select the correct icon.
+    - "child-objects" = include child items in count or only parents, true or false (optional, default false)
+    - "others" = display a count for items with no "display_template", true or false (optional, default false)
+    - "total" = display a count for total items, true or false (optional, default false)
+
+{%- endcomment -%}
+{%- assign object_field = include.object_field | default: 'display_template' -%}
+{% if include.child-objects == true %}
+{%- assign items = site.data[site.metadata] | where_exp: 'item','item.objectid' -%}
+{% else %}
+{%- assign items = site.data[site.metadata] | where_exp: 'item','item.objectid and item.parentid == nil' -%}
+{% endif %}
+{%- assign templates = items | map: object_field -%}
+{%- assign types = templates | uniq | compact | sort -%}
 <div class="card mb-3" >
-  <div class="card-body">
-    <h2 class="card-title h5">Objects</h2>
-    <p class="card-text">
-      {% for t in types %}
-      {%- assign count = templates | where_exp: 'item','item contains t' | size -%}
-      {% if count > 0 %}
-      {{ count }}      
-      {% case t %}
-      {% when 'image' %} 
-      <a class="text-dark" href="{{ 'image' | prepend: '/browse.html#' | relative_url }}">Image{% if count > 1 %}s{% endif %} <svg class="bi icon-sprite text-body" fill="currentColor" aria-hidden="true"><use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#icon-image"/></svg></a><br>
-      {% when 'audio' %}
-      <a class="text-dark" href="{{ 'audio' | prepend: '/browse.html#' | relative_url }}">Audio File{% if count > 1 %}s{% endif %} <svg class="bi icon-sprite text-body" fill="currentColor" aria-hidden="true"><use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#icon-audio"/></svg></a><br>
-      {% when 'video' %}
-      <a class="text-dark" href="{{ 'video' | prepend: '/browse.html#' | relative_url }}">Video{% if count > 1 %}s{% endif %} <svg class="bi icon-sprite text-body" fill="currentColor" aria-hidden="true"><use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#icon-video"/></svg></a><br>
-      {% when 'pdf' %}
-      <a class="text-dark" href="{{ 'pdf' | prepend: '/browse.html#' | relative_url }}">PDF{% if count > 1 %}s{% endif %} <svg class="bi icon-sprite text-body" fill="currentColor" aria-hidden="true"><use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#icon-pdf"/></svg></a><br>
-      {% when 'panorama' %}
-      <a class="text-dark" href="{{ 'panorama' | prepend: '/browse.html#' | relative_url }}">Panorama{% if count > 1 %}s{% endif %} <svg class="bi icon-sprite text-body" fill="currentColor" aria-hidden="true"><use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#icon-panorama"/></svg></a><br>
-      {% when 'record' %}
-      <a class="text-dark" href="{{ 'record' | prepend: '/browse.html#' | relative_url }}">Record{% if count > 1 %}s{% endif %} <svg class="bi icon-sprite text-body" fill="currentColor" aria-hidden="true"><use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#icon-record"/></svg></a><br>
-      {% when 'compound_object' %}
-      <a class="text-dark" href="{{ 'compound%20object' | prepend: '/browse.html#' | relative_url }}">Compound Object{% if count > 1 %}s{% endif %} <svg class="bi icon-sprite text-body" fill="currentColor" aria-hidden="true"><use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#icon-compound-object"/></svg></a><br>
-      {% when 'multiple' %}
-      <a class="text-dark" href="{{ 'multiple' | prepend: '/browse.html#' | relative_url }}">Multiple{% if count > 1 %}s{% endif %} <svg class="bi icon-sprite text-body" fill="currentColor" aria-hidden="true"><use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#icon-multiple"/></svg></a><br>
-      {% else %}
-      <a class="text-dark" href="{{ 'file' | prepend: '/browse.html#' | relative_url }}">File{% if count > 1 %}s{% endif %} <svg class="bi icon-sprite text-body" fill="currentColor" aria-hidden="true"><use xlink:href="{{ '/assets/lib/cb-icons.svg' | relative_url }}#icon-default"/></svg></a><br>
-      {%- endcase -%}
-      {%- endif -%}
-      {%- endfor -%}
-      <a class="btn btn-sm btn-outline-secondary mt-2" href="{{ '/data.html' | relative_url }}">View table</a>
-    </p>
-  </div>
+    <div class="card-body">
+        <{{ include.heading_level | default: 'h2' | strip }} class="card-title h5">Objects</{{ include.heading_level | default: 'h2' | strip }}>
+        <p class="card-text">
+        {% for t in types %}
+        {%- assign count = templates | where_exp: 'item', 'item contains t' | size -%}
+        {% if count > 0 %}
+        {{ count }}
+        <a class="text-dark" href="{{ t | prepend: '/browse.html#' | relative_url }}">{{ t | upcase | replace: "_", " " }} 
+        {% include helpers/get-icon-svg.html type="hidden" template=t %}</a><br>
+        {%- endif -%}
+        {%- endfor -%}
+        {% if include.others == true %}{% assign others = templates | where_exp: 'item', 'item == nil or item == ""' | size %}{% if others > 0 %}
+        {{ others }} OTHER {% include helpers/get-icon-svg.html type="hidden" %}<br>{% endif %}{% endif %}
+        {% if include.total == true %}
+        {{ templates | size }} TOTAL ITEMS<br>{% endif %}
+        <a class="btn btn-sm btn-{{ include.btn-color | default: 'outline-secondary' }} mt-2" href="{{ '/data.html' | relative_url }}">View table</a>
+        </p>
+    </div>
 </div>
