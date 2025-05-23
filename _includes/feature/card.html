@@ -24,11 +24,13 @@
 {%- capture src -%}{{ item.image_small | default: item.object_location | relative_url }}{% endcapture %}
 {%- capture alt -%}{{ item.image_alt_text | default: item.description | default: item.title }}{% endcapture %}
 {%- endif -%}
-<div class="card mb-3{% if include.float %} feature-float-{{ include.float }}{% endif %}{% if include.width %} feature-w-{{ include.width }}{% endif %}{% if include.centered %} mx-auto{% endif %}">
-    {% if src %}<img class="card-img-top" src="{{ src }}" alt="{{ alt | escape }}">{%- endif -%}
-    {% if include.header %}<{{ include.heading_level | default: 'h2' | strip }} class="card-header">{{ include.header }}</{{ include.heading_level | default: 'h2' | strip }}>{%- endif -%}
-    <div class="card-body">
-        {% if include.title %}<{{ include.heading_level | default: 'h2' | strip }} class="card-title">{{ include.title }}</{{ include.heading_level | default: 'h2' | strip }}>{%- endif -%}
-        <div class="card-text">{{ include.text | markdownify }}</div>
+<div class="feature-include">
+    <div class="card mb-3{% if include.float %} feature-float-{{ include.float }}{% endif %}{% if include.width %} feature-w-{{ include.width }}{% endif %}{% if include.centered %} mx-auto{% endif %}">
+        {% if src %}<img class="card-img-top" src="{{ src }}" alt="{{ alt | escape }}">{%- endif -%}
+        {% if include.header %}<{{ include.heading_level | default: 'h2' | strip }} class="card-header">{{ include.header }}</{{ include.heading_level | default: 'h2' | strip }}>{%- endif -%}
+        <div class="card-body">
+            {% if include.title %}<{{ include.heading_level | default: 'h2' | strip }} class="card-title">{{ include.title }}</{{ include.heading_level | default: 'h2' | strip }}>{%- endif -%}
+            <div class="card-text">{{ include.text | markdownify }}</div>
+        </div>
     </div>
 </div>
