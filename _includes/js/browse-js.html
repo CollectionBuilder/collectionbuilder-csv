@@ -92,7 +92,7 @@ function makeCard(obj) {
     // media type
     if(obj.template && obj.template != "") {
         mediaIcon = getIcon(obj.template,obj.format,"hidden");
-        card += '<p class="card-text"><small><a class="btn btn-sm btn-outline-secondary" href="{{ page.url | relative_url }}#' + encodeURIComponent(obj.template) + '">' + 
+        card += '<p class="card-text"><small><a class="btn btn-sm btn-outline-secondary" href="{{ page.url | relative_url }}#display_template:' + encodeURIComponent(obj.template) + '">' + 
         obj.template.toUpperCase().replace("_"," ") + ' ' + mediaIcon + '</a></small></p>';
     }
     // view button
@@ -156,6 +156,20 @@ function filterItems(arr, q, field="all") {
     if (q != "") {
         filterTextBox.focus();
     }
+    
+    // Display active filter indicators for facet searches too
+    if (q && q !== "") {
+        const searchCriteria = [{
+            boolean: 'AND',
+            field: field,
+            value: q
+        }];
+        displayActiveFilters(searchCriteria);
+    } else {
+        // Clear active filter indicators for empty searches
+        displayActiveFilters([]);
+    }
+    
     loadingIcon.classList.add("d-none");
 };
 
@@ -243,9 +257,11 @@ function filterItems(arr, q, field="all") {
     }
     browseItemsDiv.innerHTML = cards;
     
+    // Display active filter indicators
+    displayActiveFilters(searchCriteria);
+    
     loadingIcon.classList.add("d-none");
 }
-
 /**
  * Process the basic search form and execute search
  * Uses simple direct URL manipulation to maintain compatibility with links
@@ -293,6 +309,10 @@ function resetFilter() {
     
     // Show all items
     filterItems(items, "", "all");
+    
+    // Clear active filter indicators
+    displayActiveFilters([]);
+    
     return false;
 }
 
@@ -300,7 +320,7 @@ function resetFilter() {
  * Create a list of valid field names from the configuration
  * Used to validate field names in hash-based searches
  */
-const validFields = [{% for f in fields %}"{{ f.field }}",{% endfor %}"title"];
+const validFields = [{% for f in fields %}"{{ f.field }}",{% endfor %}"title","display_template"];
 /**
  * Handle changes to the hash portion of the URL
  * This is triggered by both manual URL changes and links with hash targets
@@ -461,7 +481,7 @@ function addSearchRow(values = {}) {
  * @param {Event} event - Optional event object if triggered by a form submit
  * @return {boolean} False to prevent default form submission
  */
-function submitAdvancedSearch(event) {
+ function submitAdvancedSearch(event) {
     // Prevent default if this was from a form submit
     if (event && event.preventDefault) {
         event.preventDefault();
@@ -483,6 +503,12 @@ function submitAdvancedSearch(event) {
             searchParams[`v${index}`] = value;
         }
     });
+    
+    // Add current sort option to the URL parameters
+    const activeSort = document.querySelector(".browse-sort-item.active");
+    if (activeSort) {
+        searchParams['sort'] = activeSort.dataset.filter;
+    }
     
     // Create URL parameters
     const queryString = new URLSearchParams();
@@ -576,7 +602,6 @@ if (matchingDropdownItem) {
 
     shuffle(items);
 {% endif %}
-
 /* Add sort function on click of sort options */
 var sortFilter = document.querySelector("#sortFilter");
 var sortOptions = document.querySelectorAll(".browse-sort-item");
@@ -605,8 +630,26 @@ sortOptions.forEach((button) => {
       index++;
     }
     
-    // If we have active advanced search criteria
+    // If we have active advanced search criteria, update the URL with new sort parameter
     if (searchCriteria.length > 0) {
+      // Create new URL with updated sort parameter
+      const newParams = new URLSearchParams();
+      
+      // Copy existing search parameters
+      for (let i = 0; i < searchCriteria.length; i++) {
+        newParams.set(`b${i}`, searchCriteria[i].boolean);
+        newParams.set(`f${i}`, searchCriteria[i].field);
+        newParams.set(`v${i}`, searchCriteria[i].value);
+      }
+      
+      // Set the sort parameter
+      newParams.set('sort', field);
+      
+      // Update the URL without reloading the page
+      const newUrl = window.location.pathname + '?' + newParams.toString();
+      window.history.pushState({}, '', newUrl);
+      
+      // Apply the sort and filter
       if (field != 'random') {
         sorting(items, field);
         advancedFilterItems(items, searchCriteria);
@@ -644,6 +687,28 @@ document.querySelector("#fieldSelect").addEventListener("change", function(e) {
  window.addEventListener('load', function() {
     // Initialize search state based on URL
     const urlParams = new URLSearchParams(window.location.search);
+    
+    // Handle sort parameter from URL if present
+    if (urlParams.has('sort')) {
+        const sortValue = urlParams.get('sort');
+        const sortOptions = document.querySelectorAll('.browse-sort-item');
+        
+        // Update sort UI to match URL parameter
+        sortOptions.forEach((option) => {
+            option.classList.remove('active');
+            if (option.dataset.filter === sortValue) {
+                option.classList.add('active');
+                document.getElementById('sortFilter').innerHTML = option.textContent;
+                
+                // Apply the sort if it's not random
+                if (sortValue !== 'random') {
+                    sorting(items, sortValue);
+                } else {
+                    shuffle(items);
+                }
+            }
+        });
+    }
     
     // If we have URL search parameters, handle advanced search
     if (urlParams.toString()) {
@@ -757,8 +822,152 @@ document.getElementById('fieldSelect').addEventListener('change', function(e) {
         // Show the advanced search modal
         new bootstrap.Modal(document.getElementById('advancedSearchModal')).show();
     }
+    
+    // Update mobile button text
+    const selectedField = document.getElementById('selectedField');
+    if (selectedField) {
+        selectedField.textContent = e.target.options[e.target.selectedIndex].text;
+    }
+});
+
+// Handle mobile dropdown clicks
+document.addEventListener('click', function(e) {
+    if (e.target.matches('.dropdown-item[data-field]')) {
+        const field = e.target.getAttribute('data-field');
+        const fieldSelect = document.getElementById('fieldSelect');
+        const selectedField = document.getElementById('selectedField');
+        
+        if (field === 'advanced') {
+            // Show advanced search modal
+            new bootstrap.Modal(document.getElementById('advancedSearchModal')).show();
+            return;
+        }
+        
+        // Update the hidden select and mobile button text
+        if (fieldSelect) {
+            fieldSelect.value = field;
+            // Trigger change event
+            fieldSelect.dispatchEvent(new Event('change'));
+        }
+        
+        if (selectedField) {
+            selectedField.textContent = e.target.textContent;
+        }
+    }
 });
 
 // Event listener for hash changes
 window.addEventListener("hashchange", handleHashChange);
+
+/**
+ * Display active filter indicators below the search box
+ * Shows small buttons for each active advanced search filter
+ * 
+ * @param {Array} searchCriteria - Array of active search criteria
+ */
+function displayActiveFilters(searchCriteria) {
+    const activeFiltersDiv = document.getElementById('activeFilters');
+    if (!activeFiltersDiv) return;
+    
+    // Clear existing filters
+    activeFiltersDiv.innerHTML = '';
+    
+    if (!searchCriteria || searchCriteria.length === 0) {
+        return;
+    }
+    
+    searchCriteria.forEach((criteria, index) => {
+        if (!criteria.value) return;
+        
+        const filterButton = document.createElement('button');
+        filterButton.className = 'btn btn-sm btn-outline-success me-2 mb-1';
+        filterButton.type = 'button';
+        filterButton.setAttribute('data-filter-index', index);
+        
+        // Get field display name with better facet field handling
+        let fieldDisplayName = criteria.field;
+        if (criteria.field === 'all') {
+            fieldDisplayName = 'All Fields';
+        } {% for f in fields %} else if (criteria.field === '{{f.field}}') {
+            fieldDisplayName = '{% if f.display_name %}{{f.display_name}}{% else %}{{f.field | capitalize }}{% endif %}';
+        } {% endfor %} else {
+            // Capitalize first letter and replace underscores with spaces
+            fieldDisplayName = criteria.field.charAt(0).toUpperCase() + 
+                criteria.field.slice(1).replace(/_/g, ' ');
+        }
+        
+        // For single field filters (like facets), don't show the boolean operator
+        const showBoolean = searchCriteria.length > 1 && criteria.boolean !== 'AND';
+        
+        filterButton.innerHTML = `
+            <span class="me-1">${showBoolean ? criteria.boolean + ' ' : ''}${fieldDisplayName}: "${criteria.value}"</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+            </svg>
+        `;
+        
+        // Add click handler to remove this filter
+        filterButton.addEventListener('click', function() {
+            // For hash-based searches (facets), handle differently
+            if (window.location.hash && !window.location.search) {
+                resetFilter();
+            } else {
+                removeActiveFilter(index);
+            }
+        });
+        
+        activeFiltersDiv.appendChild(filterButton);
+    });
+}
+
+/**
+ * Remove a specific filter from active search criteria
+ * 
+ * @param {number} filterIndex - Index of the filter to remove
+ */
+function removeActiveFilter(filterIndex) {
+    // If we're in a hash-based search (facet), just reset completely
+    if (window.location.hash && !window.location.search) {
+        resetFilter();
+        return;
+    }
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchCriteria = [];
+    let index = 0;
+    
+    // Rebuild search criteria excluding the removed filter
+    while (urlParams.has(`f${index}`)) {
+        if (index !== filterIndex) {
+            searchCriteria.push({
+                boolean: urlParams.get(`b${index}`),
+                field: urlParams.get(`f${index}`),
+                value: urlParams.get(`v${index}`)
+            });
+        }
+        index++;
+    }
+    
+    // If no criteria left, reset completely
+    if (searchCriteria.length === 0) {
+        resetFilter();
+        return;
+    }
+    
+    // Rebuild URL with remaining criteria
+    const newParams = new URLSearchParams();
+    searchCriteria.forEach((criteria, newIndex) => {
+        newParams.set(`b${newIndex}`, criteria.boolean);
+        newParams.set(`f${newIndex}`, criteria.field);
+        newParams.set(`v${newIndex}`, criteria.value);
+    });
+    
+    // Preserve sort parameter if it exists
+    if (urlParams.has('sort')) {
+        newParams.set('sort', urlParams.get('sort'));
+    }
+    
+    // Update URL and apply new search
+    window.location = window.location.pathname + '?' + newParams.toString();
+}
 </script>
