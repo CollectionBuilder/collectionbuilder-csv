@@ -6,9 +6,8 @@ custom-foot: js/browse-js.html
 {%- assign fields = site.data.config-browse -%}
 
 <div class="row mb-2">
-<div class="col-9">{{ content }}</div>
-
-<div class="col-3 justify-content-center">{% if site.data.theme.advanced-search == true %}{% include advanced-search-modal.html %}{% endif %}</div>
+    <div class="col-7 col-md-9">{{ content }}</div>
+    <div class="col-5 col-md-3 text-end text-md-start">{% if site.data.theme.advanced-search == true %}{% include advanced-search-modal.html %}{% endif %}</div>
 </div>
 <div class="row mb-3 justify-content-center">
     <div class="col-md-8 text-center">
