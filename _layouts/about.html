@@ -14,42 +14,40 @@ layout: default
 {%- endif -%}
 
 <style>
-    .jumbotron {
-        padding: 4rem 2rem;
+    #about-feature {
+        padding: 4rem 0;
         margin-bottom: 1rem;
         background-color: #e9ecef;
-    }  
-    #about-feature {
         background-image: url({{ jumboSrc }});
         background-size: cover;
         background-repeat: no-repeat;
         background-position: {{ page.position | default: 'center' }};
     }
     {% if page.padding %}
-    .jumbo-title-box {
+    .about-title-box {
         padding-top: {{ page.padding }};
         padding-bottom: 1em;
     }
     {%- endif -%}
-    .jumbo-title {
+    .about-title {
         padding-left: 15% !important;
     }
     @media screen and (max-width: 576px) {
-        .jumbo-title-box {
+        .about-title-box {
             max-height: 500px; 
         }
-        .jumbo-title {
+        .about-title {
             text-align: center !important;
             padding-left: 0 !important;
         }
     }
 </style>
-<div class="jumbotron feature px-0" id="about-feature">
-    <div class="jumbo-title-box">
+<div id="about-feature">
+    <div class="about-title-box">
         {% unless page.heading == false and page.text == false %}
-        <div class="p-2 text-start text-white bg-dark bg-opacity-75 jumbo-title">
+        <div class="p-2 text-start text-white bg-dark bg-opacity-75 about-title">
             {% unless page.heading == false %}<h2 class="display-1">{{ page.heading | default: "About the Collection" }}</h2>{% endunless %}
-            {% unless page.text == false %}<p class="jumbo-tagline">{{ page.text | default: site.tagline }}</p>{% endunless %}
+            {% unless page.text == false %}<p class="about-tagline">{{ page.text | default: site.tagline }}</p>{% endunless %}
         </div>
         {% endunless %}
     </div>
