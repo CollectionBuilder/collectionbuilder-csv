@@ -25,7 +25,7 @@
 {%- assign captions = include.caption | split: ";" %}
 {%- assign alts = include.alt | split: ";" -%}
 {%- assign links = include.link | split: ";" -%}
-<div class="row">
+<div class="row feature-include">
     {% for i in figures %}
     {% if i contains "/" %}
         {%- capture image_src -%}{{ i | relative_url }}{%- endcapture -%}
@@ -39,7 +39,7 @@
         {%- capture image_alt -%}{{ alts[forloop.index0] | default: figure.image_alt_text | default: figure.description | default: figure.title }}{%- endcapture -%}
         {%- capture image_src -%}{{ figure.image_small | default: figure.object_location | relative_url }}{% endcapture %}
     {% endif %}
-    <div class="col-md {% if figcount == 1 %}text-start{% elsif forloop.first %}text-md-end{% elsif forloop.last %}text-md-start{% else %}text-center{% endif %}">
+    <div class="col-md {% if figcount == 1 %}{% elsif forloop.first %}text-md-end{% elsif forloop.last %}text-md-start{% else %}text-center{% endif %}">
         <figure class="figure {% if include.width %}feature-w-{{ include.width }}{% endif %}">
             <a href="{{ image_link | default: image_src }}">
                 <img class="figure-img img-fluid rounded lazyload w-100" alt="{{ image_alt | default: image_caption | escape }}"  title="click to see item" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'%3E%3C/svg%3E" data-src="{{ image_src }}" >

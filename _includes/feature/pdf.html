@@ -31,7 +31,7 @@
 {%- capture pdf_link -%}{{ '/items/' | relative_url }}{% if item.parentid %}{{ item.parentid }}.html#{{ item.objectid }}{% else %}{{ item.objectid }}.html{% endif %}{%- endcapture -%}
 {%- capture pdf_caption -%}{% if include.caption %}{{ include.caption }}{% else %}{{ item.title }}{% endif %}{%- endcapture -%}
 {% endif %}
-<div class="text-center text-md-start">
+<div class="feature-include">
     <figure class="figure border rounded p-1 feature-w-{{ include.width | default: '100' }}">
         <div class="{% unless include.height %}ratio ratio-{{ include.ratio | default: '1x1' }}{% endunless %}">
             <object aria-label="pdf embed of {{ pdf_caption | escape }}" {% if include.height %}width="100%" height="{{ include.height }}"{% endif %} data="{{ src }}">

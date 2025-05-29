@@ -146,8 +146,9 @@ $toc-a-color: #191919 !default;
         min-width:0;
         padding: 2rem 5rem 0 3rem;
         overflow-x: hidden;
-
-        /* creating a narrow text column */
+    }
+    /* creating a narrow text column */
+    #about-contents-wrapper > {
         h2 {
             font-weight: bold;
         }
@@ -164,7 +165,6 @@ $toc-a-color: #191919 !default;
         grid-area: credits;
         order: 2;
         min-width:0;
-        padding: 2rem 0 0 3rem;
     }
     #about-toc { 
         position: -webkit-sticky;
@@ -209,9 +209,30 @@ $toc-a-color: #191919 !default;
     }
 }
 
-/* narrow text block for page-narrow layout */
+/* page-narrow layout narrow text block */
 .page-narrow, .narrow-content {
     max-width: 750px;
     margin-left: auto;
     margin-right: auto;
+}
+
+/* about-narrow layout styles */ 
+.about-narrow-contents > {
+    h2 {
+        font-weight: bold;
+        padding-top: 100px;
+        border-top: 1px dotted black;
+    }
+    h1, h2, h3, h4, h5, h6 {
+        max-width: 650px;
+        margin: 1.5rem auto 1rem;
+    }
+    p, .narrow-content, hr, .footnotes, ol, ul, blockquote {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 650px;
+    }
+    .feature-include {
+        text-align: center !important;
+    }
 }
