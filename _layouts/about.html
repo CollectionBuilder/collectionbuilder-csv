@@ -34,11 +34,10 @@ layout: default
     }
     @media screen and (max-width: 576px) {
         .about-title-box {
-            max-height: 500px; 
+            padding-top: min({{ page.padding }}, 45vh);
         }
         .about-title {
-            text-align: center !important;
-            padding-left: 0 !important;
+            padding-left: 1rem !important;
         }
     }
 </style>
