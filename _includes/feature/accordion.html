@@ -11,7 +11,7 @@
     - "heading_level" = customize the level of the heading if necessary for accessibility, choose "h1", "{{ include.heading_level | default: 'h2' | strip }}", "h3", etc (optional, default "{{ include.heading_level | default: 'h2' | strip }}")
 
 {%- endcomment -%}
-<div class="accordion mb-3" id="accordionInclude">
+<div class="accordion mb-3 narrow-content" id="accordionInclude">
     <div class="accordion-item">
       <{{ include.heading_level | default: 'h2' | strip }} class="accordion-header" id="headingOne">
         <button class="accordion-button{% unless include.open %} collapsed{% endunless %}" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="{% if include.open == true %}true{% else %}false{% endif %}" aria-controls="collapseOne">
