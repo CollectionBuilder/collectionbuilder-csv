@@ -884,7 +884,16 @@ function displayActiveFilters(searchCriteria) {
         if (!criteria.value) return;
         
         const filterButton = document.createElement('button');
-        filterButton.className = 'btn btn-sm btn-outline-success me-2 mb-1';
+        
+        // Set button color based on boolean operator
+        let buttonClass = 'btn btn-sm btn-outline-success me-2 mb-1'; // Default for AND
+        if (criteria.boolean === 'NOT') {
+            buttonClass = 'btn btn-sm btn-outline-danger me-2 mb-1';
+        } else if (criteria.boolean === 'OR') {
+            buttonClass = 'btn btn-sm btn-outline-dark me-2 mb-1';
+        }
+        
+        filterButton.className = buttonClass;
         filterButton.type = 'button';
         filterButton.setAttribute('data-filter-index', index);
         
