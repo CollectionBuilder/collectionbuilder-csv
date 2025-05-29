@@ -45,10 +45,10 @@ layout: default
 </style>
 <div id="about-feature">
     <div class="about-title-box">
-        {% if page.heading or page.text %}
+        {% if page.heading or page.sub-heading %}
         <div class="p-2 text-start text-white bg-dark bg-opacity-75 about-title">
             {% if page.heading %}<h2 class="display-1">{{ page.heading }}</h2>{% endif %}
-            {% if page.text  %}<p class="about-tagline">{{ page.text }}</p>{% endif %}
+            {% if page.sub-heading  %}<p class="about-tagline">{{ page.sub-heading }}</p>{% endif %}
         </div>
         {% endif %}
     </div>
