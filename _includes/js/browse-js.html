@@ -1107,9 +1107,9 @@ function removeActiveFilter(filterIndex) {
 }
 
 /**
- * Normalize date string to yyyy-mm-dd format
- * Handles both yyyy-mm-dd and mm/dd/yyyy formats
- * If only year is provided, returns just the year for partial matching
+ * Normalize date string to yyyy-mm-dd, yyyy-mm, or yyyy formats
+ * Handles yyyy-mm-dd, yyyy-mm, mm/dd/yyyy, and yyyy formats
+ * If only year or year-month is provided, returns type for partial matching
  * 
  * @param {string} dateStr - Date string to normalize
  * @return {Object} Object with normalized date and type info
@@ -1125,6 +1125,17 @@ function normalizeDateString(dateStr) {
             normalized: cleaned,
             type: 'year',
             year: parseInt(cleaned)
+        };
+    }
+
+    // Check for yyyy-mm format
+    const yearMonthMatch = cleaned.match(/^(\d{4})-(\d{1,2})$/);
+    if (yearMonthMatch) {
+        const [, year, month] = yearMonthMatch;
+        return {
+            normalized: `${year}`,
+            type: 'year',
+            year: parseInt(year)
         };
     }
     
