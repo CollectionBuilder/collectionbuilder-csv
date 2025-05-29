@@ -8,10 +8,10 @@ credits: true
 featured-image: https://cdil.lib.uidaho.edu/images/palouse_sm.jpg
 # set background-position for featured image, "center", "top", "bottom"
 position: top
-# major heading to display over featured image. By default this will be the site title. Give the value false for no heading.
+# major heading to display over featured image
 heading: About the Collection
-# paragraph text below heading in featured image. By default this will be the site tagline. Give the value false for no text.
-text: false
+# paragraph text below heading in featured image
+text: 
 # additional padding added to the feature to increase size. Give value in em or px, e.g. "5em".
 padding: 8em
 # Edit the markdown on in this file to describe your collection

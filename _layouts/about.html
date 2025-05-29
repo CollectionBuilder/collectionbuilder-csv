@@ -44,12 +44,12 @@ layout: default
 </style>
 <div id="about-feature">
     <div class="about-title-box">
-        {% unless page.heading == false and page.text == false %}
+        {% if page.heading or page.text %}
         <div class="p-2 text-start text-white bg-dark bg-opacity-75 about-title">
-            {% unless page.heading == false %}<h2 class="display-1">{{ page.heading | default: "About the Collection" }}</h2>{% endunless %}
-            {% unless page.text == false %}<p class="about-tagline">{{ page.text | default: site.tagline }}</p>{% endunless %}
+            {% if page.heading %}<h2 class="display-1">{{ page.heading }}</h2>{% endif %}
+            {% if page.text  %}<p class="about-tagline">{{ page.text }}</p>{% endif %}
         </div>
-        {% endunless %}
+        {% endif %}
     </div>
 </div>
 {% endif %}
