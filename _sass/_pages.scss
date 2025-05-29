@@ -40,7 +40,85 @@
 }
 
 
+
 /* browse */
+
+.date-range-inputs {
+    display: none;
+    flex: 1; /* Allow it to grow/shrink with available space */
+    min-width: 200px; /* Prevent it from getting too small */
+}
+
+.date-range-inputs.active {
+    display: flex;
+}
+
+.date-input-group {
+    display: flex;
+    flex-wrap: nowrap; /* Keep inputs on same line */
+    gap: 0.25rem; /* Reduce gap to save space */
+    align-items: center;
+    margin-top: 0; /* Remove top margin to align with search box */
+    width: 100%;
+}
+
+.date-input-group label {
+    margin: 0;
+    font-weight: 500;
+    white-space: nowrap;
+    font-size: 0.875rem;
+}
+
+.date-input-group input {
+    flex: 1;
+    min-width: 80px; /* Reduce minimum width */
+    height: calc(1.5em + 0.75rem + 2px); /* Match Bootstrap form-control height */
+    padding: 1.35rem 0.5rem; /* Reduce padding to save space */
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem; /* Add border radius back for consistency */
+    font-size: 1rem; /* Match main input font size */
+}
+
+/* Specific styling for date inputs in advanced search modal */
+.modal .date-input-group input {
+    padding: 0.25rem 0.5rem; /* Smaller padding for modal */
+    font-size: 0.875rem; /* Smaller font size to match form-control-sm */
+    height: calc(1.5em + 0.5rem + 2px); /* Adjust height for smaller inputs */
+}
+
+.date-separator {
+    font-size: 0.875rem;
+    color: #6c757d;
+    padding: 0 0.25rem;
+    white-space: nowrap;
+}
+
+@media (max-width: 576px) {
+    .date-range-inputs {
+        width: auto; /* Let it size naturally instead of fixed 60% */
+        min-width: 180px; /* Smaller minimum on mobile */
+    }
+    
+    .date-input-group {
+        flex-wrap: nowrap;
+        gap: 0.125rem; /* Even smaller gap on mobile */
+    }
+    
+    .date-input-group input {
+        min-width: 60px; /* Smaller inputs on mobile */
+        padding: 1.75rem 0.25rem; /* Less padding on mobile */
+    }
+    
+    /* Keep modal inputs small on mobile too */
+    .modal .date-input-group input {
+        padding: 0.25rem 0.375rem;
+    }
+    
+    .date-separator {
+        padding: 0 0.125rem;
+    }
+}
+
 
 /* map */
 #map { height: 750px; z-index: 98; }
