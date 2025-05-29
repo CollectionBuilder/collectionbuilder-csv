@@ -57,7 +57,7 @@
         var i, size;
         var items = "";
         {% if include.shuffle == true %}shuffle(array);{% endif %}
-        for (i = 0; i < array.length; i++) {
+        for (let i = 0; i < array.length; i++) {
             size = mapSize(array[i][1]);
             items += '<a class="btn btn-{{ include.button | default: "outline-primary" }} m-2 tagcloud' + size + '" href="{{ "/browse.html" | relative_url }}#' + array[i][2] + ':' + encodeURIComponent(array[i][0]) + '" >' + array[i][0] + '</a>';
         }
