@@ -46,6 +46,7 @@
             <div class="col-5 col-md-3">
                 <select class="form-select form-select-sm field-select">
                     <option value="all">All Fields</option>
+                    <option value="title">Title</option>
                     {% for f in site.data.config-browse %}
                     <option value="{{ f.field }}">{% if f.display_name %}{{ f.display_name }}{% else %}{{ f.field | capitalize }}{% endif %}</option>
                     {% endfor %}
