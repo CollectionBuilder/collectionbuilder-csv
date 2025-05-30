@@ -4,14 +4,29 @@
 {%- assign items = site.data[site.metadata] | where_exp: 'item','item.objectid and item.parentid == nil' -%}
 {% endif %}
 {%- assign fields = site.data.config-browse -%}
+{% unless site.data.theme.faceted-search or site.data.theme.advanced-search %}
+{% include js/browse-simple-js.html %}
+{% else %}
 <script>
+/**
+ * BROWSE PAGE JAVASCRIPT - Less Janky Version
+ * 
+ * Handles collection browsing with search, filtering, sorting, and URL state management.
+ * Supports both simple hash-based searches and advanced parameter-based searches.
+ */
 
-/* add items */
+// =============================================================================
+// INITIALIZATION & DATA SETUP
+// =============================================================================
+
+/**
+ * Initialize items array from Jekyll site data
+ */
 var items = [
     {% for item in items %}
     { {% for f in fields %}{% if item[f.field] %}{{ f.field | escape | jsonify }}:{{ item[f.field] | strip | jsonify }}, {%- endif -%}{%- endfor -%}
         {% if item.image_thumb %}"img": {{ item.image_thumb | relative_url | jsonify }}, {%- endif -%} 
-        {% if item.display_template %}"template": {{ item.display_template | jsonify }}, {%- endif -%}
+        {% if item.display_template %}"display_template": {{ item.display_template | jsonify }}, {%- endif -%}
         {% if item.format %}"format": {{ item.format | jsonify }}, {%- endif -%}
         {% if item.image_alt_text %}"alt": {{ item.image_alt_text | escape | jsonify }}, {%- endif -%}
         "title":{{ item.title | strip | escape | jsonify }},
@@ -19,207 +34,1015 @@ var items = [
         "id":{{ item.objectid | jsonify }} }{% unless forloop.last %},{% endunless %}{%- endfor -%}
 ];
 
+// Valid field names for URL-based searches
+const validFields = [{% for f in fields %}"{{ f.field }}",{% endfor %}"title","display_template"];
+
+// Date field names - add your date fields here
+const dateFields = ['date', 'created', 'published', 'modified', 'issued', 'date_created', 'date_published'];
+
+// Cache DOM elements
+var loadingIcon, filterTextBox, browseItemsDiv;
+
 {% include helpers/get-icon.js %}
 
-/* function to create cards for each item */ 
-function makeCard(obj) {
-    // placeholder image for lazyload
-    var placeholder = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'%3E%3C/svg%3E";
-    // find item link
-    var itemHref = `{{ '/items/' | relative_url }}${ obj.parent ? obj.parent + ".html#" + obj.id : obj.id + ".html"}`; 
-    // find image
-    var imgSrc, thumbIcon;
-    // if there is a thumb in the csv display it
-    if(obj.img) {
-        imgSrc = obj.img;
-    // else add an icon based on display_template or format
-    } else {
-        thumbIcon = getIcon(obj.template,obj.format,"thumb");
-    }
-    var imgAlt = obj.alt ? obj.alt : obj.title;
+// =============================================================================
+// CARD GENERATION
+// =============================================================================
 
-    // start card
-    var card = '<div class="item col-lg-4 col-md-6 mb-2"><div class="card">';
-    // top image for items with image
-    if(imgSrc) {
-        card += '<a href="' + itemHref + '"> <img class="card-img-top lazyload" src="' + placeholder + '" data-src="' + imgSrc + '" alt="' + imgAlt + '"></a>';
+/**
+ * Creates HTML card for displaying a collection item
+ */
+function makeCard(obj) {
+    const placeholder = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'%3E%3C/svg%3E";
+    const itemHref = `{{ '/items/' | relative_url }}${ obj.parent ? obj.parent + ".html#" + obj.id : obj.id + ".html"}`;
+    
+    let card = '<div class="item col-lg-4 col-md-6 mb-2"><div class="card">';
+    
+    // Image or icon
+    if(obj.img) {
+        card += `<a href="${itemHref}"><img class="card-img-top lazyload" src="${placeholder}" data-src="${obj.img}" alt="${obj.alt || obj.title}"></a>`;
     }
-    // title
-    card += '<div class="card-body text-center"> <h3 class="card-title h4"><a href="' + itemHref + '" class="text-dark">' + obj.title + '</a></h3>';
-    // icon thumb for item without image
-    if(thumbIcon){
-        card += '<p><a href="' + itemHref + '">' + thumbIcon + '</a></p>';
+    
+    // Title
+    card += `<div class="card-body text-center"><h3 class="card-title h4"><a href="${itemHref}" class="text-dark">${obj.title}</a></h3>`;
+    
+    // Icon for items without images
+    if(!obj.img) {
+        const thumbIcon = getIcon(obj.display_template, obj.format, "thumb");
+        if(thumbIcon) card += `<p><a href="${itemHref}">${thumbIcon}</a></p>`;
     }
-    // other fields
+    
+    // Field data
     card += '<p class="card-text">';
     {% for f in fields %}{% unless f.hidden == 'true' %}
     if(obj[{{ f.field | jsonify }}]){
-    {% if f.display_name %}card += '<strong>{{ f.display_name }}:</strong> ';{% endif %}
-    {% if f.btn == 'true' %}
-    var btns = obj[{{ f.field | jsonify }}].split(";");
-    for (var i = 0, len = btns.length; i < len; i++) {
-        if(btns[i] != "") {
-        card += '<a class="btn btn-sm btn-secondary m-1 text-wrap" href="{{ page.url | relative_url }}#' + encodeURIComponent(btns[i].trim()) + '">' + btns[i].trim() + '</a>';
-        }
-    }
-    {% else %}
-    card += obj[{{ f.field | jsonify }}];
-    {% endif %}
-    {% unless forloop.last %}card += '<br>';{% endunless %}
+        {% if f.display_name %}card += '<strong>{{ f.display_name }}:</strong> ';{% endif %}
+        {% if f.btn == 'true' %}
+        const btns = obj[{{ f.field | jsonify }}].split(";");
+        btns.forEach(btn => {
+            if(btn.trim()) {
+                card += `<a class="btn btn-sm btn-secondary m-1 text-wrap" href="{{ page.url | relative_url }}#{{ f.field }}:${encodeURIComponent(btn.trim())}">${btn.trim()}</a>`;
+            }
+        });
+        {% else %}
+        card += obj[{{ f.field | jsonify }}];
+        {% endif %}
+        {% unless forloop.last %}card += '<br>';{% endunless %}
     }
     {% endunless %}{% endfor %}
     card += '</p>';
-    // media type
-    if(obj.template && obj.template != "") {
-        mediaIcon = getIcon(obj.template,obj.format,"hidden");
-        card += '<p class="card-text"><small><a class="btn btn-sm btn-outline-secondary" href="{{ page.url | relative_url }}#' + encodeURIComponent(obj.template) + '">' + 
-        obj.template.toUpperCase().replace("_"," ") + ' ' + mediaIcon + '</a></small></p>';
+    
+    // Media type badge
+    if(obj.display_template) {
+        const mediaIcon = getIcon(obj.display_template, obj.format, "hidden");
+        card += `<p class="card-text"><small><a class="btn btn-sm btn-outline-secondary" href="{{ page.url | relative_url }}#display_template:${encodeURIComponent(obj.display_template)}">${obj.display_template.toUpperCase().replace("_"," ")} ${mediaIcon}</a></small></p>`;
     }
-    // view button
-    card += '<hr><a href="' + itemHref + '" class="btn btn-sm btn-light" title="link to ' + obj.title + '">View Full Record</a>';
-    // close divs
-    card += '</div></div></div>';
-    // send back big string
+    
+    card += `<hr><a href="${itemHref}" class="btn btn-sm btn-light" title="link to ${obj.title}">View Full Record</a></div></div></div>`;
     return card;
 }
 
-/* filter items function */
-function filterItems(arr,q) {
-    // show loading icon
-    loadingIcon.classList.remove("d-none");
-    // dont filter if no q 
-    if (q=="") { 
-        var filteredItems = arr; 
-    } else {
-        q = q.trim().toUpperCase(); 
-        // js indexOf filter
-        var filteredItems = [];
-        for (var i = 0, len = arr.length; i < len; i++) {
-            var val = "";
-            for (var k in arr[i]) { 
-                if (k != "img") { val += arr[i][k] + " "; }
+// =============================================================================
+// DATE UTILITIES
+// =============================================================================
+
+/**
+ * Check if a field name represents a date field
+ */
+function isDateField(fieldName) {
+    return dateFields.includes(fieldName.toLowerCase());
+}
+
+/**
+ * Normalize date string to consistent format for comparison
+ * Handles: yyyy, yyyy-mm, yyyy-mm-dd, mm/dd/yyyy
+ */
+function normalizeDateString(dateStr) {
+    if (!dateStr) return null;
+    
+    const cleaned = dateStr.trim();
+    
+    // Year only (4 digits)
+    if (/^\d{4}$/.test(cleaned)) {
+        return { normalized: cleaned, type: 'year', year: parseInt(cleaned) };
+    }
+
+    // Year-Month format yyyy-mm
+    const yearMonthMatch = cleaned.match(/^(\d{4})-(\d{1,2})$/);
+    if (yearMonthMatch) {
+        const [, year, month] = yearMonthMatch;
+        return {
+            normalized: `${year}-${month.padStart(2, '0')}`,
+            type: 'year-month',
+            year: parseInt(year),
+            month: parseInt(month)
+        };
+    }
+
+    // ISO format yyyy-mm-dd
+    const isoMatch = cleaned.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+    if (isoMatch) {
+        const [, year, month, day] = isoMatch;
+        return {
+            normalized: `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`,
+            type: 'full',
+            year: parseInt(year),
+            month: parseInt(month),
+            day: parseInt(day)
+        };
+    }
+    
+    // US format mm/dd/yyyy
+    const usMatch = cleaned.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+    if (usMatch) {
+        const [, month, day, year] = usMatch;
+        return {
+            normalized: `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`,
+            type: 'full',
+            year: parseInt(year),
+            month: parseInt(month),
+            day: parseInt(day)
+        };
+    }
+    
+    return null;
+}
+
+/**
+ * Check if a date falls within a range (handles partial dates)
+ */
+function isDateInRange(itemDate, startDate, endDate) {
+    const itemDateObj = normalizeDateString(itemDate);
+    if (!itemDateObj) return false;
+    
+    const startDateObj = startDate ? normalizeDateString(startDate) : null;
+    const endDateObj = endDate ? normalizeDateString(endDate) : null;
+    
+    // Year-only comparison
+    if (itemDateObj.type === 'year') {
+        let inRange = true;
+        if (startDateObj) inRange = inRange && itemDateObj.year >= startDateObj.year;
+        if (endDateObj) inRange = inRange && itemDateObj.year <= endDateObj.year;
+        return inRange;
+    }
+    
+    // Year-Month comparison
+    if (itemDateObj.type === 'year-month') {
+        let inRange = true;
+        
+        if (startDateObj) {
+            // Convert start date to year-month format for comparison
+            let startNormalized;
+            if (startDateObj.type === 'year') {
+                startNormalized = `${startDateObj.year}-01`;
+            } else if (startDateObj.type === 'year-month') {
+                startNormalized = startDateObj.normalized;
+            } else {
+                startNormalized = startDateObj.normalized.substring(0, 7); // Extract yyyy-mm from yyyy-mm-dd
             }
-            if(val.toUpperCase().indexOf(q) != -1){
-                filteredItems.push(arr[i]);
+            inRange = inRange && itemDateObj.normalized >= startNormalized;
+        }
+        
+        if (endDateObj) {
+            // Convert end date to year-month format for comparison
+            let endNormalized;
+            if (endDateObj.type === 'year') {
+                endNormalized = `${endDateObj.year}-12`;
+            } else if (endDateObj.type === 'year-month') {
+                endNormalized = endDateObj.normalized;
+            } else {
+                endNormalized = endDateObj.normalized.substring(0, 7); // Extract yyyy-mm from yyyy-mm-dd
             }
+            inRange = inRange && itemDateObj.normalized <= endNormalized;
+        }
+        
+        return inRange;
+    }
+    
+    // Full date comparison
+    if (itemDateObj.type === 'full') {
+        let inRange = true;
+        if (startDateObj) {
+            let startNormalized;
+            if (startDateObj.type === 'year') {
+                startNormalized = `${startDateObj.year}-01-01`;
+            } else if (startDateObj.type === 'year-month') {
+                startNormalized = `${startDateObj.normalized}-01`;
+            } else {
+                startNormalized = startDateObj.normalized;
+            }
+            inRange = inRange && itemDateObj.normalized >= startNormalized;
+        }
+        if (endDateObj) {
+            let endNormalized;
+            if (endDateObj.type === 'year') {
+                endNormalized = `${endDateObj.year}-12-31`;
+            } else if (endDateObj.type === 'year-month') {
+                // Get last day of the month
+                const year = endDateObj.year;
+                const month = endDateObj.month;
+                const lastDay = new Date(year, month, 0).getDate();
+                endNormalized = `${endDateObj.normalized}-${lastDay.toString().padStart(2, '0')}`;
+            } else {
+                endNormalized = endDateObj.normalized;
+            }
+            inRange = inRange && itemDateObj.normalized <= endNormalized;
+        }
+        return inRange;
+    }
+    
+    return false;
+}
+
+// =============================================================================
+// SEARCH & FILTER FUNCTIONS
+// =============================================================================
+
+/**
+ * Check if item matches search criteria (handles semicolon-separated values)
+ */
+function itemMatches(item, field, query, startDate, endDate) {
+    // Date field search
+    if (isDateField(field) && (startDate || endDate)) {
+        if (!item[field]) return false;
+        const fieldValues = item[field].toString().split(";");
+        return fieldValues.some(value => isDateInRange(value.trim(), startDate, endDate));
+    }
+    
+    // Text search
+    if (query && query !== "") {
+        const q = query.trim().toUpperCase();
+        
+        // Search all fields 
+        if (field === "all") {
+            for (let k in item) {
+                if (k !== "img" && item[k] && item[k].toString().toUpperCase().includes(q)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+        // Search specific field
+        if (item[field]) {
+            const fieldValues = item[field].toString().split(";");
+            return fieldValues.some(value => value.trim().toUpperCase().includes(q));
         }
     }
-    // add number 
-    document.querySelector("#numberOf").innerHTML = filteredItems.length + " of {{ items | size }} items";
     
-    // add stuff, make cards first in giant var, then add all at once to speed things up
-    var cards = "";
-    for (var i = 0, len = filteredItems.length; i < len; i++) {
-        cards += makeCard(filteredItems[i]);
-    }
-    browseItemsDiv.innerHTML = cards;
+    return false;
+}
 
-    // finish
-    if (q != "") {
-        filterTextBox.focus();
+/**
+ * Basic filter - searches single field with single query
+ */
+function filterItems(arr, query, field = "all", startDate = "", endDate = "") {
+    loadingIcon.classList.remove("d-none");
+    
+    let filteredItems = arr;
+    
+    // Apply filter if we have search criteria
+    if (query || startDate || endDate) {
+        filteredItems = arr.filter(item => itemMatches(item, field, query, startDate, endDate));
     }
+    
+    updateDisplay(filteredItems, query, field, startDate, endDate);
     loadingIcon.classList.add("d-none");
-};
+}
 
-/* Fisher-Yates shuffle https://bost.ocks.org/mike/shuffle/ */
+/**
+ * Advanced filter - handles multiple search criteria with boolean logic
+ */
+function advancedFilterItems(arr, searchCriteria) {
+    loadingIcon.classList.remove("d-none");
+    
+    const filteredItems = arr.filter(item => {
+        if (!searchCriteria?.length) return true;
+        
+        let result = true;
+        
+        for (let i = 0; i < searchCriteria.length; i++) {
+            const {boolean, field, value, startDate, endDate} = searchCriteria[i];
+            
+            // Skip empty criteria
+            if (!value && !startDate && !endDate) continue;
+            
+            const matches = itemMatches(item, field, value, startDate, endDate);
+            
+            // Apply boolean logic
+            switch(boolean) {
+                case 'OR':  result = result || matches; break;
+                case 'NOT': result = result && !matches; break;
+                default:    result = result && matches; break; // AND or first item
+            }
+        }
+        
+        return result;
+    });
+    
+    updateDisplay(filteredItems);
+    displayActiveFilters(searchCriteria);
+    loadingIcon.classList.add("d-none");
+}
+
+/**
+ * Update the display with filtered results
+ */
+function updateDisplay(filteredItems, query = "", field = "", startDate = "", endDate = "") {
+    // Use DocumentFragment for better performance when adding many cards
+    const fragment = document.createDocumentFragment();
+    const tempDiv = document.createElement('div');
+    
+    // Generate all cards at once
+    const cardsHTML = filteredItems.map(item => makeCard(item)).join('');
+    tempDiv.innerHTML = cardsHTML;
+    
+    // Move all cards to fragment
+    while (tempDiv.firstChild) {
+        fragment.appendChild(tempDiv.firstChild);
+    }
+    
+    // Single DOM update
+    browseItemsDiv.innerHTML = '';
+    browseItemsDiv.appendChild(fragment);
+    
+    // Update count
+    document.querySelector("#numberOf").innerHTML = `${filteredItems.length} of {{ items | size }} items`;
+    
+    // Focus active input (only if needed)
+    if (query || startDate || endDate) {
+        const activeInput = document.querySelector('#filterTextBox:not([style*="display: none"]), #startDate, #endDate');
+        if (activeInput && document.activeElement !== activeInput) {
+            activeInput.focus();
+        }
+    }
+    
+    // Show filter indicators for basic search
+    if (query || startDate || endDate) {
+        const searchCriteria = [{
+            boolean: 'AND',
+            field: field,
+            value: isDateField(field) ? `${startDate || ''} - ${endDate || ''}`.trim().replace(/^-\s*|-\s*$/g, '') : query,
+            startDate: startDate,
+            endDate: endDate
+        }];
+        displayActiveFilters(searchCriteria);
+    } else if (arguments.length <= 1) { // Only clear if not called from advancedFilterItems
+        displayActiveFilters([]);
+    }
+}
+
+// =============================================================================
+// UI INTERACTION HANDLERS
+// =============================================================================
+
+/**
+ * Toggle between text and date inputs based on field selection
+ */
+function toggleDateInputs(fieldName, container) {
+    const textInput = container.querySelector('.search-input, #filterTextBox');
+    const dateInputs = container.querySelector('.date-range-inputs, #dateRangeInputs');
+    
+    if (!textInput || !dateInputs) return;
+    
+    if (isDateField(fieldName)) {
+        textInput.style.display = 'none';
+        dateInputs.style.display = 'block';
+        dateInputs.classList.add('active');
+    } else {
+        textInput.style.display = 'block';
+        dateInputs.style.display = 'none';
+        dateInputs.classList.remove('active');
+    }
+}
+
+/**
+ * Handle basic search form submission
+ */
+function submitFilter() {
+    const query = filterTextBox.value;
+    const fieldSelect = document.querySelector("#fieldSelect");
+    const field = fieldSelect ? fieldSelect.value : "all";
+    
+    if (isDateField(field)) {
+        const startDate = document.querySelector("#startDate").value;
+        const endDate = document.querySelector("#endDate").value;
+        
+        if (!startDate && !endDate) return false;
+        
+        // Use URL parameters for date searches
+        const params = new URLSearchParams();
+        params.set('f0', field);
+        params.set('b0', 'AND');
+        if (startDate) params.set('start0', startDate);
+        if (endDate) params.set('end0', endDate);
+        params.set('v0', `${startDate || ''} - ${endDate || ''}`.trim().replace(/^-\s*|-\s*$/g, ''));
+        
+        window.location = window.location.pathname + "?" + params.toString();
+    } else {
+        // Use hash for text searches
+        const hash = field === "all" ? query : `${field}:${query}`;
+        window.location.hash = encodeURIComponent(hash);
+    }
+    return false;
+}
+
+/**
+ * Reset all filters and return to base URL
+ */
+function resetFilter() {
+    // Clear UI
+    filterTextBox.value = "";
+    {% unless site.data.theme.faceted-search == false %}document.querySelector("#fieldSelect").value = "all";{% endunless%}
+    
+    // Clear URL completely
+    if (window.location.hash || window.location.search) {
+        window.location = window.location.pathname;
+        return false;
+    }
+    
+    // Reset advanced search form
+    const searchRows = document.getElementById('searchRows');
+    if (searchRows) {
+        searchRows.innerHTML = '';
+        for (let i = 0; i < 3; i++) addSearchRow();
+    }
+    
+    filterItems(items, "", "all");
+    displayActiveFilters([]);
+    return false;
+}
+
+// =============================================================================
+// URL STATE MANAGEMENT
+// =============================================================================
+
+/**
+ * Handle hash-based searches (simple searches and facet links)
+ */
+function handleHashChange() {
+    const hash = decodeURIComponent(location.hash.substr(1));
+    
+    // ignore back to top hash
+    if (hash == 'maincontent') return;
+    // Don't interfere with parameter-based searches
+    if (!hash && window.location.search) return;
+    
+    // Clear parameters if using hash
+    if (hash && window.location.search) {
+        window.location = window.location.pathname + "#" + hash;
+        return;
+    }
+    
+    // No hash - show all items
+    if (!hash) {
+        filterTextBox.value = "";
+        {% unless site.data.theme.faceted-search == false %}document.querySelector("#fieldSelect").value = "all";{% endunless%}
+        filterItems(items, "", "all");
+        updateAdvancedSearchModal([]);
+        return;
+    }
+    
+    // Parse field:query format
+    let field = 'all';
+    let query = hash;
+
+    if (hash.includes(":")) {
+        const [potentialField, hashQuery] = hash.split(":");
+        if (validFields.includes(potentialField)) {
+            field = potentialField;
+            query = hashQuery;
+        } else {
+            // Invalid field - search everything with just the query part
+            field = 'all';
+            query = hashQuery; // Use only the part after the colon, not the full hash
+        }
+    }
+    
+    // Update UI and filter
+    filterTextBox.value = query;
+    {% unless site.data.theme.faceted-search == false %}
+    document.querySelector("#fieldSelect").value = field;{% endunless%}
+    filterItems(items, query, field);
+    
+    // Update advanced search modal
+    if (query) {
+        updateAdvancedSearchModal([{boolean: 'AND', field: field, value: query}], true);
+    }
+}
+
+// =============================================================================
+// ADVANCED SEARCH MODAL
+// =============================================================================
+
+/**
+ * Update advanced search modal to reflect current search state
+ */
+function updateAdvancedSearchModal(searchCriteria, forceUpdate = false) {
+    const searchRows = document.getElementById('searchRows');
+    if (!searchRows) return;
+    
+    // Add default empty rows if no criteria
+    if (!searchCriteria.length && searchRows.children.length === 0) {
+        for (let i = 0; i < 3; i++) addSearchRow();
+        return;
+    }
+    
+    // Rebuild rows from criteria
+    if (searchCriteria.length && (searchRows.children.length === 0 || forceUpdate)) {
+        searchRows.innerHTML = '';
+        searchCriteria.forEach(criteria => addSearchRow(criteria));
+        addSearchRow(); // Extra empty row
+    }
+}
+
+/**
+ * Add a search row to the advanced search modal
+ */
+function addSearchRow(values = {}) {
+    const template = document.getElementById('searchRowTemplate');
+    const searchRows = document.getElementById('searchRows');
+    const newRow = template.content.cloneNode(true);
+    const row = newRow.querySelector('.search-row');
+    
+    // Set initial values
+    if (values.boolean) row.querySelector('.boolean-operator').value = values.boolean;
+    if (values.field) {
+        row.querySelector('.field-select').value = values.field;
+        toggleDateInputs(values.field, row);
+    }
+    if (values.value && !isDateField(values.field)) {
+        row.querySelector('.search-input').value = values.value;
+    }
+    if (values.startDate) {
+        const startInput = row.querySelector('.start-date');
+        if (startInput) startInput.value = values.startDate;
+    }
+    if (values.endDate) {
+        const endInput = row.querySelector('.end-date');
+        if (endInput) endInput.value = values.endDate;
+    }
+    
+    // Hide boolean operator for first row
+    if (searchRows.children.length === 0) {
+        row.querySelector('.boolean-operator').style.visibility = 'hidden';
+    }
+    
+    // Event handlers
+    row.querySelector('.field-select').addEventListener('change', e => toggleDateInputs(e.target.value, row));
+    row.querySelector('.remove-row').addEventListener('click', () => {
+        row.remove();
+        if (searchRows.children.length === 1) {
+            searchRows.querySelector('.boolean-operator').style.visibility = 'hidden';
+        }
+    });
+    
+    // Enter key handlers
+    ['.search-input', '.start-date', '.end-date'].forEach(selector => {
+        const input = row.querySelector(selector);
+        if (input) {
+            input.addEventListener('keypress', e => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    submitAdvancedSearch();
+                }
+            });
+        }
+    });
+    
+    searchRows.appendChild(row);
+}
+
+/**
+ * Submit advanced search form
+ */
+function submitAdvancedSearch(event) {
+    if (event?.preventDefault) event.preventDefault();
+    
+    const form = document.getElementById('advancedSearchForm');
+    const rows = form.querySelectorAll('.search-row');
+    const params = new URLSearchParams();
+    
+    // Build parameters from form rows
+    rows.forEach((row, index) => {
+        const boolean = index === 0 ? 'AND' : row.querySelector('.boolean-operator').value;
+        const field = row.querySelector('.field-select').value;
+        
+        if (isDateField(field)) {
+            const startDate = row.querySelector('.start-date').value.trim();
+            const endDate = row.querySelector('.end-date').value.trim();
+            
+            if (startDate || endDate) {
+                params.set(`b${index}`, boolean);
+                params.set(`f${index}`, field);
+                params.set(`v${index}`, `${startDate || ''} - ${endDate || ''}`.trim().replace(/^-\s*|-\s*$/g, ''));
+                if (startDate) params.set(`start${index}`, startDate);
+                if (endDate) params.set(`end${index}`, endDate);
+            }
+        } else {
+            const value = row.querySelector('.search-input').value.trim();
+            if (value) {
+                params.set(`b${index}`, boolean);
+                params.set(`f${index}`, field);
+                params.set(`v${index}`, value);
+            }
+        }
+    });
+    
+    // Preserve sort
+    const activeSort = document.querySelector(".browse-sort-item.active");
+    if (activeSort) params.set('sort', activeSort.dataset.filter);
+    
+    window.location = window.location.pathname + "?" + params.toString();
+    
+    // Close modal
+    try {
+        const modal = bootstrap.Modal.getInstance(document.getElementById('advancedSearchModal'));
+        modal?.hide();
+    } catch (e) {
+        console.error('Could not close modal:', e);
+    }
+    
+    return false;
+}
+
+// =============================================================================
+// ACTIVE FILTER INDICATORS
+// =============================================================================
+
+/**
+ * Display active filter buttons below search box
+ */
+function displayActiveFilters(searchCriteria) {
+    const activeFiltersDiv = document.getElementById('activeFilters');
+    if (!activeFiltersDiv) return;
+    
+    activeFiltersDiv.innerHTML = '';
+    if (!searchCriteria?.length) return;
+    
+    const container = document.createElement('div');
+    container.className = 'd-flex flex-wrap align-items-center';
+    
+    // Create filter buttons
+    searchCriteria.forEach((criteria, index) => {
+        if (!criteria.value) return;
+        
+        const button = document.createElement('button');
+        button.className = `btn btn-sm btn-outline-${criteria.boolean === 'NOT' ? 'danger' : criteria.boolean === 'OR' ? 'warning' : 'success'} me-2 mb-1`;
+        button.type = 'button';
+        
+        // Get field display name
+        let fieldName = criteria.field === 'all' ? 'All Fields' : 
+        'display_template' === criteria.field ? 'Content Type' : 
+            {% for f in fields %}'{{f.field}}' === criteria.field ? '{% if f.display_name %}{{f.display_name}}{% else %}{{f.field | capitalize }}{% endif %}' : {% endfor %}
+            criteria.field.charAt(0).toUpperCase() + criteria.field.slice(1).replace(/_/g, ' ');
+        
+        // Format display value for dates
+        let displayValue = criteria.value;
+        if (isDateField(criteria.field) && (criteria.startDate || criteria.endDate)) {
+            if (criteria.startDate && criteria.endDate) {
+                displayValue = `${criteria.startDate} to ${criteria.endDate}`;
+            } else if (criteria.startDate) {
+                displayValue = `from ${criteria.startDate}`;
+            } else if (criteria.endDate) {
+                displayValue = `until ${criteria.endDate}`;
+            }
+        }
+        
+        const showBoolean = searchCriteria.length > 1 && criteria.boolean !== 'AND';
+        button.innerHTML = `
+            <span class="me-1">${showBoolean ? criteria.boolean + ' ' : ''}${fieldName}: "${displayValue}"</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+            </svg>
+        `;
+        
+        button.addEventListener('click', () => {
+            if (window.location.hash && !window.location.search) {
+                resetFilter();
+            } else {
+                removeActiveFilter(index);
+            }
+        });
+        
+        container.appendChild(button);
+    });
+    
+    // Add "Add Field" button
+    const addButton = document.createElement('button');
+    addButton.type = 'button';
+    addButton.className = 'btn btn-outline-secondary btn-sm mb-1{% if site.data.theme.advanced-search == false %} d-none{% endif %}';
+    addButton.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"></path>
+            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"></path>
+        </svg>
+        Add Field
+    `;
+    addButton.addEventListener('click', () => {
+        new bootstrap.Modal(document.getElementById('advancedSearchModal')).show();
+    });
+    
+    container.appendChild(addButton);
+    activeFiltersDiv.appendChild(container);
+}
+
+/**
+ * Remove a specific active filter by rebuilding URL without it
+ */
+function removeActiveFilter(filterIndex) {
+    if (window.location.hash && !window.location.search) {
+        resetFilter();
+        return;
+    }
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    const newParams = new URLSearchParams();
+    let newIndex = 0;
+    
+    // Rebuild parameters excluding the removed filter
+    let index = 0;
+    while (urlParams.has(`f${index}`)) {
+        if (index !== filterIndex) {
+            newParams.set(`b${newIndex}`, urlParams.get(`b${index}`));
+            newParams.set(`f${newIndex}`, urlParams.get(`f${index}`));
+            newParams.set(`v${newIndex}`, urlParams.get(`v${index}`));
+            if (urlParams.has(`start${index}`)) newParams.set(`start${newIndex}`, urlParams.get(`start${index}`));
+            if (urlParams.has(`end${index}`)) newParams.set(`end${newIndex}`, urlParams.get(`end${index}`));
+            newIndex++;
+        }
+        index++;
+    }
+    
+    // Preserve sort
+    if (urlParams.has('sort')) newParams.set('sort', urlParams.get('sort'));
+    
+    // Navigate to new URL or reset if no filters left
+    if (newIndex === 0) {
+        resetFilter();
+    } else {
+        window.location = window.location.pathname + '?' + newParams.toString();
+    }
+}
+
+// =============================================================================
+// SORTING UTILITIES
+// =============================================================================
+
+/**
+ * Fisher-Yates shuffle for random sorting
+ */
 function shuffle(array) {
-    var m = array.length, t, i;
+    let m = array.length;
     while (m) {
-        i = Math.floor(Math.random() * m--);
-        t = array[m];
-        array[m] = array[i];
-        array[i] = t;
+        const i = Math.floor(Math.random() * m--);
+        [array[m], array[i]] = [array[i], array[m]];
     }
     return array;
 }
 
-/* init browse page */
+/**
+ * Sort items by specified field
+ */
+function sorting(jsonObject, keyToSortBy) {
+    jsonObject.sort((a, b) => {
+        let x = a[keyToSortBy];
+        let y = b[keyToSortBy];
+        if (typeof x === 'string') x = x.toUpperCase();
+        if (typeof y === 'string') y = y.toUpperCase();
+        return (x == null) ? 1 : (y == null) ? -1 : (x < y) ? -1 : (x > y) ? 1 : 0;
+    });
+}
 
-/* randomize items once at page load */
-shuffle(items);
+// =============================================================================
+// INITIALIZATION & EVENT HANDLERS
+// =============================================================================
 
-/* set some elements */ 
-var loadingIcon = document.querySelector("#loadingIcon");
-var filterTextBox = document.querySelector('#filterTextBox');
-var filterButton = document.querySelector("#filterButton");
-var browseItemsDiv = document.querySelector("#browseItems");
-
-/* filter if hash in initial URL */
-var query = "";
-if(window.location.hash) {
-    var hashValue = decodeURIComponent(location.hash.substr(1));
-    if (hashValue != 'maincontent') { 
-        query = hashValue;
+/**
+ * Initialize page on load
+ */
+window.addEventListener('load', function() {
+    // Cache DOM elements
+    loadingIcon = document.querySelector("#loadingIcon");
+    filterTextBox = document.querySelector('#filterTextBox');
+    browseItemsDiv = document.querySelector("#browseItems");
+    
+    // Initialize default sort
+    {% if site.data.theme.default-sort-field %}
+    const defaultSort = "{{ site.data.theme.default-sort-field }}".toLowerCase();
+    const matchingSort = document.querySelector(`[data-filter="${defaultSort}"]`);
+    if (matchingSort) {
+        sorting(items, defaultSort);
+        matchingSort.classList.add("active");
+        document.getElementById("sortFilter").innerHTML = matchingSort.textContent;
     } else {
-        query = "";
+        shuffle(items);
     }
-    filterTextBox.value = query;
-    filterItems(items,query);
-} else {
-    query = "";
-    filterItems(items,query);
-}
-
-/* filter form */
-function submitFilter() {
-    query = filterTextBox.value;
-    window.location.hash = encodeURIComponent(query);
-}
-/* reset filters */ 
-function resetFilter() {
-    query = "";
-    filterTextBox.value = query;
-    window.location.hash = encodeURIComponent(query);
-}
-
-/* filter if hash changes */ 
-window.addEventListener("hashchange", function() {
-    // read hash
-    var hashValue = decodeURIComponent(location.hash.substr(1));
-    if (hashValue != 'maincontent') { 
-        query = hashValue;
-        filterTextBox.value = query;
-        // filter
-        filterItems(items,query);
+    {% else %}
+    shuffle(items);
+    {% endif %}
+    
+    // Parse URL and initialize search state
+    const urlParams = new URLSearchParams(window.location.search);
+    
+    // Handle sort parameter
+    if (urlParams.has('sort')) {
+        const sortValue = urlParams.get('sort');
+        document.querySelectorAll('.browse-sort-item').forEach(option => {
+            option.classList.remove('active');
+            if (option.dataset.filter === sortValue) {
+                option.classList.add('active');
+                document.getElementById('sortFilter').innerHTML = option.textContent;
+                sortValue !== 'random' ? sorting(items, sortValue) : shuffle(items);
+            }
+        });
     }
+    
+    // Handle advanced search parameters
+    if (urlParams.toString()) {
+        const searchRows = document.getElementById('searchRows');
+        if (searchRows) searchRows.innerHTML = '';
+        
+        let index = 0;
+        const searchCriteria = [];
+        
+        // Parse URL parameters into search criteria
+        while (urlParams.has(`f${index}`)) {
+            const criteria = {
+                boolean: urlParams.get(`b${index}`),
+                field: urlParams.get(`f${index}`),
+                value: urlParams.get(`v${index}`)
+            };
+            if (urlParams.has(`start${index}`)) criteria.startDate = urlParams.get(`start${index}`);
+            if (urlParams.has(`end${index}`)) criteria.endDate = urlParams.get(`end${index}`);
+            
+            searchCriteria.push(criteria);
+            if (searchRows) addSearchRow(criteria);
+            index++;
+        }
+        
+        // Add extra empty row and apply filters
+        if (searchRows && searchCriteria.length > 0) addSearchRow();
+        advancedFilterItems(items, searchCriteria);
+    }
+    // Handle hash-based search
+    else if (window.location.hash) {
+        handleHashChange();
+    }
+    // Default: show all items
+    else {
+        const searchRows = document.getElementById('searchRows');
+        if (searchRows) {
+            searchRows.innerHTML = '';
+            for (let i = 0; i < 3; i++) addSearchRow();
+        }
+        filterItems(items, "", "all");
+    }
+    
+    // Set up event handlers
+    setupEventHandlers();
 });
 
-/* item array sorting function */
-function sorting(json_object, key_to_sort_by) {
-    function sortByKey(a, b) {
-        var x = a[key_to_sort_by];
-        var y = b[key_to_sort_by];
-        if (typeof x === 'string' ) { x = x.toUpperCase(); }
-        if (typeof y === 'string' ) { y = y.toUpperCase(); }
-        return ((x==null) ? 1: (y==null) ? -1: (x < y) ? -1 : ((x > y) ? 1 : 0));
+/**
+ * Set up all event handlers
+ */
+function setupEventHandlers() {
+    // Hash change handler
+    window.addEventListener("hashchange", handleHashChange);
+    
+    // Form submission handlers
+    document.getElementById('browseFilter').addEventListener('submit', e => {
+        e.preventDefault();
+        submitFilter();
+        return false;
+    });
+    
+    const advancedSearchForm = document.getElementById('advancedSearchForm');
+    if (advancedSearchForm) {
+        advancedSearchForm.addEventListener('submit', e => {
+            e.preventDefault();
+            submitAdvancedSearch(e);
+            return false;
+        });
     }
-    json_object.sort(sortByKey);
-};
-
-/* add sort function on click of sort options */
-var sortFilter = document.querySelector("#sortFilter");
-var sortOptions = document.querySelectorAll(".browse-sort-item");
-sortOptions.forEach((button) => {
-  button.addEventListener("click", (event) => {
-    // get the sort field
-    var field = button.dataset.filter;
-    var display_name = button.textContent;
-    // get current filter
-    var query = filterTextBox.value;
-    // switch active sort option
-    sortOptions.forEach((option) => { option.classList.remove("active"); } );
-    button.classList.add("active");
-    sortFilter.innerHTML = display_name;
-    // send to sort and filter
-    if (field != 'random') {
-        sorting(items, field);
-        filterItems(items, query);
+    
+    {% unless site.data.theme.faceted-search == false %}
+    // Field selection handlers
+    document.querySelector("#fieldSelect").addEventListener("change", function(e) {
+        const field = e.target.value;
+        
+        if (field === 'advanced') {
+            e.target.value = 'all';
+            new bootstrap.Modal(document.getElementById('advancedSearchModal')).show();
+            return;
+        }
+        
+        toggleDateInputs(field, document.querySelector('#browseFilter'));
+        document.querySelector("#selectedField").textContent = e.target.options[e.target.selectedIndex].text;
+    });
+    
+    // Mobile dropdown handler
+    document.addEventListener('click', function(e) {
+        if (e.target.matches('.dropdown-item[data-field]')) {
+            const field = e.target.getAttribute('data-field');
+            const fieldSelect = document.getElementById('fieldSelect');
+            const selectedField = document.getElementById('selectedField');
+            
+            if (field === 'advanced') {
+                new bootstrap.Modal(document.getElementById('advancedSearchModal')).show();
+                return;
+            }
+            
+            if (fieldSelect) {
+                fieldSelect.value = field;
+                fieldSelect.dispatchEvent(new Event('change'));
+            }
+            if (selectedField) selectedField.textContent = e.target.textContent;
+        }
+    });{% endunless %}
+    
+    // Sort option handlers
+    document.querySelectorAll(".browse-sort-item").forEach(button => {
+        button.addEventListener("click", event => {
+            const field = button.dataset.filter;
+            const displayName = button.textContent;
+            
+            // Update active sort option
+            document.querySelectorAll(".browse-sort-item").forEach(opt => opt.classList.remove("active"));
+            button.classList.add("active");
+            document.getElementById("sortFilter").innerHTML = displayName;
+            
+            // Apply sort
+            field !== 'random' ? sorting(items, field) : shuffle(items);
+            
+            // Handle current search state
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            if (urlParams.toString()) {
+                // Advanced search active - update URL with sort parameter
+                const searchCriteria = [];
+                let index = 0;
+                
+                while (urlParams.has(`f${index}`)) {
+                    const criteria = {
+                        boolean: urlParams.get(`b${index}`),
+                        field: urlParams.get(`f${index}`),
+                        value: urlParams.get(`v${index}`)
+                    };
+                    if (urlParams.has(`start${index}`)) criteria.startDate = urlParams.get(`start${index}`);
+                    if (urlParams.has(`end${index}`)) criteria.endDate = urlParams.get(`end${index}`);
+                    searchCriteria.push(criteria);
+                    index++;
+                }
+                
+                const newParams = new URLSearchParams();
+                searchCriteria.forEach((criteria, i) => {
+                    newParams.set(`b${i}`, criteria.boolean);
+                    newParams.set(`f${i}`, criteria.field);
+                    newParams.set(`v${i}`, criteria.value);
+                    if (criteria.startDate) newParams.set(`start${i}`, criteria.startDate);
+                    if (criteria.endDate) newParams.set(`end${i}`, criteria.endDate);
+                });
+                newParams.set('sort', field);
+                
+                window.history.pushState({}, '', window.location.pathname + '?' + newParams.toString());
+                advancedFilterItems(items, searchCriteria);
+            } else {
+                // Basic search - apply sort and current filter
+                const query = filterTextBox.value;
+                {% if site.data.theme.faceted-search == false %}
+                const searchField = 'all';
+                {% else %}
+                const searchField = document.querySelector("#fieldSelect").value;{% endif %}
+                filterItems(items, query, searchField);
+            }
+        });
+    });
+    
+    // Advanced search modal handler
+    const advancedSearchModal = document.getElementById('advancedSearchModal');
+    if (advancedSearchModal) {
+        advancedSearchModal.addEventListener('show.bs.modal', function() {
+            // Reflect hash-based search in modal
+            if (window.location.hash && !window.location.search) {
+                const hash = decodeURIComponent(location.hash.substr(1));
+                if (!hash) return;
+                
+                let field = 'all';
+                let query = hash;
+                
+                if (hash.includes(":")) {
+                    const [potentialField, hashQuery] = hash.split(":");
+                    if (validFields.includes(potentialField)) {
+                        field = potentialField;
+                        query = hashQuery;
+                    }
+                }
+                
+                updateAdvancedSearchModal([{boolean: 'AND', field: field, value: query}]);
+            }
+        });
     }
-    else {
-        shuffle(items);
-        filterItems(items, query);
-    }
-  });
-}); 
-
+}
 </script>
+{% endunless %}

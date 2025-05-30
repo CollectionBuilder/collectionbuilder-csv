@@ -2,6 +2,10 @@
     pages - style tweaks related to individual CB pages
     although most presentation is controlled by Bootstrap classes, these styles are necessary for default visualization pages to function correctly
 */
+
+/* set up base variable to override from cb.scss */
+$toc-a-color: #191919 !default;
+
 /* index */
 .carousel-item-title{
     background-color: rgba(37, 36, 36, 0.72);
@@ -40,7 +44,84 @@
 }
 
 
+
 /* browse */
+
+.date-range-inputs {
+    display: none;
+    flex: 1; /* Allow it to grow/shrink with available space */
+    min-width: 200px; /* Prevent it from getting too small */
+}
+
+.date-range-inputs.active {
+    display: flex;
+}
+
+.date-input-group {
+    display: flex;
+    flex-wrap: nowrap; /* Keep inputs on same line */
+    gap: 0.25rem; /* Reduce gap to save space */
+    align-items: center;
+    margin-top: 0; /* Remove top margin to align with search box */
+    width: 100%;
+}
+
+.date-input-group label {
+    margin: 0;
+    font-weight: 500;
+    white-space: nowrap;
+    font-size: 0.875rem;
+}
+
+.date-input-group input {
+    flex: 1;
+    min-width: 80px; /* Reduce minimum width */
+    height: calc(1.5em + 0.75rem + 2px); /* Match Bootstrap form-control height */
+    padding: 1.35rem 0.5rem; /* Reduce padding to save space */
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem; /* Add border radius back for consistency */
+    font-size: 1rem; /* Match main input font size */
+}
+
+/* Specific styling for date inputs in advanced search modal */
+.modal .date-input-group input {
+    padding: 0.25rem 0.5rem; /* Smaller padding for modal */
+    font-size: 0.875rem; /* Smaller font size to match form-control-sm */
+    height: calc(1.5em + 0.5rem + 2px); /* Adjust height for smaller inputs */
+}
+
+.date-separator {
+    font-size: 0.875rem;
+    color: #6c757d;
+    padding: 0 0.25rem;
+    white-space: nowrap;
+}
+
+@media (max-width: 576px) {
+    .date-range-inputs {
+        width: auto; /* Let it size naturally instead of fixed 60% */
+        min-width: 180px; /* Smaller minimum on mobile */
+    }
+    
+    .date-input-group {
+        gap: 0.125rem; /* Even smaller gap on mobile */
+    }
+    
+    .date-input-group input {
+        min-width: 60px; /* Smaller inputs on mobile */
+        padding: 1.75rem 0.25rem; /* Less padding on mobile */
+    }
+    
+    /* Keep modal inputs small on mobile too */
+    .modal .date-input-group input {
+        padding: 0.25rem 0.375rem;
+    }
+    
+    .date-separator {
+        padding: 0 0.125rem;
+    }
+}
+
 
 /* map */
 #map { height: 750px; z-index: 98; }
@@ -71,34 +152,164 @@
 .tagcloud10{font-size:3.0em;}
 
 /* About */
-.about-nav {
-    line-height: 1.5em; 
-    z-index: 10;
+/* side nav toc */ 
+// mobile style
+#about-toc-wrapper {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    z-index: 99;
+    width: 100%;
+    background-color: var(--bs-body-bg);
 }
-/* creating a narrow text column */ 
-.about-contents > {
+#about-toc-title {
+    button { 
+        width: 100%;
+        background-color: #dedede;
+    }
+}
+#about-toc-list {
+    padding: 1rem 3rem;
+}
+.jekyll-toc-list { 
+    list-style: none;
+    padding-left: 0;
+    font-style: italic;
+
+    ul, ol {
+        padding-left: 0;
+        margin-left: 0;
+    }
+
+    > li {
+        font-size: 18px;
+        line-height: 1.2;
+        padding: 5px 0;
+    }
+
+    li li {
+        font-size: 15px;
+        line-height: 1.2;
+        padding-top: 7px;
+        margin-left: 15px;
+        list-style: none;
+    }
+
+    a {
+        color: $toc-a-color !important;
+    }
+}
+#about-contents-wrapper { 
+    padding: 1rem;
+}
+// desktop style
+@media (min-width: 992px) {
+    #about-wrapper {
+        display: grid;
+        grid-column-gap: 1.2rem;
+        grid-row-gap: 0;
+        grid-template-areas: 
+        "sidebar main"
+        "sidebar credits";
+        grid-template-columns: 1fr 6fr;
+    }
+    #about-toc-wrapper {
+        grid-area: sidebar;
+        position: initial;
+    }
+    #about-contents-wrapper {
+        grid-area: main;
+        order: 1;
+        min-width:0;
+        padding: 2rem 5rem 0 3rem;
+        overflow-x: hidden;
+    }
+    /* creating a narrow text column */
+    #about-contents-wrapper > {
+        h2 {
+            font-weight: bold;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            margin: 1.5rem 0 1rem;
+        }
+
+        p, .about-narrowed-content, .narrow-content, hr, .footnotes, ol, ul, blockquote {
+            max-width: 750px;
+        }
+    }
+    #credits-contents-wrapper {
+        grid-area: credits;
+        order: 2;
+        min-width:0;
+    }
+    #about-toc { 
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+    }
+    #about-toc-title { display: none; }
+    #about-toc-list { 
+        display: block; 
+        padding: 2rem 0 2rem 1rem;
+    }
+    .jekyll-toc-list { 
+        padding: 1rem;
+        //border: 1px solid #dee2e6;
+        //border-radius: 0.25rem;
+        max-height: 90vh;
+        overflow-y: auto;
+        font-style: italic;
+
+        ul, ol {
+            padding-left: 0;
+            margin-left: 0;
+        }
+
+        > li {
+            font-size: 18px;
+            line-height: 1.2;
+            padding: 15px 0;
+        }
+
+        li li {
+            font-size: 15px;
+            line-height: 1.2;
+            padding-top: 15px;
+            margin-left: 15px;
+            list-style: none;
+        }
+
+        a {
+            color: $toc-a-color !important;
+        }
+    }
+}
+
+/* page-narrow layout narrow text block */
+.page-narrow {
+    max-width: 750px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* about-narrow layout styles */ 
+.about-narrow-contents > {
     h2 {
         font-weight: bold;
         padding-top: 100px;
         border-top: 1px dotted black;
     }
-    
     h1, h2, h3, h4, h5, h6 {
         max-width: 650px;
         margin: 1.5rem auto 1rem;
     }
-    
-    p, .about-narrowed-content, .narrow-content, hr, .footnotes, ol, ul, blockquote {
+    p, .narrow-content, hr, .footnotes, ol, ul, blockquote {
         margin-left: auto;
         margin-right: auto;
         max-width: 650px;
     }
-
-}
-
-/* narrow text block for page-narrow layout */
-.page-narrow {
-    max-width: 750px;
-    margin-left: auto;
-    margin-right: auto;
+    .feature-include {
+        text-align: center !important;
+    }
 }

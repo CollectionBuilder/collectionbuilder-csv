@@ -12,7 +12,8 @@
 }
 @media screen and (max-width: 576px) {
     #home-title-box {
-        max-height: 500px;
+        padding-top: min({{ site.data.theme.home-title-y-padding | default: '5em' }}, 32vh);
+        padding-bottom: min({{ site.data.theme.home-title-y-padding | default: '5em' }}, 32vh);
     }
 }
 </style>

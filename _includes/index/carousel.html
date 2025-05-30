@@ -79,7 +79,7 @@
     var slides = "";
     var indicators = "";
     var i, itemImg, itemLink;
-    for (i=0; i < {{ carousel-items | size | at_most: carousel-max }}; i++) {
+    for (let i=0; i < {{ carousel-items | size | at_most: carousel-max }}; i++) {
         // calculate item image location
         itemImg = carouselItems[i][2];
         // calculate item link
