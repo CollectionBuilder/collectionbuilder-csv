@@ -1,6 +1,7 @@
 field,display_name,btn,hidden,sort_name,facet_name
-date,Date,,,Date,Date Created
+date,Date,,,Date Created
+description,,,,
 creator,Creator,,,
-subject,,true,,,Subject
-location,,true
+subject,,true
+location,,true,,,Location Depicted
 identifier,,,true,Identifier
