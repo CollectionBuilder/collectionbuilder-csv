@@ -273,13 +273,14 @@ function itemMatches(item, field, query, startDate, endDate) {
     if (query && query !== "") {
         const q = query.trim().toUpperCase();
         
-        // Search all fields
+        // Search all fields 
         if (field === "all") {
-            let allValues = "";
             for (let k in item) {
-                if (k !== "img" && item[k]) allValues += item[k] + " ";
+                if (k !== "img" && item[k] && item[k].toString().toUpperCase().includes(q)) {
+                    return true;
+                }
             }
-            return allValues.toUpperCase().includes(q);
+            return false;
         }
         
         // Search specific field
@@ -348,17 +349,32 @@ function advancedFilterItems(arr, searchCriteria) {
  * Update the display with filtered results
  */
 function updateDisplay(filteredItems, query = "", field = "", startDate = "", endDate = "") {
+    // Use DocumentFragment for better performance when adding many cards
+    const fragment = document.createDocumentFragment();
+    const tempDiv = document.createElement('div');
+    
+    // Generate all cards at once
+    const cardsHTML = filteredItems.map(item => makeCard(item)).join('');
+    tempDiv.innerHTML = cardsHTML;
+    
+    // Move all cards to fragment
+    while (tempDiv.firstChild) {
+        fragment.appendChild(tempDiv.firstChild);
+    }
+    
+    // Single DOM update
+    browseItemsDiv.innerHTML = '';
+    browseItemsDiv.appendChild(fragment);
+    
     // Update count
     document.querySelector("#numberOf").innerHTML = `${filteredItems.length} of {{ items | size }} items`;
     
-    // Generate and display cards
-    const cards = filteredItems.map(item => makeCard(item)).join('');
-    browseItemsDiv.innerHTML = cards;
-    
-    // Focus active input
+    // Focus active input (only if needed)
     if (query || startDate || endDate) {
         const activeInput = document.querySelector('#filterTextBox:not([style*="display: none"]), #startDate, #endDate');
-        if (activeInput) activeInput.focus();
+        if (activeInput && document.activeElement !== activeInput) {
+            activeInput.focus();
+        }
     }
     
     // Show filter indicators for basic search
