@@ -488,14 +488,16 @@ function handleHashChange() {
     // Parse field:query format
     let field = 'all';
     let query = hash;
-    
+
     if (hash.includes(":")) {
         const [potentialField, hashQuery] = hash.split(":");
         if (validFields.includes(potentialField)) {
             field = potentialField;
             query = hashQuery;
         } else {
-            query = hash; // Invalid field, search everything
+            // Invalid field - search everything with just the query part
+            field = 'all';
+            query = hashQuery; // Use only the part after the colon, not the full hash
         }
     }
     
