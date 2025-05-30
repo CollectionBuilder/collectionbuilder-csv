@@ -5,7 +5,7 @@
 layout: default
 ---
 
-{% if page.about-featured-image %}
+{% if page.about-featured-image or page.heading or page.sub-heading %}
 
 {% assign jumboId = page.about-featured-image %}
 {% if jumboId contains '/' %}
@@ -19,11 +19,12 @@ layout: default
     #about-feature {
         padding: 4rem 0;
         margin-bottom: 1rem;
+        {% if page.about-featured-image %}
         background-color: #e9ecef;
         background-image: url({{ jumboSrc }});
         background-size: cover;
         background-repeat: no-repeat;
-        background-position: {{ page.position | default: 'center' }};
+        background-position: {{ page.position | default: 'center' }};{% endif %}
     }
     {% if page.padding %}
     .about-title-box {
