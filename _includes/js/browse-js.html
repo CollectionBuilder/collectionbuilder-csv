@@ -483,6 +483,8 @@ function resetFilter() {
 function handleHashChange() {
     const hash = decodeURIComponent(location.hash.substr(1));
     
+    // ignore back to top hash
+    if (hash == 'maincontent') return;
     // Don't interfere with parameter-based searches
     if (!hash && window.location.search) return;
     
