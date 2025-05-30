@@ -16,7 +16,7 @@
             <a class="me-3" href="{{ t | strip | url_param_escape | prepend: '/browse.html#' | relative_url }}">{{ t | strip }}</a>
             {% endfor %}
             {% elsif f.external_link == "true" %}
-            <a href="{{ child[f.field] }}" target="_blank" rel="noopener">{{ child[f.field] }}</a>
+            <a href="{{ child[f.field] }}">{{ child[f.field] }}</a>
             {% else %}
             {{ child[f.field] | replace: '""','"' }}{% endif %}
         </dd>

@@ -6,11 +6,17 @@
 @charset "utf-8";
 
 /* base variables pulled from theme.yml */
+$theme-base-font-family: {{ site.data.theme.base-font-family | default: '""' }};
+$theme-base-font-size: {{ site.data.theme.base-font-size | default: '""' }};
+$theme-text-color: {{ site.data.theme.text-color | default: '""' }};
+$theme-link-color: {{ site.data.theme.link-color | default: '""' }};
+
+/* base tweaks to Bootstrap */
 @forward "base" with (
-  $base-font-family: {{ site.data.theme.base-font-family | default: '""' }},
-  $base-font-size: {{ site.data.theme.base-font-size | default: '""' }},
-  $text-color: {{ site.data.theme.text-color | default: '""' }},
-  $link-color: {{ site.data.theme.link-color | default: '""' }}
+  $base-font-family: $theme-base-font-family,
+  $base-font-size: $theme-base-font-size,
+  $text-color: $theme-text-color,
+  $link-color: $theme-link-color
 );
 
 /* individual CB page styles */
@@ -23,7 +29,7 @@
 {% if btns != empty %}
 @use "sass:map";
 @forward "theme-colors" with (
-  $link-color-base: {{ site.data.theme.link-color | default: '""' }},
+  $link-color-base: $theme-link-color,
   $theme-colors: (
     {% for btn in btns %}{% assign color = btn.color | strip %}{% if color != empty %}
     "{{ btn.color_class | slugify }}": {{ color }}{% unless forloop.last %},{% endunless %}
