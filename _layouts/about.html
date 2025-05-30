@@ -5,9 +5,9 @@
 layout: default
 ---
 
-{% if page.featured-image %}
+{% if page.about-featured-image %}
 
-{% assign jumboId = page.featured-image %}
+{% assign jumboId = page.about-featured-image %}
 {% if jumboId contains '/' %}
 {% assign jumboSrc = jumboId | relative_url %}
 {% else %}
