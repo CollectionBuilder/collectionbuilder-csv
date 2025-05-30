@@ -671,6 +671,7 @@ function displayActiveFilters(searchCriteria) {
         
         // Get field display name
         let fieldName = criteria.field === 'all' ? 'All Fields' : 
+        'display_template' === criteria.field ? 'Content Type' : 
             {% for f in fields %}'{{f.field}}' === criteria.field ? '{% if f.display_name %}{{f.display_name}}{% else %}{{f.field | capitalize }}{% endif %}' : {% endfor %}
             criteria.field.charAt(0).toUpperCase() + criteria.field.slice(1).replace(/_/g, ' ');
         
