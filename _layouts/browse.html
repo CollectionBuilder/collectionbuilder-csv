@@ -13,15 +13,16 @@ custom-foot: js/browse-js.html
     <div class="col-lg-8 text-center">
         <form role="search" id="browseFilter" onsubmit="submitFilter(); return false;">
             <div class="input-group input-group-lg">
-                
-                <select class="{% if site.data.theme.faceted-search == true %}form-control form-select d-none d-lg-block{% else %}d-none{% endif %}" id="fieldSelect" style="max-width: 200px;" aria-label="select search field to filter">
+                {% if site.data.theme.faceted-search == true %}
+                <select class="form-control form-select d-none d-lg-block" id="fieldSelect" style="max-width: 200px;" aria-label="select search field to filter">
                     <option value="all">All Fields</option>
                     <option value="title">Title</option>
                     {% for f in fields %}
                     {% assign cap-field = f.field | capitalize %}
                     <option value="{{ f.field }}">{{ f.facet_name | default: f.display_name | default: cap-field }}</option>
                    {% endfor %}
-                    {% if site.data.theme.advanced-search == true %}<option value="" disabled>─────────────</option>
+                    {% if site.data.theme.advanced-search == true %}
+                    <option value="" disabled>─────────────</option>
                     <option value="advanced">Advanced Search...</option>{% endif %}
                 </select>
                 <!-- Mobile filter button - shows only on small screens -->
@@ -39,10 +40,12 @@ custom-foot: js/browse-js.html
                         {% assign cap-field = f.field | capitalize %}
                         <button class="dropdown-item" type="button" data-field="{{ f.field }}">{{ f.facet_name | default: f.display_name | default: cap-field }}</button>
                         {% endfor %}
+                        {% if site.data.theme.advanced-search == true %}
                         <div class="dropdown-divider"></div>
                         <button class="dropdown-item" type="button" data-field="advanced">Advanced Search...</button>
+                        {% endif %}
                     </div>
-                </div>
+                </div>{% endif %}
                 <input type="text" class="form-control" id="filterTextBox" placeholder="Filter ... " aria-label="Search"> 
                 <!-- Update the date range inputs section -->
                 <div id="dateRangeInputs" class="date-range-inputs">

@@ -6,21 +6,19 @@
 
 {%- assign fields = site.data.config-browse -%}
 <script>
-
 /**
- * BROWSE PAGE JAVASCRIPT
+ * BROWSE PAGE JAVASCRIPT - Less Janky Version
  * 
- * This script handles collection browsing functionality including:
- * - Loading and displaying collection items
- * - Basic and advanced searching/filtering
- * - URL-based state management
- * - Sorting
- * - Browser history management
+ * Handles collection browsing with search, filtering, sorting, and URL state management.
+ * Supports both simple hash-based searches and advanced parameter-based searches.
  */
 
+// =============================================================================
+// INITIALIZATION & DATA SETUP
+// =============================================================================
+
 /**
- * Initialize items array from site data
- * Each item contains field values, image information, and display settings
+ * Initialize items array from Jekyll site data
  */
 var items = [
     {% for item in items %}
@@ -34,1119 +32,117 @@ var items = [
         "id":{{ item.objectid | jsonify }} }{% unless forloop.last %},{% endunless %}{%- endfor -%}
 ];
 
+// Valid field names for URL-based searches
+const validFields = [{% for f in fields %}"{{ f.field }}",{% endfor %}"title","display_template"];
+
+// Date field names - add your date fields here
+const dateFields = ['date', 'created', 'published', 'modified', 'issued', 'date_created', 'date_published'];
+
+// Cache DOM elements
+var loadingIcon, filterTextBox, browseItemsDiv;
+
 {% include helpers/get-icon.js %}
 
+// =============================================================================
+// CARD GENERATION
+// =============================================================================
+
 /**
- * Creates an HTML card for displaying a collection item
- * 
- * @param {Object} obj - The item object with fields and metadata
- * @return {string} HTML string for the item card
+ * Creates HTML card for displaying a collection item
  */
 function makeCard(obj) {
-    // placeholder image for lazyload
-    var placeholder = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'%3E%3C/svg%3E";
-    // find item link
-    var itemHref = `{{ '/items/' | relative_url }}${ obj.parent ? obj.parent + ".html#" + obj.id : obj.id + ".html"}`; 
-    // find image
-    var imgSrc, thumbIcon;
-    // if there is a thumb in the csv display it
+    const placeholder = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'%3E%3C/svg%3E";
+    const itemHref = `{{ '/items/' | relative_url }}${ obj.parent ? obj.parent + ".html#" + obj.id : obj.id + ".html"}`;
+    
+    let card = '<div class="item col-lg-4 col-md-6 mb-2"><div class="card">';
+    
+    // Image or icon
     if(obj.img) {
-        imgSrc = obj.img;
-    // else add an icon based on display_template or format
-    } else {
-        thumbIcon = getIcon(obj.template,obj.format,"thumb");
+        card += `<a href="${itemHref}"><img class="card-img-top lazyload" src="${placeholder}" data-src="${obj.img}" alt="${obj.alt || obj.title}"></a>`;
     }
-    var imgAlt = obj.alt ? obj.alt : obj.title;
-
-    // start card
-    var card = '<div class="item col-lg-4 col-md-6 mb-2"><div class="card">';
-    // top image for items with image
-    if(imgSrc) {
-        card += '<a href="' + itemHref + '"> <img class="card-img-top lazyload" src="' + placeholder + '" data-src="' + imgSrc + '" alt="' + imgAlt + '"></a>';
+    
+    // Title
+    card += `<div class="card-body text-center"><h3 class="card-title h4"><a href="${itemHref}" class="text-dark">${obj.title}</a></h3>`;
+    
+    // Icon for items without images
+    if(!obj.img) {
+        const thumbIcon = getIcon(obj.template, obj.format, "thumb");
+        if(thumbIcon) card += `<p><a href="${itemHref}">${thumbIcon}</a></p>`;
     }
-    // title
-    card += '<div class="card-body text-center"> <h3 class="card-title h4"><a href="' + itemHref + '" class="text-dark">' + obj.title + '</a></h3>';
-    // icon thumb for item without image
-    if(thumbIcon){
-        card += '<p><a href="' + itemHref + '">' + thumbIcon + '</a></p>';
-    }
-    // other fields
+    
+    // Field data
     card += '<p class="card-text">';
     {% for f in fields %}{% unless f.hidden == 'true' %}
     if(obj[{{ f.field | jsonify }}]){
-    {% if f.display_name %}card += '<strong>{{ f.display_name }}:</strong> ';{% endif %}
-    {% if f.btn == 'true' %}
-    var btns = obj[{{ f.field | jsonify }}].split(";");
-    for (var i = 0, len = btns.length; i < len; i++) {
-        if(btns[i] != "") {
-        card += '<a class="btn btn-sm btn-secondary m-1 text-wrap" href="{{ page.url | relative_url }}#{{ f.field }}:' + encodeURIComponent(btns[i].trim()) + '">' + btns[i].trim() + '</a>';
-        }
-    }
-    {% else %}
-    card += obj[{{ f.field | jsonify }}];
-    {% endif %}
-    {% unless forloop.last %}card += '<br>';{% endunless %}
+        {% if f.display_name %}card += '<strong>{{ f.display_name }}:</strong> ';{% endif %}
+        {% if f.btn == 'true' %}
+        const btns = obj[{{ f.field | jsonify }}].split(";");
+        btns.forEach(btn => {
+            if(btn.trim()) {
+                card += `<a class="btn btn-sm btn-secondary m-1 text-wrap" href="{{ page.url | relative_url }}#{{ f.field }}:${encodeURIComponent(btn.trim())}">${btn.trim()}</a>`;
+            }
+        });
+        {% else %}
+        card += obj[{{ f.field | jsonify }}];
+        {% endif %}
+        {% unless forloop.last %}card += '<br>';{% endunless %}
     }
     {% endunless %}{% endfor %}
     card += '</p>';
-    // media type
-    if(obj.template && obj.template != "") {
-        mediaIcon = getIcon(obj.template,obj.format,"hidden");
-        card += '<p class="card-text"><small><a class="btn btn-sm btn-outline-secondary" href="{{ page.url | relative_url }}#display_template:' + encodeURIComponent(obj.template) + '">' + 
-        obj.template.toUpperCase().replace("_"," ") + ' ' + mediaIcon + '</a></small></p>';
+    
+    // Media type badge
+    if(obj.template) {
+        const mediaIcon = getIcon(obj.template, obj.format, "hidden");
+        card += `<p class="card-text"><small><a class="btn btn-sm btn-outline-secondary" href="{{ page.url | relative_url }}#display_template:${encodeURIComponent(obj.template)}">${obj.template.toUpperCase().replace("_"," ")} ${mediaIcon}</a></small></p>`;
     }
-    // view button
-    card += '<hr><a href="' + itemHref + '" class="btn btn-sm btn-light" title="link to ' + obj.title + '">View Full Record</a>';
-    // close divs
-    card += '</div></div></div>';
-    // send back big string
+    
+    card += `<hr><a href="${itemHref}" class="btn btn-sm btn-light" title="link to ${obj.title}">View Full Record</a></div></div></div>`;
     return card;
 }
 
-/**
- * Filter items based on search query and optional field
- * This is the main filter function for basic searches
- * 
- * @param {Array} arr - Array of items to filter
- * @param {string} q - Search query
- * @param {string} field - Field to search in, "all" for all fields
- */
-function filterItems(arr, q, field="all", startDate="", endDate="") {
-    loadingIcon.classList.remove("d-none");
-    
-    // dont filter if no q and no date range
-    if (q=="" && !startDate && !endDate) { 
-        var filteredItems = arr; 
-    } else {
-        var filteredItems = [];
-        
-        for (var i = 0, len = arr.length; i < len; i++) {
-            let itemMatches = false;
-            
-            // Handle date field searches
-            if (isDateField(field) && (startDate || endDate)) {
-                if (arr[i][field]) {
-                    // Handle semicolon-separated date values
-                    let fieldValues = arr[i][field].toString().split(";");
-                    itemMatches = fieldValues.some(value => 
-                        isDateInRange(value.trim(), startDate, endDate)
-                    );
-                }
-            }
-            // Handle regular text searches
-            else if (q && q !== "") {
-                q = q.trim().toUpperCase();
-                
-                // If searching all fields, use original search behavior
-                if (field === "all") {
-                    var val = "";
-                    for (var k in arr[i]) { 
-                        if (k != "img") { val += arr[i][k] + " "; }
-                    }
-                    if(val.toUpperCase().indexOf(q) != -1){
-                        itemMatches = true;
-                    }
-                } 
-                // If searching specific field, handle semicolon-separated values
-                else if (arr[i][field]) {
-                    let fieldValues = arr[i][field].toString().split(";");
-                    if (fieldValues.some(value => value.trim().toUpperCase().indexOf(q) != -1)) {
-                        itemMatches = true;
-                    }
-                }
-            }
-            
-            if (itemMatches) {
-                filteredItems.push(arr[i]);
-            }
-        }
-    }
-    
-    // add number 
-    document.querySelector("#numberOf").innerHTML = filteredItems.length + " of {{ items | size }} items";
-    
-    // add stuff, make cards first in giant var, then add all at once to speed things up
-    var cards = "";
-    for (var i = 0, len = filteredItems.length; i < len; i++) {
-        cards += makeCard(filteredItems[i]);
-    }
-    browseItemsDiv.innerHTML = cards;
-
-    // finish
-    if (q != "" || startDate || endDate) {
-        const activeInput = document.querySelector('#filterTextBox:not([style*="display: none"]), #startDate, #endDate');
-        if (activeInput) activeInput.focus();
-    }
-    
-    // Display active filter indicators
-    if ((q && q !== "") || startDate || endDate) {
-        const searchCriteria = [{
-            boolean: 'AND',
-            field: field,
-            value: isDateField(field) ? 
-                `${startDate || ''} - ${endDate || ''}`.trim().replace(/^-\s*|-\s*$/g, '') : q,
-            startDate: startDate,
-            endDate: endDate
-        }];
-        displayActiveFilters(searchCriteria);
-    } else {
-        displayActiveFilters([]);
-    }
-    
-    loadingIcon.classList.add("d-none");
-};
+// =============================================================================
+// DATE UTILITIES
+// =============================================================================
 
 /**
- * Filter items based on advanced search criteria with boolean logic
- * 
- * @param {Array} arr - Array of items to filter
- * @param {Array} searchCriteria - Array of objects with boolean, field, value properties
+ * Check if a field name represents a date field
  */
- function advancedFilterItems(arr, searchCriteria) {
-    loadingIcon.classList.remove("d-none");
-    
-    var filteredItems = arr.filter(item => {
-        // If no criteria, return all items
-        if (!searchCriteria || !searchCriteria.length) return true;
-        
-        let result = true;
-        let previousResult = true;
-        
-        for (let i = 0; i < searchCriteria.length; i++) {
-            const {boolean, field, value, startDate, endDate} = searchCriteria[i];
-            
-            // Skip empty criteria
-            if (!value && !startDate && !endDate) continue;
-            
-            let itemMatches = false;
-            
-            // Handle date field searches
-            if (isDateField(field) && (startDate || endDate)) {
-                if (item[field]) {
-                    let fieldValues = item[field].toString().split(";");
-                    itemMatches = fieldValues.some(val => 
-                        isDateInRange(val.trim(), startDate, endDate)
-                    );
-                }
-            }
-            // Handle "all fields" search
-            else if (field === 'all' && value) {
-                for (let k in item) {
-                    if (item[k] && typeof item[k] === 'string' && 
-                        item[k].toUpperCase().includes(value.trim().toUpperCase())) {
-                        itemMatches = true;
-                        break;
-                    }
-                }
-            } 
-            // Regular field search
-            else if (value) {
-                const itemValue = item[field];
-                const fieldValues = itemValue ? itemValue.toString().split(";") : [];
-                itemMatches = fieldValues.some(v => 
-                    v.trim().toUpperCase().includes(value.trim().toUpperCase())
-                );
-            }
-            
-            switch(boolean) {
-                case 'AND':
-                    result = previousResult && itemMatches;
-                    break;
-                case 'OR':
-                    result = previousResult || itemMatches;
-                    break;
-                case 'NOT':
-                    result = previousResult && !itemMatches;
-                    break;
-                default:
-                    result = itemMatches;
-            }
-            
-            previousResult = result;
-        }
-        return result;
-    });
-    
-    document.querySelector("#numberOf").innerHTML = filteredItems.length + " of {{ items | size }} items";
-    
-    var cards = "";
-    for (var i = 0, len = filteredItems.length; i < len; i++) {
-        cards += makeCard(filteredItems[i]);
-    }
-    browseItemsDiv.innerHTML = cards;
-    
-    // Display active filter indicators
-    displayActiveFilters(searchCriteria);
-    
-    loadingIcon.classList.add("d-none");
-}
-/**
- * Process the basic search form and execute search
- * Uses simple direct URL manipulation to maintain compatibility with links
- */
- function submitFilter() {
-    const query = filterTextBox.value;
-    const field = document.querySelector("#fieldSelect").value;
-    
-    // Check if this is a date field
-    if (isDateField(field)) {
-        const startDate = document.querySelector("#startDate").value;
-        const endDate = document.querySelector("#endDate").value;
-        
-        if (!startDate && !endDate) return false;
-        
-        // For date ranges, use URL parameters instead of hash
-        const params = new URLSearchParams();
-        params.set('f0', field);
-        params.set('b0', 'AND');
-        if (startDate) params.set('start0', startDate);
-        if (endDate) params.set('end0', endDate);
-        params.set('v0', `${startDate || ''} - ${endDate || ''}`.trim().replace(/^-\s*|-\s*$/g, ''));
-        
-        window.location = window.location.pathname + "?" + params.toString();
-    } else {
-        // Regular text search - use existing hash method
-        if (field === "all") {
-            window.location.hash = encodeURIComponent(query);
-        } else {
-            window.location.hash = encodeURIComponent(field + ":" + query);
-        }
-    }
-    return false;
+function isDateField(fieldName) {
+    return dateFields.includes(fieldName.toLowerCase());
 }
 
 /**
- * Reset all filters and clear the URL
- */
-function resetFilter() {
-    // Clear the search UI first (without triggering events)
-    query = "";
-    filterTextBox.value = query;
-    document.querySelector("#fieldSelect").value = "all";
-    
-    // Clear both hash and search params for a complete reset
-    if (window.location.hash || window.location.search) {
-        window.location = window.location.pathname;
-        return false;
-    }
-    
-    // If we're already at the base URL, just reset the display
-    // Reset advanced search form if it exists
-    const advancedForm = document.getElementById('advancedSearchForm');
-    if (advancedForm) {
-        const searchRows = document.getElementById('searchRows');
-        // Clear existing rows
-        searchRows.innerHTML = '';
-        // Add back empty default rows
-        for (let i = 0; i < 3; i++) {
-            addSearchRow();
-        }
-    }
-    
-    // Show all items
-    filterItems(items, "", "all");
-    
-    // Clear active filter indicators
-    displayActiveFilters([]);
-    
-    return false;
-}
-
-/**
- * Create a list of valid field names from the configuration
- * Used to validate field names in hash-based searches
- */
-const validFields = [{% for f in fields %}"{{ f.field }}",{% endfor %}"title","display_template"];
-/**
- * Handle changes to the hash portion of the URL
- * This is triggered by both manual URL changes and links with hash targets
- */
- function handleHashChange() {
-    var hash = decodeURIComponent(location.hash.substr(1));
-    
-    // If empty hash but we have search parameters, don't interfere
-    if (!hash && window.location.search) {
-        return;
-    }
-    
-    // Clear any existing search params if we're using a hash search
-    // This prevents mixing of search types
-    if (hash && window.location.search) {
-        window.location = window.location.pathname + "#" + hash;
-        return;
-    }
-    
-    // If no hash and no search params, show all items
-    if (!hash) {
-        query = "";
-        filterTextBox.value = query;
-        document.querySelector("#fieldSelect").value = "all";
-        filterItems(items, query, "all");
-        
-        // Update the advanced search modal to reflect empty search
-        updateAdvancedSearchModal([]);
-        return;
-    }
-    
-    // Process the hash value
-    let field = 'all';
-    let q = hash;
-    
-    if (hash.includes(":")) {
-        var [potentialField, hashQ] = hash.split(":");
-        
-        // Check if it's a valid field
-        if (validFields.includes(potentialField)) {
-            // Valid field search
-            field = potentialField;
-            q = hashQ;
-            filterTextBox.value = q;
-            document.querySelector("#fieldSelect").value = field;
-            filterItems(items, q, field);
-        } else {
-            // Invalid field, search all fields with original hash
-            filterTextBox.value = hash;
-            document.querySelector("#fieldSelect").value = "all";
-            filterItems(items, hash, "all");
-        }
-    } else {
-        // No colon, regular search across all fields
-        query = hash;
-        filterTextBox.value = query;
-        document.querySelector("#fieldSelect").value = "all";
-        filterItems(items, query, "all");
-    }
-    
-    // Update the advanced search modal to reflect the current hash search
-    if (q) {
-        const searchCriteria = [{
-            boolean: 'AND',
-            field: field,
-            value: q
-        }];
-        updateAdvancedSearchModal(searchCriteria, true); // Force update on hash change
-    }
-}
-
-/**
- * Update the advanced search modal to reflect the current search criteria
- * This preserves any existing rows and adds new rows from current searches
- * 
- * @param {Array} searchCriteria - Array of search criteria objects
- * @param {boolean} forceUpdate - Whether to force update even if rows exist
- */
- function updateAdvancedSearchModal(searchCriteria, forceUpdate = false) {
-    const searchRows = document.getElementById('searchRows');
-    if (!searchRows) return;
-    
-    // If there are no search criteria and no existing rows, add empty default rows
-    if (!searchCriteria.length && searchRows.children.length === 0) {
-        for (let i = 0; i < 3; i++) {
-            addSearchRow();
-        }
-        return;
-    }
-    
-    // If we have search criteria but no rows, or if forced update,
-    // recreate all rows using the current search criteria
-    if (searchCriteria.length && (searchRows.children.length === 0 || forceUpdate)) {
-        // Clear existing rows
-        searchRows.innerHTML = '';
-        
-        // Add each search criteria as a row
-        searchCriteria.forEach((criteria, i) => {
-            addSearchRow(criteria);
-        });
-        
-        // Add one extra empty row for convenience
-        addSearchRow();
-    }
-}
-
-/**
- * Add a new search row to the advanced search modal
- * 
- * @param {Object} values - Optional initial values for the row
- */
-function addSearchRow(values = {}) {
-    const template = document.getElementById('searchRowTemplate');
-    const searchRows = document.getElementById('searchRows');
-    const newRow = template.content.cloneNode(true);
-    const row = newRow.querySelector('.search-row');
-    
-    // Set values if provided
-    if (values.boolean) {
-        row.querySelector('.boolean-operator').value = values.boolean;
-    }
-    if (values.field) {
-        row.querySelector('.field-select').value = values.field;
-        // Toggle date inputs based on field
-        toggleDateInputs(values.field, row);
-    }
-    if (values.value && !isDateField(values.field)) {
-        row.querySelector('.search-input').value = values.value;
-    }
-    if (values.startDate) {
-        const startInput = row.querySelector('.start-date');
-        if (startInput) startInput.value = values.startDate;
-    }
-    if (values.endDate) {
-        const endInput = row.querySelector('.end-date');
-        if (endInput) endInput.value = values.endDate;
-    }
-    
-    // Hide boolean operator for first row
-    if (searchRows.children.length === 0) {
-        row.querySelector('.boolean-operator').style.visibility = 'hidden';
-    }
-    
-    // Add field change handler
-    row.querySelector('.field-select').addEventListener('change', function(e) {
-        toggleDateInputs(e.target.value, row);
-    });
-    
-    // Add remove button handler
-    row.querySelector('.remove-row').addEventListener('click', function() {
-        row.remove();
-        if (searchRows.children.length === 1) {
-            searchRows.querySelector('.boolean-operator').style.visibility = 'hidden';
-        }
-    });
-    
-    // Add enter key handlers
-    row.querySelector('.search-input').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            submitAdvancedSearch();
-            return false;
-        }
-    });
-    
-    const startDateInput = row.querySelector('.start-date');
-    const endDateInput = row.querySelector('.end-date');
-    if (startDateInput) {
-        startDateInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                submitAdvancedSearch();
-                return false;
-            }
-        });
-    }
-    if (endDateInput) {
-        endDateInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                submitAdvancedSearch();
-                return false;
-            }
-        });
-    }
-    
-    searchRows.appendChild(row);
-}
-
-/**
- * Handle form submission from the advanced search modal
- * 
- * @param {Event} event - Optional event object if triggered by a form submit
- * @return {boolean} False to prevent default form submission
- */
- function submitAdvancedSearch(event) {
-    // Prevent default if this was from a form submit
-    if (event && event.preventDefault) {
-        event.preventDefault();
-    }
-    
-    const form = document.getElementById('advancedSearchForm');
-    const rows = form.querySelectorAll('.search-row');
-    const searchParams = {};
-    
-    // Build URL parameters from form values
-    rows.forEach((row, index) => {
-        const boolean = index === 0 ? 'AND' : row.querySelector('.boolean-operator').value;
-        const field = row.querySelector('.field-select').value;
-        
-        if (isDateField(field)) {
-            const startDate = row.querySelector('.start-date').value.trim();
-            const endDate = row.querySelector('.end-date').value.trim();
-            
-            if (startDate || endDate) {
-                searchParams[`b${index}`] = boolean;
-                searchParams[`f${index}`] = field;
-                searchParams[`v${index}`] = `${startDate || ''} - ${endDate || ''}`.trim().replace(/^-\s*|-\s*$/g, '');
-                if (startDate) searchParams[`start${index}`] = startDate;
-                if (endDate) searchParams[`end${index}`] = endDate;
-            }
-        } else {
-            const value = row.querySelector('.search-input').value.trim();
-            if (value) {
-                searchParams[`b${index}`] = boolean;
-                searchParams[`f${index}`] = field;
-                searchParams[`v${index}`] = value;
-            }
-        }
-    });
-    
-    // Add current sort option
-    const activeSort = document.querySelector(".browse-sort-item.active");
-    if (activeSort) {
-        searchParams['sort'] = activeSort.dataset.filter;
-    }
-    
-    const queryString = new URLSearchParams();
-    Object.entries(searchParams).forEach(([key, value]) => {
-        queryString.append(key, value);
-    });
-    
-    window.location = window.location.pathname + "?" + queryString.toString();
-    
-    try {
-        const modal = bootstrap.Modal.getInstance(document.getElementById('advancedSearchModal'));
-        if (modal) {
-            modal.hide();
-        }
-    } catch (e) {
-        console.error('Could not close modal:', e);
-    }
-    
-    return false;
-}
-
-/**
- * Fisher-Yates shuffle algorithm for randomizing item order
- * From: https://bost.ocks.org/mike/shuffle/
- * 
- * @param {Array} array - Array to shuffle
- * @return {Array} Shuffled array (modified in-place)
- */
-function shuffle(array) {
-    var m = array.length, t, i;
-    while (m) {
-        i = Math.floor(Math.random() * m--);
-        t = array[m];
-        array[m] = array[i];
-        array[i] = t;
-    }
-    return array;
-}
-
-/**
- * Sort items array by a specified key
- * 
- * @param {Array} json_object - Array of items to sort
- * @param {string} key_to_sort_by - Field name to sort by
- */
-function sorting(json_object, key_to_sort_by) {
-    function sortByKey(a, b) {
-        var x = a[key_to_sort_by];
-        var y = b[key_to_sort_by];
-        if (typeof x === 'string' ) { x = x.toUpperCase(); }
-        if (typeof y === 'string' ) { y = y.toUpperCase(); }
-        return ((x==null) ? 1: (y==null) ? -1: (x < y) ? -1 : ((x > y) ? 1 : 0));
-    }
-    json_object.sort(sortByKey);
-}
-
-/* 
- * INITIALIZATION
- * Set up event handlers and handle initial page load state
- */
-
-// Initialize page elements
-var loadingIcon = document.querySelector("#loadingIcon");
-var filterTextBox = document.querySelector('#filterTextBox');
-var filterButton = document.querySelector("#filterButton");
-var browseItemsDiv = document.querySelector("#browseItems");
-
-/* initialize sort options */
-{% if site.data.theme.default-sort-field %}
-// If default sort field is configured, use it
-const sortFilterElement = "{{ site.data.theme.default-sort-field }}".toLowerCase();
-// Find the dropdown item with matching data-filter attribute
-const matchingDropdownItem = document.querySelector(".dropdown-item[data-filter='" + sortFilterElement + "']");
-if (matchingDropdownItem) {
-    // sort the items by the configured field
-    sorting(items, sortFilterElement);
-    // add an active class to the matching dropdown item
-    matchingDropdownItem.classList.add("active");
-    // update the sort filter display
-    document.getElementById("sortFilter").innerHTML = matchingDropdownItem.textContent;
-} else {
-    // if configured field doesn't match any sort options, fall back to random
-    shuffle(items);
-}
-{% else %}
-
-    shuffle(items);
-{% endif %}
-/* Add sort function on click of sort options */
-var sortFilter = document.querySelector("#sortFilter");
-var sortOptions = document.querySelectorAll(".browse-sort-item");
-sortOptions.forEach((button) => {
-  button.addEventListener("click", (event) => {
-    // get the sort field
-    var field = button.dataset.filter;
-    var display_name = button.textContent;
-    
-    // switch active sort option
-    sortOptions.forEach((option) => { option.classList.remove("active"); });
-    button.classList.add("active");
-    sortFilter.innerHTML = display_name;
-    
-    // Check if we're in an advanced search state
-    const urlParams = new URLSearchParams(window.location.search);
-    const searchCriteria = [];
-    let index = 0;
-    
-    while (urlParams.has(`f${index}`)) {
-      searchCriteria.push({
-        boolean: urlParams.get(`b${index}`),
-        field: urlParams.get(`f${index}`),
-        value: urlParams.get(`v${index}`),
-        startDate: urlParams.get(`start${index}`),
-        endDate: urlParams.get(`end${index}`)
-      });
-      index++;
-    }
-    
-    // If we have active advanced search criteria, update the URL with new sort parameter
-    if (searchCriteria.length > 0) {
-      // Create new URL with updated sort parameter
-      const newParams = new URLSearchParams();
-      
-      // Copy existing search parameters
-      for (let i = 0; i < searchCriteria.length; i++) {
-        newParams.set(`b${i}`, searchCriteria[i].boolean);
-        newParams.set(`f${i}`, searchCriteria[i].field);
-        newParams.set(`v${i}`, searchCriteria[i].value);
-        // Add the missing date parameters
-        if (searchCriteria[i].startDate) {
-          newParams.set(`start${i}`, searchCriteria[i].startDate);
-        }
-        if (searchCriteria[i].endDate) {
-          newParams.set(`end${i}`, searchCriteria[i].endDate);
-        }
-      }
-      
-      // Set the sort parameter
-      newParams.set('sort', field);
-      
-      // Update the URL without reloading the page
-      const newUrl = window.location.pathname + '?' + newParams.toString();
-      window.history.pushState({}, '', newUrl);
-      
-      // Apply the sort and filter
-      if (field != 'random') {
-        sorting(items, field);
-        advancedFilterItems(items, searchCriteria);
-      } else {
-        shuffle(items);
-        advancedFilterItems(items, searchCriteria);
-      }
-    } 
-    // Otherwise handle hash-based or simple search
-    else {
-      // get current filter and field
-      var query = filterTextBox.value;
-      var searchField = document.querySelector("#fieldSelect").value;
-      
-      if (field != 'random') {
-        sorting(items, field);
-        filterItems(items, query, searchField);
-      } else {
-        shuffle(items);
-        filterItems(items, query, searchField);
-      }
-    }
-  });
-});
-
-/* Update selected field display when dropdown changes */
-document.querySelector("#fieldSelect").addEventListener("change", function(e) {
-    document.querySelector("#selectedField").textContent = 
-        e.target.options[e.target.selectedIndex].text;
-});
-
-/**
- * Initialize the page on load
- */
- window.addEventListener('load', function() {
-    // Initialize search state based on URL
-    const urlParams = new URLSearchParams(window.location.search);
-    
-    // Handle sort parameter from URL if present
-    if (urlParams.has('sort')) {
-        const sortValue = urlParams.get('sort');
-        const sortOptions = document.querySelectorAll('.browse-sort-item');
-        
-        // Update sort UI to match URL parameter
-        sortOptions.forEach((option) => {
-            option.classList.remove('active');
-            if (option.dataset.filter === sortValue) {
-                option.classList.add('active');
-                document.getElementById('sortFilter').innerHTML = option.textContent;
-                
-                // Apply the sort if it's not random
-                if (sortValue !== 'random') {
-                    sorting(items, sortValue);
-                } else {
-                    shuffle(items);
-                }
-            }
-        });
-    }
-    
-    // Handle URL parameters for advanced search (including dates)
-    if (urlParams.toString()) {
-        const searchRows = document.getElementById('searchRows');
-        if (searchRows) {
-            searchRows.innerHTML = '';
-        }
-        
-        let index = 0;
-        const searchCriteria = [];
-        
-        // Read parameters and build search criteria
-        while (urlParams.has(`f${index}`)) {
-            const boolean = urlParams.get(`b${index}`);
-            const field = urlParams.get(`f${index}`);
-            const value = urlParams.get(`v${index}`);
-            const startDate = urlParams.get(`start${index}`);
-            const endDate = urlParams.get(`end${index}`);
-            
-            const criteria = {boolean, field, value};
-            if (startDate) criteria.startDate = startDate;
-            if (endDate) criteria.endDate = endDate;
-            
-            searchCriteria.push(criteria);
-            
-            if (searchRows) {
-                addSearchRow(criteria);
-            }
-            
-            index++;
-        }
-        
-        // Add one extra empty row for convenience
-        if (searchRows && searchCriteria.length > 0) {
-            addSearchRow();
-        }
-        
-        advancedFilterItems(items, searchCriteria);
-    }
-    
-    // If we have a hash but no search params, handle hash-based search
-    else if (window.location.hash) {
-        handleHashChange();
-    }
-    // No search parameters or hash, initialize with default view
-    else {
-        // Initialize modal with empty rows if it exists
-        const searchRows = document.getElementById('searchRows');
-        if (searchRows) {
-            searchRows.innerHTML = '';
-            for (let i = 0; i < 3; i++) {
-                addSearchRow();
-            }
-        }
-        
-        // Show all items
-        filterItems(items, "", "all");
-    }
-    
-    // Set up form submission handlers
-    const advancedSearchForm = document.getElementById('advancedSearchForm');
-    if (advancedSearchForm) {
-        advancedSearchForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            submitAdvancedSearch(e);
-            return false;
-        });
-    }
-    
-    // Basic search form submission
-    document.getElementById('browseFilter').addEventListener('submit', function(e) {
-        e.preventDefault();
-        submitFilter();
-        return false;
-    });
-    
-    // Intercept modal open event to ensure search rows are updated
-    const advancedSearchModal = document.getElementById('advancedSearchModal');
-    if (advancedSearchModal) {
-        advancedSearchModal.addEventListener('show.bs.modal', function() {
-            // If we have a hash-based search, reflect it in the modal
-            if (window.location.hash && !window.location.search) {
-                const hash = decodeURIComponent(location.hash.substr(1));
-                if (!hash) return;
-                
-                let field = 'all';
-                let q = hash;
-                
-                if (hash.includes(":")) {
-                    var [potentialField, hashQ] = hash.split(":");
-                    if (validFields.includes(potentialField)) {
-                        field = potentialField;
-                        q = hashQ;
-                    }
-                }
-                
-                const searchCriteria = [{
-                    boolean: 'AND',
-                    field: field,
-                    value: q
-                }];
-                
-                updateAdvancedSearchModal(searchCriteria);
-            }
-        });
-    }
-});
-
-document.getElementById('fieldSelect').addEventListener('change', function(e) {
-    if (e.target.value === 'advanced') {
-        // Reset the select back to "All Fields"
-        e.target.value = 'all';
-        // Show the advanced search modal
-        new bootstrap.Modal(document.getElementById('advancedSearchModal')).show();
-    }
-    
-    // Update mobile button text
-    const selectedField = document.getElementById('selectedField');
-    if (selectedField) {
-        selectedField.textContent = e.target.options[e.target.selectedIndex].text;
-    }
-});
-
-// Handle mobile dropdown clicks
-document.addEventListener('click', function(e) {
-    if (e.target.matches('.dropdown-item[data-field]')) {
-        const field = e.target.getAttribute('data-field');
-        const fieldSelect = document.getElementById('fieldSelect');
-        const selectedField = document.getElementById('selectedField');
-        
-        if (field === 'advanced') {
-            // Show advanced search modal
-            new bootstrap.Modal(document.getElementById('advancedSearchModal')).show();
-            return;
-        }
-        
-        // Update the hidden select and mobile button text
-        if (fieldSelect) {
-            fieldSelect.value = field;
-            // Trigger change event
-            fieldSelect.dispatchEvent(new Event('change'));
-        }
-        
-        if (selectedField) {
-            selectedField.textContent = e.target.textContent;
-        }
-    }
-});
-
-// Event listener for hash changes
-window.addEventListener("hashchange", handleHashChange);
-
-/**
- * Display active filter indicators below the search box
- * Shows small buttons for each active advanced search filter
- * 
- * @param {Array} searchCriteria - Array of active search criteria
- */
-function displayActiveFilters(searchCriteria) {
-    const activeFiltersDiv = document.getElementById('activeFilters');
-    if (!activeFiltersDiv) return;
-    
-    // Clear existing filters
-    activeFiltersDiv.innerHTML = '';
-    
-    if (!searchCriteria || searchCriteria.length === 0) {
-        return;
-    }
-    
-    // Create a container for the filter buttons and add field button
-    const filtersContainer = document.createElement('div');
-    filtersContainer.className = 'd-flex flex-wrap align-items-center';
-    
-    searchCriteria.forEach((criteria, index) => {
-        if (!criteria.value) return;
-        
-        const filterButton = document.createElement('button');
-        
-        // Set button color based on boolean operator
-        let buttonClass = 'btn btn-sm btn-outline-success me-2 mb-1'; // Default for AND
-        if (criteria.boolean === 'NOT') {
-            buttonClass = 'btn btn-sm btn-outline-danger me-2 mb-1';
-        } else if (criteria.boolean === 'OR') {
-            buttonClass = 'btn btn-sm btn-outline-warning me-2 mb-1';
-        }
-        
-        filterButton.className = buttonClass;
-        filterButton.type = 'button';
-        filterButton.setAttribute('data-filter-index', index);
-        
-        // Get field display name
-        let fieldDisplayName = criteria.field;
-        if (criteria.field === 'all') {
-            fieldDisplayName = 'All Fields';
-        } {% for f in fields %} else if (criteria.field === '{{f.field}}') {
-            fieldDisplayName = '{% if f.display_name %}{{f.display_name}}{% else %}{{f.field | capitalize }}{% endif %}';
-        } {% endfor %} else {
-            fieldDisplayName = criteria.field.charAt(0).toUpperCase() + 
-                criteria.field.slice(1).replace(/_/g, ' ');
-        }
-        
-        const showBoolean = searchCriteria.length > 1 && criteria.boolean !== 'AND';
-        
-        // Format the value display for date fields
-        let displayValue = criteria.value;
-        if (isDateField(criteria.field) && (criteria.startDate || criteria.endDate)) {
-            if (criteria.startDate && criteria.endDate) {
-                displayValue = `${criteria.startDate} to ${criteria.endDate}`;
-            } else if (criteria.startDate) {
-                displayValue = `from ${criteria.startDate}`;
-            } else if (criteria.endDate) {
-                displayValue = `until ${criteria.endDate}`;
-            }
-        }
-        
-        filterButton.innerHTML = `
-            <span class="me-1">${showBoolean ? criteria.boolean + ' ' : ''}${fieldDisplayName}: "${displayValue}"</span>
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
-                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
-            </svg>
-        `;
-        
-        // Add click handler to remove this filter
-        filterButton.addEventListener('click', function() {
-            // For hash-based searches (facets), handle differently
-            if (window.location.hash && !window.location.search) {
-                resetFilter();
-            } else {
-                removeActiveFilter(index);
-            }
-        });
-        
-        filtersContainer.appendChild(filterButton);
-    });
-    
-    // Add the "Add Field" button
-    const addFieldButton = document.createElement('button');
-    addFieldButton.type = 'button';
-    addFieldButton.className = 'btn btn-outline-secondary btn-sm mb-1';
-    addFieldButton.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
-            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"></path>
-            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"></path>
-        </svg>
-        Add Field
-    `;
-    
-    // Add click handler to open advanced search modal
-    addFieldButton.addEventListener('click', function() {
-        const advancedSearchModal = document.getElementById('advancedSearchModal');
-        if (advancedSearchModal) {
-            new bootstrap.Modal(advancedSearchModal).show();
-        }
-    });
-    
-    filtersContainer.appendChild(addFieldButton);
-    activeFiltersDiv.appendChild(filtersContainer);
-}
-
-/**
- * Remove a specific filter from active search criteria
- * 
- * @param {number} filterIndex - Index of the filter to remove
- */
-function removeActiveFilter(filterIndex) {
-    // If we're in a hash-based search (facet), just reset completely
-    if (window.location.hash && !window.location.search) {
-        resetFilter();
-        return;
-    }
-    
-    const urlParams = new URLSearchParams(window.location.search);
-    const searchCriteria = [];
-    let index = 0;
-    
-    // Rebuild search criteria excluding the removed filter
-    while (urlParams.has(`f${index}`)) {
-        if (index !== filterIndex) {
-            searchCriteria.push({
-                boolean: urlParams.get(`b${index}`),
-                field: urlParams.get(`f${index}`),
-                value: urlParams.get(`v${index}`)
-            });
-        }
-        index++;
-    }
-    
-    // If no criteria left, reset completely
-    if (searchCriteria.length === 0) {
-        resetFilter();
-        return;
-    }
-    
-    // Rebuild URL with remaining criteria
-    const newParams = new URLSearchParams();
-    searchCriteria.forEach((criteria, newIndex) => {
-        newParams.set(`b${newIndex}`, criteria.boolean);
-        newParams.set(`f${newIndex}`, criteria.field);
-        newParams.set(`v${newIndex}`, criteria.value);
-    });
-    
-    // Preserve sort parameter if it exists
-    if (urlParams.has('sort')) {
-        newParams.set('sort', urlParams.get('sort'));
-    }
-    
-    // Update URL and apply new search
-    window.location = window.location.pathname + '?' + newParams.toString();
-}
-
-/**
- * Normalize date string to yyyy-mm-dd, yyyy-mm, or yyyy formats
- * Handles yyyy-mm-dd, yyyy-mm, mm/dd/yyyy, and yyyy formats
- * If only year or year-month is provided, returns type for partial matching
- * 
- * @param {string} dateStr - Date string to normalize
- * @return {Object} Object with normalized date and type info
+ * Normalize date string to consistent format for comparison
+ * Handles: yyyy, yyyy-mm, yyyy-mm-dd, mm/dd/yyyy
  */
 function normalizeDateString(dateStr) {
     if (!dateStr) return null;
     
     const cleaned = dateStr.trim();
     
-    // Check if it's just a year (4 digits)
+    // Year only (4 digits)
     if (/^\d{4}$/.test(cleaned)) {
-        return {
-            normalized: cleaned,
-            type: 'year',
-            year: parseInt(cleaned)
-        };
+        return { normalized: cleaned, type: 'year', year: parseInt(cleaned) };
     }
 
-    // Check for yyyy-mm format
+    // Year-Month format yyyy-mm
     const yearMonthMatch = cleaned.match(/^(\d{4})-(\d{1,2})$/);
     if (yearMonthMatch) {
         const [, year, month] = yearMonthMatch;
         return {
-            normalized: `${year}`,
-            type: 'year',
-            year: parseInt(year)
+            normalized: `${year}-${month.padStart(2, '0')}`,
+            type: 'year-month',
+            year: parseInt(year),
+            month: parseInt(month)
         };
     }
-    
-    // Check for yyyy-mm-dd format
+
+    // ISO format yyyy-mm-dd
     const isoMatch = cleaned.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
     if (isoMatch) {
         const [, year, month, day] = isoMatch;
-        const paddedMonth = month.padStart(2, '0');
-        const paddedDay = day.padStart(2, '0');
         return {
-            normalized: `${year}-${paddedMonth}-${paddedDay}`,
+            normalized: `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`,
             type: 'full',
             year: parseInt(year),
             month: parseInt(month),
@@ -1154,14 +150,12 @@ function normalizeDateString(dateStr) {
         };
     }
     
-    // Check for mm/dd/yyyy format (US format)
+    // US format mm/dd/yyyy
     const usMatch = cleaned.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
     if (usMatch) {
         const [, month, day, year] = usMatch;
-        const paddedMonth = month.padStart(2, '0');
-        const paddedDay = day.padStart(2, '0');
         return {
-            normalized: `${year}-${paddedMonth}-${paddedDay}`,
+            normalized: `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`,
             type: 'full',
             year: parseInt(year),
             month: parseInt(month),
@@ -1173,13 +167,7 @@ function normalizeDateString(dateStr) {
 }
 
 /**
- * Check if a date falls within a range
- * Handles partial dates (year-only) intelligently
- * 
- * @param {string} itemDate - Date from the item
- * @param {string} startDate - Start of range
- * @param {string} endDate - End of range
- * @return {boolean} True if date is in range
+ * Check if a date falls within a range (handles partial dates)
  */
 function isDateInRange(itemDate, startDate, endDate) {
     const itemDateObj = normalizeDateString(itemDate);
@@ -1188,60 +176,210 @@ function isDateInRange(itemDate, startDate, endDate) {
     const startDateObj = startDate ? normalizeDateString(startDate) : null;
     const endDateObj = endDate ? normalizeDateString(endDate) : null;
     
-    // If we only have a year for the item date
+    // Year-only comparison
     if (itemDateObj.type === 'year') {
-        let yearInRange = true;
-        
-        if (startDateObj) {
-            yearInRange = yearInRange && itemDateObj.year >= startDateObj.year;
-        }
-        
-        if (endDateObj) {
-            yearInRange = yearInRange && itemDateObj.year <= endDateObj.year;
-        }
-        
-        return yearInRange;
+        let inRange = true;
+        if (startDateObj) inRange = inRange && itemDateObj.year >= startDateObj.year;
+        if (endDateObj) inRange = inRange && itemDateObj.year <= endDateObj.year;
+        return inRange;
     }
     
-    // For full dates, do string comparison (works because of yyyy-mm-dd format)
-    if (itemDateObj.type === 'full') {
-        let dateInRange = true;
+    // Year-Month comparison
+    if (itemDateObj.type === 'year-month') {
+        let inRange = true;
         
         if (startDateObj) {
-            const startNormalized = startDateObj.type === 'year' ? 
-                `${startDateObj.year}-01-01` : startDateObj.normalized;
-            dateInRange = dateInRange && itemDateObj.normalized >= startNormalized;
+            // Convert start date to year-month format for comparison
+            let startNormalized;
+            if (startDateObj.type === 'year') {
+                startNormalized = `${startDateObj.year}-01`;
+            } else if (startDateObj.type === 'year-month') {
+                startNormalized = startDateObj.normalized;
+            } else {
+                startNormalized = startDateObj.normalized.substring(0, 7); // Extract yyyy-mm from yyyy-mm-dd
+            }
+            inRange = inRange && itemDateObj.normalized >= startNormalized;
         }
         
         if (endDateObj) {
-            const endNormalized = endDateObj.type === 'year' ? 
-                `${endDateObj.year}-12-31` : endDateObj.normalized;
-            dateInRange = dateInRange && itemDateObj.normalized <= endNormalized;
+            // Convert end date to year-month format for comparison
+            let endNormalized;
+            if (endDateObj.type === 'year') {
+                endNormalized = `${endDateObj.year}-12`;
+            } else if (endDateObj.type === 'year-month') {
+                endNormalized = endDateObj.normalized;
+            } else {
+                endNormalized = endDateObj.normalized.substring(0, 7); // Extract yyyy-mm from yyyy-mm-dd
+            }
+            inRange = inRange && itemDateObj.normalized <= endNormalized;
         }
         
-        return dateInRange;
+        return inRange;
+    }
+    
+    // Full date comparison
+    if (itemDateObj.type === 'full') {
+        let inRange = true;
+        if (startDateObj) {
+            let startNormalized;
+            if (startDateObj.type === 'year') {
+                startNormalized = `${startDateObj.year}-01-01`;
+            } else if (startDateObj.type === 'year-month') {
+                startNormalized = `${startDateObj.normalized}-01`;
+            } else {
+                startNormalized = startDateObj.normalized;
+            }
+            inRange = inRange && itemDateObj.normalized >= startNormalized;
+        }
+        if (endDateObj) {
+            let endNormalized;
+            if (endDateObj.type === 'year') {
+                endNormalized = `${endDateObj.year}-12-31`;
+            } else if (endDateObj.type === 'year-month') {
+                // Get last day of the month
+                const year = endDateObj.year;
+                const month = endDateObj.month;
+                const lastDay = new Date(year, month, 0).getDate();
+                endNormalized = `${endDateObj.normalized}-${lastDay.toString().padStart(2, '0')}`;
+            } else {
+                endNormalized = endDateObj.normalized;
+            }
+            inRange = inRange && itemDateObj.normalized <= endNormalized;
+        }
+        return inRange;
+    }
+    
+    return false;
+}
+
+// =============================================================================
+// SEARCH & FILTER FUNCTIONS
+// =============================================================================
+
+/**
+ * Check if item matches search criteria (handles semicolon-separated values)
+ */
+function itemMatches(item, field, query, startDate, endDate) {
+    // Date field search
+    if (isDateField(field) && (startDate || endDate)) {
+        if (!item[field]) return false;
+        const fieldValues = item[field].toString().split(";");
+        return fieldValues.some(value => isDateInRange(value.trim(), startDate, endDate));
+    }
+    
+    // Text search
+    if (query && query !== "") {
+        const q = query.trim().toUpperCase();
+        
+        // Search all fields
+        if (field === "all") {
+            let allValues = "";
+            for (let k in item) {
+                if (k !== "img" && item[k]) allValues += item[k] + " ";
+            }
+            return allValues.toUpperCase().includes(q);
+        }
+        
+        // Search specific field
+        if (item[field]) {
+            const fieldValues = item[field].toString().split(";");
+            return fieldValues.some(value => value.trim().toUpperCase().includes(q));
+        }
     }
     
     return false;
 }
 
 /**
- * Check if a field is a date field based on field name
- * Add your date field names to this array
- * 
- * @param {string} fieldName - Name of the field to check
- * @return {boolean} True if field is a date field
+ * Basic filter - searches single field with single query
  */
-function isDateField(fieldName) {
-    const dateFields = ['date', 'created', 'published', 'modified', 'issued', 'date_created', 'date_published'];
-    return dateFields.includes(fieldName.toLowerCase());
+function filterItems(arr, query, field = "all", startDate = "", endDate = "") {
+    loadingIcon.classList.remove("d-none");
+    
+    let filteredItems = arr;
+    
+    // Apply filter if we have search criteria
+    if (query || startDate || endDate) {
+        filteredItems = arr.filter(item => itemMatches(item, field, query, startDate, endDate));
+    }
+    
+    updateDisplay(filteredItems, query, field, startDate, endDate);
+    loadingIcon.classList.add("d-none");
 }
 
 /**
- * Toggle date range inputs based on selected field
- * 
- * @param {string} fieldName - Name of the selected field
- * @param {HTMLElement} container - Container element with inputs
+ * Advanced filter - handles multiple search criteria with boolean logic
+ */
+function advancedFilterItems(arr, searchCriteria) {
+    loadingIcon.classList.remove("d-none");
+    
+    const filteredItems = arr.filter(item => {
+        if (!searchCriteria?.length) return true;
+        
+        let result = true;
+        
+        for (let i = 0; i < searchCriteria.length; i++) {
+            const {boolean, field, value, startDate, endDate} = searchCriteria[i];
+            
+            // Skip empty criteria
+            if (!value && !startDate && !endDate) continue;
+            
+            const matches = itemMatches(item, field, value, startDate, endDate);
+            
+            // Apply boolean logic
+            switch(boolean) {
+                case 'OR':  result = result || matches; break;
+                case 'NOT': result = result && !matches; break;
+                default:    result = result && matches; break; // AND or first item
+            }
+        }
+        
+        return result;
+    });
+    
+    updateDisplay(filteredItems);
+    displayActiveFilters(searchCriteria);
+    loadingIcon.classList.add("d-none");
+}
+
+/**
+ * Update the display with filtered results
+ */
+function updateDisplay(filteredItems, query = "", field = "", startDate = "", endDate = "") {
+    // Update count
+    document.querySelector("#numberOf").innerHTML = `${filteredItems.length} of {{ items | size }} items`;
+    
+    // Generate and display cards
+    const cards = filteredItems.map(item => makeCard(item)).join('');
+    browseItemsDiv.innerHTML = cards;
+    
+    // Focus active input
+    if (query || startDate || endDate) {
+        const activeInput = document.querySelector('#filterTextBox:not([style*="display: none"]), #startDate, #endDate');
+        if (activeInput) activeInput.focus();
+    }
+    
+    // Show filter indicators for basic search
+    if (query || startDate || endDate) {
+        const searchCriteria = [{
+            boolean: 'AND',
+            field: field,
+            value: isDateField(field) ? `${startDate || ''} - ${endDate || ''}`.trim().replace(/^-\s*|-\s*$/g, '') : query,
+            startDate: startDate,
+            endDate: endDate
+        }];
+        displayActiveFilters(searchCriteria);
+    } else if (arguments.length <= 1) { // Only clear if not called from advancedFilterItems
+        displayActiveFilters([]);
+    }
+}
+
+// =============================================================================
+// UI INTERACTION HANDLERS
+// =============================================================================
+
+/**
+ * Toggle between text and date inputs based on field selection
  */
 function toggleDateInputs(fieldName, container) {
     const textInput = container.querySelector('.search-input, #filterTextBox');
@@ -1251,194 +389,30 @@ function toggleDateInputs(fieldName, container) {
     
     if (isDateField(fieldName)) {
         textInput.style.display = 'none';
-        dateInputs.classList.add('active');
         dateInputs.style.display = 'block';
+        dateInputs.classList.add('active');
     } else {
         textInput.style.display = 'block';
-        dateInputs.classList.remove('active');
         dateInputs.style.display = 'none';
+        dateInputs.classList.remove('active');
     }
 }
 
-// Update the filterItems function to handle date ranges
-function filterItems(arr, q, field="all", startDate="", endDate="") {
-    loadingIcon.classList.remove("d-none");
-    
-    // dont filter if no q and no date range
-    if (q=="" && !startDate && !endDate) { 
-        var filteredItems = arr; 
-    } else {
-        var filteredItems = [];
-        
-        for (var i = 0, len = arr.length; i < len; i++) {
-            let itemMatches = false;
-            
-            // Handle date field searches
-            if (isDateField(field) && (startDate || endDate)) {
-                if (arr[i][field]) {
-                    // Handle semicolon-separated date values
-                    let fieldValues = arr[i][field].toString().split(";");
-                    itemMatches = fieldValues.some(value => 
-                        isDateInRange(value.trim(), startDate, endDate)
-                    );
-                }
-            }
-            // Handle regular text searches
-            else if (q && q !== "") {
-                q = q.trim().toUpperCase();
-                
-                // If searching all fields, use original search behavior
-                if (field === "all") {
-                    var val = "";
-                    for (var k in arr[i]) { 
-                        if (k != "img") { val += arr[i][k] + " "; }
-                    }
-                    if(val.toUpperCase().indexOf(q) != -1){
-                        itemMatches = true;
-                    }
-                } 
-                // If searching specific field, handle semicolon-separated values
-                else if (arr[i][field]) {
-                    let fieldValues = arr[i][field].toString().split(";");
-                    if (fieldValues.some(value => value.trim().toUpperCase().indexOf(q) != -1)) {
-                        itemMatches = true;
-                    }
-                }
-            }
-            
-            if (itemMatches) {
-                filteredItems.push(arr[i]);
-            }
-        }
-    }
-    
-    // add number 
-    document.querySelector("#numberOf").innerHTML = filteredItems.length + " of {{ items | size }} items";
-    
-    // add stuff, make cards first in giant var, then add all at once to speed things up
-    var cards = "";
-    for (var i = 0, len = filteredItems.length; i < len; i++) {
-        cards += makeCard(filteredItems[i]);
-    }
-    browseItemsDiv.innerHTML = cards;
-
-    // finish
-    if (q != "" || startDate || endDate) {
-        const activeInput = document.querySelector('#filterTextBox:not([style*="display: none"]), #startDate, #endDate');
-        if (activeInput) activeInput.focus();
-    }
-    
-    // Display active filter indicators
-    if ((q && q !== "") || startDate || endDate) {
-        const searchCriteria = [{
-            boolean: 'AND',
-            field: field,
-            value: isDateField(field) ? 
-                `${startDate || ''} - ${endDate || ''}`.trim().replace(/^-\s*|-\s*$/g, '') : q,
-            startDate: startDate,
-            endDate: endDate
-        }];
-        displayActiveFilters(searchCriteria);
-    } else {
-        displayActiveFilters([]);
-    }
-    
-    loadingIcon.classList.add("d-none");
-}
-
-// Update the advancedFilterItems function to handle date ranges
-function advancedFilterItems(arr, searchCriteria) {
-    loadingIcon.classList.remove("d-none");
-    
-    var filteredItems = arr.filter(item => {
-        // If no criteria, return all items
-        if (!searchCriteria || !searchCriteria.length) return true;
-        
-        let result = true;
-        let previousResult = true;
-        
-        for (let i = 0; i < searchCriteria.length; i++) {
-            const {boolean, field, value, startDate, endDate} = searchCriteria[i];
-            
-            // Skip empty criteria
-            if (!value && !startDate && !endDate) continue;
-            
-            let itemMatches = false;
-            
-            // Handle date field searches
-            if (isDateField(field) && (startDate || endDate)) {
-                if (item[field]) {
-                    let fieldValues = item[field].toString().split(";");
-                    itemMatches = fieldValues.some(val => 
-                        isDateInRange(val.trim(), startDate, endDate)
-                    );
-                }
-            }
-            // Handle "all fields" search
-            else if (field === 'all' && value) {
-                for (let k in item) {
-                    if (item[k] && typeof item[k] === 'string' && 
-                        item[k].toUpperCase().includes(value.trim().toUpperCase())) {
-                        itemMatches = true;
-                        break;
-                    }
-                }
-            } 
-            // Regular field search
-            else if (value) {
-                const itemValue = item[field];
-                const fieldValues = itemValue ? itemValue.toString().split(";") : [];
-                itemMatches = fieldValues.some(v => 
-                    v.trim().toUpperCase().includes(value.trim().toUpperCase())
-                );
-            }
-            
-            switch(boolean) {
-                case 'AND':
-                    result = previousResult && itemMatches;
-                    break;
-                case 'OR':
-                    result = previousResult || itemMatches;
-                    break;
-                case 'NOT':
-                    result = previousResult && !itemMatches;
-                    break;
-                default:
-                    result = itemMatches;
-            }
-            
-            previousResult = result;
-        }
-        return result;
-    });
-    
-    document.querySelector("#numberOf").innerHTML = filteredItems.length + " of {{ items | size }} items";
-    
-    var cards = "";
-    for (var i = 0, len = filteredItems.length; i < len; i++) {
-        cards += makeCard(filteredItems[i]);
-    }
-    browseItemsDiv.innerHTML = cards;
-    
-    // Display active filter indicators
-    displayActiveFilters(searchCriteria);
-    
-    loadingIcon.classList.add("d-none");
-}
-
-// Update the submitFilter function to handle date inputs
+/**
+ * Handle basic search form submission
+ */
 function submitFilter() {
     const query = filterTextBox.value;
-    const field = document.querySelector("#fieldSelect").value;
+    const fieldSelect = document.querySelector("#fieldSelect");
+    const field = fieldSelect ? fieldSelect.value : "all";
     
-    // Check if this is a date field
     if (isDateField(field)) {
         const startDate = document.querySelector("#startDate").value;
         const endDate = document.querySelector("#endDate").value;
         
         if (!startDate && !endDate) return false;
         
-        // For date ranges, use URL parameters instead of hash
+        // Use URL parameters for date searches
         const params = new URLSearchParams();
         params.set('f0', field);
         params.set('b0', 'AND');
@@ -1448,39 +422,131 @@ function submitFilter() {
         
         window.location = window.location.pathname + "?" + params.toString();
     } else {
-        // Regular text search - use existing hash method
-        if (field === "all") {
-            window.location.hash = encodeURIComponent(query);
-        } else {
-            window.location.hash = encodeURIComponent(field + ":" + query);
-        }
+        // Use hash for text searches
+        const hash = field === "all" ? query : `${field}:${query}`;
+        window.location.hash = encodeURIComponent(hash);
     }
     return false;
 }
 
-// Add event listeners for field selection changes
-document.querySelector("#fieldSelect").addEventListener("change", function(e) {
-    const field = e.target.value;
-    toggleDateInputs(field, document.querySelector('#browseFilter'));
+/**
+ * Reset all filters and return to base URL
+ */
+function resetFilter() {
+    // Clear UI
+    filterTextBox.value = "";
+    {% unless site.data.theme.faceted-search == false %}document.querySelector("#fieldSelect").value = "all";{% endunless%}
     
-    document.querySelector("#selectedField").textContent = 
-        e.target.options[e.target.selectedIndex].text;
-});
+    // Clear URL completely
+    if (window.location.hash || window.location.search) {
+        window.location = window.location.pathname;
+        return false;
+    }
+    
+    // Reset advanced search form
+    const searchRows = document.getElementById('searchRows');
+    if (searchRows) {
+        searchRows.innerHTML = '';
+        for (let i = 0; i < 3; i++) addSearchRow();
+    }
+    
+    filterItems(items, "", "all");
+    displayActiveFilters([]);
+    return false;
+}
 
-// Update the addSearchRow function to handle date inputs
+// =============================================================================
+// URL STATE MANAGEMENT
+// =============================================================================
+
+/**
+ * Handle hash-based searches (simple searches and facet links)
+ */
+function handleHashChange() {
+    const hash = decodeURIComponent(location.hash.substr(1));
+    
+    // Don't interfere with parameter-based searches
+    if (!hash && window.location.search) return;
+    
+    // Clear parameters if using hash
+    if (hash && window.location.search) {
+        window.location = window.location.pathname + "#" + hash;
+        return;
+    }
+    
+    // No hash - show all items
+    if (!hash) {
+        filterTextBox.value = "";
+        {% unless site.data.theme.faceted-search == false %}document.querySelector("#fieldSelect").value = "all";{% endunless%}
+        filterItems(items, "", "all");
+        updateAdvancedSearchModal([]);
+        return;
+    }
+    
+    // Parse field:query format
+    let field = 'all';
+    let query = hash;
+    
+    if (hash.includes(":")) {
+        const [potentialField, hashQuery] = hash.split(":");
+        if (validFields.includes(potentialField)) {
+            field = potentialField;
+            query = hashQuery;
+        } else {
+            query = hash; // Invalid field, search everything
+        }
+    }
+    
+    // Update UI and filter
+    filterTextBox.value = query;
+    {% unless site.data.theme.faceted-search == false %}
+    document.querySelector("#fieldSelect").value = field;{% endunless%}
+    filterItems(items, query, field);
+    
+    // Update advanced search modal
+    if (query) {
+        updateAdvancedSearchModal([{boolean: 'AND', field: field, value: query}], true);
+    }
+}
+
+// =============================================================================
+// ADVANCED SEARCH MODAL
+// =============================================================================
+
+/**
+ * Update advanced search modal to reflect current search state
+ */
+function updateAdvancedSearchModal(searchCriteria, forceUpdate = false) {
+    const searchRows = document.getElementById('searchRows');
+    if (!searchRows) return;
+    
+    // Add default empty rows if no criteria
+    if (!searchCriteria.length && searchRows.children.length === 0) {
+        for (let i = 0; i < 3; i++) addSearchRow();
+        return;
+    }
+    
+    // Rebuild rows from criteria
+    if (searchCriteria.length && (searchRows.children.length === 0 || forceUpdate)) {
+        searchRows.innerHTML = '';
+        searchCriteria.forEach(criteria => addSearchRow(criteria));
+        addSearchRow(); // Extra empty row
+    }
+}
+
+/**
+ * Add a search row to the advanced search modal
+ */
 function addSearchRow(values = {}) {
     const template = document.getElementById('searchRowTemplate');
     const searchRows = document.getElementById('searchRows');
     const newRow = template.content.cloneNode(true);
     const row = newRow.querySelector('.search-row');
     
-    // Set values if provided
-    if (values.boolean) {
-        row.querySelector('.boolean-operator').value = values.boolean;
-    }
+    // Set initial values
+    if (values.boolean) row.querySelector('.boolean-operator').value = values.boolean;
     if (values.field) {
         row.querySelector('.field-select').value = values.field;
-        // Toggle date inputs based on field
         toggleDateInputs(values.field, row);
     }
     if (values.value && !isDateField(values.field)) {
@@ -1500,62 +566,42 @@ function addSearchRow(values = {}) {
         row.querySelector('.boolean-operator').style.visibility = 'hidden';
     }
     
-    // Add field change handler
-    row.querySelector('.field-select').addEventListener('change', function(e) {
-        toggleDateInputs(e.target.value, row);
-    });
-    
-    // Add remove button handler
-    row.querySelector('.remove-row').addEventListener('click', function() {
+    // Event handlers
+    row.querySelector('.field-select').addEventListener('change', e => toggleDateInputs(e.target.value, row));
+    row.querySelector('.remove-row').addEventListener('click', () => {
         row.remove();
         if (searchRows.children.length === 1) {
             searchRows.querySelector('.boolean-operator').style.visibility = 'hidden';
         }
     });
     
-    // Add enter key handlers
-    row.querySelector('.search-input').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            submitAdvancedSearch();
-            return false;
+    // Enter key handlers
+    ['.search-input', '.start-date', '.end-date'].forEach(selector => {
+        const input = row.querySelector(selector);
+        if (input) {
+            input.addEventListener('keypress', e => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    submitAdvancedSearch();
+                }
+            });
         }
     });
-    
-    const startDateInput = row.querySelector('.start-date');
-    const endDateInput = row.querySelector('.end-date');
-    if (startDateInput) {
-        startDateInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                submitAdvancedSearch();
-                return false;
-            }
-        });
-    }
-    if (endDateInput) {
-        endDateInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                submitAdvancedSearch();
-                return false;
-            }
-        });
-    }
     
     searchRows.appendChild(row);
 }
 
-// Update submitAdvancedSearch function to handle date ranges
+/**
+ * Submit advanced search form
+ */
 function submitAdvancedSearch(event) {
-    if (event && event.preventDefault) {
-        event.preventDefault();
-    }
+    if (event?.preventDefault) event.preventDefault();
     
     const form = document.getElementById('advancedSearchForm');
     const rows = form.querySelectorAll('.search-row');
-    const searchParams = {};
+    const params = new URLSearchParams();
     
+    // Build parameters from form rows
     rows.forEach((row, index) => {
         const boolean = index === 0 ? 'AND' : row.querySelector('.boolean-operator').value;
         const field = row.querySelector('.field-select').value;
@@ -1565,40 +611,32 @@ function submitAdvancedSearch(event) {
             const endDate = row.querySelector('.end-date').value.trim();
             
             if (startDate || endDate) {
-                searchParams[`b${index}`] = boolean;
-                searchParams[`f${index}`] = field;
-                searchParams[`v${index}`] = `${startDate || ''} - ${endDate || ''}`.trim().replace(/^-\s*|-\s*$/g, '');
-                if (startDate) searchParams[`start${index}`] = startDate;
-                if (endDate) searchParams[`end${index}`] = endDate;
+                params.set(`b${index}`, boolean);
+                params.set(`f${index}`, field);
+                params.set(`v${index}`, `${startDate || ''} - ${endDate || ''}`.trim().replace(/^-\s*|-\s*$/g, ''));
+                if (startDate) params.set(`start${index}`, startDate);
+                if (endDate) params.set(`end${index}`, endDate);
             }
         } else {
             const value = row.querySelector('.search-input').value.trim();
             if (value) {
-                searchParams[`b${index}`] = boolean;
-                searchParams[`f${index}`] = field;
-                searchParams[`v${index}`] = value;
+                params.set(`b${index}`, boolean);
+                params.set(`f${index}`, field);
+                params.set(`v${index}`, value);
             }
         }
     });
     
-    // Add current sort option
+    // Preserve sort
     const activeSort = document.querySelector(".browse-sort-item.active");
-    if (activeSort) {
-        searchParams['sort'] = activeSort.dataset.filter;
-    }
+    if (activeSort) params.set('sort', activeSort.dataset.filter);
     
-    const queryString = new URLSearchParams();
-    Object.entries(searchParams).forEach(([key, value]) => {
-        queryString.append(key, value);
-    });
+    window.location = window.location.pathname + "?" + params.toString();
     
-    window.location = window.location.pathname + "?" + queryString.toString();
-    
+    // Close modal
     try {
         const modal = bootstrap.Modal.getInstance(document.getElementById('advancedSearchModal'));
-        if (modal) {
-            modal.hide();
-        }
+        modal?.hide();
     } catch (e) {
         console.error('Could not close modal:', e);
     }
@@ -1606,136 +644,381 @@ function submitAdvancedSearch(event) {
     return false;
 }
 
-// Update the window load event listener to handle date parameters
+// =============================================================================
+// ACTIVE FILTER INDICATORS
+// =============================================================================
+
+/**
+ * Display active filter buttons below search box
+ */
+function displayActiveFilters(searchCriteria) {
+    const activeFiltersDiv = document.getElementById('activeFilters');
+    if (!activeFiltersDiv) return;
+    
+    activeFiltersDiv.innerHTML = '';
+    if (!searchCriteria?.length) return;
+    
+    const container = document.createElement('div');
+    container.className = 'd-flex flex-wrap align-items-center';
+    
+    // Create filter buttons
+    searchCriteria.forEach((criteria, index) => {
+        if (!criteria.value) return;
+        
+        const button = document.createElement('button');
+        button.className = `btn btn-sm btn-outline-${criteria.boolean === 'NOT' ? 'danger' : criteria.boolean === 'OR' ? 'warning' : 'success'} me-2 mb-1`;
+        button.type = 'button';
+        
+        // Get field display name
+        let fieldName = criteria.field === 'all' ? 'All Fields' : 
+            {% for f in fields %}'{{f.field}}' === criteria.field ? '{% if f.display_name %}{{f.display_name}}{% else %}{{f.field | capitalize }}{% endif %}' : {% endfor %}
+            criteria.field.charAt(0).toUpperCase() + criteria.field.slice(1).replace(/_/g, ' ');
+        
+        // Format display value for dates
+        let displayValue = criteria.value;
+        if (isDateField(criteria.field) && (criteria.startDate || criteria.endDate)) {
+            if (criteria.startDate && criteria.endDate) {
+                displayValue = `${criteria.startDate} to ${criteria.endDate}`;
+            } else if (criteria.startDate) {
+                displayValue = `from ${criteria.startDate}`;
+            } else if (criteria.endDate) {
+                displayValue = `until ${criteria.endDate}`;
+            }
+        }
+        
+        const showBoolean = searchCriteria.length > 1 && criteria.boolean !== 'AND';
+        button.innerHTML = `
+            <span class="me-1">${showBoolean ? criteria.boolean + ' ' : ''}${fieldName}: "${displayValue}"</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+            </svg>
+        `;
+        
+        button.addEventListener('click', () => {
+            if (window.location.hash && !window.location.search) {
+                resetFilter();
+            } else {
+                removeActiveFilter(index);
+            }
+        });
+        
+        container.appendChild(button);
+    });
+    
+    // Add "Add Field" button
+    const addButton = document.createElement('button');
+    addButton.type = 'button';
+    addButton.className = 'btn btn-outline-secondary btn-sm mb-1{% if site.data.theme.advanced-search == false %} d-none{% endif %}';
+    addButton.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"></path>
+            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"></path>
+        </svg>
+        Add Field
+    `;
+    addButton.addEventListener('click', () => {
+        new bootstrap.Modal(document.getElementById('advancedSearchModal')).show();
+    });
+    
+    container.appendChild(addButton);
+    activeFiltersDiv.appendChild(container);
+}
+
+/**
+ * Remove a specific active filter by rebuilding URL without it
+ */
+function removeActiveFilter(filterIndex) {
+    if (window.location.hash && !window.location.search) {
+        resetFilter();
+        return;
+    }
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    const newParams = new URLSearchParams();
+    let newIndex = 0;
+    
+    // Rebuild parameters excluding the removed filter
+    let index = 0;
+    while (urlParams.has(`f${index}`)) {
+        if (index !== filterIndex) {
+            newParams.set(`b${newIndex}`, urlParams.get(`b${index}`));
+            newParams.set(`f${newIndex}`, urlParams.get(`f${index}`));
+            newParams.set(`v${newIndex}`, urlParams.get(`v${index}`));
+            if (urlParams.has(`start${index}`)) newParams.set(`start${newIndex}`, urlParams.get(`start${index}`));
+            if (urlParams.has(`end${index}`)) newParams.set(`end${newIndex}`, urlParams.get(`end${index}`));
+            newIndex++;
+        }
+        index++;
+    }
+    
+    // Preserve sort
+    if (urlParams.has('sort')) newParams.set('sort', urlParams.get('sort'));
+    
+    // Navigate to new URL or reset if no filters left
+    if (newIndex === 0) {
+        resetFilter();
+    } else {
+        window.location = window.location.pathname + '?' + newParams.toString();
+    }
+}
+
+// =============================================================================
+// SORTING UTILITIES
+// =============================================================================
+
+/**
+ * Fisher-Yates shuffle for random sorting
+ */
+function shuffle(array) {
+    let m = array.length;
+    while (m) {
+        const i = Math.floor(Math.random() * m--);
+        [array[m], array[i]] = [array[i], array[m]];
+    }
+    return array;
+}
+
+/**
+ * Sort items by specified field
+ */
+function sorting(jsonObject, keyToSortBy) {
+    jsonObject.sort((a, b) => {
+        let x = a[keyToSortBy];
+        let y = b[keyToSortBy];
+        if (typeof x === 'string') x = x.toUpperCase();
+        if (typeof y === 'string') y = y.toUpperCase();
+        return (x == null) ? 1 : (y == null) ? -1 : (x < y) ? -1 : (x > y) ? 1 : 0;
+    });
+}
+
+// =============================================================================
+// INITIALIZATION & EVENT HANDLERS
+// =============================================================================
+
+/**
+ * Initialize page on load
+ */
 window.addEventListener('load', function() {
-    // Initialize search state based on URL
+    // Cache DOM elements
+    loadingIcon = document.querySelector("#loadingIcon");
+    filterTextBox = document.querySelector('#filterTextBox');
+    browseItemsDiv = document.querySelector("#browseItems");
+    
+    // Initialize default sort
+    {% if site.data.theme.default-sort-field %}
+    const defaultSort = "{{ site.data.theme.default-sort-field }}".toLowerCase();
+    const matchingSort = document.querySelector(`[data-filter="${defaultSort}"]`);
+    if (matchingSort) {
+        sorting(items, defaultSort);
+        matchingSort.classList.add("active");
+        document.getElementById("sortFilter").innerHTML = matchingSort.textContent;
+    } else {
+        shuffle(items);
+    }
+    {% else %}
+    shuffle(items);
+    {% endif %}
+    
+    // Parse URL and initialize search state
     const urlParams = new URLSearchParams(window.location.search);
     
-    // Handle sort parameter from URL if present
+    // Handle sort parameter
     if (urlParams.has('sort')) {
         const sortValue = urlParams.get('sort');
-        const sortOptions = document.querySelectorAll('.browse-sort-item');
-        
-        // Update sort UI to match URL parameter
-        sortOptions.forEach((option) => {
+        document.querySelectorAll('.browse-sort-item').forEach(option => {
             option.classList.remove('active');
             if (option.dataset.filter === sortValue) {
                 option.classList.add('active');
                 document.getElementById('sortFilter').innerHTML = option.textContent;
-                
-                // Apply the sort if it's not random
-                if (sortValue !== 'random') {
-                    sorting(items, sortValue);
-                } else {
-                    shuffle(items);
-                }
+                sortValue !== 'random' ? sorting(items, sortValue) : shuffle(items);
             }
         });
     }
     
-    // Handle URL parameters for advanced search (including dates)
+    // Handle advanced search parameters
     if (urlParams.toString()) {
         const searchRows = document.getElementById('searchRows');
-        if (searchRows) {
-            searchRows.innerHTML = '';
-        }
+        if (searchRows) searchRows.innerHTML = '';
         
         let index = 0;
         const searchCriteria = [];
         
+        // Parse URL parameters into search criteria
         while (urlParams.has(`f${index}`)) {
-            const boolean = urlParams.get(`b${index}`);
-            const field = urlParams.get(`f${index}`);
-            const value = urlParams.get(`v${index}`);
-            const startDate = urlParams.get(`start${index}`);
-            const endDate = urlParams.get(`end${index}`);
-            
-            const criteria = {boolean, field, value};
-            if (startDate) criteria.startDate = startDate;
-            if (endDate) criteria.endDate = endDate;
+            const criteria = {
+                boolean: urlParams.get(`b${index}`),
+                field: urlParams.get(`f${index}`),
+                value: urlParams.get(`v${index}`)
+            };
+            if (urlParams.has(`start${index}`)) criteria.startDate = urlParams.get(`start${index}`);
+            if (urlParams.has(`end${index}`)) criteria.endDate = urlParams.get(`end${index}`);
             
             searchCriteria.push(criteria);
-            
-            if (searchRows) {
-                addSearchRow(criteria);
-            }
-            
+            if (searchRows) addSearchRow(criteria);
             index++;
         }
         
-        // Add one extra empty row for convenience
-        if (searchRows && searchCriteria.length > 0) {
-            addSearchRow();
-        }
-        
+        // Add extra empty row and apply filters
+        if (searchRows && searchCriteria.length > 0) addSearchRow();
         advancedFilterItems(items, searchCriteria);
     }
-    
-    // If we have a hash but no search params, handle hash-based search
+    // Handle hash-based search
     else if (window.location.hash) {
         handleHashChange();
     }
-    // No search parameters or hash, initialize with default view
+    // Default: show all items
     else {
-        // Initialize modal with empty rows if it exists
         const searchRows = document.getElementById('searchRows');
         if (searchRows) {
             searchRows.innerHTML = '';
-            for (let i = 0; i < 3; i++) {
-                addSearchRow();
-            }
+            for (let i = 0; i < 3; i++) addSearchRow();
         }
-        
-        // Show all items
         filterItems(items, "", "all");
     }
     
-    // Set up form submission handlers
+    // Set up event handlers
+    setupEventHandlers();
+});
+
+/**
+ * Set up all event handlers
+ */
+function setupEventHandlers() {
+    // Hash change handler
+    window.addEventListener("hashchange", handleHashChange);
+    
+    // Form submission handlers
+    document.getElementById('browseFilter').addEventListener('submit', e => {
+        e.preventDefault();
+        submitFilter();
+        return false;
+    });
+    
     const advancedSearchForm = document.getElementById('advancedSearchForm');
     if (advancedSearchForm) {
-        advancedSearchForm.addEventListener('submit', function(e) {
+        advancedSearchForm.addEventListener('submit', e => {
             e.preventDefault();
             submitAdvancedSearch(e);
             return false;
         });
     }
     
-    // Basic search form submission
-    document.getElementById('browseFilter').addEventListener('submit', function(e) {
-        e.preventDefault();
-        submitFilter();
-        return false;
+    {% unless site.data.theme.faceted-search == false %}
+    // Field selection handlers
+    document.querySelector("#fieldSelect").addEventListener("change", function(e) {
+        const field = e.target.value;
+        
+        if (field === 'advanced') {
+            e.target.value = 'all';
+            new bootstrap.Modal(document.getElementById('advancedSearchModal')).show();
+            return;
+        }
+        
+        toggleDateInputs(field, document.querySelector('#browseFilter'));
+        document.querySelector("#selectedField").textContent = e.target.options[e.target.selectedIndex].text;
     });
     
-    // Intercept modal open event to ensure search rows are updated
+    // Mobile dropdown handler
+    document.addEventListener('click', function(e) {
+        if (e.target.matches('.dropdown-item[data-field]')) {
+            const field = e.target.getAttribute('data-field');
+            const fieldSelect = document.getElementById('fieldSelect');
+            const selectedField = document.getElementById('selectedField');
+            
+            if (field === 'advanced') {
+                new bootstrap.Modal(document.getElementById('advancedSearchModal')).show();
+                return;
+            }
+            
+            if (fieldSelect) {
+                fieldSelect.value = field;
+                fieldSelect.dispatchEvent(new Event('change'));
+            }
+            if (selectedField) selectedField.textContent = e.target.textContent;
+        }
+    });{% endunless %}
+    
+    // Sort option handlers
+    document.querySelectorAll(".browse-sort-item").forEach(button => {
+        button.addEventListener("click", event => {
+            const field = button.dataset.filter;
+            const displayName = button.textContent;
+            
+            // Update active sort option
+            document.querySelectorAll(".browse-sort-item").forEach(opt => opt.classList.remove("active"));
+            button.classList.add("active");
+            document.getElementById("sortFilter").innerHTML = displayName;
+            
+            // Apply sort
+            field !== 'random' ? sorting(items, field) : shuffle(items);
+            
+            // Handle current search state
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            if (urlParams.toString()) {
+                // Advanced search active - update URL with sort parameter
+                const searchCriteria = [];
+                let index = 0;
+                
+                while (urlParams.has(`f${index}`)) {
+                    const criteria = {
+                        boolean: urlParams.get(`b${index}`),
+                        field: urlParams.get(`f${index}`),
+                        value: urlParams.get(`v${index}`)
+                    };
+                    if (urlParams.has(`start${index}`)) criteria.startDate = urlParams.get(`start${index}`);
+                    if (urlParams.has(`end${index}`)) criteria.endDate = urlParams.get(`end${index}`);
+                    searchCriteria.push(criteria);
+                    index++;
+                }
+                
+                const newParams = new URLSearchParams();
+                searchCriteria.forEach((criteria, i) => {
+                    newParams.set(`b${i}`, criteria.boolean);
+                    newParams.set(`f${i}`, criteria.field);
+                    newParams.set(`v${i}`, criteria.value);
+                    if (criteria.startDate) newParams.set(`start${i}`, criteria.startDate);
+                    if (criteria.endDate) newParams.set(`end${i}`, criteria.endDate);
+                });
+                newParams.set('sort', field);
+                
+                window.history.pushState({}, '', window.location.pathname + '?' + newParams.toString());
+                advancedFilterItems(items, searchCriteria);
+            } else {
+                // Basic search - apply sort and current filter
+                const query = filterTextBox.value;
+                {% if site.data.theme.faceted-search == false %}
+                const searchField = 'all';
+                {% else %}
+                const searchField = document.querySelector("#fieldSelect").value;{% endif %}
+                filterItems(items, query, searchField);
+            }
+        });
+    });
+    
+    // Advanced search modal handler
     const advancedSearchModal = document.getElementById('advancedSearchModal');
     if (advancedSearchModal) {
         advancedSearchModal.addEventListener('show.bs.modal', function() {
-            // If we have a hash-based search, reflect it in the modal
+            // Reflect hash-based search in modal
             if (window.location.hash && !window.location.search) {
                 const hash = decodeURIComponent(location.hash.substr(1));
                 if (!hash) return;
                 
                 let field = 'all';
-                let q = hash;
+                let query = hash;
                 
                 if (hash.includes(":")) {
-                    var [potentialField, hashQ] = hash.split(":");
+                    const [potentialField, hashQuery] = hash.split(":");
                     if (validFields.includes(potentialField)) {
                         field = potentialField;
-                        q = hashQ;
+                        query = hashQuery;
                     }
                 }
                 
-                const searchCriteria = [{
-                    boolean: 'AND',
-                    field: field,
-                    value: q
-                }];
-                
-                updateAdvancedSearchModal(searchCriteria);
+                updateAdvancedSearchModal([{boolean: 'AND', field: field, value: query}]);
             }
         });
     }
-});
+}
 </script>
