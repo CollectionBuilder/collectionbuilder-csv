@@ -16,8 +16,9 @@
 {%- comment -%} capture terms from all cloud fields {%- endcomment -%}
 {%- assign terms = "" -%}
 {%- for c in cloud-fields -%}
-{% assign new = items | map: c | join: ";" %}
-{% assign terms = terms | append: ";" | append: new %}
+{% assign new = items | map: c | join: ";" | split: ";" %}
+{% capture field_terms %}{% for n in new %}{{n}}~{{c}};{% endfor %}{% endcapture %}
+{% assign terms = terms | append: ";" | append: field_terms %}
 {%- endfor -%}
 {%- comment -%} find unique terms and counts {%- endcomment -%}
 {%- assign uniqTerms = terms | downcase | split: ";" | array_count_uniq | sort | where_exp: 't','t[1] >= termsMin' -%}
@@ -26,7 +27,7 @@
 (function(){    
     /* subject terms + count */
     var terms = [
-        {% for t in uniqTerms %}[{{ t[0] | jsonify }}, {{ t[1] | jsonify }}]{% unless forloop.last %}, {% endunless %}{% endfor %}
+        {% for t in uniqTerms %}{% assign term_field = t[0] | split: "~" %}[{{ term_field[0] | jsonify }}, {{ t[1] | jsonify }},{{term_field[1] | jsonify}}]{% unless forloop.last %}, {% endunless %}{% endfor %}
     ];
 
     {% if include.stopwords %}/* apply stopwords */
@@ -56,9 +57,9 @@
         var i, size;
         var items = "";
         {% if include.shuffle == true %}shuffle(array);{% endif %}
-        for (i = 0; i < array.length; i++) {
+        for (let i = 0; i < array.length; i++) {
             size = mapSize(array[i][1]);
-            items += '<a class="btn btn-{{ include.button | default: "outline-primary" }} m-2 tagcloud' + size + '" href="{{ "/browse.html" | relative_url }}#' + encodeURIComponent(array[i][0]) + '" >' + array[i][0] + '</a>';
+            items += '<a class="btn btn-{{ include.button | default: "outline-primary" }} m-2 tagcloud' + size + '" href="{{ "/browse.html" | relative_url }}#' + array[i][2] + ':' + encodeURIComponent(array[i][0]) + '" >' + array[i][0] + '</a>';
         }
         cloud.innerHTML = items;
     }
