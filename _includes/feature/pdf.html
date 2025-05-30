@@ -31,13 +31,13 @@
 {%- capture pdf_link -%}{{ '/items/' | relative_url }}{% if item.parentid %}{{ item.parentid }}.html#{{ item.objectid }}{% else %}{{ item.objectid }}.html{% endif %}{%- endcapture -%}
 {%- capture pdf_caption -%}{% if include.caption %}{{ include.caption }}{% else %}{{ item.title }}{% endif %}{%- endcapture -%}
 {% endif %}
-<div class="text-center">
+<div class="feature-include">
     <figure class="figure border rounded p-1 feature-w-{{ include.width | default: '100' }}">
         <div class="{% unless include.height %}ratio ratio-{{ include.ratio | default: '1x1' }}{% endunless %}">
             <object aria-label="pdf embed of {{ pdf_caption | escape }}" {% if include.height %}width="100%" height="{{ include.height }}"{% endif %} data="{{ src }}">
                 <p>The PDF is not rendering in your browser. Please <a href="{{ src }}">download the PDF</a> to view.</p>
             </object>
         </div>
-        {% unless include.caption == false %}<figcaption class="figure-caption"><a href="{{ pdf_link }}">{{ pdf_caption }}</a></figcaption>{% endunless %}
+        {% unless include.caption == false %}<figcaption class="figure-caption text-center"><a href="{{ pdf_link }}">{{ pdf_caption }}</a></figcaption>{% endunless %}
     </figure>
 </div>

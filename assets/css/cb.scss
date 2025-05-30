@@ -20,7 +20,9 @@ $theme-link-color: {{ site.data.theme.link-color | default: '""' }};
 );
 
 /* individual CB page styles */
-@use "pages"; 
+@forward "pages" with (
+  $toc-a-color: {{ site.data.theme.text-color | default: '#191919' }}
+); 
 
 /* theme colors pulled from config-theme-colors */
 {% assign btns = site.data.config-theme-colors | where_exp: "item","item.color != nil" %}
