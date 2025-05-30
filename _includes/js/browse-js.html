@@ -24,7 +24,7 @@ var items = [
     {% for item in items %}
     { {% for f in fields %}{% if item[f.field] %}{{ f.field | escape | jsonify }}:{{ item[f.field] | strip | jsonify }}, {%- endif -%}{%- endfor -%}
         {% if item.image_thumb %}"img": {{ item.image_thumb | relative_url | jsonify }}, {%- endif -%} 
-        {% if item.display_template %}"template": {{ item.display_template | jsonify }}, {%- endif -%}
+        {% if item.display_template %}"display_template": {{ item.display_template | jsonify }}, {%- endif -%}
         {% if item.format %}"format": {{ item.format | jsonify }}, {%- endif -%}
         {% if item.image_alt_text %}"alt": {{ item.image_alt_text | escape | jsonify }}, {%- endif -%}
         "title":{{ item.title | strip | escape | jsonify }},
@@ -66,7 +66,7 @@ function makeCard(obj) {
     
     // Icon for items without images
     if(!obj.img) {
-        const thumbIcon = getIcon(obj.template, obj.format, "thumb");
+        const thumbIcon = getIcon(obj.display_template, obj.format, "thumb");
         if(thumbIcon) card += `<p><a href="${itemHref}">${thumbIcon}</a></p>`;
     }
     
@@ -91,9 +91,9 @@ function makeCard(obj) {
     card += '</p>';
     
     // Media type badge
-    if(obj.template) {
-        const mediaIcon = getIcon(obj.template, obj.format, "hidden");
-        card += `<p class="card-text"><small><a class="btn btn-sm btn-outline-secondary" href="{{ page.url | relative_url }}#display_template:${encodeURIComponent(obj.template)}">${obj.template.toUpperCase().replace("_"," ")} ${mediaIcon}</a></small></p>`;
+    if(obj.display_template) {
+        const mediaIcon = getIcon(obj.display_template, obj.format, "hidden");
+        card += `<p class="card-text"><small><a class="btn btn-sm btn-outline-secondary" href="{{ page.url | relative_url }}#display_template:${encodeURIComponent(obj.display_template)}">${obj.display_template.toUpperCase().replace("_"," ")} ${mediaIcon}</a></small></p>`;
     }
     
     card += `<hr><a href="${itemHref}" class="btn btn-sm btn-light" title="link to ${obj.title}">View Full Record</a></div></div></div>`;

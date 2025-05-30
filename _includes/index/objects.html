@@ -33,7 +33,7 @@
         {%- assign count = templates | where_exp: 'item', 'item contains t' | size -%}
         {% if count > 0 %}
         {{ count }}
-        <a class="text-dark" href="{{ t | prepend: '/browse.html#' | relative_url }}">{{ t | upcase | replace: "_", " " }} 
+        <a class="text-dark" href="{{ '/browse.html' | relative_url }}#display_template:{{ t }}">{{ t | upcase | replace: "_", " " }} 
         {% include helpers/get-icon-svg.html type="hidden" template=t %}</a><br>
         {%- endif -%}
         {%- endfor -%}

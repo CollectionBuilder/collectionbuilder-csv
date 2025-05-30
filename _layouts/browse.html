@@ -20,7 +20,8 @@ custom-foot: js/browse-js.html
                     {% for f in fields %}
                     {% assign cap-field = f.field | capitalize %}
                     <option value="{{ f.field }}">{{ f.facet_name | default: f.display_name | default: cap-field }}</option>
-                   {% endfor %}
+                    {% endfor %}
+                    <option value="display_template">Item type</option>
                     {% if site.data.theme.advanced-search == true %}
                     <option value="" disabled>─────────────</option>
                     <option value="advanced">Advanced Search...</option>{% endif %}
@@ -40,6 +41,7 @@ custom-foot: js/browse-js.html
                         {% assign cap-field = f.field | capitalize %}
                         <button class="dropdown-item" type="button" data-field="{{ f.field }}">{{ f.facet_name | default: f.display_name | default: cap-field }}</button>
                         {% endfor %}
+                        <button class="dropdown-item" type="button" data-field="display_template">Item type</button>
                         {% if site.data.theme.advanced-search == true %}
                         <div class="dropdown-divider"></div>
                         <button class="dropdown-item" type="button" data-field="advanced">Advanced Search...</button>
