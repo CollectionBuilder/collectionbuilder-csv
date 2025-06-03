@@ -5,6 +5,11 @@ layout: item/item-page-base
 
 <div class="mb-4 text-center">
 
+    {% if page.image_small or page.image_thumb %}
+    <p>
+        {% include item/item-thumb.html %}
+    </p>
+    {% endif %}
     <div class="my-2">
         {% include item/download-buttons.html %}
     </div>
