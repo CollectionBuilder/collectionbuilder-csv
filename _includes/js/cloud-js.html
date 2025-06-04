@@ -16,7 +16,7 @@
 {%- comment -%} capture terms from all cloud fields {%- endcomment -%}
 {%- assign terms = "" -%}
 {%- for c in cloud-fields -%}
-{% assign new = items | map: c | join: ";" | split: ";" %}
+{% assign new = items | map: c | compact | join: ";" | split: ";" %}
 {% capture field_terms %}{% for n in new %}{{n}}~{{c}};{% endfor %}{% endcapture %}
 {% assign terms = terms | append: ";" | append: field_terms %}
 {%- endfor -%}
