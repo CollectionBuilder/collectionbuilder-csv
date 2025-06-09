@@ -36,5 +36,5 @@ Do not include the `baseurl` value that you set in "_config.yml", since this wil
 
 ## Display Template
 
-- `display_template`: a template type used in logic to set up different Item page features. If blank the object will default to a generic item page. Default supported options: `image`,`pdf`, `video`, `audio`, `panorama`, `record`, `item`, `multiple`, and `compound_object`. See docs/item-pages.md for details.
+- `display_template`: a template type used in logic to set up different Item page features. If blank the object will default to a generic item page. Default supported options: `image`,`pdf`, `video`, `audio`, `panorama`, `record`, `item`, `markdown`, `multiple`, and `compound_object`. See docs/item-pages.md for details.
 - `parentid`: used to designate child items in the "multiple" and "compound_object" templates, a unique string matching the objectid of the parent item. See docs/compound_objects.md for details.

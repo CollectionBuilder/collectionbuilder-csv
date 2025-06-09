@@ -27,6 +27,9 @@ function getIcon(objectTemplate,objectFormat,svgType) {
     } else if (iconTemplate.includes("panorama")) {
         iconId = "icon-panorama";
         iconTitle = "panorama file icon";
+    } else if (iconTemplate.includes("markdown")) {
+        iconId = "icon-markdown";
+        iconTitle = "markdown file icon";
     } else if (iconTemplate.includes("compound")) {
         iconId = "icon-compound-object";
         iconTitle = "compound object icon";
