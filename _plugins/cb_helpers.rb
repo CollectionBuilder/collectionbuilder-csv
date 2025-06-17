@@ -38,7 +38,7 @@ module CollectionBuilderHelperGenerator
       if featured_image.include? "/"
         # if featured image is a link
         featured_item_src = featured_image
-        featured_item_alt = site.config['title']
+        featured_item_alt = site.data['theme']['featured-image-alt-text'] || site.config['title']
         featured_item_link = featured_item_src
       else
         # if featured image is an objectid
@@ -63,7 +63,7 @@ module CollectionBuilderHelperGenerator
               puts color_text("Error cb_helpers: Item for featured image with objectid '#{featured_image}' does not have an image url in metadata. Please check 'featured-image' in '_data/theme.yml' and choose an item that has 'object_location' or 'image_small'", :yellow)
             end
             # use item title as alt
-            featured_item_alt = featured_record[0]['title'] || site.config['title']
+            featured_item_alt = featured_record[0]['image_alt_text'] || featured_record[0]['title'] || site.config['title']
             # figure out item link
             if featured_record[0]['parentid']
               featured_item_link = "/items/" + featured_record[0]['parentid'] + ".html#" + featured_image
