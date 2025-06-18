@@ -1,7 +1,6 @@
 field,display_name,btn,hidden,sort_name
 date,Datum,,,Datum
-subject,Themen,true,,
-era,Epoche,true,,
+coverage,Epoche,true,,
 creator,,,true,
 publisher,,,true,
 language,,,true,

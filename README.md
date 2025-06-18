@@ -1,28 +1,30 @@
 # forschung.stadtgeschichtebasel.ch
 
-The open-source code of the digital platform for research data of Stadt.Geschichte.Basel.
+Open-source code of the **digital research data platform** for [Stadt.Geschichte.Basel](https://stadtgeschichtebasel.ch) — a major historical research initiative hosted at the University of Basel.
 
 [![GitHub issues](https://img.shields.io/github/issues/Stadt-Geschichte-Basel/forschung.stadtgeschichtebasel.ch.svg)](https://github.com/Stadt-Geschichte-Basel/forschung.stadtgeschichtebasel.ch/issues)
 [![GitHub forks](https://img.shields.io/github/forks/Stadt-Geschichte-Basel/forschung.stadtgeschichtebasel.ch.svg)](https://github.com/Stadt-Geschichte-Basel/forschung.stadtgeschichtebasel.ch/network)
 [![GitHub stars](https://img.shields.io/github/stars/Stadt-Geschichte-Basel/forschung.stadtgeschichtebasel.ch.svg)](https://github.com/Stadt-Geschichte-Basel/forschung.stadtgeschichtebasel.ch/stargazers)
 [![GitHub license](https://img.shields.io/github/license/Stadt-Geschichte-Basel/forschung.stadtgeschichtebasel.ch.svg)](https://github.com/Stadt-Geschichte-Basel/forschung.stadtgeschichtebasel.ch/blob/main/LICENSE)
 
-## Overview
+## 🔎 Overview
 
 Welcome to [Stadt.Geschichte.Basel](https://stadtgeschichtebasel.ch/), a historical research project at the University of Basel in Switzerland, funded with over 9 million Swiss Francs from public and private sources, running from 2017 to 2025. It is a comprehensive digital and print project that aims to present the multifaceted history of Basel from its earliest beginnings to the present day. Visit [Stadt.Geschichte.Basel](https://stadtgeschichtebasel.ch) to see how our digital portal brings Basel's history to life.
 
 Stadt.Geschichte.Basel seeks to bridge research gaps and present historical findings in accessible formats. Our project encompasses an [extensive nine-volume book series](https://www.merianverlag.ch/buecher/stadt.geschichte.basel.html), an overview volume, a digital portal, and a digital platform for research data. Hosted at the University of Basel, this project aims to make historical research and insights accessible to scholars and the public like never before.
 
-This project is the open-source code of the digital platform for research data of Stadt.Geschichte.Basel. It is a static website built with [CollectionBuilder-CSV](https://collectionbuilder.github.io/) and hosted on [GitHub Pages](https://pages.github.com/). The research data collection itself is hosted at the University of Bern's [instance of Omeka S](https://omeka.unibe.ch/s/stadtgeschichtebasel/page/sgb).
+This repository contains the **source code for the research data platform**, built with [CollectionBuilder-CSV](https://collectionbuilder.github.io/), a static site generator based on [Jekyll](https://jekyllrb.com/) and deployed via [GitHub Pages](https://pages.github.com/).  
+The collection data is maintained on the [University of Bern’s Omeka S instance](https://omeka.unibe.ch/s/stadtgeschichtebasel/page/sgb).
 
-## Key Features
+## ⚙️ Features
 
-- **Fast Static Website**: Built with CollectionBuilder-CSV using open source static site generator [Jekyll](https://jekyllrb.com/) and a modern static web stack.
-- **Explorative Access to Metadata**: Interactive features for exploring collection metadata such as a timeline, filtering and comprehensive annotation.
-- **Sensitive Content Annotation**: Annotation of collection items following the [Manual for Creating Non-Discriminatory Metadata for Historical Sources and Research Data](https://maehr.github.io/diskriminierungsfreie-metadaten/) developed by Stadt.Geschichte.Basel.
-- **Accessibility-Focused Design**: Ensuring inclusivity for all users by complying with WCAG standards and observing neurodiversity design guidelines. More at our [accessibility statement](https://stadtgeschichtebasel.ch/barrierefreiheitserklaerung/).
+- **Static Site Generator**: Fast, scalable, minimal-maintenance architecture using Jekyll.
+- **Interactive Metadata Exploration**: Timelines, filters, annotations, and visualizations.
+- **Inclusive Metadata Practices**: Based on our [Manual for Creating Non-Discriminatory Metadata](https://maehr.github.io/diskriminierungsfreie-metadaten/).
+- **Accessibility-First Design**: Compliant with [WCAG](https://www.w3.org/WAI/standards-guidelines/wcag/), designed with [Neurodiversity Design System](https://neurodiversity.design/) guidelines in mind.
+- **Open Standards**: Schema.org, Open Graph, EDTF support, and reusable modular components.
 
-### CollectionBuilder
+### 🔧 Project-Specific Extensions to CollectionBuilder
 
 The technical basis for Stadt.Geschichte.Basel's research data platform is provided by [CollectionBuilder](https://collectionbuilder.github.io/), an open source framework for creating metadata-driven digital collections. CollectionBuilder is a project maintained by the University of Idaho Library's [Digital Initiatives](https://www.lib.uidaho.edu/digital/) and the [Center for Digital Inquiry and Learning](https://cdil.lib.uidaho.edu) (CDIL) following the [Lib-Static](https://lib-static.github.io/) methodology.
 
@@ -45,7 +47,7 @@ Stadt.Geschichte.Basel has extended CollectionBuilder with some features that ar
 - **GitHub Actions**: GitHub actions have been added to check code for correct formatting and to automatically build the site, including processing the data from [Omeka S](https://omeka.unibe.ch/s/stadtgeschichtebasel/page/sgb).
 - **Use of prettier**: All files were formatted using [prettier](https://prettier.io/).
 
-## Data Model
+## 🧱 Data Model
 
 Metadata for items featured on the research data platform is provided according to a data model developed by the Stadt.Geschichte.Basel Research Data Management Team to meet the requirements of the wide range of sources used in the project. The data model (and the subsequent annotation process) follow the [Manual for Creating Non-Discriminatory Metadata for Historical Sources and Research Data](https://maehr.github.io/diskriminierungsfreie-metadaten/) developed by Stadt.Geschichte.Basel.
 
@@ -82,29 +84,55 @@ classDiagram
     metadata "n" --> "m" media
 ```
 
-## Installation
+> [!WARNING]
+> In Omeka, `temporal` refers to the period (e.g. “19th century”), while CollectionBuilder uses `coverage` for this purpose. Allowed values:
+> `Frühgeschichte`, `Antike`, `Mittelalter`, `Frühe Neuzeit`, `19. Jahrhundert`, `20. Jahrhundert`, `21. Jahrhundert`.
 
-Use [Bundle](https://bundler.io/) to install all dependencies.
+## 🚀 Getting Started
+
+### 🔧 Installation
+
+Ensure you have [Ruby](https://rubyonrails.org/) and [Bundle](https://bundler.io/) installed.
 
 ```bash
 bundle install
 ```
 
-## Usage
+Create a `.env` file in the root directory of the project and add the following line:
 
-Run the development server.
+```bash
+OMEKA_API_URL=https://omeka.unibe.ch/s/stadtgeschichtebasel
+KEY_IDENTITY=YOUR_KEY_IDENTITY
+KEY_CREDENTIAL=YOUR_KEY_CREDENTIAL
+ITEM_SET_ID=10780
+```
+
+> [!NOTE]
+> Replace `YOUR_KEY_IDENTITY` and `YOUR_KEY_CREDENTIAL` with your actual credentials for the Omeka S API. You can find these in the Omeka S instance under "Settings" > "API Keys". The `ITEM_SET_ID` is the ID of the collection you want to process, which can be found in the URL of the collection page.
+
+Ensure you have [uv](https://docs.astral.sh/uv/) installed to process the data from Omeka S:
+
+```bash
+uv run .github/workflows/process_data.py
+```
+
+### 🛠 Development
+
+Run local development server:
 
 ```bash
 bundle exec jekyll serve
 ```
 
-Build for production.
+### 📦 Production Build
+
+Deploy the site using:
 
 ```bash
 rake deploy
 ```
 
-## Support
+## 🐕‍🦺 Support
 
 This project is maintained by [@Stadt-Geschichte-Basel](https://github.com/Stadt-Geschichte-Basel). Please understand that we won't be able to provide individual support via email. We believe that help is much more valuable if it's shared publicly, so that more people can benefit from it.
 
@@ -115,26 +143,26 @@ This project is maintained by [@Stadt-Geschichte-Basel](https://github.com/Stadt
 | 🛡 **Report a security vulnerability** | [GitHub Issue Tracker](https://github.com/Stadt-Geschichte-Basel/forschung.stadtgeschichtebasel.ch/issues)    |
 | 💬 **General Questions**               | [GitHub Discussions](https://github.com/Stadt-Geschichte-Basel/forschung.stadtgeschichtebasel.ch/discussions) |
 
-## Contributing
+## 🤝 Contributing
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
+We welcome contributions! Please read our [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on submitting issues and pull requests.
 
-## Versioning
+## 📌 Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/Stadt-Geschichte-Basel/forschung.stadtgeschichtebasel.ch/tags).
+We use [Semantic Versioning](https://semver.org/).
+Available versions: [GitHub Tags](https://github.com/Stadt-Geschichte-Basel/forschung.stadtgeschichtebasel.ch/tags)
 
-## Authors and acknowledgment
+## 👥 Authors
 
-- **Moritz Mähr** - [maehr](https://github.com/maehr)
-- **Nico Görlich** - [koilebeit](https://github.com/koilebeit)
-- **Moritz Twente** - [mtwente](https://github.com/mtwente)
+- **Moritz Mähr** — [@maehr](https://github.com/maehr)
+- **Nico Görlich** — [@koilebeit](https://github.com/koilebeit)
+- **Moritz Twente** — [@mtwente](https://github.com/mtwente)
 
-See also the list of [contributors](https://github.com/Stadt-Geschichte-Basel/forschung.stadtgeschichtebasel.ch/graphs/contributors) who participated in this project.
+See the full list of [contributors](https://github.com/Stadt-Geschichte-Basel/forschung.stadtgeschichtebasel.ch/graphs/contributors).
 
----
+## 📜 License
 
-## License
+This codebase is released under the [MIT License](LICENSE).
+**Note:** Content and media objects on [forschung.stadtgeschichtebasel.ch](https://forschung.stadtgeschichtebasel.ch) are _not_ included under this license. See each item's metadata for usage rights.
 
-The code in this repository is licensed under the [MIT](https://github.com/Stadt-Geschichte-Basel/forschung.stadtgeschichtebasel.ch/blob/main/LICENSE) license. This license does not include external dependencies included in the `assets/lib` directory, which are covered by their individual licenses.
-
-Any content relating to the items that form the research data collection (e.g. media files, metadata objects) at [forschung.stadtgeschichtebasel.ch](https://forschung.stadtgeschichtebasel.ch) are _NOT_ covered by this license. Please see the individual rights and license statement in the corresponding metadata for each collection item.
+External libraries under `assets/lib/` are licensed separately.

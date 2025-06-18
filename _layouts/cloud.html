@@ -31,13 +31,6 @@ layout: page
           {{ site.data.translations._layouts['browse.html'].timeline[site.lang] | default: 'Timeline' }}
         </a>
         <a
-          href="{{ '/subjects.html' | relative_url }}"
-          class="btn btn-outline-primary btn-lg"
-          aria-label="{{ site.data.translations['_layouts']['browse.html'].view-subjects[site.lang] | default: 'Show list of subjects' }}"
-        >
-          {{ site.data.translations._layouts['browse.html'].subjects[site.lang] | default: 'Subjects' }}
-        </a>
-        <a
           href="{{ '/eras.html' | relative_url }}"
           class="btn btn-primary btn-lg active"
           aria-label="{{ site.data.translations['_layouts']['browse.html'].view-eras[site.lang] | default: 'Show list of eras' }}"

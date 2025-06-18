@@ -124,10 +124,10 @@
               // hide the link column
               { "visible": false,  "targets": [ {{ fcount }} ] },
               // define certain columns to be hidden by default for better appearance
-              { "visible": false, "targets": [5,6,7,9,10,11,12,13] },
-              // handle keywords and eras: display as HTML, export raw text
+              { "visible": false, "targets": [4,5,6,8,9,10,11,12] },
+              // handle coverage column: display as HTML, export raw text
               {
-                "targets": [3,4], // keyword and era column IDs
+                "targets": [3], // coverage column ID
                 "render": function (data, type, row) {
                   if (!data) return '';
 
@@ -147,7 +147,7 @@
               },
               // handle markdown links: display as HTML, export raw markdown
               {
-                "targets": [5,7,8,9,10], // columns with markdown links
+                "targets": [4,6,7,8,9], // columns with markdown links
                 "render": function (data, type, row) {
                     if (!data) return '';
 

@@ -25,14 +25,14 @@ trigger-warning-text: "<p>Die historischen Materialien in dieser Datenbank dokum
 ##########
 # SUBJECTS PAGE
 #
-subjects-fields: subject # set of fields separated by ; to be featured in the cloud (leave blank or comment out to not generate)
+subjects-fields: # set of fields separated by ; to be featured in the cloud (leave blank or comment out to not generate)
 subjects-min: 1 # min size for subject cloud, too many terms = slow load time!
 subjects-stopwords: # set of subjects separated by ; that will be removed from display, e.g. boxers;boxing
 
 ##########
 # ERAS PAGE
 #
-eras-fields: era # set of fields separated by ; to be featured in the cloud (leave blank or comment out to not generate)
+eras-fields: coverage # set of fields separated by ; to be featured in the cloud (leave blank or comment out to not generate)
 eras-min: 1 # min size for subject cloud, too many terms = slow load time!
 eras-stopwords: # set of subjects separated by ; that will be removed from display, e.g. boxers;boxing
 
@@ -68,9 +68,9 @@ year-nav-increment: 50 # set increments to auto gen nav years
 # 
 # add metadata fields for export in data downloads (tip: paste in first row of csv)
 # comma delimited list, reference url is automatic
-metadata-export-fields: "objectid,parentid,title,description,relation,subject,era,isPartOf,creator,publisher,source,date,type,format,extent,language,rights,license,object_location,image_alt_text"
+metadata-export-fields: "objectid,parentid,title,description,relation,coverage,isPartOf,creator,publisher,source,date,type,format,extent,language,rights,license,object_location,image_alt_text"
 # generate a facets list for given fields, comma delimited
-metadata-facets-fields: "subject,creator,publisher,type,format,language,license"
+metadata-facets-fields: "creator,publisher,type,format,language,license"
 
 ##########
 # Compound Objects 
