@@ -241,19 +241,6 @@ $_luminance-list: .0008 .001 .0011 .0013 .0015 .0017 .002 .0022 .0025 .0027 .003
     }  
 }
 
-/* bg-opacity classes needed to override */ 
-.bg-opacity-75 {
-    --bs-bg-opacity: 0.75;
-}
-.bg-opacity-50 {
-    --bs-bg-opacity: 0.50;
-}
-.bg-opacity-25 {
-    --bs-bg-opacity: 0.25;
-}
-.bg-opacity-10 {
-    --bs-bg-opacity: 0.10;
-}
 /* custom mixin to create background variants */ 
 @mixin theme-bg($parent, $color) {
     #{$parent} {
@@ -266,6 +253,20 @@ $_luminance-list: .0008 .001 .0011 .0013 .0015 .0017 .002 .0022 .0025 .0027 .003
             background-color: color.scale($color, $lightness: -20%) !important;
         }
     }
+}
+
+/* bg-opacity classes needed to override */ 
+.bg-opacity-75 {
+    --bs-bg-opacity: 0.75 !important;
+}
+.bg-opacity-50 {
+    --bs-bg-opacity: 0.50 !important;
+}
+.bg-opacity-25 {
+    --bs-bg-opacity: 0.25 !important;
+}
+.bg-opacity-10 {
+    --bs-bg-opacity: 0.10 !important;
 }
 
 /* 
