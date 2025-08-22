@@ -68,6 +68,7 @@ icons:
   icon-pdf: file-pdf
   icon-record: file-text
   icon-panorama: image-alt
+  icon-markdown: filetype-md
   icon-compound-object: collection 
   icon-multiple: postcard
   icon-default: file-earmark # fall back icon

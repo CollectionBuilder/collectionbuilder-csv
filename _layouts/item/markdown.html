@@ -1,0 +1,22 @@
+---
+# derived from item.html, for objects with `display_template` of "markdown" 
+# displays object_location content in Markdown form
+layout: item/item-page-base
+---
+
+<!-- cb: _layouts/item/markdown.html -->
+<div class="card mb-4 text-center">
+    <div class="card-body">
+        
+        <p>
+            {% include item/item-markdown.html %}
+        </p>
+        <div class="mt-2">
+
+            {% include item/download-buttons.html %}
+
+        </div>
+
+    </div>
+</div>
+<!-- /cb: _layouts/item/markdown.html -->

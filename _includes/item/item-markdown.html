@@ -1,0 +1,22 @@
+{% comment %}
+
+    Display the contents of object_location using markdownify.
+
+{% endcomment %}
+<!-- cb: _includes/item/item-markdown.html -->
+{% if page.object_location %}
+  <div class="mt-3">
+    <div class="card card-body text-start">
+    {% assign object_type = page.object_location | slice: 0,1 %}
+    {% if object_type == '/' %}
+      {% assign object_location = page.object_location | remove_first: '/' %}
+      {% assign object = site.pages | where: 'path', object_location | first %}
+      {{ object.content | markdownify }}
+    {% else %}
+      {{ page.object_location | markdownify }}
+    {% endif %}
+    </div>
+  </div>  
+  <span class="visually-hidden">{{ page.title | escape }} - {{ page.format }}</span>
+{% endif %}
+<!-- /cb: _includes/item/item-markdown.html -->
