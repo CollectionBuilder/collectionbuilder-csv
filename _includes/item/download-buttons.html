@@ -9,7 +9,7 @@
 
 {%- endcomment -%}
 <div class="btn-group" role="group" aria-label="Item options">
-    {% if page.object_transcript %}<button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTranscript" aria-expanded="false" aria-controls="collapseExample">View Transcript</button>{% endif %}
+    {% if page.object_transcript %}<button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTranscript" aria-expanded="false" aria-controls="collapseTranscript">View Transcript</button>{% endif %}
     {% if page.date %}{%- capture year -%}{% if page.date contains "-" %}{{ page.date | split: "-" | first }}{% elsif page.date contains "/" %}{{ page.date | split: "/" | last }}{% else %}{{ page.date }}{% endif %}{%- endcapture -%}
     <a href="{{ year | strip | prepend: '/timeline.html#y' | relative_url }}" class="btn btn-outline-primary">View on Timeline</a>{% endif %}
     {% if page.latitude and page.longitude %}

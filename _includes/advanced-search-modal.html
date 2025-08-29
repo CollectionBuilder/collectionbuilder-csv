@@ -47,8 +47,8 @@
                 <select class="form-select form-select-sm field-select">
                     <option value="all">All Fields</option>
                     <option value="title">Title</option>
-                    {% for f in site.data.config-browse %}
-                    <option value="{{ f.field }}">{% if f.display_name %}{{ f.display_name }}{% else %}{{ f.field | capitalize }}{% endif %}</option>
+                    {% for f in site.data.config-browse %}{% assign cap-field = f.field | capitalize %}
+                    <option value="{{ f.field }}">{{ f.facet_name | default: f.display_name | default: cap-field }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -63,7 +63,7 @@
                 </div>
             </div>
             <div class="col-2 col-md-1">
-                <button type="button" class="btn btn-outline-danger btn-sm remove-row">×</button>
+                <button type="button" class="btn btn-outline-danger btn-sm remove-row" aria-label="Remove condition">×</button>
             </div>
         </div>
     </div>
