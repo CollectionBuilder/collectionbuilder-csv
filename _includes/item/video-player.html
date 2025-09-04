@@ -5,7 +5,7 @@
 
 {%- endcomment -%}
 <div class="ratio ratio-16x9">
-    <video width="320" height="240" controls>
+    <video {% if page.image_small %}poster="{{ page.image_small | relative_url }}" preload="metadata"{% endif %} controls>
         <source src="{{ page.object_location | relative_url }}">
         Your browser does not support the video tag. Please <a href="{{ page.object_location | relative_url }}">download the video file</a>.
     </video>
