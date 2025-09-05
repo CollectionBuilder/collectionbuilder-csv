@@ -15,7 +15,9 @@
         3. a full URL to a video hosted on Vimeo, e.g. https://vimeo.com/464555587 
         4. a full URL to an external video file (supported by browsers, generally mp4), e.g. "https://www.lib.uidaho.edu/digital/videos/fluffyclouds.mp4"
         5. a relative link to a video file stored in this repository (that is not included in the collection), i.e. "/assets/videos/cloudyskies.mp4"  
-    - "caption" = by default the figure include automatically adds the title of the item from your metadata. The caption option allows you to manually add a different caption, or give the value false for none. (optional)
+    - "caption" = by default the include automatically adds the title of the item from your metadata. The caption option allows you to manually add a different caption, or give the value false for none. (optional)
+    - "transcript" = by default if using an objectid, if the item has a object_transcript value, the view transcript button will automatically be added. The transcript option allows you to manually add a different transcript or provide one for non-collection videos. (optional)
+    - "cover" = by default if using an objectid, if the item has a image_small value, the image will be used as the cover for video file embeds (not youtube). The cover option allows you to manually add a cover image for non-collection videos. (optional)
     - "width" = will use responsive sizing to set the % size on desktop (will be 100% on mobile), choose from "25", "50", "75", or "100" (optional)
     - "ratio" = use Bootstrap embed ratio options "21x9", "16x9", "4x3", or "1x1" to customize the responsive aspect ratio. 16by9 is default. (optional)
 
@@ -24,10 +26,14 @@
 {%- endcomment -%}
 {%- if include.objectid contains '/' -%}
     {% capture video_caption %}{{ include.caption }}{% endcapture %}
+    {% capture video_poster %}{{ include.cover }}{% endcapture %}
+    {% capture video_transcript %}{{ include.transcript }}{% endcapture %}
     {% capture raw_src %}{{ include.objectid }}{% endcapture %}
 {%- else -%}
     {%- assign item = site.data[site.metadata] | where: "objectid", include.objectid | first -%}
     {% capture video_caption %}{% if include.caption %}{{ include.caption }}{% else %}<a href="{{ '/items/' | relative_url }}{% if item.parentid %}{{ item.parentid }}.html#{{ item.objectid }}{% else %}{{ item.objectid }}.html{% endif %}">{{ item.title }}</a>{% endif %}{% endcapture %}
+    {% capture video_poster %}{{ include.cover | default: item.image_small | default: '' }}{% endcapture %}
+    {% capture video_transcript %}{{ include.transcript | default: item.object_transcript }}{% endcapture %}
     {% capture raw_src %}{{ item.object_location }}{% endcapture %}
 {%- endif -%}
 {%- if raw_src contains 'vimeo' -%}
@@ -41,13 +47,14 @@
 {%- else -%}
     {% assign video_src = raw_src | relative_url %}
 {%- endif -%}
+{% capture includeid %}{% if include.objectid.size > 8 %}{{ include.objectid | slice: -8, 8 | slugify }}{% else %}{{ include.objectid | slugify }}{% endif %}{% endcapture %}
 <div class="feature-include my-4">
     <figure class="{% if include.width %} feature-w-{{ include.width }}{% endif %}">
         <div class="ratio ratio-{{ include.ratio | default: '16x9' }}">
             {%- if video_src contains "vimeo" or video_src contains "youtu" -%}
             <iframe title="video embed {{ video_caption | escape }}" src="{{ video_src }}" allowfullscreen></iframe>
             {% else %}
-            <video width="320" height="240" controls>
+            <video {% if video_poster %}poster="{{ video_poster | relative_url }}"{% endif %} preload="metadata" controls>
                 <source src="{{ video_src }}">
                 Your browser does not support the video tag.
             </video>
@@ -56,6 +63,21 @@
         {% unless include.caption == false %}
         <figcaption class="figure-caption text-center">
             {{ video_caption }}
+            {% if video_transcript != '' %}<br>
+            <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTranscript{{ includeid }}" aria-expanded="false" aria-controls="collapseTranscript{{ includeid }}">View Transcript</button>
+            <div class="collapse mt-3" id="collapseTranscript{{ includeid }}">
+                <div class="card card-body text-start">
+                    {% assign transcript_type = video_transcript | slice: 0,1 %}
+                    {% if transcript_type == '/' %}
+                    {% assign transcript_location = video_transcript | remove_first: '/' %}
+                    {% assign transcript = site.pages | where: 'path', transcript_location | first %}
+                    {{ transcript.content | markdownify }}
+                    {% else %}
+                    {{ video_transcript | markdownify }}
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
         </figcaption>
         {% endunless %}
     </figure>
