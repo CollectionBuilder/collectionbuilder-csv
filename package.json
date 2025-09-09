@@ -3,7 +3,15 @@
     "check": "prettier --check '**/*.{js,css,md,html}'",
     "format": "prettier --write '**/*.{js,css,md,html}'",
     "clean": "rm _data/sgb-metadata-* && find objects -type f ! -name 'README.md' -delete",
-    "populate": "uv run .github/workflows/process_data.py"
+    "populate": "uv run .github/workflows/process_data.py",
+    "install:ruby": "bundle config set --local path 'vendor/bundle' && bundle install",
+    "install:python": "uv sync",
+    "install:all": "npm run install:ruby && npm run install:python",
+    "dev": "bundle exec jekyll serve",
+    "serve": "bundle exec jekyll serve",
+    "build": "bundle exec jekyll build",
+    "build:production": "rake deploy",
+    "setup": "npm install && npm run install:all"
   },
   "dependencies": {
     "@shopify/prettier-plugin-liquid": "^1.9.0",

@@ -90,18 +90,49 @@ classDiagram
 
 ## 🚀 Getting Started
 
+### 📋 Prerequisites
+
+Ensure you have the following tools installed:
+
+- [Node.js](https://nodejs.org/) and [npm](https://npmjs.com/) (for package management and build scripts)
+- [Ruby](https://rubyonrails.org/) and [bundler](https://bundler.io/) (for Jekyll)
+- [uv](https://docs.astral.sh/uv/) (for Python dependency management)
+
 ### 🔧 Installation
 
-Ensure you have [Ruby](https://rubyonrails.org/) and [Bundle](https://bundler.io/) installed.
+#### Option 1: Quick Setup (Recommended)
+
+Use npm scripts to install all dependencies:
 
 ```bash
-bundle install
+npm run setup
 ```
 
-Create a `.env` file in the root directory of the project and add the following line:
+This will install Node.js dependencies, Ruby gems, and Python packages.
+
+#### Option 2: Manual Installation
+
+Install dependencies step by step:
 
 ```bash
-OMEKA_API_URL=https://omeka.unibe.ch/s/stadtgeschichtebasel
+# Install npm dependencies
+npm install
+
+# Install Ruby gems
+npm run install:ruby
+# or manually: bundle config set --local path 'vendor/bundle' && bundle install
+
+# Install Python dependencies
+npm run install:python
+# or manually: uv sync
+```
+
+### ⚙️ Configuration
+
+Create a `.env` file in the root directory to configure API access:
+
+```bash
+OMEKA_API_URL=https://omeka.unibe.ch/api
 KEY_IDENTITY=YOUR_KEY_IDENTITY
 KEY_CREDENTIAL=YOUR_KEY_CREDENTIAL
 ITEM_SET_ID=10780
@@ -110,27 +141,58 @@ ITEM_SET_ID=10780
 > [!NOTE]
 > Replace `YOUR_KEY_IDENTITY` and `YOUR_KEY_CREDENTIAL` with your actual credentials for the Omeka S API. You can find these in the Omeka S instance under "Settings" > "API Keys". The `ITEM_SET_ID` is the ID of the collection you want to process, which can be found in the URL of the collection page.
 
-Ensure you have [uv](https://docs.astral.sh/uv/) installed to process the data from Omeka S:
+### 📊 Data Processing
+
+Process the collection data from Omeka S:
 
 ```bash
-uv run .github/workflows/process_data.py
+npm run populate
 ```
 
 ### 🛠 Development
 
-Run local development server:
+Start the local development server:
 
 ```bash
-bundle exec jekyll serve
+npm run dev
+# or alternatively: npm run serve
+# or manually: bundle exec jekyll serve
 ```
+
+The site will be available at `http://127.0.0.1:4000`.
 
 ### 📦 Production Build
 
-Deploy the site using:
+Build the site for production:
 
 ```bash
-rake deploy
+npm run build:production
+# or manually: rake deploy
 ```
+
+For a standard Jekyll build without production optimizations:
+
+```bash
+npm run build
+# or manually: bundle exec jekyll build
+```
+
+### 🧹 Available npm Scripts
+
+| Script                     | Description                               |
+| -------------------------- | ----------------------------------------- |
+| `npm run setup`            | Complete setup: install all dependencies  |
+| `npm run install:ruby`     | Install Ruby gems with bundler            |
+| `npm run install:python`   | Install Python dependencies with uv       |
+| `npm run install:all`      | Install both Ruby and Python dependencies |
+| `npm run dev`              | Start Jekyll development server           |
+| `npm run serve`            | Alias for `dev`                           |
+| `npm run build`            | Build Jekyll site                         |
+| `npm run build:production` | Build site with production settings       |
+| `npm run populate`         | Process data from Omeka S API             |
+| `npm run clean`            | Remove generated data and objects         |
+| `npm run format`           | Format code with Prettier                 |
+| `npm run check`            | Check code formatting                     |
 
 ## 🐕‍🦺 Support
 
