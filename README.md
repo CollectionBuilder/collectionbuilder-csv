@@ -51,37 +51,41 @@ Stadt.Geschichte.Basel has extended CollectionBuilder with some features that ar
 
 Metadata for items featured on the research data platform is provided according to a data model developed by the Stadt.Geschichte.Basel Research Data Management Team to meet the requirements of the wide range of sources used in the project. The data model (and the subsequent annotation process) follow the [Manual for Creating Non-Discriminatory Metadata for Historical Sources and Research Data](https://maehr.github.io/diskriminierungsfreie-metadaten/) developed by Stadt.Geschichte.Basel.
 
-The following chart illustrates the data model with metadata fields for a sample metadata object `sgb01313` that has one child media object `m01313`. If a metadata object has more than one child media object, the children `id`s are numbered consecutively: `m01313_1`, `m01313_2` etc.
+The following chart illustrates the data model with metadata fields for a sample metadata object `abb01313` that has one child media object `m01313`. If a metadata object has more than one child media object, the children `id`s are numbered consecutively: `m01313_1`, `m01313_2` etc.
 
 ```mermaid
-classDiagram
-    class metadata {
-        id (sgb01313)
-        title
-        [subject;subject]
-        description
-        temporal
-        [isPartOf;isPartOf] (Data DOIs)
-    }
-    class media {
-        id (m01313)
-        title
-        [subject;subject] (keywords from GenderOpen Index)
-        description
-        [creator] (incl. link to Wikidata)
-        [publisher] (incl. link to Wikidata)
-        date
-        temporal
-        type
-        format
-        extent
-        [source] (Source and catalogue link)
-        language (ISO 639-2 code)
-        [relation] (internal links to other items, link to GitHub, further information)
-        rights
-        license
-    }
+    classDiagram
+    direction LR
+        class metadata {
+            id &lpar;abb01313&rpar;
+            title
+            [subject;subject]
+            description
+            temporal
+            [isPartOf;isPartOf] &lpar;Data DOIs&rpar;
+        }
+        class media {
+            id &lpar;m01313&rpar;
+            title
+            [subject;subject]
+            description
+            [abstract] &lpar;alt-attribute for alternative text&rpar;
+            [creator] &lpar;incl. link to institution&rpar;
+            [publisher] &lpar;incl. link to institution&rpar;
+            date
+            temporal
+            type
+            format
+            extent
+            [source] &lpar;source and catalogue link&rpar;
+            language &lpar;ISO 639-2 code&rpar;
+            [relation] &lpar;internal links, link to GitHub&rpar;
+            rights
+            license
+        }
     metadata "n" --> "m" media
+    style metadata stroke:#3a1e3e,fill:#fff,color:#3a1e3e
+    style media stroke:#3a1e3e,fill:#fff,color:#3a1e3e
 ```
 
 > [!WARNING]

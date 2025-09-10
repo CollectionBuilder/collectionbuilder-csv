@@ -20,7 +20,7 @@ Wissenschaftliche Veröffentlichungen, die im Zusammenhang mit dem Forschungspro
 
 Metadaten für die auf der Forschungsdatenplattform vorgestellten Elemente werden gemäss einem Datenmodell bereitgestellt, das vom Team für Forschungdatenmanagement der Stadt.Geschichte.Basel entwickelt wurde, um den Anforderungen der vielfältigen im Projekt verwendeten Quellen gerecht zu werden. Das Datenmodell (und der anschliessende Annotationsprozess) folgen dem [Handbuch zur Erstellung diskriminerungsfreier Metadaten für historische Quellen und Forschungsdaten](https://maehr.github.io/diskriminierungsfreie-metadaten/){:target="\_blank"}, das ebenfalls von Stadt.Geschichte.Basel entwickelt wurde.
 
-Die folgende Grafik veranschaulicht das Datenmodell mit Metadatenfeldern für ein Beispiel-Metadatenobjekt `sgb01313`, das ein untergeordnetes Medienobjekt `m01313` hat. Wenn ein Metadatenobjekt mehr als ein untergeordnetes Medienobjekt hat, werden die `id`-Nummern der untergeordneten Objekte fortlaufend nummeriert: `m01313_1`, `m01313_2` usw.
+Die folgende Grafik veranschaulicht das Datenmodell mit Metadatenfeldern für ein Beispiel-Metadatenobjekt `abb01313`, das ein untergeordnetes Medienobjekt `m01313` hat. Wenn ein Metadatenobjekt mehr als ein untergeordnetes Medienobjekt hat, werden die `id`-Nummern der untergeordneten Objekte fortlaufend nummeriert: `m01313_1`, `m01313_2` usw.
 
 ![Datenmodell](assets/img/sgb_datamodel.svg){:style="max-width: 70%; display: block; margin: auto;"}
 

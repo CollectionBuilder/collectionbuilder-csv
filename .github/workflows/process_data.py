@@ -100,6 +100,17 @@ def extract_property(props, prop_id, as_uri=False):
     return ""
 
 
+def extract_property_by_term(props, term, as_uri=False):
+    """Extracts a property value or URI from properties list."""
+    # Since props is already a list of values for dcterms:abstract,
+    # we just need to extract the first available value
+    for prop in props:
+        if as_uri:
+            return f"[{prop.get('o:label', '')}]({prop.get('@id', '')})"
+        return prop.get("@value", "")
+    return ""
+
+
 def extract_combined_values(props):
     """Combines text values and URIs from properties into a single list."""
     values = [
@@ -113,6 +124,19 @@ def extract_combined_values(props):
         if "@id" in prop
     ]
     return values + uris
+
+
+def extract_alt_text(item_or_media):
+    """Extracts alt text from dcterms:abstract field, with fallback to o:alt_text."""
+    # First try to get dcterms:abstract (the new alt attribute field)
+    abstract_props = item_or_media.get("dcterms:abstract", [])
+    if abstract_props:
+        alt_text = extract_property_by_term(abstract_props, "abstract")
+        if alt_text:
+            return alt_text
+    
+    # Fallback to the old o:alt_text field for backward compatibility
+    return item_or_media.get("o:alt_text", "")
 
 
 def extract_combined_values_csv(props):
@@ -175,7 +199,7 @@ def extract_item_data(item):
         "object_location": "",
         "image_small": local_image_path,
         "image_thumb": local_image_path,
-        "image_alt_text": item.get("o:alt_text", ""),
+        "image_alt_text": extract_alt_text(item),
     }
 
 
@@ -228,7 +252,7 @@ def extract_media_data(media, item_dc_identifier):
         "object_location": object_location,
         "image_small": local_image_path,
         "image_thumb": local_image_path,
-        "image_alt_text": media.get("o:alt_text", ""),
+        "image_alt_text": extract_alt_text(media),
     }
 
 
