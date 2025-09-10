@@ -19,6 +19,22 @@
   language="javascript"
   src="{{ '/assets/lib/papaparse/papaparse.min.js' | relative_url }}"
 ></script>
+<script type="text/javascript">
+  function esc(v) {
+    const s = v == null ? '' : String(v);
+    return s.replace(
+      /[&<>"']/g,
+      (c) =>
+        ({
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#39;',
+        })[c],
+    );
+  }
+</script>
 
 <script type="text/javascript">
   document.addEventListener('DOMContentLoaded', function () {
@@ -41,16 +57,16 @@
 
                           if (rows.length > 0) {
                               build += "<thead><tr>";
-                              var headers = Object.keys(rows[0]);
+                              var headers = results.meta.fields;
                               headers.forEach(header => {
-                                  build += "<th scope='col'>" + header + "</th>";
+                                  build += "<th scope='col'>" + esc(header) + "</th>";
                               });
                               build += "</tr></thead><tbody>";
 
                               rows.forEach(row => {
                                   build += "<tr>";
                                   headers.forEach(header => {
-                                      build += "<td>" + (row[header] !== null && row[header] !== undefined ? row[header] : "") + "</td>";
+                                      build += "<td>" + esc(row[header] !== null && row[header] !== undefined ? row[header] : "") + "</td>";
                                   });
                                   build += "</tr>";
                               });

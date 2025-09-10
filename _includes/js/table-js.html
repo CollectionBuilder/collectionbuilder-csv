@@ -124,7 +124,7 @@
               // hide the link column
               { "visible": false,  "targets": [ {{ fcount }} ] },
               // define certain columns to be hidden by default for better appearance
-              { "visible": false, "targets": [4,5,6,8,9,10,11,12] },
+              { "visible": false, "targets": [4,5,6,8,9,10,11,12,14] },
               // handle coverage column: display as HTML, export raw text
               {
                 "targets": [3], // coverage column ID
@@ -167,7 +167,26 @@
                     });
                     return type === 'display' ? links.join('<hr>') : links.join(';');
                   }
-                }
+                },
+                // turn column with plain text URLs into clickable links as well
+                {
+                  "targets": [14], // license column number
+                  "render": function (data, type, row) {
+                      if (!data) return '';
+
+                      const urls = data.split(';').map(url => url.trim());
+
+                      if (type === 'display') {
+                          const links = urls.map(url =>
+                              `<a href="${url}" target="_blank">${url}</a>`
+                          );
+                          return links.join('<hr>');
+                      } else if (type === 'export') {
+                          return urls.join(';');
+                      }
+                      return data;
+                  }
+              }
           ],
           // sort based on the second column
           order: [[ 1, "asc" ]],
