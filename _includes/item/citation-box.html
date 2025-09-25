@@ -4,13 +4,11 @@
 
 {%- endcomment -%}
 <div class="card">
-    <div class="card-header">Source</div>
+    <div class="card-header">Attribution</div>
     <div class="card-body">
         <dl>
             <dt>Preferred Citation:</dt>
-            <dd>"{{ page.title }}", {{ site.title }}, {{ site.organization-name }}</dd>
-            <dt>Reference Link:</dt>
-            <dd>{{ page.url | absolute_url }}</dd>
+            <dd>"{{ page.title }}", {{ site.title }}, {% if site.organization-name %}{{ site.organization-name }}, {% endif %}{{ page.url | absolute_url }}</dd>
         </dl>
     </div>
 </div>
