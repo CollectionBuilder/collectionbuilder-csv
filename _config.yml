@@ -52,8 +52,8 @@ metadata: demo-compoundobjects-metadata
 #
 organization-name: "Center for Digital Inquiry and Learning (CDIL)"
 organization-link: https://cdil.lib.uidaho.edu/
-organization-logo-banner: https://cdil.lib.uidaho.edu/storying-extinction/assets/img/cdil.png
-organization-logo-nav: https://cdil.lib.uidaho.edu/assets/img/logo.png
+organization-logo-banner: https://www.lib.uidaho.edu/collectionbuilder/cdil-black.png
+organization-logo-nav: https://www.lib.uidaho.edu/collectionbuilder/cdil-white.png
 
 ##########
 # ROBOTS EXCLUDE
