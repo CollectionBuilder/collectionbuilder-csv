@@ -54,7 +54,7 @@ If a template page is looking for `image_small` or `image_thumb` and finds it bl
 Theme icons are also used for the "back to top" button.
 
 During Jekyll's build process, CollectionBuilder's "cb_helpers" plugin processes the icons and adds them to `site.data.theme_icons`. 
-The theme icons are added to a SVG Sprite file "/assets/lib/cb-icons.svg" (which is much smaller and customized compared to "bootstrap-icons.svg").
+The theme icons are added to a SVG Sprite file "/assets/css/cb-icons.svg" (which is much smaller and customized compared to "bootstrap-icons.svg").
 
 Configuring the theme icons is *optional*. 
 If desired, the default icons can be overridden or new icons can be added using the `icons` object in "_data/theme.yml". 
@@ -82,7 +82,7 @@ All theme icons configured in `icons` (plus the default ones) can be used in sev
 
 - To add a full svg inline, use the Liquid variable `site.data.theme_icons` plus the icon key plus `.inline`. E.g. `{{ site.data.theme_icons.icon-image.inline }}`.
 - To add an icon svg sprite symbol, use the Liquid variable  `site.data.theme_icons` plus the icon key plus `.symbol`. E.g. `{{ site.data.theme_icons.icon-image.symbol }}`.
-- Use the external svg sprite link markup using with href to the "cb-icons.svg" file and hash for the icon key. E.g. `<svg class="bi text-body" fill="currentColor"><use xlink:href="{{ "/assets/lib/cb-icons.svg" | relative_url }}#icon-image"/></svg>`
+- Use the external svg sprite link markup using with href to the "cb-icons.svg" file and hash for the icon key. E.g. `<svg class="bi text-body" fill="currentColor"><use xlink:href="{{ "/assets/css/cb-icons.svg" | relative_url }}#icon-image"/></svg>`
 
 The "cb_helpers" plugin contains built in SVGs for the default icon options.
 This means if you are not customizing the icons or using feature/icon.html include, the "assets/lib/icons/" folder can be removed if desired.
