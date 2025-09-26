@@ -46,12 +46,13 @@ metadata: demo-compoundobjects-metadata
 #     filter: 'objectid'  
 
 ##########
-# Site/Organization Branding 
-#   Enter information for your organization (replacing the CDIL links and name below) if you'd like to brand your site with a logo
-#   To remove the branding, comment out these values, or delete them. 
+# ORGANIZATION SETTINGS
 #
+# Enter name and link for your organization (replacing the name and links below)
+# These values will be used in attribution and data 
 organization-name: "Center for Digital Inquiry and Learning (CDIL)"
 organization-link: https://cdil.lib.uidaho.edu/
+# Add logo image links if you would like them to appear in banner and footer. Delete or leave blank to remove logos.
 organization-logo-banner: https://www.lib.uidaho.edu/collectionbuilder/cdil-black.png
 organization-logo-nav: https://www.lib.uidaho.edu/collectionbuilder/cdil-white.png
 
