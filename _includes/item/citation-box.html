@@ -7,8 +7,8 @@
     <div class="card-header">Attribution</div>
     <div class="card-body">
         <dl>
-            <dt>Preferred Citation:</dt>
-            <dd>"{{ page.title }}", {{ site.title }}, {% if site.organization-name %}{{ site.organization-name }}, {% endif %}{{ page.url | absolute_url }}</dd>
+            <dt>Citation:</dt>
+            <dd>"{{ page.title }}", {{ site.title }}, {% if site.organization-name %}{{ site.organization-name }}, {% endif %}<a href="{{ page.url | absolute_url }}">{{ page.url | absolute_url }}</a></dd>
         </dl>
     </div>
 </div>
