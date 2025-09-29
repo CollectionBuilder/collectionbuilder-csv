@@ -1,0 +1,97 @@
+{% comment %}
+
+    Audio modal feature from an item's objectid or external link.
+    This include adds a card featuring the thumb image, title, and description of an audio item--when clicked it opens a modal containing the audio embed. The modal displays audio information, transcript, link to item. This is especially useful feature if you would like multiple videos on one page.
+
+    E.G. --> {% include feature/audio-modal.html objectid="demo_003" %}
+
+    It requires an "objectid" with the include, which is used to find the audio details. Alternatively, a URL to an external audio file can be used in "objectid".
+
+    Options: 
+    - "objectid" = several options below (required)
+        - an objectid of an audio item in this collection, e.g. "demo_003" 
+        - an external link to an MP3 file hosted elsewhere, e.g. "https://www.lib.uidaho.edu/digital/mp3s/Clouds.mp3"   
+        - a relative link to an MP3 file somewhere else in this repository, e.g. "/assets/{{ includeid }}.mp3"
+    - "title" = by default automatically adds the title from item metadata, which will be used for the modal btn and modal title. Manually set by using the title option. (optional)
+    - "heading_level" = customize the level of the heading if necessary for accessibility, choose "h1", "h2", "h3", etc (optional, default "h2")
+    - "caption" = by default the figure include automatically uses the description of the item from your metadata. The caption option allows you to manually add a different caption, or give the value false for none. (optional)
+    - "image" = by default if using an objectid, if the item has a image_small value, the image will be used on the card. The image option allows you to manually add a image for non-collection videos. Give "false" to not display an image (optional)
+    - "transcript" = by default if using an objectid, if the item has a object_transcript value, the view transcript button will automatically be added. The transcript option allows you to manually add a different transcript or provide one for non-collection videos. (optional)
+
+    Note: if you have issues make sure the item is a audio item.
+    Audio file may not play correctly from dev server on Chrome browser! It will work in production.
+
+{% endcomment %}
+{% if include.objectid contains "/" %}
+    {%- capture src -%}{{ include.objectid | relative_url }}{%- endcapture -%}
+    {%- capture audio_link -%}{{ src }}{%- endcapture -%}
+    {%- capture audio_caption -%}{{ include.caption }}{%- endcapture -%}
+    {%- capture audio_title -%}{{ include.title }}{%- endcapture -%}
+    {% capture audio_transcript %}{{ include.transcript }}{% endcapture %}
+    {% capture audio_poster %}{% if include.image == false %}{% else %}{{ include.image | relative_url | default: '' }}{% endif %}{% endcapture %}
+{% else %}
+    {%- assign item = site.data[site.metadata] | where: "objectid", include.objectid | first -%}
+    {%- capture audio_link -%}{{ '/items/' | relative_url }}{% if item.parentid %}{{ item.parentid }}.html#{{ item.objectid }}{% else %}{{ item.objectid }}.html{% endif %}{%- endcapture -%}
+    {%- capture src -%}{{ item.object_location | relative_url }}{% endcapture %}
+    {%- capture audio_caption -%}{% if include.caption %}{{ include.caption }}{% else %}{{ item.description }}{% endif %}{%- endcapture -%}
+    {%- capture audio_title -%}{% if include.title %}{{ include.title }}{% else %}{{ item.title }}{% endif %}{%- endcapture -%}
+    {% capture audio_transcript %}{{ include.transcript | default: item.object_transcript }}{% endcapture %}
+    {% capture audio_poster %}{% if include.image == false %}{% else %}{{ include.image | default: item.image_small | relative_url | default: '' }}{% endif %}{% endcapture %}
+{% endif %}
+{% capture includeid %}{% if include.objectid.size > 10 %}{{ include.objectid | slice: -10, 10 | slugify }}{% else %}{{ include.objectid | slugify }}{% endif %}{% endcapture %}
+<div class="card my-3 narrow-content">
+    {% if audio_poster != "" %}<img src="{{ audio_poster | relative_url }}" class="card-img-top" alt="{{ audio_title | escape }}">{% endif %}
+    <div class="card-body text-center">
+        <{{ include.heading_level | default: 'h2' | strip }} class="card-title h2">{{ audio_title }}</{{ include.heading_level | default: 'h2' | strip }}>
+        <p class="card-text">{{ audio_caption }}</p>
+        <button class="btn btn-sm btn-primary stretched-link" type="button" data-bs-toggle="modal" data-bs-target="#{{ includeid }}Modal">
+            Listen to Audio
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi icon-sprite" viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                <path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445"/>
+            </svg>
+        </button>
+    </div>
+</div>
+<div class="modal fade" id="{{ includeid }}Modal" tabindex="-1" aria-labelledby="{{ includeid }}ModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="{{ includeid }}ModalLabel">{{ audio_title }}</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="document.querySelector('#{{ includeid }}ModalAudio').pause();"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-center my-3">
+                    <audio controls class="w-100" preload="metadata" id="{{ includeid }}ModalAudio">
+                        <source src="{{ src }}" >
+                        Your browser does not support the audio element, please <a href="{{ audio_link }}">download the file to listen</a>.
+                    </audio>
+                    {% if audio_poster != "" %}<img src="{{ audio_poster | relative_url }}" class="img-fluid" alt="{{ audio_title | escape }}">{% endif %}
+                    {% unless include.caption == false %}<p class="figure-caption">
+                        {{ audio_caption }}
+                    </p>{% endunless %}
+                </p>
+            </div>
+            <div class="modal-footer">
+                {% if audio_transcript != '' %}
+                <div class="collapse mt-3 w-100" id="collapseTranscript{{ includeid }}">
+                    <div class="card card-body text-start">
+                        {% assign transcript_type = audio_transcript | slice: 0,1 %}
+                        {% if transcript_type == '/' %}
+                        {% assign transcript_location = audio_transcript | remove_first: '/' %}
+                        {% assign transcript = site.pages | where: 'path', transcript_location | first %}
+                        {{ transcript.content | markdownify }}
+                        {% else %}
+                        {{ audio_transcript | markdownify }}
+                        {% endif %}
+                    </div>
+                </div>
+                <button class="btn btn-outline-primary m-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTranscript{{ includeid }}" aria-expanded="false" aria-controls="collapseTranscript{{ includeid }}">View Transcript</button>
+                {% endif %}
+                {% unless include.objectid contains '/' %}
+                <a href="{{ audio_link }}" class="btn btn-outline-dark m-2">Visit Item Page</a>{% endunless %}
+                <button type="button" class="btn btn-dark" data-bs-dismiss="modal" onclick="document.querySelector('#{{ includeid }}ModalAudio').pause();">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
