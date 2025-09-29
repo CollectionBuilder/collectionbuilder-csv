@@ -2,6 +2,8 @@
 
 Check all the includes. Steal Code! 
 
+----------
+
 ### Image Options
 
 #### Image from Collection (auto caption)
@@ -52,6 +54,7 @@ Example Code --> `{% raw %}{% include feature/image.html objectid="https://www.l
 
 Example Code --> `{% raw %}{% include feature/image.html objectid="https://www.lib.uidaho.edu/collectionbuilder/demo-objects/mg101_b6_photographs_01.jpg;https://www.lib.uidaho.edu/collectionbuilder/demo-objects/mg101_b6_psychiana_photographs_010.jpg" caption="this guy!;(was nothing without these women!)" link="https://www.lib.uidaho.edu/digital/psychiana/items/psychiana519.html;https://www.lib.uidaho.edu/digital/psychiana/items/psychiana547.html" alt="Frank B. Robinson at the Organ;Women staff members of Psychiana lined up outside the Psychiana headquarters" %}{% endraw %}`
 
+----------
 
 ### PDF Options
 
@@ -82,6 +85,7 @@ Example Code --> `{% raw %}{% include feature/pdf.html objectid="https://www.lib
 
 Example Code --> `{% raw %}{% include feature/pdf.html objectid="https://www.lib.uidaho.edu/collectionbuilder/demo-objects/uiext21768.pdf" width="50" caption="Safe Chainsawing is Important!" %}{% endraw %}`
 
+----------
 
 ### Video Options
 
@@ -126,6 +130,7 @@ Example Code --> `{% raw %}{% include feature/video.html objectid="https://vimeo
 
 Example Code --> `{% raw %}{% include feature/video.html objectid="https://www.youtube.com/watch?v=dbKNr3wuiuQ" width="50" caption="youtube caption"  %}{% endraw %}`
 
+----------
 
 ### Audio Options
 
@@ -156,12 +161,27 @@ Example Code --> `{% raw %}{% include feature/audio.html objectid="https://www.l
 
 Example Code --> `{% raw %}{% include feature/audio.html objectid="https://www.lib.uidaho.edu/digital/mp3s/Clouds.mp3" width="50" caption="Clouds are Important!" %}{% endraw %}`
 
+#### Audio Modal from Collection
+
+{% include feature/audio-modal.html objectid="demo_003" %}
+
+Example Code --> `{% raw %}{% include feature/audio-modal.html objectid="demo_003" %}{% endraw %}`
+
+#### Audio Modal External Item
+
+{% include feature/audio-modal.html objectid="https://www.lib.uidaho.edu/digital/mp3s/Clouds.mp3" title="Clouds" caption="A reading." transcript="Example transcript text, this should be better!" %}
+
+Example Code --> `{% raw %}{% include feature/audio-modal.html objectid="https://www.lib.uidaho.edu/digital/mp3s/Clouds.mp3" title="Clouds" caption="A reading." transcript="Example transcript text, this should be better!" %}{% endraw %}`
+
+----------
+
+### Other Features
+
 #### Cloud Include
 
 {% include feature/cloud.html fields="subject" min="1" background="dark" button="outline-warning" %}
 
 Example Code --> `{% raw %}{% include feature/cloud.html fields="subject" min="1" background="dark" button="outline-warning"  %}{% endraw %}`
-
 
 #### TimelineJS
 
@@ -169,8 +189,9 @@ Example Code --> `{% raw %}{% include feature/cloud.html fields="subject" min="1
 
 Example Code --> `{% raw %}{% include feature/timelinejs.html  %}{% endraw %}`
 
+----------
 
-### Include [Bootstrap](https://getbootstrap.com/) Features
+### [Bootstrap](https://getbootstrap.com/) Features
 
 #### Include a Card
 
