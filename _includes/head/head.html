@@ -20,7 +20,7 @@
 <link rel="stylesheet" href="{% if site.data.theme.bootswatch %}https://cdn.jsdelivr.net/npm/bootswatch@5.3.8/dist/{{ site.data.theme.bootswatch }}/bootstrap.min.css{% else %}{{ site.lib-assets | default: '/assets/lib' | relative_url }}/bootstrap.min.css{% endif %}" type="text/css">
 {% if page.layout == 'data' %}<link rel="stylesheet" type="text/css" href="{{ site.lib-assets | default: '/assets/lib' | relative_url }}/datatables/datatables.min.css">{%- endif -%}
 {% if page.layout == 'map' %}<link rel="stylesheet" href="{{ site.lib-assets | default: '/assets/lib' | relative_url }}/leaflet/leaflet.css">
-<link rel="stylesheet" href="{{ '/assets/lib/leaflet/leaflet.fullscreen.css' | relative_url }}">
+<link rel="stylesheet" href="{{ site.lib-assets | default: '/assets/lib' | relative_url }}/leaflet/leaflet.fullscreen.css">
 {% if site.data.theme.map-search == true %}<link rel="stylesheet" href="{{ site.lib-assets | default: '/assets/lib' | relative_url }}/leaflet/leaflet.fusesearch.css">{%- endif -%}
 {% if site.data.theme.map-cluster == true %}<link rel="stylesheet" href="{{ site.lib-assets | default: '/assets/lib' | relative_url }}/leaflet/MarkerCluster.css">
 <link rel="stylesheet" href="{{ site.lib-assets | default: '/assets/lib' | relative_url }}/leaflet/MarkerCluster.Default.css">{% endif %}{%- endif -%}

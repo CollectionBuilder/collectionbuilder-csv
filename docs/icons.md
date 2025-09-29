@@ -13,7 +13,7 @@ The pattern to use the full Bootstrap SVG Sprite set looks like this:
 
 ```
 <svg class="bi icon-sprite" aria-hidden="true">
-    <use xlink:href="{{ '/assets/lib/icons/bootstrap-icons.svg' | relative_url }}#arrow-up-square" href="{{ '/assets/lib/icons/bootstrap-icons.svg' | relative_url }}#arrow-up-square"></use>
+    <use xlink:href="{{ site.lib-assets | default: '/assets/lib' | relative_url }}/icons/bootstrap-icons.svg#arrow-up-square" href="{{ site.lib-assets | default: '/assets/lib' | relative_url }}/icons/bootstrap-icons.svg#arrow-up-square"></use>
 </svg>
 <span class="visually-hidden">Up Arrow</span>
 ```
@@ -37,7 +37,7 @@ To use an icon similar to an image (for example as an icon stand in for thumbnai
 
 ```
 <svg class="bi w-50 text-body" fill="currentColor" aria-hidden="true">
-    <use xlink:href="{{ '/assets/lib/icons/bootstrap-icons.svg' | relative_url }}#file-earmark-play"/>
+    <use xlink:href="{{ site.lib-assets | default: '/assets/lib' | relative_url }}/icons/bootstrap-icons.svg#file-earmark-play"/>
 </svg>
 <span class="visually-hidden">File icon</span>
 ```

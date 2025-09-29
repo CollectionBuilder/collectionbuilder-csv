@@ -1,6 +1,6 @@
 {% assign fcount = site.data.config-table | size %}
 <!-- load DataTables with jquery bundled -->
-<script type="text/javascript" language="javascript" src="{{ '/assets/lib/datatables/datatables.min.js' | relative_url }}"></script>
+<script type="text/javascript" language="javascript" src="{{ site.lib-assets | default: '/assets/lib' | relative_url }}/datatables/datatables.min.js"></script>
 <script>
 /* use jquery to initialize DataTables and load collection data */
 $(document).ready( function () {

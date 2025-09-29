@@ -5,9 +5,9 @@
     https://pannellum.org/documentation/reference/
 
 {%- endcomment -%}
-<link rel="stylesheet" href="{{ '/assets/lib/pannellum/pannellum.css' | relative_url }}">
+<link rel="stylesheet" href="{{ site.lib-assets | default: '/assets/lib' | relative_url }}/pannellum/pannellum.css">
 <div id="panorama" class="ratio ratio-4x3 my-4"></div>
-<script src="{{ '/assets/lib/pannellum/pannellum.js' | relative_url }}"></script>
+<script src="{{ site.lib-assets | default: '/assets/lib' | relative_url }}/pannellum/pannellum.js"></script>
 <script>
 pannellum.viewer('panorama', {
     "type": "equirectangular",
