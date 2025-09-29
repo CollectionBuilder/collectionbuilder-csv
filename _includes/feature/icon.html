@@ -12,4 +12,4 @@
     - "class" = extra classes to add directly to the svg element (optional)
 
 {%- endcomment -%}
-<svg class="bi icon-sprite {% if include.class %}{{ include.class }}{% endif %}" {% if include.label %}role="img" aria-label="{{ include.label | escape }}"{% else %}aria-hidden="true"{% endif %}><use xlink:href="{{ '/assets/lib/icons/bootstrap-icons.svg' | relative_url }}#{{ include.icon }}" href="{{ '/assets/lib/icons/bootstrap-icons.svg' | relative_url }}#{{ include.icon }}"></use></svg>
+<svg class="bi icon-sprite {% if include.class %}{{ include.class }}{% endif %}" {% if include.label %}role="img" aria-label="{{ include.label | escape }}"{% else %}aria-hidden="true"{% endif %}><use xlink:href="{{ site.lib-assets | default: '/assets/lib' | relative_url }}/icons/bootstrap-icons.svg#{{ include.icon }}" href="{{ site.lib-assets | default: '/assets/lib' | relative_url }}/icons/bootstrap-icons.svg#{{ include.icon }}"></use></svg>
