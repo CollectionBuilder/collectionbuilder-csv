@@ -64,10 +64,10 @@ function stopMedia{{ includeid }}() {
     {% if video_type == 'youtube' %}const message = JSON.stringify({ event: 'command', func: 'pauseVideo', args: '' }); document.querySelector('#{{ includeid }}ModalVideo iframe').contentWindow.postMessage(message, '*');{% elsif video_type == 'vimeo' %}document.querySelector('#{{ includeid }}ModalVideo iframe').contentWindow.postMessage('{"method":"pause"}', '*');{% else %}document.querySelector('#{{ includeid }}ModalVideo video').pause();{% endif %}
 }
 </script>
-<div class="card my-3">
+<div class="card my-3 narrow-content">
     {% if video_poster != '' %}<img src="{{ video_poster | relative_url }}" class="card-img-top" alt="{{ video_title | escape }}">{% endif %}
     <div class="card-body text-center">
-        <{{ include.heading_level | default: 'h2' | strip }} class="card-title">{{ video_title }}</{{ include.heading_level | default: 'h2' | strip }}>
+        <{{ include.heading_level | default: 'h2' | strip }} class="card-title h2">{{ video_title }}</{{ include.heading_level | default: 'h2' | strip }}>
         <p class="card-text">{{ video_caption }}</p>
         <button class="btn btn-sm btn-primary stretched-link" type="button" data-bs-toggle="modal" data-bs-target="#{{ includeid }}Modal">
             View Video
@@ -106,7 +106,7 @@ function stopMedia{{ includeid }}() {
             </div>
             <div class="modal-footer">
                 {% if video_transcript != '' %}
-                <div class="collapse mt-3" id="collapseTranscript{{ includeid }}">
+                <div class="collapse mt-3 w-100" id="collapseTranscript{{ includeid }}">
                     <div class="card card-body text-start">
                         {% assign transcript_type = video_transcript | slice: 0,1 %}
                         {% if transcript_type == '/' %}
@@ -120,7 +120,8 @@ function stopMedia{{ includeid }}() {
                 </div>
                 <button class="btn btn-outline-primary m-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTranscript{{ includeid }}" aria-expanded="false" aria-controls="collapseTranscript{{ includeid }}">View Transcript</button>
                 {% endif %}
-                <a href="{{ video_link }}" class="btn btn-outline-dark m-2">Visit Item Page</a>
+                {% unless include.objectid contains '/' %}
+                <a href="{{ video_link }}" class="btn btn-outline-dark m-2">Visit Item Page</a>{% endunless %}
                 <button type="button" class="btn btn-dark" data-bs-dismiss="modal" onclick="stopMedia{{ includeid }}()">Close</button>
             </div>
         </div>

@@ -74,7 +74,7 @@
             </div>
             <div class="modal-footer">
                 {% if audio_transcript != '' %}
-                <div class="collapse mt-3" id="collapseTranscript{{ includeid }}">
+                <div class="collapse mt-3 w-100" id="collapseTranscript{{ includeid }}">
                     <div class="card card-body text-start">
                         {% assign transcript_type = audio_transcript | slice: 0,1 %}
                         {% if transcript_type == '/' %}
@@ -88,7 +88,8 @@
                 </div>
                 <button class="btn btn-outline-primary m-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTranscript{{ includeid }}" aria-expanded="false" aria-controls="collapseTranscript{{ includeid }}">View Transcript</button>
                 {% endif %}
-                <a href="{{ audio_link }}" class="btn btn-outline-dark m-2">Visit Item Page</a>
+                {% unless include.objectid contains '/' %}
+                <a href="{{ audio_link }}" class="btn btn-outline-dark m-2">Visit Item Page</a>{% endunless %}
                 <button type="button" class="btn btn-dark" data-bs-dismiss="modal" onclick="document.querySelector('#{{ includeid }}ModalAudio').pause();">Close</button>
             </div>
         </div>

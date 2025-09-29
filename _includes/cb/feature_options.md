@@ -130,6 +130,18 @@ Example Code --> `{% raw %}{% include feature/video.html objectid="https://vimeo
 
 Example Code --> `{% raw %}{% include feature/video.html objectid="https://www.youtube.com/watch?v=dbKNr3wuiuQ" width="50" caption="youtube caption"  %}{% endraw %}`
 
+#### Video Modal from Collection
+
+{% include feature/video-modal.html objectid="demo_004" %}
+
+Example Code --> `{% raw %}{% include feature/video-modal.html objectid="demo_004" %}{% endraw %}`
+
+#### Video Modal External Item
+
+{% include feature/video-modal.html objectid="https://cdil.lib.uidaho.edu/storying-extinction/objects/trailcams/videos/ballcreek-cedarrub-birdonpath.mp4" caption="Bears are Important!" transcript="Example transcript text, this should be better!" %}
+
+Example Code --> `{% raw %}{% include feature/video-modal.html objectid="https://cdil.lib.uidaho.edu/storying-extinction/objects/trailcams/videos/ballcreek-cedarrub-birdonpath.mp4" caption="Bears are Important!" transcript="Example transcript text, this should be better!" %}{% endraw %}`
+
 ----------
 
 ### Audio Options
