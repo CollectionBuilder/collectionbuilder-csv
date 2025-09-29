@@ -71,7 +71,7 @@ organization-logo-nav: https://www.lib.uidaho.edu/collectionbuilder/cdil-white.p
 #
 # Library directory location. This allows you to customize where the standard assets are found.
 # provide a relative path in this repository or full url 
-library-assets: /assets/lib
+lib-assets: /assets/lib
 # ignore stuff
 exclude: [docs/, Rakefile, rakelib/, README.md, LICENSE, CITATION.cff, CODE_OF_CONDUCT.md, CONTRIBUTING.md, SECURITY.md]
 # compress CSS output
