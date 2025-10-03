@@ -1,0 +1,128 @@
+{% comment %}
+
+    Video modal feature from an item's objectid or external link.
+    This include adds a card featuring the thumb image, title, and description of a video--when clicked it opens a modal containing the video embed. The modal displays video information, transcript, link to item. This is especially useful feature if you would like multiple videos on one page.
+
+    E.G. --> {% include feature/video-modal.html objectid="demo_004" %}
+
+    It requires an "objectid" with the include, which is used to find the video details. Alternatively, a URL to an external video can be used in "objectid".
+    YouTube and Vimeo items will use iframe embeds, video files use html video element.
+
+    Options: 
+    - "objectid" = several options below (required)
+        1. an objectid of a video item in this collection, e.g. "demo_003"
+        2. a full URL to a video hosted on YouTube, e.g. https://youtu.be/dbKNr3wuiuQ
+        3. a full URL to a video hosted on Vimeo, e.g. https://vimeo.com/464555587 
+        4. a full URL to an external video file (supported by browsers, generally mp4), e.g. "https://www.lib.uidaho.edu/digital/videos/fluffyclouds.mp4"
+        5. a relative link to a video file stored in this repository (that is not included in the collection), i.e. "/assets/videos/cloudyskies.mp4"  
+    - "title" = by default automatically adds the title from item metadata, which will be used for the card and modal title. Manually set by using the title option. (optional)
+    - "heading_level" = customize the level of the card heading if necessary for accessibility, choose "h1", "h2", "h3", etc (optional, default "h2")
+    - "caption" = by default the include automatically adds the description of the item from your metadata. The caption option allows you to manually add a different caption, or give the value false for none. (optional)
+    - "transcript" = by default if using an objectid, if the item has a object_transcript value, the view transcript button will automatically be added. The transcript option allows you to manually add a different transcript or provide one for non-collection videos. (optional)
+    - "image" = by default if using an objectid, if the item has a image_small value, the image will be used on the card and as the poster for video file embeds (not youtube). The image option allows you to manually add a image for non-collection videos. Give "false" to have no image displayed on the card (optional)
+    - "ratio" = use Bootstrap embed ratio options "21x9", "16x9", "4x3", or "1x1" to customize the responsive aspect ratio. 16by9 is default. (optional)
+
+    Note: if you have issues make sure the item is a video item and a web friendly format
+
+
+{% endcomment %}
+{%- if include.objectid contains '/' -%}
+    {%- capture video_title -%}{{ include.title }}{%- endcapture -%}
+    {% capture video_caption %}{{ include.caption }}{% endcapture %}
+    {% capture video_poster %}{{ include.image }}{% endcapture %}
+    {% capture video_transcript %}{{ include.transcript }}{% endcapture %}
+    {% capture raw_src %}{{ include.objectid }}{% endcapture %}
+    {%- capture video_link -%}{{ raw_src | relative_url }}{%- endcapture -%}
+{%- else -%}
+    {%- assign item = site.data[site.metadata] | where: "objectid", include.objectid | first -%}
+    {%- capture video_title -%}{% if include.title %}{{ include.title }}{% else %}{{ item.title }}{% endif %}{%- endcapture -%}
+    {% capture video_caption %}{% if include.caption %}{{ include.caption }}{% else %}{{ item.description }}{% endif %}{% endcapture %}
+    {% capture video_poster %}{{ include.image | default: item.image_small | default: '' }}{% endcapture %}
+    {% capture video_transcript %}{{ include.transcript | default: item.object_transcript }}{% endcapture %}
+    {% capture raw_src %}{{ item.object_location }}{% endcapture %}
+    {%- capture video_link -%}{{ '/items/' | relative_url }}{% if item.parentid %}{{ item.parentid }}.html#{{ item.objectid }}{% else %}{{ item.objectid }}.html{% endif %}{%- endcapture -%}
+{%- endif -%}
+{%- if raw_src contains 'vimeo' -%}
+    {% assign vimeo_id = raw_src | split: '/' | last %}
+    {% capture video_src %}https://player.vimeo.com/video/{{ vimeo_id }}{% endcapture %}
+    {% assign video_type = 'vimeo' %}
+{%- elsif raw_src contains 'youtu' -%}
+    {% assign youtube_id = raw_src | split: '/' | last %}
+    {% if youtube_id contains 'v=' %}{% assign youtube_id = youtube_id | split: 'v=' | last | split: '&' | first %}
+    {% elsif youtube_id contains '?' %}{% assign youtube_id = youtube_id | split: '?' | first %}{% endif %}
+    {% capture video_src %}https://www.youtube-nocookie.com/embed/{{ youtube_id }}?enablejsapi=1&rel=0&modestbranding=1{% endcapture %}
+    {% assign video_type = 'youtube' %}
+{%- else -%}
+    {% assign video_src = raw_src | relative_url %}
+    {% assign video_type = 'video' %}
+{%- endif -%}
+{% capture includeid %}{% if include.objectid.size > 10 %}{{ include.objectid | slice: -10, 10 | slugify | replace: "-","_" }}{% else %}{{ include.objectid | slugify | replace: "-","_" }}{% endif %}{% endcapture %}
+{% capture stop_media %}{% endcapture %}
+<script>
+function stopMedia{{ includeid }}() {
+    {% if video_type == 'youtube' %}const message = JSON.stringify({ event: 'command', func: 'pauseVideo', args: '' }); document.querySelector('#{{ includeid }}ModalVideo iframe').contentWindow.postMessage(message, '*');{% elsif video_type == 'vimeo' %}document.querySelector('#{{ includeid }}ModalVideo iframe').contentWindow.postMessage('{"method":"pause"}', '*');{% else %}document.querySelector('#{{ includeid }}ModalVideo video').pause();{% endif %}
+}
+</script>
+<div class="card my-3 narrow-content">
+    {% if include.image != false and video_poster != '' %}<img src="{{ video_poster | relative_url }}" class="card-img-top" alt="{{ video_title | escape }}">{% endif %}
+    <div class="card-body text-center">
+        <{{ include.heading_level | default: 'h2' | strip }} class="card-title h2">{{ video_title }}</{{ include.heading_level | default: 'h2' | strip }}>
+        <p class="card-text">{{ video_caption }}</p>
+        <button class="btn btn-sm btn-primary stretched-link" type="button" data-bs-toggle="modal" data-bs-target="#{{ includeid }}Modal">
+            View Video
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi icon-sprite" viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                <path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445"/>
+            </svg>
+        </button>
+    </div>
+</div>
+<div class="modal fade" id="{{ includeid }}Modal" tabindex="-1" aria-labelledby="{{ includeid }}ModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="{{ includeid }}ModalLabel">{{ video_title }}</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="stopMedia{{ includeid }}()"></button>
+            </div>
+            <div class="modal-body">
+                <figure class="">
+                    <div class="ratio ratio-{{ include.ratio | default: '16x9' }}" id="{{ includeid }}ModalVideo">
+                        {%- if video_src contains "vimeo" or video_src contains "youtu" -%}
+                        <iframe title="video embed {{ video_title | escape }}" src="{{ video_src }}" allowfullscreen></iframe>
+                        {% else %}
+                        <video {% if video_poster %}poster="{{ video_poster | relative_url }}"{% endif %} preload="metadata" controls>
+                            <source src="{{ video_src }}">
+                            Your browser does not support the video tag, please <a href="{{ video_link }}">download the file to watch</a>.
+                        </video>
+                        {%- endif -%}
+                    </div>
+                    {% unless include.caption == false %}
+                    <figcaption class="figure-caption text-center">
+                        {{ video_caption }}
+                    </figcaption>
+                    {% endunless %}
+                </figure>
+            </div>
+            <div class="modal-footer">
+                {% if video_transcript != '' %}
+                <div class="collapse mt-3 w-100" id="collapseTranscript{{ includeid }}">
+                    <div class="card card-body text-start">
+                        {% assign transcript_type = video_transcript | slice: 0,1 %}
+                        {% if transcript_type == '/' %}
+                        {% assign transcript_location = video_transcript | remove_first: '/' %}
+                        {% assign transcript = site.pages | where: 'path', transcript_location | first %}
+                        {{ transcript.content | markdownify }}
+                        {% else %}
+                        {{ video_transcript | markdownify }}
+                        {% endif %}
+                    </div>
+                </div>
+                <button class="btn btn-outline-primary m-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTranscript{{ includeid }}" aria-expanded="false" aria-controls="collapseTranscript{{ includeid }}">View Transcript</button>
+                {% endif %}
+                {% unless include.objectid contains '/' %}
+                <a href="{{ video_link }}" class="btn btn-outline-dark m-2">Visit Item Page</a>{% endunless %}
+                <button type="button" class="btn btn-dark" data-bs-dismiss="modal" onclick="stopMedia{{ includeid }}()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
