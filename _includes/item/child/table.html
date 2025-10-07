@@ -7,6 +7,9 @@
   assign quick_search = site.data.translations._includes.item.child.['table.html'].quick_search[site.lang]
   | default: 'Quick Search'
 %}
+{%- capture table_id -%}csvTable-{{ child.objectid }}{%- endcapture -%}
+{%- capture wrap_id -%}wrap-{{ child.objectid }}{%- endcapture -%}
+{%- capture obj_url -%}url_{{ child.objectid }}{%- endcapture -%}
 
 <link rel="stylesheet" type="text/css" href="/assets/lib/datatables/datatables.min.css">
 <script
@@ -37,11 +40,11 @@
 </script>
 
 <script type="text/javascript">
-  document.addEventListener('DOMContentLoaded', function () {
-      var obj_url = '{{ data | default: 'null' }}';
+  (function() {
+      var {{ obj_url }} = '{{ data | default: 'null' }}';
 
-      if (obj_url !== 'null') {
-          fetch(obj_url)
+      if ({{ obj_url }} !== 'null') {
+          fetch({{ obj_url }})
               .then(response => response.text())
               .then(data => {
                   Papa.parse(data, {
@@ -52,7 +55,7 @@
                           return value === undefined ? "" : value;
                       },
                       complete: function(results) {
-                          var build = '<table id="csvTable" class="table table-striped datatable-border" style="width:100%">\n';
+                          var build = '<table id="{{ table_id }}" class="table table-striped datatable-border" style="width:100%">\n';
                           var rows = results.data;
 
                           if (rows.length > 0) {
@@ -72,10 +75,10 @@
                               });
 
                               build += "</tbody></table>";
-                              document.getElementById('wrap').innerHTML = build;
+                              document.getElementById('{{ wrap_id }}').innerHTML = build;
 
                               // Initialize DataTables
-                              $('#csvTable').DataTable({
+                              $('#{{ table_id }}').DataTable({
                                   {% if lang != "en" %}language: { url: '{{ "/assets/lib/datatables/" | append: lang | append: ".json" | relative_url }}' },{% endif %}
                                   ajax: false, // No AJAX since data is already loaded
                                   deferRender: true,
@@ -88,7 +91,7 @@
                                   layout: {
                                       bottomStart: [
                                           {
-                                            rowClass: 'm-2',
+                                            rowClass: 'm-2 mt-1',
                                             features: {
                                                 search: {
                                                     text: '_INPUT_',
@@ -103,17 +106,20 @@
                                   order: [[ 0, "asc" ]],
                               });
                           } else {
-                              console.error('No data found or data format is incorrect.');
+                              console.error('No data found or data format is incorrect for {{ table_id }}.');
                           }
                       },
                       error: function(error) {
-                          console.error('Error parsing CSV:', error);
+                          console.error('Error parsing CSV for {{ table_id }}:', error);
                       }
                   });
               })
-              .catch(error => console.error('Error fetching data:', error));
+              .catch(error => console.error('Error fetching data for {{ table_id }}:', error));
       }
-  });
+  })();
 </script>
 
-<div id="wrap" class="bg-{{ include.background | default: '#ffe880' }} border datatable-border rounded"></div>
+<div
+  id="{{ wrap_id }}"
+  class="bg-{{ include.background | default: '#ffe880' }} border datatable-border cell-border rounded"
+></div>
