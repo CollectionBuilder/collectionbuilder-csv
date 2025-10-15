@@ -1,10 +1,22 @@
 ---
-title: Datendokumentation
+title: Daten
 layout: page
 permalink: /data.html
 ---
 
-# Datendokumentation
+# Daten
+
+<div>{% include data-download-cards.html %}</div>
+
+## Datenmodell
+
+Metadaten für die auf der Forschungsdatenplattform vorgestellten Elemente werden gemäss einem Datenmodell bereitgestellt, das vom Team für Forschungdatenmanagement der Stadt.Geschichte.Basel entwickelt wurde, um den Anforderungen der vielfältigen im Projekt verwendeten Quellen gerecht zu werden. Das Datenmodell (und der anschliessende Annotationsprozess) folgen dem [Handbuch zur Erstellung diskriminerungsfreier Metadaten für historische Quellen und Forschungsdaten](https://maehr.github.io/diskriminierungsfreie-metadaten/){:target="\_blank"}, das ebenfalls von Stadt.Geschichte.Basel entwickelt wurde.
+
+Die folgende Grafik veranschaulicht das Datenmodell mit Metadatenfeldern für ein Beispiel-Metadatenobjekt `abb01313`, das ein untergeordnetes Medienobjekt `m01313` hat. Wenn ein Metadatenobjekt mehr als ein untergeordnetes Medienobjekt hat, werden die `id`-Nummern der untergeordneten Objekte fortlaufend nummeriert: `m01313_1`, `m01313_2` usw.
+
+![Datenmodell](assets/img/sgb_datamodel.svg){:style="max-width: 70%; display: block; margin: auto;"}
+
+## Datendokumentation
 
 Die Stadt.Geschichte.Basel macht projektbezogene Daten in verschiedenen Formaten zugänglich. Verfügbar sind wissenschaftliche Publikationen mit Projektbezug einerseits, sowie die Metadaten zu den auf dieser Plattform bereitgestellten Quellen und historischen Forschungsdaten andererseits.
 
@@ -15,14 +27,6 @@ Die Arbeit des Teams für Forschungsdatenmanagement und Public History an dieser
 [![Screenshot der Dokumentationswebsite](assets/img/screenshots/dokumentation.png){:style="max-width: 50%; display: block; margin: auto;"}](https://dokumentation.stadtgeschichtebasel.ch){:target="\_blank"}
 
 Wissenschaftliche Veröffentlichungen, die im Zusammenhang mit dem Forschungsprojekt stehen, sind auch [auf Zenodo archiviert](https://zenodo.org/communities/stadt-geschichte-basel){:target="\_blank"}. Die im Rahmen von Konferenzen und Workshops publizierten Beiträge des Teams für Forschungsdatenmanagement und Public History befassen sich mit der Entwicklung dieser Plattform und übergreifend mit (digitalem) Forschungsdatenmanagement und Public History in den Geschichtswissenschaften.
-
-## Datenmodell
-
-Metadaten für die auf der Forschungsdatenplattform vorgestellten Elemente werden gemäss einem Datenmodell bereitgestellt, das vom Team für Forschungdatenmanagement der Stadt.Geschichte.Basel entwickelt wurde, um den Anforderungen der vielfältigen im Projekt verwendeten Quellen gerecht zu werden. Das Datenmodell (und der anschliessende Annotationsprozess) folgen dem [Handbuch zur Erstellung diskriminerungsfreier Metadaten für historische Quellen und Forschungsdaten](https://maehr.github.io/diskriminierungsfreie-metadaten/){:target="\_blank"}, das ebenfalls von Stadt.Geschichte.Basel entwickelt wurde.
-
-Die folgende Grafik veranschaulicht das Datenmodell mit Metadatenfeldern für ein Beispiel-Metadatenobjekt `abb01313`, das ein untergeordnetes Medienobjekt `m01313` hat. Wenn ein Metadatenobjekt mehr als ein untergeordnetes Medienobjekt hat, werden die `id`-Nummern der untergeordneten Objekte fortlaufend nummeriert: `m01313_1`, `m01313_2` usw.
-
-![Datenmodell](assets/img/sgb_datamodel.svg){:style="max-width: 70%; display: block; margin: auto;"}
 
 ## EDTF
 

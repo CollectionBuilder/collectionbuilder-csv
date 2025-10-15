@@ -390,7 +390,25 @@ table td:last-child {
     border-right: none;
 }
 
-/* Toggle Collection View for Small Screens */
+.random-card-img-top {
+    height: 33vh;
+    width: 100%;
+    object-fit: contain; /* to maintain aspect ratio */
+    object-position: center;
+}
+
+.timeline-thumb[src$=".svg"] {
+    width: 100%;
+    height: 100%;
+}
+
+.compound-thumb[src$=".svg"] {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* Button Group Settings for Small Screens */
 
 @media screen and (min-width: 577px) {
 
@@ -401,6 +419,11 @@ table td:last-child {
     #switch-view .btn:nth-last-child(2) {
         border-top-right-radius: .25rem;
         border-bottom-right-radius: .25rem;
+    }
+
+    .btngroup-download-child {
+        margin-left: 2.5%;
+        margin-right: 2.5%;
     }
 }
 
@@ -440,22 +463,35 @@ table td:last-child {
         border-top-right-radius: .25rem;
         border-bottom-right-radius: .25rem;
     }
-}
 
-.random-card-img-top {
-    height: 33vh;
-    width: 100%;
-    object-fit: contain; /* to maintain aspect ratio */
-    object-position: center;
-}
+    .btngroup-download-child, .btngroup-download-compound {
+        flex-direction: column;
+        display: flex;
+        margin-left: 2.5%;
+        margin-right: 2.5%;
+    }
 
-.timeline-thumb[src$=".svg"] {
-    width: 100%;
-    height: 100%;
-}
+    .btngroup-download-child .btn, .btngroup-download-compound .btn {
+        justify-content: center;
+    }
 
-.compound-thumb[src$=".svg"] {
-    width: 100%;
-    height: 100%;
-    border: none;
+    .btngroup-download-child .btn {
+        justify-content: center;
+        border-radius: 0; /* Reset all radii first */
+    }
+
+    .btngroup-download-child > .btn:not(:first-child) {
+        margin-top: -1px;
+    }
+
+    .btn-group.btngroup-download-child > .btn:first-child {
+        border-top-left-radius: .25rem;
+        border-top-right-radius: .25rem;
+        margin-left: -1px;
+    }
+
+    .btngroup-download-child > .btn:last-child {
+        border-bottom-left-radius: .25rem;
+        border-bottom-right-radius: .25rem;
+    }
 }

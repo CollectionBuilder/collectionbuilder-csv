@@ -6,7 +6,7 @@
   - View on Map -- if item has "latitude" and "longitude" value, links to location on map.
   - Download -- if the item has "object_location" value, adds a download button along with the item format, or if the value is a YouTube or Vimeo link adds a "View on" link.
 {% endcomment %}
-<div class="btn-group my-2" role="group" aria-label="Objektoptionen">
+<div class="btn-group my-2 btngroup-download-child" role="group" aria-label="Objektoptionen">
   {% if child.object_transcript -%}
     <button
       class="btn btn-outline-primary"

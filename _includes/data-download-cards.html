@@ -1,0 +1,297 @@
+{% comment %}
+  This include creates an overview of data export options.
+  The logic of which formats appear is based on config-nav stubs:
+  if subject.html, map.html, location.html, or timeline.html are present,
+  corresponding data formats will be available for download.
+{% endcomment %}
+
+{%- assign stubs = site.data['config-nav'] | map: 'stub' | join: ';' -%}
+<p>
+  {{ site.data.translations['_includes']['data-download-modal.html']['description'][site.lang] | default: 'Download this collection\'s data in a variety of reusable formats.' }}
+</p>
+
+{% if site.data.theme['metadata-export-fields'] %}
+  <div class="card my-3">
+    <div class="card-body">
+      <h2 class="card-title h4">
+        {{
+          site.data.translations._includes['data-download-modal.html']['complete-metadata'][site.lang]
+          | default: 'Complete Metadata'
+        }}
+      </h2>
+      <p class="card-text">
+        {{
+          site.data.translations._includes['data-download-modal.html']['metadata-description'][site.lang]
+          | default: 'All metadata fields for all collection items, available as a CSV spreadsheet (usable in Excel, Google Sheets, and similar programs) or JSON file (often used with web applications).'
+        }}
+      </p>
+      <div
+        class="btn-group btn-group-toggle justify-content-center"
+        data-toggle="buttons"
+        role="group"
+      >
+        <a href="{{ '/assets/data/metadata.csv' | relative_url }}" class="btn btn-outline-dark" target="_blank">
+          {{- site.data.translations._includes['data-download-modal.html'].metadata[site.lang] | default: 'Metadata' }}
+          CSV</a
+        >
+        <a href="{{ '/assets/data/metadata.json' | relative_url }}" class="btn btn-outline-dark" target="_blank">
+          {{- site.data.translations._includes['data-download-modal.html'].metadata[site.lang] | default: 'Metadata' }}
+          JSON</a
+        >
+      </div>
+    </div>
+  </div>
+{%- endif -%}
+{% if site.data.theme['metadata-facets-fields'] %}
+  <div class="card my-3">
+    <div class="card-body">
+      <h2 class="card-title h4">
+        {{
+          site.data.translations._includes['data-download-modal.html'].facets[site.lang]
+          | default: 'Metadata Facets'
+        }}
+      </h2>
+      <p class="card-text">
+        {{
+          site.data.translations._includes['data-download-modal.html']['facets-description'][site.lang]
+          | default: 'List of unique values and their count for specific metadata fields, useful for understanding content of the fields.'
+        }}
+      </p>
+      <a href="{{ '/assets/data/facets.json' | relative_url }}" class="btn btn-outline-dark" target="_blank">
+        {{- site.data.translations._includes['data-download-modal.html'].facets[site.lang] | default: 'Facets' }}
+        JSON</a
+      >
+    </div>
+  </div>
+{%- endif -%}
+{% if stubs contains 'subject' %}
+  <div class="card my-3">
+    <div class="card-body">
+      <h2 class="card-title h4">
+        {{
+          site.data.translations._includes['data-download-modal.html']['subject-metadata'][site.lang]
+          | default: 'Subject Metadata'
+        }}
+      </h2>
+      <p class="card-text">
+        {{
+          site.data.translations._includes['data-download-modal.html']['subject-metadata-description'][site.lang]
+          | default: 'Unique values and counts of subject metadata, useful for further analyzing the content of this collection.'
+        }}
+      </p>
+      <a href="{{ '/assets/data/subjects.csv' | relative_url }}" class="btn btn-outline-dark" target="_blank">
+        {{- site.data.translations._includes['data-download-modal.html'].subject[site.lang] | default: 'Subjects' }}
+        CSV</a
+      >
+      <a href="{{ '/assets/data/subjects.json' | relative_url }}" class="btn btn-outline-dark" target="_blank">
+        {{- site.data.translations._includes['data-download-modal.html'].subject[site.lang] | default: 'Subjects' }}
+        JSON</a
+      >
+    </div>
+  </div>
+{% endif %}
+{% if stubs contains 'location' %}
+  <div class="card my-3">
+    <div class="card-body">
+      <h2 class="card-title h4">
+        {{ site.data.translations._includes['data-download-modal.html'].location[site.lang] | default: 'Locations' }}
+      </h2>
+      <p class="card-text">
+        {{ site.data.translations['_includes']['data-download-modal.html']['location-description'][site.lang] | default: 'Unique values and counts of location metadata, useful for further visualization and analysis of this collection\'s place names.' }}
+      </p>
+      <a href="{{ '/assets/data/locations.csv' | relative_url }}" class="btn btn-outline-dark" target="_blank">
+        {{- site.data.translations._includes['data-download-modal.html'].location[site.lang] | default: 'Locations' }}
+        CSV</a
+      >
+      <a href="{{ '/assets/data/locations.json' | relative_url }}" class="btn btn-outline-dark" target="_blank">
+        {{- site.data.translations._includes['data-download-modal.html'].location[site.lang] | default: 'Locations' }}
+        JSON</a
+      >
+    </div>
+  </div>
+{%- endif -%}
+{% if stubs contains 'map' %}
+  <div class="card my-3">
+    <div class="card-body">
+      <h2 class="card-title h4">GeoJSON</h2>
+      <p class="card-text">
+        {{
+          site.data.translations._includes['data-download-modal.html']['geojson-description'][site.lang]
+          | default: "Metadata for all collection items that have geographic coordinates in <a href='https://en.wikipedia.org/wiki/GeoJSON' target='_blank' rel='noopener'>GeoJSON</a> format, useful for further exploration and analysis of this collection through a geographical lense."
+        }}
+      </p>
+      <a href="{{ '/assets/data/geodata.json' | relative_url }}" class="btn btn-outline-dark" target="_blank"
+        >Geodata JSON</a
+      >
+    </div>
+  </div>
+{%- endif -%}
+{% if stubs contains 'timeline' %}
+  <div class="card my-3">
+    <div class="card-body">
+      <h2 class="card-title h4">
+        {{ site.data.translations._includes['data-download-modal.html'].timeline[site.lang] | default: 'Timeline' }}
+      </h2>
+      <p class="card-text">
+        {{
+          site.data.translations._includes['data-download-modal.html']['timeline-description'][site.lang]
+          | default: "A time-focused JSON data export designed for use with <a href='https://timeline.knightlab.com/' target='_blank' rel='noopener'>TimelineJS</a>."
+        }}
+      </p>
+      <a href="{{ '/assets/data/timelinejs.json' | relative_url }}" class="btn btn-outline-dark" target="_blank"
+        >TimelineJS JSON</a
+      >
+    </div>
+  </div>
+{%- endif -%}
+<div class="card my-3">
+  <div class="card-body">
+    <h2 class="card-title h4">
+      {{
+        site.data.translations._includes['data-download-modal.html']['source-code'][site.lang]
+        | default: 'Source Code'
+      }}
+    </h2>
+    <p class="card-text">
+      {{
+        site.data.translations._includes['data-download-modal.html']['source-code-description'][site.lang]
+        | default: "GitHub repository containing source code for this project built with <a href='https://github.com/CollectionBuilder/collectionbuilder-csv' target='_blank' rel='noopener'>CollectionBuilder-CSV</a>."
+      }}
+    </p>
+    <a
+      href="{{ site.source-code | default: 'https://github.com/CollectionBuilder/collectionbuilder-csv' }}"
+      class="btn btn-outline-dark"
+      target="_blank"
+      rel="noopener"
+    >
+      {{-
+        site.data.translations._includes['data-download-modal.html']['source-code'][site.lang]
+        | default: 'Source Code'
+      -}}
+    </a>
+  </div>
+</div>
+
+<script type="application/ld+json">
+  {
+      "@context":"https://schema.org/",
+      "@type":"Dataset",
+      "name":"{{ site.title | escape }} Data",
+      "description":"Metadata and data derived from {{ site.title | escape }}. {{ site.description | escape }}",
+      {% if site.keywords %}"keywords": {% assign keywords = site.keywords | split: ';' %} {{ keywords | jsonify }},{% endif %}
+      "url":"{{ page.url | absolute_url }}",
+      "license" : "https://creativecommons.org/publicdomain/zero/1.0/",
+      "creator": [
+          {
+              "@type": "Organization",
+              "sameAs": "{{ site.organization-link }}",
+              "name": "{{ site.organization-name | escape }}"
+          }
+      ],
+      "hasPart" : [
+          {% if site.data.theme.metadata-facets-fields %}
+          {
+              "@type": "Dataset",
+              "name": "{{ site.title | escape }} Metadata Facets",
+              "description": "Unique values and counts of metadata facet fields.",
+              "license" : "https://creativecommons.org/publicdomain/zero/1.0/",
+              "distribution":[
+                  {
+                      "@type":"DataDownload",
+                      "encodingFormat":"JSON",
+                      "contentUrl":"{{ '/assets/data/facets.json' | absolute_url }}"
+                  }
+              ]
+          },
+          {%- endif -%}
+          {% if stubs contains "subject" %}
+          {
+              "@type": "Dataset",
+              "name": "{{ site.title | escape }} metadata subject counts",
+              "description": "Unique values and counts of metadata subject fields.",
+              "license" : "https://creativecommons.org/publicdomain/zero/1.0/",
+              "distribution":[
+                  {
+                      "@type":"DataDownload",
+                      "encodingFormat":"CSV",
+                      "contentUrl":"{{ '/assets/data/subjects.csv' | absolute_url }}"
+                  },
+                  {
+                      "@type":"DataDownload",
+                      "encodingFormat":"JSON",
+                      "contentUrl":"{{ '/assets/data/subjects.json' | absolute_url }}"
+                  }
+              ]
+          },
+          {%- endif -%}
+          {% if stubs contains "location" %}
+          {
+              "@type": "Dataset",
+              "name": "{{ site.title | escape }} metadata location counts",
+              "description": "Unique values and counts of metadata location fields.",
+              "license" : "https://creativecommons.org/publicdomain/zero/1.0/",
+              "distribution":[
+                  {
+                      "@type":"DataDownload",
+                      "encodingFormat":"CSV",
+                      "contentUrl":"{{ '/assets/data/locations.csv' | absolute_url }}"
+                  },
+                  {
+                      "@type":"DataDownload",
+                      "encodingFormat":"JSON",
+                      "contentUrl":"{{ '/assets/data/locations.json' | absolute_url }}"
+                  }
+              ]
+          },
+          {%- endif -%}
+          {% if stubs contains "map" %}
+          {
+              "@type": "Dataset",
+              "name": "{{ site.title | escape }} geographic metadata",
+              "description": "Geojson data containing all objects with lat-longs and associated descriptive metadata.",
+              "license" : "https://creativecommons.org/publicdomain/zero/1.0/",
+              "distribution":[
+                  {
+                      "@type":"DataDownload",
+                      "encodingFormat":"JSON",
+                      "contentUrl":"{{ '/assets/data/geodata.json' | absolute_url }}"
+                  }
+              ]
+          },
+          {%- endif -%}
+          {% if stubs contains "timeline" %}
+          {
+              "@type": "Dataset",
+              "name": "{{ site.title | escape }} timeline metadata",
+              "description": "Time-based metadata formatted for TimelineJS or other applications.",
+              "license" : "https://creativecommons.org/publicdomain/zero/1.0/",
+              "distribution":[
+                  {
+                      "@type":"DataDownload",
+                      "encodingFormat":"JSON",
+                      "contentUrl":"{{ '/assets/data/timelinejs.json' | absolute_url }}"
+                  }
+              ]
+          },
+          {%- endif -%}
+          {
+              "@type": "Dataset",
+              "name": "{{ site.title | escape }} full metadata",
+              "description": "Complete metadata export for {{ site.title | escape }} objects.",
+              "license" : "https://creativecommons.org/publicdomain/zero/1.0/",
+              "distribution":[
+                  {
+                      "@type":"DataDownload",
+                      "encodingFormat":"CSV",
+                      "contentUrl":"{{ '/assets/data/metadata.csv' | absolute_url }}"
+                  },
+                  {
+                      "@type":"DataDownload",
+                      "encodingFormat":"JSON",
+                      "contentUrl":"{{ '/assets/data/metadata.json' | absolute_url }}"
+                  }
+              ]
+          }
+      ]
+  }
+</script>
