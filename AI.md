@@ -3,25 +3,59 @@
 ## Overview
 This document outlines best practices for customizing CollectionBuilder-CSV repositories, particularly those enhanced with Oral History as Data (OHD) features. These guidelines help maintain compatibility with the existing infrastructure while enabling powerful customizations.
 
+## Essential Commands
+
+### Quick Command Reference:
+- **Local development**: `bundle exec jekyll serve`
+- **After config changes**: Restart Jekyll server (crucial!)
+- **Generate thumbnails**: `rake generate_derivatives`
+- **Large collections**: `rake generate_json`
+- **Troubleshoot build**: `bundle exec jekyll build --verbose`
+- **Test site**: Visit `http://localhost:4000`
+
 ## Quick Reference for AI Agents
 
 ### Most Common Tasks:
-- **Navigation change**: Update `config-nav.csv`
-- **Browse customization**: Modify `config-browse.csv`
-- **Styling**: Use Bootstrap classes →  `_sass/_custom.scss` → `config-theme-colors.csv` for bootstrap color changes   
-- **New component**: Create in `_includes/` → Use `feature/` components first
-- **New item type**: Add `display_template` to CSV → Create layout in `_layouts/item/` → Extend `item-page-base.html`
+- **Navigation change**: Update `_data/config-nav.csv:1`
+- **Browse customization**: Modify `_data/config-browse.csv:1`
+- **Styling**: Use Bootstrap classes →  `_sass/_custom.scss:1` → `_data/config-theme-colors.csv:1` for bootstrap color changes
+- **New component**: Create in `_includes/` → Use `_includes/feature/` components first
+- **New item type**: Add `display_template` to CSV → Create layout in `_layouts/item/` → Extend `_layouts/item/item-page-base.html:1`
 
 ### File Priority Order:
-1. CSV config files (`_data/`)
-2. Existing feature includes (`_includes/feature/`)
-3. `theme.yml` settings
+1. CSV config files (`_data/*.csv`)
+2. Existing feature includes (`_includes/feature/*.html`)
+3. `_data/theme.yml:1` settings
 4. Custom includes (`_includes/`)
-5. Custom CSS (`_sass/_custom.scss`)
+5. Custom CSS (`_sass/_custom.scss:1`)
 
 ### ⚠️ Critical Don'ts:
 - **DON'T** create monolithic layouts - extend existing base layouts
 - **DON'T** rebuild Bootstrap components or media embed components - use options in `_includes/feature/`
+
+## 🚨 Emergency Troubleshooting
+
+### Site Won't Build:
+1. **Check YAML syntax**: `_config.yml:1` (YAML is space-sensitive - no tabs!)
+2. **Verify metadata**: No duplicate `objectid` values in `_data/[metadata-file].csv:1`
+3. **Check layouts exist**: All `display_template` values must have matching files in `_layouts/item/`
+4. **Restart server**: After ANY config file changes, restart `bundle exec jekyll serve`
+
+### Pages Not Generating:
+- Item pages generate at `/items/{objectid}.html` via `_plugins/cb_page_gen.rb:34`
+- Check `objectid` values are URL-safe (no spaces, special chars)
+- Verify `display_template` matches layout filename in `_layouts/item/`
+
+### Navigation Broken:
+- Navigation processes in `_includes/nav/nav.html:15`
+- Check `_data/config-nav.csv:1` format: `display_name,stub,dropdown_parent`
+- Ensure stub URLs start with `/`
+
+### Search/Browse Issues:
+- Search config: `_data/config-search.csv:1`
+- Browse config: `_data/config-browse.csv:1`
+- Metadata config: `_data/config-metadata.csv:1`
+- Clear browser cache and restart server
 
 ---
 
@@ -33,7 +67,7 @@ This document outlines best practices for customizing CollectionBuilder-CSV repo
 - Use the modular include system for reusable components
 
 ### 2. **Configuration-Driven Customization**
-- Use `theme.yml` for display and styling options on specific pages -- Homepage, browse, subjects, locations, map, timeline, data exports, compound objects behavior and some styles
+- Use `_data/theme.yml:1` for display and styling options on specific pages -- Homepage, browse, subjects, locations, map, timeline, data exports, compound objects behavior and some styles
 - Minimize custom code when configuration can achieve the same result
 
 ### 3. **Modular Architecture**
@@ -191,7 +225,7 @@ default.html (base HTML structure)
 #### ✅ **DO: Extend Existing Base Layouts**
 ```yaml
 ---
-layout: item/item-page-base  # Build on foundation
+layout: item/item-page-base  # Build on _layouts/item/item-page-base.html:1
 custom-foot: transcript/js/transcript-js.html
 ---
 # Add custom content here
@@ -233,8 +267,39 @@ layout: default
 
 ## Working with Metadata
 
+### Complete Metadata Field Reference
+
+#### Required Fields:
+- `objectid`: Unique identifier (generates `/items/{objectid}.html`)
+- `title`: Item title
+
+#### Core Display Fields:
+- `display_template`: Routes to layout in `_layouts/item/` (e.g., "image", "audio", "video")
+- `object_location`: Path/URL to media file
+- `image_thumb`: Thumbnail image path
+- `image_small`: Small image path
+
+#### Geographic Fields:
+- `latitude`: For map display
+- `longitude`: For map display
+- `location`: Place name (searchable)
+
+#### Metadata Fields:
+- `creator`: Author/creator
+- `date`: Date (YYYY-MM-DD or YYYY for timeline)
+- `description`: Item description
+- `subject`: Topics (semicolon-separated)
+- `format`: File type
+- `rights`: Rights statement
+- `identifier`: Original ID
+
+#### Custom Fields:
+- Any additional columns become automatically searchable
+- Configure display in `_data/config-metadata.csv:1`
+- Enable browse filtering in `_data/config-browse.csv:1`
+
 ### CSV Metadata Structure
-Main collection metadata in `_data/metadata.csv` (or configured filename):
+Main collection metadata in `_data/metadata.csv:1` (or configured filename in `_config.yml:37`):
 
 ```csv
 objectid,title,display_template,creator,date,description,subject,object_location
@@ -248,10 +313,10 @@ episode001,Episode Title,episode,Host Name,2024-01-01,Description,topic1; topic2
 - Custom fields: Add any additional metadata columns
 
 ### Display Template Routing
-CollectionBuilder automatically routes items based on `display_template`:
-- `display_template: episode` → `_layouts/item/episode.html`
-- `display_template: transcript` → `_layouts/item/transcript.html`
-- `display_template: audio` → `_layouts/item/audio.html`
+CollectionBuilder automatically routes items based on `display_template` (via `_plugins/cb_page_gen.rb:34`):
+- `display_template: episode` → `_layouts/item/episode.html:1`
+- `display_template: transcript` → `_layouts/item/transcript.html:1`
+- `display_template: audio` → `_layouts/item/audio.html:1`
 
 ## Include Directory Organization
 
@@ -360,7 +425,7 @@ _includes/transcript/
 
 ### Color Customization: Use `config-theme-colors.csv`
 
-**For Bootstrap color overrides, use `_data/config-theme-colors.csv`:**
+**For Bootstrap color overrides, use `_data/config-theme-colors.csv:1`:**
 
 ```csv
 color_class,color
@@ -373,7 +438,7 @@ info,#17a2b8
 
 ### Sass Variables: Use `assets/css/cb.scss`
 
-**For custom Sass variables, modify `assets/css/cb.scss`:**
+**For custom Sass variables, modify `assets/css/cb.scss:1`:**
 
 ```scss
 ---
@@ -391,7 +456,7 @@ $episode-border-radius: 12px;
 
 ### Repository-Level Customization: Use `_sass/_custom.scss`
 
-**For component styles and CSS overrides, use `_sass/_custom.scss`:**
+**For component styles and CSS overrides, use `_sass/_custom.scss:1`:**
 
 ```scss
 /* _sass/_custom.scss */
@@ -468,35 +533,35 @@ CollectionBuilder includes Bootstrap 5. **Always prefer Bootstrap classes:**
 ### File Organization for Styling
 ```
 _sass/
-├── _custom.scss      # Component styles and CSS overrides
-├── _base.scss        # CollectionBuilder base styles
-├── _ohd.scss         # OHD-specific styles
-├── _pages.scss       # Page-specific styles
-└── _theme-colors.scss # Bootstrap color overrides
+├── _custom.scss:1      # Component styles and CSS overrides
+├── _base.scss:1        # CollectionBuilder base styles
+├── _ohd.scss:1         # OHD-specific styles
+├── _pages.scss:1       # Page-specific styles
+└── _theme-colors.scss:1 # Bootstrap color overrides
 
 _data/
-└── config-theme-colors.csv # Bootstrap color theme configuration
+└── config-theme-colors.csv:1 # Bootstrap color theme configuration
 
 assets/css/
-└── cb.scss          # Sass variables and Jekyll processing
+└── cb.scss:1          # Sass variables and Jekyll processing
 ```
 
 ## Generated Data Files (`assets/data/`)
 
 CollectionBuilder automatically generates reusable data files in `assets/data/` that serve multiple purposes:
 
-### Auto-Generated Data Outputs
+### Auto-Generated Data Outputs (DO NOT EDIT - Generated by Jekyll)
 ```
 assets/data/
-├── metadata.csv     # Downloadable metadata export
-├── metadata.json    # JSON version for APIs
-├── subjects.csv     # Subject terms and counts
-├── subjects.json    # Subject data for visualizations
-├── locations.csv    # Location data export
-├── geodata.json     # Geographic data for maps
-├── timelinejs.json  # Timeline.js compatible data
-├── facets.json      # Search facet data
-└── collection-info.json # Collection statistics
+├── metadata.csv:1     # Downloadable metadata export
+├── metadata.json:1    # JSON version for APIs
+├── subjects.csv:1     # Subject terms and counts
+├── subjects.json:1    # Subject data for visualizations
+├── locations.csv:1    # Location data export
+├── geodata.json:1     # Geographic data for maps
+├── timelinejs.json:1  # Timeline.js compatible data
+├── facets.json:1      # Search facet data
+└── collection-info.json:1 # Collection statistics
 ```
 
 ### How These Files Are Used
@@ -684,7 +749,7 @@ var episodes = [
 
 ### Customizing Generated Data
 
-**Configure exports in `theme.yml`:**
+**Configure exports in `_data/theme.yml:70`:**
 ```yaml
 # Specify which fields to include in data downloads
 metadata-export-fields: "objectid,title,creator,date,description,subject,location,rights"
@@ -770,6 +835,40 @@ OHD provides powerful visualization features:
 
 Enable through `theme.yml` configuration rather than rebuilding.
 
+## Testing & Validation Guide
+
+### Before Committing Changes:
+1. **Build test**: `bundle exec jekyll build --verbose`
+2. **Local preview**: `bundle exec jekyll serve` → test at `http://localhost:4000`
+3. **Check navigation**: All menu items work
+4. **Test search/browse**: Verify filtering and results
+5. **Mobile test**: Check responsive design
+6. **Page generation**: Verify new items appear at `/items/{objectid}.html`
+7. **Configuration**: Test any CSV config changes
+
+### Quick Validation:
+- No build errors in terminal
+- All pages load without 404s
+- Search returns expected results
+- New metadata fields display correctly
+
+## ⚠️ Common Pitfalls
+
+### Critical Mistakes to Avoid:
+- ❌ **Not restarting server** after config changes (`_config.yml`, `theme.yml`, CSV files)
+- ❌ **Creating custom Bootstrap CSS** instead of using `_data/config-theme-colors.csv:1`
+- ❌ **Editing auto-generated files** in `assets/data/` (they get overwritten)
+- ❌ **Using tabs in YAML** files (use spaces only)
+- ❌ **Duplicate `objectid` values** in metadata CSV
+- ❌ **Missing layouts** for `display_template` values
+- ❌ **Hardcoding paths** instead of using Jekyll variables
+- ❌ **Ignoring build warnings** (they often indicate real problems)
+
+### Performance Issues:
+- Collections >1000 items: Set `json-generation: true` in `_data/theme.yml:1`
+- Large images: Run `rake generate_derivatives` first
+- Slow searches: Limit search fields in `_data/config-search.csv:1`
+
 ## Troubleshooting Common Issues
 
 ### Pages Not Generating
@@ -784,7 +883,7 @@ Enable through `theme.yml` configuration rather than rebuilding.
 
 ### Configuration Not Applied
 - Verify CSV files have proper headers
-- Check `theme.yml` syntax (YAML is space-sensitive)
+- Check `_data/theme.yml:1` syntax (YAML is space-sensitive)
 - Restart Jekyll development server after config changes
 
 ## Migration from Hardcoded Customizations
@@ -830,7 +929,7 @@ rake generate_json
 
 ### Jekyll Plugins (`_plugins/` directory)
 
-#### Page Generator (`cb_page_gen.rb`)
+#### Page Generator (`_plugins/cb_page_gen.rb:1`)
 **Core functionality**: Automatically generates item pages from CSV metadata.
 
 - Reads metadata CSV and creates `/items/{objectid}.html` pages
@@ -838,7 +937,7 @@ rake generate_json
 - Handles URL slugification and validation
 - Configured via `_config.yml` `page_gen` settings
 
-#### Helper Functions (`cb_helpers.rb`)
+#### Helper Functions (`_plugins/cb_helpers.rb:1`)
 **Liquid filters and utilities**:
 ```liquid
 {{ item.subject | array_count_uniq }}        # Count unique values in arrays
