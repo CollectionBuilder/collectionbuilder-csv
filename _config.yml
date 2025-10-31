@@ -46,12 +46,13 @@ metadata: demo-compoundobjects-metadata
 #     filter: 'objectid'  
 
 ##########
-# Site/Organization Branding 
-#   Enter information for your organization (replacing the CDIL links and name below) if you'd like to brand your site with a logo
-#   To remove the branding, comment out these values, or delete them. 
+# ORGANIZATION SETTINGS
 #
+# Enter name and link for your organization (replacing the name and links below)
+# These values will be used in attribution and data 
 organization-name: "Center for Digital Inquiry and Learning (CDIL)"
 organization-link: https://cdil.lib.uidaho.edu/
+# Add logo image links if you would like them to appear in banner and footer. Delete or leave blank to remove logos.
 organization-logo-banner: https://www.lib.uidaho.edu/collectionbuilder/cdil-black.png
 organization-logo-nav: https://www.lib.uidaho.edu/collectionbuilder/cdil-white.png
 
@@ -68,6 +69,9 @@ organization-logo-nav: https://www.lib.uidaho.edu/collectionbuilder/cdil-white.p
 # JEKYLL_ENV=production jekyll build
 # (this is done automatically by gh-pages build)
 #
+# Library directory location. This allows you to customize where the standard assets are found.
+# provide a relative path in this repository or full url 
+lib-assets: /assets/lib
 # ignore stuff
 exclude: [docs/, Rakefile, rakelib/, README.md, LICENSE, CITATION.cff, CODE_OF_CONDUCT.md, CONTRIBUTING.md, SECURITY.md]
 # compress CSS output
