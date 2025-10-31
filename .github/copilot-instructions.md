@@ -1,0 +1,257 @@
+# CollectionBuilder-CSV Copilot Instructions
+
+## Repository Overview
+
+**Purpose**: CollectionBuilder-CSV is a static site generator template for creating digital collection and exhibit websites using Jekyll. It generates interactive visualizations and browsable interfaces from collection metadata stored in CSV files, with support for externally-hosted digital objects (images, PDFs, audio, video).
+
+**Project Type**: Jekyll static site generator (Ruby-based)
+**Size**: ~2,300 files (~13MB excluding objects, vendor, and git)
+**Languages/Frameworks**: Ruby (Jekyll 4.4+), Liquid templating, JavaScript, SCSS, HTML
+**Ruby Version**: 3.2.3+ (tested with Ruby 3.2.3)
+**Key Dependencies**: Jekyll, Rake, Bootstrap 5, DataTables, Leaflet.js, Lunr.js, Spotlight gallery
+
+## Critical Setup Instructions
+
+### ALWAYS Follow This Setup Sequence
+
+1. **Install dependencies** (REQUIRED before any build):
+   ```bash
+   # Install bundler if needed (use --user-install for non-root)
+   gem install --user-install bundler
+   
+   # Add bundler to PATH
+   export PATH="$HOME/.local/share/gem/ruby/3.2.0/bin:$PATH"
+   
+   # Install gems locally to avoid permission issues
+   bundle config set --local path 'vendor/bundle'
+   bundle install
+   ```
+   **Time**: ~60-90 seconds. **ALWAYS** run before first build.
+
+2. **Development build** (fast, excludes analytics/meta):
+   ```bash
+   export PATH="$HOME/.local/share/gem/ruby/3.2.0/bin:$PATH"
+   bundle exec jekyll build
+   ```
+   **Time**: ~1 second. Use for iterative testing.
+
+3. **Local development server**:
+   ```bash
+   export PATH="$HOME/.local/share/gem/ruby/3.2.0/bin:$PATH"
+   bundle exec jekyll s --host 0.0.0.0
+   ```
+   Serves at `http://0.0.0.0:4000` or `http://127.0.0.1:4000`. Auto-rebuilds on file changes.
+
+4. **Production build** (includes all features):
+   ```bash
+   export PATH="$HOME/.local/share/gem/ruby/3.2.0/bin:$PATH"
+   JEKYLL_ENV=production bundle exec jekyll build
+   # OR use the rake shortcut:
+   bundle exec rake deploy
+   ```
+   **Time**: ~1-2 seconds (small collection). Use before deployment.
+
+### Common Build Issues & Solutions
+
+- **"jekyll: command not found"**: Missing `bundle exec` prefix or PATH not set. ALWAYS use `bundle exec` before Jekyll commands.
+- **Permission errors during bundle install**: Use `bundle config set --local path 'vendor/bundle'` to install locally.
+- **Gemfile.lock conflicts**: File is intentionally ignored. Don't commit it.
+- **Build appears slow**: Ensure using development mode (not production). Production includes extra meta markup.
+
+## Repository Structure
+
+### Root Files (Important)
+- `_config.yml` - Main Jekyll configuration. Sets site metadata, collection settings, and URL structure
+- `Gemfile` - Ruby dependencies (Jekyll, Rake, image processing gems)
+- `Rakefile` - Task automation (see Rake Tasks section)
+- `.gitignore` - Ignores `_site/`, `vendor/`, `objects/`, and Gemfile.lock
+
+### Key Directories
+
+**`_data/`** - Collection metadata and configuration CSVs
+- `demo-metadata.csv` / `demo-compoundobjects-metadata.csv` - Example metadata (set in `_config.yml` `metadata` field)
+- `config-*.csv` - Configuration files for browse, map, search, table displays
+- `theme.yml` - Theme settings (colors, featured images, page options)
+
+**`_plugins/`** - Jekyll plugins (Ruby code, runs at build time)
+- `cb_page_gen.rb` - Generates individual item pages from metadata CSV
+- `cb_helpers.rb` - Theme helpers (featured items, icons processing)
+- `array_count_uniq.rb` - Liquid filter for counting unique values efficiently
+
+**`_includes/`** - Reusable HTML/Liquid components
+- `head/` - Meta tags, analytics, page metadata
+- `js/` - JavaScript logic for browse, map, timeline, search features
+- `item/` - Item page display components
+- `index/` - Home page sections
+- `feature/` - Feature cards and buttons
+
+**`_layouts/`** - Page templates
+- `default.html` - Base template with navbar and footer
+- `item/` - Item page layouts (image, pdf, video, audio, compound objects)
+- `browse.html`, `map.html`, `timeline.html`, `search.html` - Visualization pages
+
+**`pages/`** - Static content pages (About, Browse, Map, Timeline, etc.)
+
+**`_sass/`** - SCSS stylesheets
+- `_theme-colors.scss` - Color definitions (can be customized via `_data/config-theme-colors.csv`)
+- `_pages.scss` - Page-specific styles
+- `_base.scss` - Base styles and overrides
+- `_custom.scss` - User customizations
+
+**`assets/`** - Static assets
+- `lib/` - External JS libraries (Bootstrap, DataTables, Leaflet, Lunr, Spotlight, etc.)
+- `js/` - Generated JS data files (lunr-store.js, metadata.min.json)
+- `css/` - Compiled CSS (generated from SCSS)
+- `img/` - Site images
+- `data/` - Generated data exports (metadata.csv, metadata.json, geodata.json)
+
+**`objects/`** - Digital collection objects (images, PDFs, audio, video)
+- Intentionally ignored in git (except demo files)
+- `small/` - Small derivative images (generated by rake task)
+- `thumbs/` - Thumbnail images (generated by rake task)
+
+**`docs/`** - Technical documentation for developers
+
+**`rakelib/`** - Rake task definitions (see Rake Tasks section)
+
+**`utilities/`** - XML templates for OAI-PMH and sitemap
+
+## Rake Tasks (Automation Utilities)
+
+**View available tasks**: `bundle exec rake -T`
+
+### Common Tasks
+
+**`rake deploy`** - Production build shortcut
+- Runs: `JEKYLL_ENV=production bundle exec jekyll build`
+- Use before deployment to include analytics and full meta markup
+
+**`rake generate_derivatives`** - Generate image derivatives
+- Creates optimized small/thumbnail images from objects in `objects/` directory
+- **Requirements**: ImageMagick and Ghostscript must be installed
+- Default sizes: thumbs=450x, small=800x800
+- Syntax: `rake generate_derivatives[<thumbs_size>,<small_size>,<density>,<missing>,<compress_originals>,<input_dir>]`
+- Example: `rake generate_derivatives[300x,600x600,150]`
+- **Note**: Image optimization not available on Windows (image_optim_pack limitation)
+
+### Other Rake Tasks (See `docs/rake_tasks/` for details)
+- `rake resize_images` - Batch resize images
+- `rake rename_lowercase` - Rename files to lowercase
+- `rake rename_by_csv` - Rename files based on CSV mapping
+- `rake download_by_csv` - Download objects from URLs in CSV
+
+## Build & Validation Workflow
+
+### For Code Changes:
+
+1. Make changes to relevant files (see File Types below)
+2. Test with development build:
+   ```bash
+   export PATH="$HOME/.local/share/gem/ruby/3.2.0/bin:$PATH"
+   bundle exec jekyll build
+   ```
+3. Check for errors in terminal output
+4. Optionally test with local server: `bundle exec jekyll s`
+5. Before committing, test production build: `bundle exec rake deploy`
+
+### File Types & Where to Edit
+
+**Metadata Changes**: Edit CSV files in `_data/` (e.g., demo-metadata.csv)
+**Page Content**: Edit `.md` files in `pages/` or `.html` layouts in `_layouts/`
+**Styling**: Edit `.scss` files in `_sass/` or customize via `_data/config-theme-colors.csv`
+**JavaScript Logic**: Edit files in `_includes/js/` (Liquid + JS templates)
+**Site Configuration**: Edit `_config.yml` or `_data/theme.yml`
+**Ruby Plugins**: Edit `.rb` files in `_plugins/` (requires Jekyll restart)
+
+### No Test Suite
+
+**Important**: This project does NOT have automated tests (no RSpec, Jest, etc.). Validation is done by:
+1. Successful Jekyll build (no errors)
+2. Manual review of generated site in `_site/` directory
+3. Testing in local development server
+
+## Continuous Integration / Deployment
+
+**No GitHub Actions workflows** - This repository has no automated CI/CD pipelines. The template is designed to be deployed via:
+- Manual build and FTP upload
+- GitHub Pages (with custom Actions setup by users)
+- Netlify, Vercel, or similar static hosting services
+
+Users set up their own deployment pipelines based on their hosting choice.
+
+## Metadata & Data Flow
+
+1. **Source**: CSV files in `_data/` (e.g., demo-metadata.csv)
+2. **Jekyll reads** via `site.data` Liquid variable
+3. **cb_page_gen plugin** generates individual item HTML pages in `_site/items/`
+4. **Visualization pages** (Browse, Map, Timeline) consume metadata via Liquid/JS
+5. **Data exports** generated to `_site/assets/data/` (JSON, CSV, GeoJSON formats)
+
+**Key metadata fields**: objectid, title, format, display_template, latitude, longitude, date, subject, location
+
+## Plugin Architecture
+
+### cb_page_gen.rb (Item Page Generator)
+- Generates HTML page for each row in metadata CSV
+- Default: creates pages at `/items/{objectid}.html`
+- Configurable via `_config.yml` `page_gen` array
+- Filters: Skips rows with empty `objectid` or with `parentid` (compound object children)
+- Layout selection: Uses `display_template` field from metadata, falls back to `item` layout
+
+### cb_helpers.rb (Theme Helpers)
+- Pre-processes theme.yml data at build time
+- Provides `site.data.featured_item` and `site.data.theme_icons`
+- More efficient than Liquid processing
+
+### array_count_uniq.rb (Data Filter)
+- Liquid filter: `{% assign counts = array | array_count_uniq %}`
+- Returns array of [value, count] pairs
+- Used for cloud pages and data summaries
+
+## Common Conventions (Follow When Making Changes)
+
+- **Indentation**: 4 spaces (HTML, JS, CSS), 2 spaces (YAML, Ruby)
+- **Liquid spacing**: `{% if site.example %}{{ site.example }}{% endif %}` (spaces inside braces)
+- **Multi-value fields**: Use semicolon `;` separator in metadata CSV
+- **Progressive features**: New features should maintain backward compatibility
+- **Comments**: Include inline comments for educational purposes (project has learning goals)
+- **Code simplicity**: Keep code comprehensible for librarians/DH practitioners, not necessarily optimized
+
+## Image Requirements (For generate_derivatives)
+
+- **ImageMagick**: Version 6 or 7 (check with `magick --version` or `convert --version`)
+- **Ghostscript**: Required for PDF thumbnail generation (check with `gs --version`)
+- Without these installed, `rake generate_derivatives` will fail
+
+## Important File Paths Reference
+
+- **Main config**: `/_config.yml`
+- **Theme config**: `/_data/theme.yml`
+- **Metadata template**: `/docs/metadata-template.csv`
+- **Browse config**: `/_data/config-browse.csv`
+- **Map config**: `/_data/config-map.csv`
+- **Search config**: `/_data/config-search.csv`
+- **Navigation config**: `/_data/config-nav.csv`
+- **Color theme config**: `/_data/config-theme-colors.csv`
+- **Metadata display config**: `/_data/config-metadata.csv`
+- **Generated site output**: `/_site/` (git ignored)
+- **Installed gems**: `/vendor/bundle/` (git ignored)
+
+## Performance Notes
+
+- Development builds: ~1 second (skips analytics, meta markup)
+- Production builds: ~1-2 seconds (small collections, includes all features)
+- Large collections (1000+ items): Build time scales linearly with metadata rows
+- Page generation: cb_page_gen creates one HTML file per metadata row (minus filtered rows)
+
+## Trust These Instructions
+
+These instructions have been validated by:
+- Running `bundle install` successfully
+- Building site with `bundle exec jekyll build` (development mode)
+- Building site with `bundle exec rake deploy` (production mode)
+- Testing local server with `bundle exec jekyll s`
+- Examining all major directories and key files
+- Reviewing official documentation in /docs/ folder
+
+Only search for additional information if these instructions are incomplete or you encounter errors not covered here. The project follows standard Jekyll conventions with custom plugins for efficiency.
