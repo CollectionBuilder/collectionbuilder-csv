@@ -27,65 +27,65 @@ jobs:
   data-processing:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v3
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v7
         with:
           enable-cache: true
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
       - run: uv run .github/workflows/process_data.py
       - name: Upload sgb-metadata-csv.csv
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: sgb-metadata-csv
           path: _data/sgb-metadata-csv.csv
       - name: Upload sgb-metadata-json.json
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: sgb-metadata-json
           path: _data/sgb-metadata-json.json
       - name: Upload objects folder
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: objects
           path: objects
 
   build:
     needs: data-processing
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Download sgb-metadata-csv.csv
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: sgb-metadata-csv
           path: _data
       - name: Download sgb-metadata-json.json
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: sgb-metadata-json
           path: _data
       - name: Download objects folder
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: objects
           path: objects
       - name: Setup Ruby
-        uses: ruby/setup-ruby@8575951200e472d5f2d95c625da0c7bec8217c42 # v1.161.0
+        uses: ruby/setup-ruby@v1.207.0
         with:
           bundler-cache: true
           cache-version: 0
       - name: Setup Pages
         id: pages
-        uses: actions/configure-pages@v4
+        uses: actions/configure-pages@v5
       - name: Build with Jekyll
         run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
         env:
           JEKYLL_ENV: production
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
 
   deploy:
     needs: build
