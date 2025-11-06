@@ -23,7 +23,7 @@ def process_and_optimize_image(filename, file_type, output_filename, size, densi
     begin
       if file_type == :pdf
         inputfile = "#{filename}[0]"
-        magick = MiniMagick::Tool::Convert.new
+        magick = MiniMagick.convert
         magick.density(density)
         magick << inputfile
         magick.resize(size)
@@ -31,11 +31,12 @@ def process_and_optimize_image(filename, file_type, output_filename, size, densi
         magick << output_filename
         magick.call
       else
-        image = MiniMagick::Image.open(filename)
-        image.format('jpg')
-        image.resize(size)
-        image.flatten
-        image.write(output_filename)
+        magick = MiniMagick.convert
+        magick << filename
+        magick.resize(size)
+        magick.flatten
+        magick << output_filename
+        magick.call
       end
       image_optim.optimize_image!(output_filename) unless Gem.win_platform?
     rescue StandardError => e
