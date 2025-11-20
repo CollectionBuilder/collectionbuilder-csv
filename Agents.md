@@ -1,7 +1,7 @@
 # CollectionBuilder Customization Guidelines
 
 ## Overview
-This document outlines best practices for customizing CollectionBuilder-CSV repositories, particularly those enhanced with Oral History as Data (OHD) features. These guidelines help maintain compatibility with the existing infrastructure while enabling powerful customizations.
+This document outlines best practices for customizing CollectionBuilder-CSV repositories. These guidelines help maintain compatibility with the existing infrastructure while enabling powerful customizations.
 
 ## Essential Commands
 
@@ -16,22 +16,22 @@ This document outlines best practices for customizing CollectionBuilder-CSV repo
 ## Quick Reference for AI Agents
 
 ### Most Common Tasks:
-- **Navigation change**: Update `_data/config-nav.csv:1`
-- **Browse customization**: Modify `_data/config-browse.csv:1`
-- **Styling**: Use Bootstrap classes →  `_sass/_custom.scss:1` → `_data/config-theme-colors.csv:1` for bootstrap color changes
+- **Navigation change**: Update `_data/config-nav.csv`
+- **Browse customization**: Modify `_data/config-browse.csv`
+- **Styling**: Use Bootstrap classes → `_sass/_custom.scss` → `_data/config-theme-colors.csv` for color changes
 - **New component**: Create in `_includes/` → Use `_includes/feature/` components first
-- **New item type**: Add `display_template` to CSV → Create layout in `_layouts/item/` → Extend `_layouts/item/item-page-base.html:1`
+- **New item type**: Add `display_template` to CSV → Create layout in `_layouts/item/`
 
 ### File Priority Order:
 1. CSV config files (`_data/*.csv`)
 2. Existing feature includes (`_includes/feature/*.html`)
-3. `_data/theme.yml:1` settings
+3. `_data/theme.yml` settings
 4. Custom includes (`_includes/`)
-5. Custom CSS (`_sass/_custom.scss:1`)
+5. Custom CSS (`_sass/_custom.scss`)
 
 ### ⚠️ Critical Don'ts:
 - **DON'T** create monolithic layouts - extend existing base layouts
-- **DON'T** rebuild Bootstrap components or media embed components - use options in `_includes/feature/`
+- **DON'T** rebuild Bootstrap components - use existing feature includes
 
 ## 🚨 Emergency Troubleshooting
 
@@ -42,19 +42,19 @@ This document outlines best practices for customizing CollectionBuilder-CSV repo
 4. **Restart server**: After ANY config file changes, restart `bundle exec jekyll serve`
 
 ### Pages Not Generating:
-- Item pages generate at `/items/{objectid}.html` via `_plugins/cb_page_gen.rb:34`
+- Item pages generate at `/items/{objectid}.html` via `_plugins/cb_page_gen.rb`
 - Check `objectid` values are URL-safe (no spaces, special chars)
 - Verify `display_template` matches layout filename in `_layouts/item/`
 
 ### Navigation Broken:
-- Navigation processes in `_includes/nav/nav.html:15`
-- Check `_data/config-nav.csv:1` format: `display_name,stub,dropdown_parent`
+- Navigation processes in `_includes/collection-nav.html`
+- Check `_data/config-nav.csv` format: `display_name,stub,dropdown_parent`
 - Ensure stub URLs start with `/`
 
 ### Search/Browse Issues:
-- Search config: `_data/config-search.csv:1`
-- Browse config: `_data/config-browse.csv:1`
-- Metadata config: `_data/config-metadata.csv:1`
+- Search config: `_data/config-search.csv`
+- Browse config: `_data/config-browse.csv`
+- Metadata config: `_data/config-metadata.csv`
 - Clear browser cache and restart server
 
 ---
@@ -62,12 +62,12 @@ This document outlines best practices for customizing CollectionBuilder-CSV repo
 ## Core Principles
 
 ### 1. **Work WITH the Framework, Not Against It**
-- Leverage existing CollectionBuilder and OHD components instead of rebuilding functionality
+- Leverage existing CollectionBuilder components instead of rebuilding functionality
 - Extend existing layouts rather than creating entirely new ones
 - Use the modular include system for reusable components
 
 ### 2. **Configuration-Driven Customization**
-- Use `_data/theme.yml:1` for display and styling options on specific pages -- Homepage, browse, subjects, locations, map, timeline, data exports, compound objects behavior and some styles
+- Use `_data/theme.yml` for display and styling options
 - Minimize custom code when configuration can achieve the same result
 
 ### 3. **Modular Architecture**
@@ -99,7 +99,7 @@ This document outlines best practices for customizing CollectionBuilder-CSV repo
 
 #### When User Asks About New Item Types:
 1. **Similar to existing type?** → Copy and modify existing `_layouts/item/` file
-2. **Needs audio/video?** → Extend from `transcript.html` or `audio.html`
+2. **Needs audio/video?** → Extend from `audio.html` or `video.html`
 3. **Basic display?** → Extend from `item.html`
 4. **Complex features?** → Extend from `item-page-base.html`
 
@@ -119,7 +119,7 @@ Controls site navigation structure:
 ```csv
 display_name,stub,dropdown_parent
 About,/about.html
-Episodes,/episodes.html
+Browse,/browse.html
 Browse by
 Subjects,/subjects.html,Browse by
 Map,/map.html,Browse by
@@ -132,7 +132,7 @@ Map,/map.html,Browse by
 Configures browse/search page display:
 ```csv
 field,display_name,btn,hidden,sort_name
-interviewer,Host
+creator,Creator
 date,Date,,,Date
 subject,Topics,true
 location,,true
@@ -148,8 +148,8 @@ Controls item page metadata display:
 ```csv
 field,display_name,browse_link,external_link,dc_map,schema_map
 title,Title,,,DCTERMS.title,headline
-interviewer,Host,,,DCTERMS.creator,creator
-interviewee,Guest,true,,DCTERMS.contributor,contributor
+creator,Creator,,,DCTERMS.creator,creator
+contributor,Contributor,true,,DCTERMS.contributor,contributor
 subject,Topics,true,,DCTERMS.subject,keywords
 ```
 - `browse_link`: Make field values clickable links to browse results
@@ -162,7 +162,7 @@ Defines search functionality:
 field,index,display
 title,true,true
 description,true,true
-interviewer,true,false
+creator,true,false
 subject,true,true
 ```
 - `index`: Include in search index
@@ -213,11 +213,11 @@ base-font-size: 1.2em                  # custom font sizing
 default.html (base HTML structure)
 ├── page.html (standard page wrapper)
 ├── item/item-page-base.html (item page foundation)
-│   ├── item/transcript.html (OHD transcript layout)
-│   ├── item/episode.html (custom podcast layout)
-│   ├── item/audio.html (audio file layout)
-│   └── item/image.html (image layout)
-└── home-podcast.html (custom homepage)
+│   ├── item/image.html (image layout)
+│   ├── item/pdf.html (PDF layout)
+│   ├── item/video.html (video layout)
+│   └── item/audio.html (audio layout)
+└── browse.html, map.html, timeline.html (visualization pages)
 ```
 
 ### Best Practices for Layouts
@@ -225,12 +225,12 @@ default.html (base HTML structure)
 #### ✅ **DO: Extend Existing Base Layouts**
 ```yaml
 ---
-layout: item/item-page-base  # Build on _layouts/item/item-page-base.html:1
-custom-foot: transcript/js/transcript-js.html
+layout: item/item-page-base  # Build on existing foundation
+custom-foot: js/custom-js.html
 ---
 # Add custom content here
-{% include transcript/item/av.html %}
-{% include transcript/item/episode-metadata.html %}
+{% include item/image-gallery.html %}
+{% include item/metadata.html %}
 ```
 
 #### ❌ **DON'T: Create Monolithic Layouts**
@@ -246,22 +246,22 @@ layout: default
 
 #### ✅ **DO: Use Modular Includes**
 ```html
-<!-- _layouts/item/episode.html -->
-{% include transcript/item/av.html %}
-{% include transcript/item/episode-metadata.html %}
-{% include transcript/item/bio-modal.html %}
+<!-- _layouts/item/custom.html -->
+{% include item/image-gallery.html %}
+{% include item/metadata.html %}
+{% include item/download-buttons.html %}
 ```
 
 #### ✅ **DO: Create Specialized Include Components**
 ```html
-<!-- _includes/episode-card.html -->
-<div class="episode-card">
-  <!-- Reusable episode card component -->
+<!-- _includes/custom-card.html -->
+<div class="custom-card">
+  <!-- Reusable card component -->
 </div>
 
-<!-- _includes/transcript/item/episode-metadata.html -->
-<div class="episode-metadata">
-  <!-- Custom metadata display for episodes -->
+<!-- _includes/item/custom-metadata.html -->
+<div class="custom-metadata">
+  <!-- Custom metadata display -->
 </div>
 ```
 
@@ -298,12 +298,11 @@ layout: default
 - Configure display in `_data/config-metadata.csv:1`
 - Enable browse filtering in `_data/config-browse.csv:1`
 
-### CSV Metadata Structure
-Main collection metadata in `_data/metadata.csv:1` (or configured filename in `_config.yml:37`):
+### Main collection metadata in `_data/metadata.csv` (or configured filename in `_config.yml`):
 
 ```csv
 objectid,title,display_template,creator,date,description,subject,object_location
-episode001,Episode Title,episode,Host Name,2024-01-01,Description,topic1; topic2,/objects/audio.mp3
+item001,Item Title,image,Creator Name,2024-01-01,Description,topic1; topic2,/objects/image.jpg
 ```
 
 **Key Fields:**
@@ -313,10 +312,10 @@ episode001,Episode Title,episode,Host Name,2024-01-01,Description,topic1; topic2
 - Custom fields: Add any additional metadata columns
 
 ### Display Template Routing
-CollectionBuilder automatically routes items based on `display_template` (via `_plugins/cb_page_gen.rb:34`):
-- `display_template: episode` → `_layouts/item/episode.html:1`
-- `display_template: transcript` → `_layouts/item/transcript.html:1`
-- `display_template: audio` → `_layouts/item/audio.html:1`
+CollectionBuilder automatically routes items based on `display_template` (via `_plugins/cb_page_gen.rb`):
+- `display_template: image` → `_layouts/item/image.html`
+- `display_template: pdf` → `_layouts/item/pdf.html`
+- `display_template: audio` → `_layouts/item/audio.html`
 
 ## Include Directory Organization
 
@@ -389,36 +388,19 @@ _includes/
 {% include feature/button.html text="Click Me" link="/page.html" color="primary" %}
 ```
 
-### OHD-Specific Includes
-```
-_includes/transcript/
-├── item/              # Transcript item components
-│   ├── av.html        # Audio/video player wrapper
-│   ├── bio-modal.html # Guest biography modal
-│   ├── metadata.html  # Transcript metadata display
-│   └── transcript.html # Transcript text processing
-├── player/            # Media player components
-│   ├── mp3.html
-│   ├── youtube.html
-│   └── vimeo.html
-├── style/             # Styling components
-└── js/                # JavaScript functionality
-```
-
 ### Creating Custom Includes
 
 #### Component Naming Convention
-- Use descriptive, hyphenated names: `episode-card.html`
-- Group by functionality: `transcript/item/episode-metadata.html`
+- Use descriptive, hyphenated names: `custom-card.html`
+- Group by functionality: `item/custom-metadata.html`
 - Include header comments for documentation:
 
 ```html
-<!-- cb: _includes/episode-card.html -->
-<!-- Episode card component for homepage and browse pages -->
-<div class="episode-card">
+<!-- Custom card component for homepage and browse pages -->
+<div class="custom-card">
   <!-- Component content -->
 </div>
-<!-- /cb: _includes/episode-card.html -->
+```
 ```
 
 ## Styling Approach
@@ -438,7 +420,7 @@ info,#17a2b8
 
 ### Sass Variables: Use `assets/css/cb.scss`
 
-**For custom Sass variables, modify `assets/css/cb.scss:1`:**
+**For custom Sass variables, modify `assets/css/cb.scss`:**
 
 ```scss
 ---
@@ -447,22 +429,22 @@ info,#17a2b8
 @charset "utf-8";
 
 /* Custom Sass variables */
-$podcast-primary: #FFD700;
-$podcast-secondary: #F4D03F;
-$episode-border-radius: 12px;
+$custom-primary: #FFD700;
+$custom-secondary: #F4D03F;
+$custom-border-radius: 12px;
 
 /* Continue with existing base variables... */
 ```
 
 ### Repository-Level Customization: Use `_sass/_custom.scss`
 
-**For component styles and CSS overrides, use `_sass/_custom.scss:1`:**
+**For component styles and CSS overrides, use `_sass/_custom.scss`:**
 
 ```scss
 /* _sass/_custom.scss */
 
 /* Custom component styles - NO color variables here */
-.episode-card {
+.custom-card {
   border: 2px solid var(--bs-warning); /* Use Bootstrap CSS variables */
   border-radius: 12px;
   transition: all 0.3s ease;
@@ -475,7 +457,7 @@ $episode-border-radius: 12px;
 
 /* Responsive utilities */
 @media (max-width: 768px) {
-  .episode-card {
+  .custom-card {
     margin-bottom: 1rem;
   }
 }
@@ -492,14 +474,14 @@ $episode-border-radius: 12px;
 Only use inline styles for **new feature components** or **one-off custom includes**:
 
 ```html
-<!-- _includes/episode-card.html -->
-<div class="episode-card">
+<!-- _includes/custom-card.html -->
+<div class="custom-card">
   <!-- Component content -->
 </div>
 
 <style>
 /* Component-specific styles for new features only */
-.episode-card-specific-feature {
+.custom-card-specific-feature {
   /* Styles that only apply to this component */
 }
 </style>
@@ -533,17 +515,16 @@ CollectionBuilder includes Bootstrap 5. **Always prefer Bootstrap classes:**
 ### File Organization for Styling
 ```
 _sass/
-├── _custom.scss:1      # Component styles and CSS overrides
-├── _base.scss:1        # CollectionBuilder base styles
-├── _ohd.scss:1         # OHD-specific styles
-├── _pages.scss:1       # Page-specific styles
-└── _theme-colors.scss:1 # Bootstrap color overrides
+├── _custom.scss      # Component styles and CSS overrides
+├── _base.scss        # CollectionBuilder base styles
+├── _pages.scss       # Page-specific styles
+└── _theme-colors.scss # Bootstrap color overrides
 
 _data/
-└── config-theme-colors.csv:1 # Bootstrap color theme configuration
+└── config-theme-colors.csv # Bootstrap color theme configuration
 
 assets/css/
-└── cb.scss:1          # Sass variables and Jekyll processing
+└── cb.scss          # Sass variables and Jekyll processing
 ```
 
 ## Generated Data Files (`assets/data/`)
@@ -553,15 +534,15 @@ CollectionBuilder automatically generates reusable data files in `assets/data/` 
 ### Auto-Generated Data Outputs (DO NOT EDIT - Generated by Jekyll)
 ```
 assets/data/
-├── metadata.csv:1     # Downloadable metadata export
-├── metadata.json:1    # JSON version for APIs
-├── subjects.csv:1     # Subject terms and counts
-├── subjects.json:1    # Subject data for visualizations
-├── locations.csv:1    # Location data export
-├── geodata.json:1     # Geographic data for maps
-├── timelinejs.json:1  # Timeline.js compatible data
-├── facets.json:1      # Search facet data
-└── collection-info.json:1 # Collection statistics
+├── metadata.csv     # Downloadable metadata export
+├── metadata.json    # JSON version for APIs
+├── subjects.csv     # Subject terms and counts
+├── subjects.json    # Subject data for visualizations
+├── locations.csv    # Location data export
+├── geodata.json     # Geographic data for maps
+├── timelinejs.json  # Timeline.js compatible data
+├── facets.json      # Search facet data
+└── collection-info.json # Collection statistics
 ```
 
 ### How These Files Are Used
@@ -700,13 +681,13 @@ var map = L.map('map').setView([{{ site.data.theme.latitude }}, {{ site.data.the
 ```liquid
 <!-- 1. Define data processing at top -->
 {%- assign items = site.data[site.metadata] | where_exp: 'item','item.objectid' -%}
-{%- assign filtered_items = items | where: 'display_template', 'episode' -%}
+{%- assign filtered_items = items | where: 'display_template', 'image' -%}
 
 <!-- 2. Use configuration files -->
 {%- assign fields = site.data.config-browse -%}
 
 <!-- 3. Generate clean JSON for JavaScript -->
-var episodes = [
+var items = [
 {% for item in filtered_items %}
 {
   "id": {{ item.objectid | jsonify }},
@@ -731,9 +712,9 @@ var episodes = [
 #### ❌ **DON'T: Fight the System**
 ```liquid
 <!-- Don't hardcode data -->
-var episodes = [
-  {"id": "ep1", "title": "Episode 1"},
-  {"id": "ep2", "title": "Episode 2"}
+var items = [
+  {"id": "item1", "title": "Item 1"},
+  {"id": "item2", "title": "Item 2"}
 ];
 
 <!-- Don't bypass configuration -->
@@ -749,7 +730,7 @@ var episodes = [
 
 ### Customizing Generated Data
 
-**Configure exports in `_data/theme.yml:70`:**
+**Configure exports in `_data/theme.yml`:**
 ```yaml
 # Specify which fields to include in data downloads
 metadata-export-fields: "objectid,title,creator,date,description,subject,location,rights"
@@ -768,22 +749,22 @@ metadata-facets-fields: "subject,creator,format"
 
 ### Accessing Collection Data
 ```liquid
-{%- assign episodes = site.data[site.metadata] | where: "display_template", "episode" -%}
-{%- assign featured_count = site.data.theme.featured-episodes | default: 6 -%}
+{%- assign items = site.data[site.metadata] | where: "display_template", "image" -%}
+{%- assign featured_count = site.data.theme.featured-items | default: 6 -%}
 ```
 
 ### Configuration Access
 ```liquid
-{%- assign fields = site.data.theme.episode-fields | split: ',' -%}
-{% if site.data.theme.episode-fields contains 'interviewer' %}
-  <!-- Display interviewer -->
+{%- assign fields = site.data.theme.display-fields | split: ',' -%}
+{% if site.data.theme.display-fields contains 'creator' %}
+  <!-- Display creator -->
 {% endif %}
 ```
 
 ### Filtering and Sorting
 ```liquid
-{% assign recent_episodes = site.data[site.metadata]
-   | where: "display_template", "episode"
+{% assign recent_items = site.data[site.metadata]
+   | where: "display_template", "image"
    | sort: "date"
    | reverse
    | limit: 6 %}
@@ -807,34 +788,6 @@ metadata-facets-fields: "subject,creator,format"
 2. Create corresponding page in `pages/`
 3. Use appropriate existing layout
 
-## Integration with OHD Features
-
-### Audio/Video Players
-Use existing player system:
-```html
-{% if page.object_location contains 'mp3' %}
-  {% assign av = "mp3" %}
-{% endif %}
-{% if av %}
-  {% include transcript/item/av.html %}
-{% endif %}
-```
-
-### Search and Filtering
-Leverage built-in search:
-- Configure in `config-search.csv`
-- Use existing search layout
-- Add custom styling as needed
-
-### Visualizations
-OHD provides powerful visualization features:
-- Timeline views
-- Subject clouds
-- Location maps
-- Transcript analysis
-
-Enable through `theme.yml` configuration rather than rebuilding.
-
 ## Testing & Validation Guide
 
 ### Before Committing Changes:
@@ -856,7 +809,7 @@ Enable through `theme.yml` configuration rather than rebuilding.
 
 ### Critical Mistakes to Avoid:
 - ❌ **Not restarting server** after config changes (`_config.yml`, `theme.yml`, CSV files)
-- ❌ **Creating custom Bootstrap CSS** instead of using `_data/config-theme-colors.csv:1`
+- ❌ **Creating custom Bootstrap CSS** instead of using `_data/config-theme-colors.csv`
 - ❌ **Editing auto-generated files** in `assets/data/` (they get overwritten)
 - ❌ **Using tabs in YAML** files (use spaces only)
 - ❌ **Duplicate `objectid` values** in metadata CSV
@@ -865,9 +818,9 @@ Enable through `theme.yml` configuration rather than rebuilding.
 - ❌ **Ignoring build warnings** (they often indicate real problems)
 
 ### Performance Issues:
-- Collections >1000 items: Set `json-generation: true` in `_data/theme.yml:1`
+- Collections >1000 items: Set `json-generation: true` in `_data/theme.yml`
 - Large images: Run `rake generate_derivatives` first
-- Slow searches: Limit search fields in `_data/config-search.csv:1`
+- Slow searches: Limit search fields in `_data/config-search.csv`
 
 ## Troubleshooting Common Issues
 
@@ -883,7 +836,7 @@ Enable through `theme.yml` configuration rather than rebuilding.
 
 ### Configuration Not Applied
 - Verify CSV files have proper headers
-- Check `_data/theme.yml:1` syntax (YAML is space-sensitive)
+- Check `_data/theme.yml` syntax (YAML is space-sensitive)
 - Restart Jekyll development server after config changes
 
 ## Migration from Hardcoded Customizations
@@ -929,7 +882,7 @@ rake generate_json
 
 ### Jekyll Plugins (`_plugins/` directory)
 
-#### Page Generator (`_plugins/cb_page_gen.rb:1`)
+#### Page Generator (`_plugins/cb_page_gen.rb`)
 **Core functionality**: Automatically generates item pages from CSV metadata.
 
 - Reads metadata CSV and creates `/items/{objectid}.html` pages
@@ -937,7 +890,7 @@ rake generate_json
 - Handles URL slugification and validation
 - Configured via `_config.yml` `page_gen` settings
 
-#### Helper Functions (`_plugins/cb_helpers.rb:1`)
+#### Helper Functions (`_plugins/cb_helpers.rb`)
 **Liquid filters and utilities**:
 ```liquid
 {{ item.subject | array_count_uniq }}        # Count unique values in arrays
