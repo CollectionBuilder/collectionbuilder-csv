@@ -36,9 +36,10 @@ layout: default
         padding-left: 15% !important;
     }
     @media screen and (max-width: 576px) {
+        {% if page.padding %}
         .about-title-box {
             padding-top: min({{ page.padding }}, 45vh);
-        }
+        }{% endif %}
         .about-title {
             padding-left: 1rem !important;
         }

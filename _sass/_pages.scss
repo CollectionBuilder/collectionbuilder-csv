@@ -124,7 +124,7 @@ $toc-a-color: #191919 !default;
 
 
 /* map */
-#map { height: 750px; z-index: 98; }
+#mapContainer { height: 750px; z-index: 98; }
 .map-thumb {
     height: 100px;
     max-width: 100%;
@@ -182,13 +182,13 @@ $toc-a-color: #191919 !default;
     }
 
     > li {
-        font-size: 18px;
+        font-size: 15px;
         line-height: 1.2;
         padding: 5px 0;
     }
 
     li li {
-        font-size: 15px;
+        font-size: 13px;
         line-height: 1.2;
         padding-top: 7px;
         margin-left: 15px;
@@ -267,15 +267,15 @@ $toc-a-color: #191919 !default;
         }
 
         > li {
-            font-size: 18px;
+            font-size: 15px;
             line-height: 1.2;
-            padding: 15px 0;
+            padding: 7px 0;
         }
 
         li li {
-            font-size: 15px;
+            font-size: 13px;
             line-height: 1.2;
-            padding-top: 15px;
+            padding-top: 7px;
             margin-left: 15px;
             list-style: none;
         }

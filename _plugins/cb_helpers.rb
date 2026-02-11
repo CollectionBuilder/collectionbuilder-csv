@@ -24,7 +24,7 @@ module CollectionBuilderHelperGenerator
       #
       # Featured Item 
       # find featured image as configured in "theme.yml"
-      # return new varible --> site.data.featured_item with .src, .alt, .link
+      # return new variable --> site.data.featured_item with .src, .alt, .link
       #
       #####
 
