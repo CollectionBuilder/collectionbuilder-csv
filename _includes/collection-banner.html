@@ -1,21 +1,53 @@
-{% if page.layout == "home-infographic" and site.data.theme.featured-image %}
+{% comment %}
+
+    Default Collection Banner include. 
+    This feature adds a traditional collection banner to the top of the page (generally above a navbar). There is two build in banner types:
+
+    Title + Tagline:
+    The default banner features the title and tagline set in "_config.yml". If an organization is configured (name, link, logo), it will appear on the right side of the banner.
+
+    Featured Image Banner: 
+    A decorative banner featuring a large background image stretched across the full screen with the title + tagline overlaid on top. This feature can be use on any page by adding "banner-featured-image" to the page front matter. 
+    By default, this feature is added to the "home-infographic" layout automatically, with the default options configured in "theme.yml" Home Page section. It can be turned off on "home-infographic" by adding "banner-featured-image: false" to the page stub front matter.
+    Adding "banner-featured-image: true" to any page front matter will add the same default feature as configured in "theme.yml". 
+    However, the feature can be fully customized on any page by using the front matter options: 
+        - banner-featured-image: an objectid, relative path to image in this project, or full url to any image.
+        - banner-image-position: set background-position for featured image, "center", "top", "bottom"
+        - banner-padding: additional padding added to the feature to increase size. Give value in em or px, e.g. "5em"
+
+{%- endcomment -%}
+{% if page.banner-featured-image or page.layout == "home-infographic" %}
+{% capture jumboId %}{% if page.banner-featured-image == true %}{{ site.data.theme.featured-image }}{% elsif page.banner-featured-image == false %}{% else %}{{ page.banner-featured-image | default: site.data.theme.featured-image }}{% endif %}{% endcapture %}
+{% else %}
+{% assign jumboId = "" %}
+{%- endif -%}
+
+{% if jumboId != "" %}
+{% if jumboId contains '/' %}
+{% assign jumboSrc = jumboId | relative_url %}
+{% else %}
+{% assign jumboItem = site.data[site.metadata] | where: "objectid", jumboId | first %}
+{% capture jumboSrc %}{{ jumboItem.object_location | default: jumboItem.image_small | relative_url }}{% endcapture %}
+{% capture jumboLink %}{{ '/items/' | relative_url }}{% if jumboItem.parentid %}{{ jumboItem.parentid }}.html#{{ jumboItem.objectid }}{% else %}{{ jumboItem.objectid }}.html{% endif %}{% endcapture %}
+{%- endif -%}
+
 <style>
 #home-banner {
     padding: 4rem 0;
-    background-image: url('{{ site.data.featured_item.src | relative_url }}');
+    background-image: url({{ jumboSrc }});
     background-size: cover;
     background-repeat: no-repeat;
-    background-position: {{ site.data.theme.home-banner-image-position | default: 'center' }};
+    background-position: {{ page.banner-image-position | default: site.data.theme.home-banner-image-position | default: 'center' }};
 }
-{% if site.data.theme.home-title-y-padding %}
+{% if page.banner-padding or site.data.theme.home-title-y-padding %}
 #home-title-box {
-    padding-top: {{ site.data.theme.home-title-y-padding }};
+    padding-top: {{ page.banner-padding | default: site.data.theme.home-title-y-padding }};
     padding-bottom: 1em;
 }
 {%- endif -%}
 @media screen and (max-width: 576px) {
     #home-title-box {
-        padding-top: min({{ site.data.theme.home-title-y-padding | default: '5em' }}, 45vh);
+        padding-top: min({{ page.banner-padding | default: site.data.theme.home-title-y-padding | default: '5em' }}, 45vh);
     }
 }
 </style>
@@ -30,10 +62,8 @@
             {% if site.tagline %}<p class="mb-0">{{ site.tagline }}</p>{% endif %}
         </div>
     </div>
-    {% unless site.data.theme.featured-image contains '/' %}
-        <div class="position-absolute bottom-0 end-0 px-2 bg-dark bg-opacity-75">
-            <a class="text-white fs-6" href="{{ site.data.featured_item.link | relative_url }}" title="{{ site.data.featured_item.alt | escape }}">Featured Image</a>
-        </div>{% endunless %}
+    {% unless jumboId contains '/' %}
+    <a class="text-white fs-6 position-absolute bottom-0 end-0 px-2 bg-dark bg-opacity-75" href="{{ jumboLink }}" title="Visit background image record">Featured Image</a>{% endunless %}
 </div>
 {%- else -%}
 <div class="container">
