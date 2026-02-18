@@ -1,0 +1,67 @@
+{% comment %}
+
+    Collection Side Navigation.
+
+    This include adds a basic navbar with a button that opens a navigation menu from the side. 
+    To use this include, edit your "_layouts/default.html". Delete the lines:
+    {% include collection-banner.html %}
+    {% include collection-nav.html %}
+    and replace them with 
+    {% include collection-side-nav.html %}
+
+{%- endcomment -%}
+<nav class="navbar bg-dark" data-bs-theme="dark">
+    <div class="container-fluid">
+        <a class="navbar-brand " href="{{ '/' | relative_url }}">
+            <h1 class="text-wrap">{{ site.title }}</h1>
+            {% if site.tagline %}<small class="text-wrap">{{ site.tagline }}</small>{% endif %}
+        </a>
+        <button class="navbar-toggler text-white" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Open navigation">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi icon-sprite fs-1" viewBox="0 0 16 16">
+                <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+            </svg>
+        </button>
+        
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel" data-bs-theme="dark">
+            <div class="offcanvas-header">
+                <h2 class="offcanvas-title" id="offcanvasNavbarLabel">{{ site.title }}</h2>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <p class="h5 mb-3">{{ site.tagline }}</p>
+                <p><small>{{ site.description }}</small></p>
+                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                    {%- assign navItems = site.data.config-nav | where_exp: 'item', 'item.dropdown_parent == nil' -%} 
+                    {% for nav in navItems %}
+                    {% if nav.stub %}
+                    <li class="nav-item">
+                        <a class="nav-link{% if page.url == nav.stub %} active{% endif %}" href="{{ nav.stub | relative_url }}">{{ nav.display_name }}</a>
+                    </li>
+                    {%- else -%}
+                    <li class="nav-item dropdown">
+                        {% assign navChildren = site.data.config-nav | where_exp: 'item', 'item.dropdown_parent == nav.display_name' %}
+                        {%- assign childStubs = navChildren | map: 'stub' -%}
+                        <a class="nav-link  dropdown-toggle{% if childStubs contains page.url %} active{% endif %}" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">{{ nav.display_name }}</a>
+                        <div class="dropdown-menu">
+                            {% for c in navChildren %}
+                            <a class="dropdown-item {% if page.url == c.stub %}active{% endif %}" href="{{ c.stub | relative_url }}">{{ c.display_name }}</a>
+                            {% endfor %}
+                        </div>
+                    </li>
+                    {% endif %}
+                    {%- endfor -%}
+                </ul>
+
+                {% include nav-search-lunr.html %}
+
+                {% if site.organization-logo-nav %}
+                <div class="mt-5 p-2">
+                    <a href="{{ site.organization-link }}">
+                        <img class="img-fluid sidebar-nav-image" src="{{ site.organization-logo-nav | relative_url }}" alt="{{ site.organization-name | escape }} home">
+                    </a>
+                </div>{% endif %}
+                
+            </div>
+        </div>
+    </div>
+</nav>
