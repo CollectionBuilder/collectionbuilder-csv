@@ -10,10 +10,10 @@
 # use either an objectid (from an item in this collect), a relative location of an image in this repo, or a full url to an image elsewhere
 featured-image: demo_033
 featured-image-alt-text: # add alt text if using url for featured-image (objectid will be automatic from metadata)
-# optional: add extra padding around collection title for a larger image feature. 
+# optional: add extra padding above collection title for a larger image feature. 
 home-title-y-padding: 10em # the margin from the top your title portion will appear.
 # optional: change position of background image, center, top, bottom
-home-banner-image-position: center # Default is top
+home-banner-image-position: center # Default is center
 
 
 ##########

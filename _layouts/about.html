@@ -20,14 +20,13 @@ layout: default
         padding: 4rem 0;
         margin-bottom: 1rem;
         {% if page.about-featured-image %}
-        background-color: #e9ecef;
         background-image: url({{ jumboSrc }});
         background-size: cover;
         background-repeat: no-repeat;
         background-position: {{ page.position | default: 'center' }};{% endif %}
     }
     {% if page.padding %}
-    .about-title-box {
+    #about-title-box {
         padding-top: {{ page.padding }};
         padding-bottom: 1em;
     }
@@ -46,11 +45,11 @@ layout: default
     }
 </style>
 <div id="about-feature">
-    <div class="about-title-box">
+    <div id="about-title-box">
         {% if page.heading or page.sub-heading %}
         <div class="p-2 text-start text-white bg-dark bg-opacity-75 about-title">
-            {% if page.heading %}<h2 class="display-1">{{ page.heading }}</h2>{% endif %}
-            {% if page.sub-heading  %}<h3 class="about-tagline h5">{{ page.sub-heading }}</h3>{% endif %}
+            {% if page.heading %}<h2 class="display-2">{{ page.heading }}</h2>{% endif %}
+            {% if page.sub-heading  %}<p class="h5">{{ page.sub-heading }}</p>{% endif %}
         </div>
         {% endif %}
     </div>
