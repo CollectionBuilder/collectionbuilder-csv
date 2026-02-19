@@ -10,22 +10,22 @@
     {% include collection-side-nav.html %}
 
 {%- endcomment -%}
-<nav class="navbar bg-dark" data-bs-theme="dark">
+<nav class="navbar {{ site.data.theme.navbar-background | default: 'bg-black' }}" data-bs-theme="{{ site.data.theme.navbar-color | default: 'dark' }}">
     <div class="container-fluid">
         <a class="navbar-brand " href="{{ '/' | relative_url }}">
             <h1 class="text-wrap">{{ site.title }}</h1>
             {% if site.tagline %}<small class="text-wrap">{{ site.tagline }}</small>{% endif %}
         </a>
-        <button class="navbar-toggler text-white" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Open navigation">
+        <button class="navbar-toggler{% if site.data.theme.navbar-color == 'dark' %} text-white border-white{% endif %}" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Open navigation">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi icon-sprite fs-1" viewBox="0 0 16 16">
                 <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
             </svg>
         </button>
         
-        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel" data-bs-theme="dark">
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel" data-bs-theme="{{ site.data.theme.navbar-color | default: 'dark' }}">
             <div class="offcanvas-header">
                 <h2 class="offcanvas-title" id="offcanvasNavbarLabel">{{ site.title }}</h2>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
                 <p class="h5 mb-3">{{ site.tagline }}</p>

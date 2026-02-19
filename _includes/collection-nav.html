@@ -3,11 +3,13 @@
     Collection Navbar.
 
     Creates a basic nav menu using Bootstrap navbar component, https://getbootstrap.com/docs/5.3/components/navbar/
-    Configured used _data/config-nav.csv.
-    Typically added to the _layout/default.html
+    
+    Configured used "_data/config-nav.csv".
+    Typically added to the "_layout/default.html".
+    The color theme options can be set in "theme.yml"
 
 {%- endcomment -%}
-<nav class="navbar navbar-expand-lg {{ site.data.theme.navbar-color | default: 'navbar-dark' }} {{ site.data.theme.navbar-background | default: 'bg-dark' }}">
+<nav class="navbar navbar-expand-lg {{ site.data.theme.navbar-background | default: 'bg-black' }}" data-bs-theme="{{ site.data.theme.navbar-color | default: 'dark' }}">
     <div class="container">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#page-nav" aria-controls="page-nav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>

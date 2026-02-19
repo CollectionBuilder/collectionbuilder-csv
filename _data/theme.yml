@@ -93,12 +93,14 @@ search-child-objects: true # true / false - if true, child objects will appear o
 #
 
 # NAVBAR COLORS [optional!]
-# navbar text color
-# Choose from "navbar-light" for use with light background colors, or "navbar-dark" for dark background colors
-navbar-color: navbar-dark
-# navbar background color
+# use Bootstrap Navbar color scheme options, https://getbootstrap.com/docs/5.3/components/navbar/#color-schemes
+#
+# navbar text color scheme
+# Choose from "light" for use with light background colors, or "dark" for dark background colors
+navbar-color: dark
+# navbar background color, https://getbootstrap.com/docs/5.3/utilities/background/
 # Choose from bg-primary, bg-secondary, bg-success, bg-danger, bg-warning, bg-info, bg-light, bg-dark, bg-white
-navbar-background: bg-dark
+navbar-background: bg-black
 
 # BOOTSWATCH THEMES [optional!]
 # You can replace the standard Bootstrap theme with a Bootswatch (https://github.com/thomaspark/bootswatch) option
