@@ -24,7 +24,7 @@
 {% if site.data.theme.map-cluster == true %}<link rel="stylesheet" href="{{ site.lib-assets | default: '/assets/lib' | relative_url }}/leaflet/MarkerCluster.css">
 <link rel="stylesheet" href="{{ site.lib-assets | default: '/assets/lib' | relative_url }}/leaflet/MarkerCluster.Default.css">{% endif %}{%- endif -%}
 <!-- load custom css last to allow overrides -->
-<link rel="stylesheet" href="{{ '/assets/css/cb.css' | relative_url }}" type="text/css">
+<link rel="stylesheet" href="{{ '/assets/css/cb.css' | relative_url }}?v={{ site.time | date: '%Y-%m-%d' }}" type="text/css">
 
 {% comment %} 
     Meta tags and analytics are added during production build ONLY 
