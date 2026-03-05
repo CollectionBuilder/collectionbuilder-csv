@@ -4,4 +4,4 @@ layout: search
 permalink: /search/
 ---
 
-## Full metadata search:
+## Search Collection Metadata
