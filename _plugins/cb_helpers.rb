@@ -39,7 +39,7 @@ module CollectionBuilderHelperGenerator
         # if featured image is a link
         featured_item_src = featured_image
         featured_item_alt = site.data['theme']['featured-image-alt-text'] || site.config['title']
-        featured_item_link = featured_item_src
+        featured_item_link = ''
       else
         # if featured image is an objectid
         # check configured metadata exists
