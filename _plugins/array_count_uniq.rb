@@ -2,7 +2,7 @@
 #
 # Array Count Plugin v0.2-csv
 #
-#   Adds three new Liquid filters to provide the unique values and their count:
+#   Adds Liquid filters to provide the unique values and their count:
 #
 #   1. array_count_uniq - takes a Liquid array and returns an array of the unique values with their counts. 
 #     Use like {{ myarray | array_count_uniq }}
@@ -23,6 +23,9 @@
 #       Use like: {% assign uniques = myhash | field_count_uniq: 'example' | remove_stopwords: 'common word; dogs; cats' %}
 #       Or, {{ myarray | remove_stopwords: 'example' }}
 #       Or, {{ myhash | remove_stopwords: 'example', 2 }}
+#
+#   4. strip_each - takes a Liquid array, returns the array with white space stripped and normalized for each value.
+#       Use like: {% assign clean_values = mylist | split: ';' | strip_each %}
 #
 # evanwill 2026 for CollectionBuilder project
 #
@@ -57,6 +60,10 @@ module Liquid
         value = item.is_a?(Array) ? item[index] : item
         stops.include?(value.to_s.strip.downcase)
       end
+    end
+
+    def strip_each(input)
+      input.map { |item| item.to_s.strip.gsub(/\s+/, ' ') }
     end
 
   end

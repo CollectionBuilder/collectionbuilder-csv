@@ -185,9 +185,8 @@ module CollectionBuilderHelperGenerator
     end
 
     # normalize whitespace
-    # taken from Jekyll Filters
     def normalize_whitespace(input)
-      input.to_s.gsub(%r!\s+!, " ").tap(&:strip!)
+      input.to_s.strip.gsub(/\s+/, ' ')
     end
 
     # Color helper, to add warning colors to message outputs
