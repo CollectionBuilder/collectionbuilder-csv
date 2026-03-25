@@ -123,11 +123,29 @@ Current helpers include:
 
 ## Array Count Uniq
 
-"Array Count Uniq" ("array_count_uniq.rb") provides a convenient Liquid filter to calculate the count of unique values in an array.
-The filter takes a Liquid array as input and returns an array of the unique values and their counts. 
-This allows you to quickly extract unique terms from large metadata files, which would take too long using Liquid alone.
-This is some what idiosyncratic to the needs of CollectionBuilder projects, used to efficiently generate Cloud pages and data derivatives.
+"Array Count Uniq" ("array_count_uniq.rb") provides several convenient Liquid filters to calculate the count of unique values in an array and remove stopwords.
+They are some what idiosyncratic to the needs of CollectionBuilder projects, used to efficiently generate Cloud pages and data derivatives.
+
+Filters include: 
+
+**array_count_uniq** - This filter takes a Liquid array or hash as input and returns an array of the unique values and their counts. This allows you to quickly extract unique terms from large metadata files, which would take too long using Liquid alone.
 
 For example, used in a project like `{% assign unique_terms = myarray | array_count_uniq %}`, 
 will return an array like `[ ["term one",2], ["term two",6], ["term three",1]]`,
 which can then be used in further Liquid.
+
+**field_count_uniq** - takes a Liquid hash and one or more specific fields in the hash, returns an array of the unique values, their field, and their counts.
+This allows you to give the filter the full Item metadata and get unique counts for one or more fields. 
+
+For example, used in a project like `{% assign uniques = items | field_count_uniq: 'example;subjects' %}`,
+will return an array like `[ ["term one", 2, "example"], ["term two", 6, "example"], ["term three", 1, "subjects"]]`.
+
+Keep in mind that the uniq count is per field, not across all fields!
+
+**remove_stopwords** - takes a Liquid array and a semicolon separated list of stop words, returns the array with items matching the stop words removed.
+
+Use like `{% assign uniques = items | field_count_uniq: 'example' | remove_stopwords: 'common word; dogs; cats' %}` to filter out the counts for "common word", "dogs", and "cats". 
+
+**strip_each** - takes a Liquid array, returns the array with white space stripped and normalized for each value. This lets you avoid having to iterate over an array to clean the values in a multivalued field. 
+
+Use like `{% assign clean_values = item.subject | split: ';' | strip_each %}`

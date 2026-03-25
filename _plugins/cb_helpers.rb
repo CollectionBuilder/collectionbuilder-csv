@@ -39,7 +39,7 @@ module CollectionBuilderHelperGenerator
         # if featured image is a link
         featured_item_src = featured_image
         featured_item_alt = site.data['theme']['featured-image-alt-text'] || site.config['title']
-        featured_item_link = featured_item_src
+        featured_item_link = ''
       else
         # if featured image is an objectid
         # check configured metadata exists
@@ -185,9 +185,8 @@ module CollectionBuilderHelperGenerator
     end
 
     # normalize whitespace
-    # taken from Jekyll Filters
     def normalize_whitespace(input)
-      input.to_s.gsub(%r!\s+!, " ").tap(&:strip!)
+      input.to_s.strip.gsub(/\s+/, ' ')
     end
 
     # Color helper, to add warning colors to message outputs

@@ -1,6 +1,6 @@
 {%- comment -%}
 
-    Generates a subject cloud using js to process the terms for display on "cloud" layout.
+    Generates a subject cloud using js to process the terms for display in a "cloud" feature include or layout.
     Requires CB's array_count_uniq.rb plugin!
 
 {%- endcomment -%}
@@ -11,28 +11,14 @@
 {% endif %}
 {%- assign termsMin = include.min | plus: 0 | default: 1 -%}
 {%- assign cloud_id = include.id | default: "cloud" -%}
-{%- assign cloud-fields = include.fields | split: ";" -%}
-
-{%- comment -%} capture terms from all cloud fields {%- endcomment -%}
-{%- assign terms = "" -%}
-{%- for c in cloud-fields -%}
-{% assign new = items | map: c | compact | join: ";" | split: ";" %}
-{% capture field_terms %}{% for n in new %}{{n}}~{{c}};{% endfor %}{% endcapture %}
-{% assign terms = terms | append: ";" | append: field_terms %}
-{%- endfor -%}
-{%- comment -%} find unique terms and counts {%- endcomment -%}
-{%- assign uniqTerms = terms | downcase | split: ";" | array_count_uniq | sort | where_exp: 't','t[1] >= termsMin' -%}
-
+{%- assign cloud-fields = include.fields | default: "subject" -%}
+{%- assign uniqTerms = items | field_count_uniq: cloud-fields | where_exp: 't','t[1] >= termsMin' -%}
+{% if include.stopwords %}{% assign uniqTerms = uniqTerms | remove_stopwords: include.stopwords %}{%- endif -%}
 <script>
 (function(){    
     /* subject terms + count */
-    var terms = [
-        {% for t in uniqTerms %}{% assign term_field = t[0] | split: "~" %}[{{ term_field[0] | jsonify }}, {{ t[1] | jsonify }},{{term_field[1] | jsonify}}]{% unless forloop.last %}, {% endunless %}{% endfor %}
-    ];
+    var terms = {{ uniqTerms | jsonify }};
 
-    {% if include.stopwords %}/* apply stopwords */
-    var stopWords = {{ include.stopwords | downcase | split: ';' | jsonify }};
-    terms = terms.filter(function(a) { return stopWords.indexOf(a[0]) < 0;});{% endif %}
     /* calculate max size */
     var counts = terms.map(function(obj){ return obj[1]; });
     var countMax = counts.reduce(function(a, b) { return Math.max(a, b); });
