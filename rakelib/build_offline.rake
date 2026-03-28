@@ -3,9 +3,8 @@
 #
 # build a CollectionBuilder site and replace links for offline use
 #
-# generates the Jekyll site, downloads external media (images, pdfs),
-# and rewrites all internal links so the site works from the local filesystem
-# without a server.
+# generates the Jekyll site, downloads external media (images, pdfs), 
+# and rewrites all internal links so the site works from the local filesystem without a server.
 #
 # options (passed as rake arguments, e.g. rake build_offline[true,offline_site]):
 #   download_external - download external media linked in metadata, true/false (default: true)
