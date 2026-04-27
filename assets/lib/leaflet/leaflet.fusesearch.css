@@ -23,9 +23,10 @@
     position: absolute;
     height: 100%;
     width: 350px;
-    
+
     z-index: -1;
     opacity: 0;
+    pointer-events: none;
     -webkit-transition: opacity 0.3s linear;
     -moz-transition: opacity 0.3s linear;
     -o-transition: opacity 0.3s linear;
@@ -69,6 +70,7 @@
 .leaflet-fusesearch-panel.visible {
     opacity: 1;
     z-index: 2000;
+    pointer-events: auto;
 }
 
 
