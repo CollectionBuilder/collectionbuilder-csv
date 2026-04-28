@@ -23,6 +23,8 @@ Pass options as rake arguments:
 
 `rake build_offline[false,"my_offline_copy"]`
 
+Note: if you change the default output_dir, remember to add it to `exclude` option in "_config.yml" to avoid including in your future site builds!
+
 ## Limitations
 
 - Streaming video (YouTube, Vimeo, etc.) is not downloaded and will not play offline. Item pages for video objects will display without the video.
