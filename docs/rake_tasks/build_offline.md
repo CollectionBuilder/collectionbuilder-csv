@@ -7,7 +7,7 @@ It can also be useful for sharing the site (via a thumb drive) in a location wit
 
 The task will:
 
-1. Complete a fresh build of the site (same as `rake deploy`)
+1. Complete a fresh build of the site (using the "offline" JEKYLL_ENV rather than "production", which allows us to swap out some parts of the site specific to building offline)
 2. Copy the build to the output directory
 3. Download external media (images, PDFs, audio) references in your metadata CSV to the "objects" folder. 
 4. Rewrite all links in the files to relatives file paths so that pages can load and link correctly from the local filesystem.

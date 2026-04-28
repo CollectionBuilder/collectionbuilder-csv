@@ -116,8 +116,8 @@ task :build_offline, [:download_external, :output_dir] do |_t, args|
   download_external = args.download_external.to_s.strip.downcase != 'false'
   offline_dir = args.output_dir
 
-  # build jekyll site with production environment
-  ENV['JEKYLL_ENV'] = 'production'
+  # build jekyll site with offline environment
+  ENV['JEKYLL_ENV'] = 'offline'
   system('bundle', 'exec', 'jekyll', 'build')
 
   jekyll_site = '_site'
