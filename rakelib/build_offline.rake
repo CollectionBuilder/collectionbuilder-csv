@@ -14,6 +14,7 @@
 # see docs/rake_tasks/build_offline.md for full documentation
 ###############################################################################
 
+require 'net/http'
 require 'open-uri'
 require 'pathname'
 require 'uri'
@@ -41,12 +42,13 @@ end
 # download a file from url and save to dest_path; returns true on success
 def offline_download(url, dest_path)
   puts "Downloading: #{url}"
-  URI.open(url, 'rb') do |remote|
+  URI.open(url, 'rb', open_timeout: 30, read_timeout: 60) do |remote|
     IO.copy_stream(remote, dest_path)
   end
   puts "  -> #{dest_path}"
   true
-rescue OpenURI::HTTPError, SocketError, Errno::ECONNREFUSED, RuntimeError => e
+rescue OpenURI::HTTPError, SocketError, Errno::ECONNREFUSED, Errno::ETIMEDOUT,
+       Net::OpenTimeout, Net::ReadTimeout, RuntimeError => e
   puts "  -> download failed: #{e.message}"
   FileUtils.rm_f(dest_path)
   false
@@ -121,10 +123,9 @@ task :build_offline, [:download_external, :output_dir, :skip_rewrite] do |_t, ar
 
   # build jekyll site with offline environment
   ENV['JEKYLL_ENV'] = 'offline'
-  system('bundle', 'exec', 'jekyll', 'build')
+  system('bundle', 'exec', 'jekyll', 'build') or abort 'Jekyll build failed'
 
   jekyll_site = '_site'
-  abort "Jekyll build failed: '#{jekyll_site}' directory not found!" unless Dir.exist?(jekyll_site)
 
   # load site configuration for url, baseurl, and metadata filename
   config = YAML.load_file('_config.yml')
