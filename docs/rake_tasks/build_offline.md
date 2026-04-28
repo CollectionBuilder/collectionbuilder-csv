@@ -18,10 +18,11 @@ When the task completes, you can browse the offline version by clicking "offline
 | --- | --- | --- |
 | download_external | attempt to download all external media linked in the project including items, true/false | true |
 | output_dir | directory name for output offline version | "offline_site" |
+| skip_rewrite | local path of directory to skip rewriting, useful for external libraries that should not be modified. | "assets/lib" |
 
 Pass options as rake arguments: 
 
-`rake build_offline[false,"my_offline_copy"]`
+`rake build_offline[false,"my_offline_copy","assets/lib"]`
 
 Note: if you change the default output_dir, remember to add it to `exclude` option in "_config.yml" to avoid including in your future site builds!
 

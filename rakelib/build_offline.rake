@@ -107,14 +107,16 @@ def offline_rewrite_links(content, depth, site_url, url_map)
 end
 
 desc 'Build jekyll site and rewrite links for offline use'
-task :build_offline, [:download_external, :output_dir] do |_t, args|
+task :build_offline, [:download_external, :output_dir, :skip_rewrite] do |_t, args|
   args.with_defaults(
     download_external: 'true',
-    output_dir: 'offline_site'
+    output_dir: 'offline_site',
+    skip_rewrite: 'assets/lib'
   )
 
   download_external = args.download_external.to_s.strip.downcase != 'false'
   offline_dir = args.output_dir
+  skip_rewrite_dir = args.skip_rewrite.to_s.strip
 
   # build jekyll site with offline environment
   ENV['JEKYLL_ENV'] = 'offline'
@@ -204,6 +206,8 @@ task :build_offline, [:download_external, :output_dir] do |_t, args|
   updated = 0
   Dir.glob(File.join(offline_dir, '**', '*.{html,js}')).each do |filepath|
     rel = Pathname.new(filepath).relative_path_from(Pathname.new(offline_dir)).to_s
+    # skip files inside the skip_rewrite directory (e.g. third-party libraries)
+    next if !skip_rewrite_dir.empty? && rel.start_with?(skip_rewrite_dir)
     depth = rel.count('/')
     content = File.read(filepath, encoding: 'utf-8', invalid: :replace, undef: :replace)
     new_content = offline_rewrite_links(content, depth, site_url, url_map)
@@ -212,7 +216,7 @@ task :build_offline, [:download_external, :output_dir] do |_t, args|
       updated += 1
     end
   end
-  puts "  #{updated} file(s) updated."
+  puts "  #{updated} file(s) updated.#{skip_rewrite_dir.empty? ? '' : " (skipped '#{skip_rewrite_dir}')"}"
 
   # inline SVG icon sprite: browsers block loading external SVG files in local file:// mode,
   # so we embed the full sprite as a hidden <svg> in each HTML page and rewrite all
