@@ -9,7 +9,7 @@
 {% assign fcount = site.data.config-table | size %}
 <!-- load DataTables with jquery bundled -->
 <script src="{{ site.lib-assets | default: '/assets/lib' | relative_url }}/datatables/datatables.min.js"></script>
-{% unless jekyll.environment == "offline" %}
+{% unless jekyll.environment == "offline" or page.simple-table == true %}
 <script>
 /* use jquery to initialize DataTables and load collection data */
 $(document).ready( function () {

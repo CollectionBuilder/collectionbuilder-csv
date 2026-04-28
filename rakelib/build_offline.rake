@@ -6,9 +6,10 @@
 # generates the Jekyll site, downloads external media (images, pdfs), 
 # and rewrites all internal links so the site works from the local filesystem without a server.
 #
-# options (passed as rake arguments, e.g. rake build_offline[true,offline_site]):
+# options (passed as rake arguments, e.g. rake build_offline[true,offline_site,assets/lib]):
 #   download_external - download external media linked in metadata, true/false (default: true)
 #   output_dir        - directory name for the offline output (default: "offline_site")
+#   skip_rewrite      - local path of directory to skip rewriting, useful for external libraries that should not be modified (default: "assets/lib")
 #
 # see docs/rake_tasks/build_offline.md for full documentation
 ###############################################################################

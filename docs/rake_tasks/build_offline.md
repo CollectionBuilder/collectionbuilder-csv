@@ -29,6 +29,7 @@ Note: if you change the default output_dir, remember to add it to `exclude` opti
 ## Limitations
 
 - Streaming video (YouTube, Vimeo, etc.) is not downloaded and will not play offline. Item pages for video objects will display without the video.
-- External images not in metadata (e.g., organization logos in the banner) remain as external links and require internet to display. Please manually adjust those images in your project.
-- DataTables on the Data page loads item data via an AJAX request to a local JSON file. Some browsers restrict local file AJAX requests by default, which may prevent the table from loading.
 - Map tiles (Leaflet/OpenStreetMap) require internet access. The map page will show markers but no background tiles when offline.
+- External images not in metadata (e.g., organization logos in the banner) remain as external links and require internet to display. Please manually adjust those images in your project.
+- The rewrite script is somewhat idiosyncratic to CB projects, so may not work correctly for other websites or highly customized projects.
+

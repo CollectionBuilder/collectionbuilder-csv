@@ -18,7 +18,7 @@ custom-foot: js/table-js.html
                 {% unless jekyll.environment == "offline" %}<th scope="col">Link</th>{% endunless %}
             </tr>
         </thead>
-        {% if jekyll.environment == "offline" %}
+        {% if jekyll.environment == "offline" or page.simple-table == true %}
         <tbody>
         {% if site.data.theme.data-child-objects == true %}
         {%- assign items = site.data[site.metadata] | where_exp: 'item','item.objectid' -%}
