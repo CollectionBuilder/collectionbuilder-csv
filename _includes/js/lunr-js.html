@@ -33,13 +33,13 @@ function lunr_search () {
         var searchitem =
             '<li class="border-bottom mb-3">'+
             {% assign display = fields | where: 'display','true' %}{% for d in display %}{% if forloop.first %}
-            '<p class="h4"><a href="{{ "/items/" | relative_url }}' + store[ref].id + '">' + store[ref][{{ fields[0].field | jsonify }}]  + '</a></p>' +
+            '<h4><a href="{{ "/items/" | relative_url }}' + store[ref].id + '">' + store[ref][{{ fields[0].field | jsonify }}]  + '</a></h4>' +
             '<p class="ms-3">';{% else %}
             if(store[ref][{{ d.field | jsonify }}]) { searchitem += store[ref][{{ d.field | jsonify }}] + '<br> '; }{% endif %}{% endfor %}
         searchitem += '</p></li>';
         newresults += searchitem;
     }
-    var resultslist = `<p class="border-bottom mb-3"><small>${results.length} Results(s) found</small></p>
+    var resultslist = `<h3 class="border-bottom mb-3 h5"><small>${results.length} Results found</small></h3>
                         <ul class="list-unstyled">${newresults}</ul>`;
     resultsdiv.innerHTML = resultslist;
 }

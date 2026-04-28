@@ -37,14 +37,14 @@
     <div class="search-row mb-4">
         <div class="row align-items-center">
             <div class="col-4 col-md-2">
-                <select class="form-select form-select-sm boolean-operator">
+                <select class="form-select form-select-sm boolean-operator" aria-label="Boolean option">
                     <option value="AND">AND</option>
                     <option value="OR">OR</option>
                     <option value="NOT">NOT</option>
                 </select>
             </div>
             <div class="col-5 col-md-3">
-                <select class="form-select form-select-sm field-select">
+                <select class="form-select form-select-sm field-select" aria-label="Metadata Field">
                     <option value="all">All Fields</option>
                     <option value="title">Title</option>
                     {% for f in site.data.config-browse %}{% assign cap-field = f.field | capitalize %}
@@ -53,12 +53,12 @@
                 </select>
             </div>
             <div class="col-10 col-md-6">
-                <input type="text" class="form-control form-control-sm search-input" placeholder="Enter search term">
+                <input type="text" class="form-control form-control-sm search-input" aria-label="Search term" placeholder="Enter search term">
                 <div class="date-range-inputs">
                     <div class="date-input-group">
-                        <input type="text" class="form-control form-control-sm start-date" placeholder="Start Date">
+                        <input type="text" class="form-control form-control-sm start-date" aria-label="Start Date" placeholder="Start Date">
                         <span class="date-separator">to</span>
-                        <input type="text" class="form-control form-control-sm end-date" placeholder="End Date">
+                        <input type="text" class="form-control form-control-sm end-date" aria-label="End Date" placeholder="End Date">
                     </div>
                 </div>
             </div>

@@ -11,7 +11,7 @@ custom-foot: js/lunr-js.html
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalLabel">Lunr Search Options</h5>
+                <h1 class="modal-title h4" id="modalLabel">Lunr Search Options</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -30,9 +30,9 @@ custom-foot: js/lunr-js.html
 {{ content }}
 
 <div class="mt-3">
-    <form class="" role="search" id="lunrSearch" onsubmit="lunr_search(); return false;">
+    <form role="search" id="lunrSearch" onsubmit="lunr_search(); return false;">
         <div class="input-group input-group-lg">
-            <input id="searchBox" class="form-control " type="text" placeholder="Enter your search term..." >
+            <input aria-label="Search terms" id="searchBox" class="form-control" type="text" placeholder="Enter your search term..." >
             <button class="btn btn-success" type="submit">
                 Search
             </button>
