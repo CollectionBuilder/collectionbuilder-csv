@@ -1,6 +1,15 @@
+{% comment %}
+
+    Javascript for DataTables interactive table feature, https://datatables.net/
+    Used with the "data.html" layout.
+    By default it loads table data from "assets/js/metadata.min.json" for better performance with large collections. 
+    For offline build, it provides an alternative basic table version.
+
+{%- endcomment -%}
 {% assign fcount = site.data.config-table | size %}
 <!-- load DataTables with jquery bundled -->
-<script type="text/javascript" language="javascript" src="{{ site.lib-assets | default: '/assets/lib' | relative_url }}/datatables/datatables.min.js"></script>
+<script src="{{ site.lib-assets | default: '/assets/lib' | relative_url }}/datatables/datatables.min.js"></script>
+{% unless jekyll.environment == "offline" %}
 <script>
 /* use jquery to initialize DataTables and load collection data */
 $(document).ready( function () {
@@ -30,3 +39,9 @@ $(document).ready( function () {
     });
 });
 </script>
+{% else %}
+<script>
+/* initialize basic DataTables */
+let table = new DataTable('#item-table');
+</script>
+{% endunless %}
