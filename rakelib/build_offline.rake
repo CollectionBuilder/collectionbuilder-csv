@@ -214,6 +214,44 @@ task :build_offline, [:download_external, :output_dir] do |_t, args|
   end
   puts "  #{updated} file(s) updated."
 
+  # inline SVG icon sprite: browsers block loading external SVG files in local file:// mode,
+  # so we embed the full sprite as a hidden <svg> in each HTML page and rewrite all
+  # href="PATH/cb-icons.svg#id" references to fragment-only href="#id".
+  # this handles both static <use> elements in HTML and dynamically-built icon strings in JS.
+  puts "Inlining SVG icon sprite for offline use..."
+  svg_sprite_path = File.join(offline_dir, 'assets', 'css', 'cb-icons.svg')
+  if File.exist?(svg_sprite_path)
+    sprite_svg = File.read(svg_sprite_path, encoding: 'utf-8')
+    # strip XML declaration — not valid inside HTML documents
+    sprite_svg = sprite_svg.sub(/\A<\?xml[^>]*\?>\s*/, '')
+    # mark the injected sprite as hidden; it is a symbol library, not visible content
+    inline_sprite = sprite_svg.sub(/<svg\b/, '<svg style="display:none" aria-hidden="true"')
+
+    inlined = 0
+    Dir.glob(File.join(offline_dir, '**', '*.html')).each do |filepath|
+      content = File.read(filepath, encoding: 'utf-8', invalid: :replace, undef: :replace)
+      new_content = content.dup
+
+      # inject the sprite right after the opening <body> tag so symbols are available
+      # to all <use> references in the document (and dynamically-created ones via JS)
+      new_content = new_content.sub(/(<body\b[^>]*>)/, "\\1\n#{inline_sprite}")
+
+      # rewrite all href references that point to the external sprite file to use
+      # fragment-only hrefs (e.g. href="#icon-image"), which reference the now-inlined symbols.
+      # the path prefix varies by directory depth after link rewriting, so we match
+      # any characters up to "cb-icons.svg#" rather than a fixed path.
+      new_content = new_content.gsub(/(href=["'])[^"']*cb-icons\.svg#/, '\1#')
+
+      if new_content != content
+        File.write(filepath, new_content, encoding: 'utf-8')
+        inlined += 1
+      end
+    end
+    puts "  #{inlined} file(s) updated with inline SVG sprite."
+  else
+    puts "  Warning: '#{svg_sprite_path}' not found, skipping SVG icon inlining."
+  end
+
   puts "\nDone! Offline site created in '#{offline_dir}'."
   puts "Open '#{File.join(offline_dir, 'index.html')}' in a browser to browse the collection."
 end
