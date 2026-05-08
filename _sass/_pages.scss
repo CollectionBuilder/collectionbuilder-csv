@@ -201,6 +201,7 @@ $toc-a-color: #191919 !default;
 }
 #about-contents-wrapper { 
     padding: 1rem;
+    overflow-wrap: break-word;
 }
 // desktop style
 @media (min-width: 992px) {
