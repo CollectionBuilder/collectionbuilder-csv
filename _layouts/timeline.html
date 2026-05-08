@@ -21,7 +21,7 @@ custom-foot: js/timeline-js.html
 {%- if t == 0 -%}{{ i }}{% unless forloop.last %};{% endunless %}{% endif %}{% endfor %}{%- endcapture -%}
 {%- assign navYears = navYears | split: ";" -%}
 {%- endif -%}
-{%- if navYears -%}
+{%- if navYears.size > 1 -%}
 <div class="dropdown float-end" id="year-nav">
     <button class="btn btn-primary dropdown-toggle" type="button" id="yearButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Year
