@@ -7,7 +7,7 @@
 #####
 permalink: /sitemap.xml
 ---
-{%- if jekyll.environment == "production" and site.noindex != true -%}
+{%- if jekyll.environment == "production" or jekyll.environment == "offline" and site.noindex != true -%}
 <?xml version="1.0" encoding="UTF-8"?>
 
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
