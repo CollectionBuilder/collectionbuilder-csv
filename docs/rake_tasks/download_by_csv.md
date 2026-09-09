@@ -25,9 +25,9 @@ The options can be changed by passing arguments with the rake command.
 | download_link | the column name that is the full link to the objects you want to download | "url" |
 | download_rename | the column name of the new filename for the downloads (optional, if you don't provide one, it will use what ever the url uses) | "filename_new" |
 | output_dir | the name of the new folder to download the files | "download/" |
+| delay | number of seconds to pause between each download (optional, helps avoid being blocked by servers) | "0" |
 
-
-The order follows [:csv_file,:download_link,:download_rename,:output_dir].
+The order follows [:csv_file,:download_link,:download_rename,:output_dir,:delay].
 For example, 
 
-`rake download_by_csv["other_down.csv","item_link","new_name","download_folder"]`
+`rake download_by_csv["other_down.csv","item_link","new_name","download_folder","1.5"]`

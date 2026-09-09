@@ -5,14 +5,17 @@
 ###############################################################################
 
 desc "download objects and rename using csv"
-task :download_by_csv, [:csv_file,:download_link,:download_rename,:output_dir] do |_t, args|
+task :download_by_csv, [:csv_file,:download_link,:download_rename,:output_dir,:delay] do |_t, args|
   # set default arguments
   args.with_defaults(
     csv_file: 'download.csv',
     download_link: 'url',
     download_rename: 'filename_new',
-    output_dir: 'download/'
+    output_dir: 'download/',
+    delay: '0'
   )
+
+  delay_seconds = args.delay.to_f
 
   # check for csv file
   if !File.exist?(args.csv_file)
@@ -48,6 +51,9 @@ task :download_by_csv, [:csv_file,:download_link,:download_rename,:output_dir] d
       else
         puts "no download url!"
       end
+
+      # pause between downloads to avoid being rate-limited/blocked by servers
+      sleep(delay_seconds) if delay_seconds > 0
     end
 
     puts "done downloading."
