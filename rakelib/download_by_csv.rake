@@ -29,8 +29,8 @@ module CBDownload
   # network errors worth trying again
   RETRY_ERRORS = [
     Net::OpenTimeout, Net::ReadTimeout, Errno::ECONNRESET, Errno::ECONNABORTED,
-    Errno::EPIPE, Errno::ETIMEDOUT, Errno::EHOSTUNREACH, EOFError, SocketError,
-    OpenSSL::SSL::SSLError
+    Errno::EPIPE, Errno::ETIMEDOUT, Errno::EHOSTUNREACH, Errno::ECONNREFUSED,
+    Errno::ENETUNREACH, EOFError, SocketError, OpenSSL::SSL::SSLError
   ].freeze
   # guess an extension when neither the url nor the headers give a filename
   EXTENSIONS = {
@@ -158,7 +158,7 @@ module CBDownload
       raise if !RETRY_STATUS.include?(e.code) || attempt >= MAX_ATTEMPTS
 
       wait = e.retry_after || backoff(attempt)
-      raise if wait > MAX_RETRY_WAIT
+      raise Error, "#{e.message} (retry-after #{wait}s exceeds max wait of #{MAX_RETRY_WAIT}s)" if wait > MAX_RETRY_WAIT
 
       report_retry(e.message, wait, attempt)
       sleep wait
@@ -281,7 +281,7 @@ module CBDownload
   def self.sanitize_filename(name, fallback)
     name = name.to_s.split(/[?#]/).first.to_s
     name = File.basename(name.tr('\\', '/')).strip
-    name = name.gsub(/[\x00-\x1f<>:"|*]/, '_')
+    name = name.gsub(/[\x00-\x1f<>:"|*?]/, '_')
     name = '' if ['.', '..'].include?(name)
     return fallback if name.empty?
 
