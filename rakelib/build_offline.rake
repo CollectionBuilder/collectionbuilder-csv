@@ -6,38 +6,60 @@
 # generates the Jekyll site, downloads external media (images, pdfs), 
 # and rewrites all internal links so the site works from the local filesystem without a server.
 #
-# options (passed as rake arguments, e.g. rake build_offline[true,offline_site,assets/lib]):
+# options (passed as rake arguments, e.g. rake build_offline[true,offline_site,assets/lib,false]):
 #   download_external - download external media linked in metadata, true/false (default: true)
 #   output_dir        - directory name for the offline output (default: "offline_site")
-#   skip_rewrite      - local path of directory to skip rewriting, useful for external libraries that should not be modified (default: "assets/lib")
+#   skip_rewrite      - comma separated directories to skip rewriting, useful for external libraries that should not be modified (default: "lib-assets" value from _config.yml, usually "assets/lib")
+#   download_video    - also download directly hosted video files (mp4, webm, etc.), true/false (default: false)
 #
 # see docs/rake_tasks/build_offline.md for full documentation
 ###############################################################################
 
 require 'csv'
+require 'digest'
 require 'net/http'
 require 'open-uri'
 require 'pathname'
+require 'set'
+require 'tempfile'
 require 'uri'
 require 'yaml'
 
-# file types to download for offline use (images and audio; streaming video is skipped)
+# file types to download for offline use by default (images, pdfs, audio)
 OFFLINE_MEDIA_EXTENSIONS = %w[.jpg .jpeg .png .gif .tif .tiff .pdf .mp3 .wav .ogg .m4a].freeze
 
-# streaming/video platforms to skip when downloading external media
-OFFLINE_SKIP_DOMAINS = %w[youtube.com youtu.be vimeo.com soundcloud.com].freeze
+# video file types, only downloaded when the download_video option is true.
+# streaming platforms (YouTube, Vimeo, etc.) have no file extension so are never downloaded.
+OFFLINE_VIDEO_EXTENSIONS = %w[.mp4 .webm .ogv .mov].freeze
 
-# check if a URL is from a platform that should be skipped for downloading
-def offline_skip_url?(url)
-  OFFLINE_SKIP_DOMAINS.any? { |domain| url.include?(domain) }
-end
+# metadata field => [objects subdirectory, filename suffix] for downloaded files.
+# downloads are named by objectid following CB conventions, e.g. objects/small/demo_001_sm.jpg
+OFFLINE_MEDIA_FIELDS = {
+  'object_location' => ['objects', ''],
+  'image_small'     => ['objects/small', '_sm'],
+  'image_thumb'     => ['objects/thumbs', '_th']
+}.freeze
 
 # check whether the URL points to a file type eligible for offline download
-def offline_downloadable?(url)
+def offline_downloadable?(url, extensions)
   ext = File.extname(URI.parse(url).path).downcase
-  OFFLINE_MEDIA_EXTENSIONS.include?(ext)
+  extensions.include?(ext)
 rescue URI::InvalidURIError
   false
+end
+
+# build a local filename for a downloaded file.
+# uses objectid + suffix + original extension; rows without objectid fall back to the
+# original basename plus a short hash of the url to avoid collisions.
+def offline_dest_filename(objectid, url, suffix)
+  path = URI.parse(url).path
+  ext = File.extname(path).downcase
+  id = objectid.to_s.strip
+  if id.empty?
+    "#{File.basename(path, '.*')}_#{Digest::MD5.hexdigest(url)[0, 8]}#{suffix}#{ext}"
+  else
+    "#{id}#{suffix}#{ext}"
+  end
 end
 
 # download a file from url and save to dest_path; returns true on success
@@ -55,103 +77,157 @@ rescue OpenURI::HTTPError, SocketError, Errno::ECONNREFUSED, Errno::ETIMEDOUT,
   false
 end
 
+# normalize a root-relative site path for the local filesystem.
+# returns [site_path, tail] where site_path has no leading slash and tail is any
+# fragment/query string. browsers do not resolve directories to index.html from file://,
+# so "/" and "/dir/" become "index.html" and "dir/index.html".
+def offline_site_path(path)
+  m = path.delete_prefix('/').match(/\A([^#?]*)(.*)\z/m)
+  base = m[1]
+  base = 'index.html' if base.empty?
+  base += 'index.html' if base.end_with?('/')
+  [base, m[2]]
+end
+
+# convert a root-relative site path into a path relative to the current file.
+# returns nil when the path does not point into the offline site, i.e. its first segment is
+# not a top-level file or directory of the build output (top_level is a Set of names, or nil
+# to skip the check). callers leave such strings untouched, which avoids rewriting quoted text
+# or attribute values that merely begin with a slash.
+# directory_index - apply the "/" and "/dir/" => index.html rules. only safe when the path is
+#                   known to be complete; JS code often builds URLs from a prefix string such as
+#                   '/items/' + id, where appending index.html would corrupt the result.
+def offline_localize(path, prefix, top_level, directory_index: true)
+  if directory_index
+    base, tail = offline_site_path(path)
+  else
+    base, tail = path.delete_prefix('/'), ''
+  end
+  first = base.split(%r{[/#?]}, 2).first.to_s
+  return nil if top_level && !top_level.include?(first)
+  "#{prefix}#{base}#{tail}"
+end
+
+# read a text file for rewriting; returns nil (with a warning) if it is not valid UTF-8,
+# so that binary or oddly encoded files are never silently mangled
+def offline_read(filepath)
+  content = File.binread(filepath).force_encoding('utf-8')
+  return content if content.valid_encoding?
+
+  puts "  Warning: '#{filepath}' is not valid UTF-8, skipping"
+  nil
+end
+
+# placeholder baseurl used for the offline build. every path that passes through Jekyll's
+# relative_url / absolute_url filters is prefixed with it, so the rewrite only has to replace
+# this one token rather than guess which strings in the rendered output are site paths.
+OFFLINE_SENTINEL = '/__CB_OFFLINE_ROOT__'.freeze
+
+# file types that may contain the sentinel (anything Jekyll renders through Liquid)
+OFFLINE_REWRITE_EXTENSIONS = %w[html js css json xml csv txt svg webmanifest].freeze
+
 # rewrite all internal links in a file's content for local filesystem use.
-# depth    - number of directory levels below the offline root (0 = root-level files)
-# site_url - absolute URL prefix from Jekyll config (url + baseurl), used in data files
-# url_map  - hash of { external_url => root_relative_local_path } for downloaded media
-def offline_rewrite_links(content, depth, site_url, url_map)
+# depth     - number of directory levels below the offline root (0 = root-level files)
+# url_map   - hash of { external_url => root_relative_local_path } for downloaded media
+# top_level - Set of top-level names in the build output, used to gate the fallback rewrite of
+#             hardcoded root-relative attribute paths (nil disables the fallback)
+# type      - file extension as a symbol; controls how the sentinel is resolved. :html and :css
+#             get a prefix relative to the file's own location (browsers resolve both against
+#             the file itself). every other type gets a root-relative path: a standalone JS file
+#             resolves against whichever page loads it, and data exports are not navigated.
+def offline_rewrite_links(content, depth, url_map, top_level = nil, type: :html)
   prefix = '../' * depth
+  # absolute_url output carries the site host in front of the sentinel when url is set
+  sentinel = %r{(?:https?://[^/"'\s]+)?#{Regexp.escape(OFFLINE_SENTINEL)}}
 
   # 1. replace downloaded external media URLs with relative local paths
   url_map.each do |external_url, local_path|
     content = content.gsub(external_url, "#{prefix}#{local_path.delete_prefix('/')}")
   end
 
-  # 2. replace absolute site URLs (Jekyll url + baseurl, or localhost:4000 when url is unset)
-  #    these appear in generated data files and occasionally in HTML meta tags
-  unless site_url.empty?
-    escaped = Regexp.escape(site_url)
-    content = content.gsub(%r{#{escaped}(/[^\s"'<>()\[\]]+)}) do
-      "#{prefix}#{$1.delete_prefix('/')}"
-    end
-    # bare site root URL with no following path
-    content = content.gsub(%r{#{escaped}/?(?=[\s"'<>()\[\]])}) do
-      "#{prefix}index.html"
+  # 2. sentinel paths in complete HTML attribute values get the directory => index.html rules,
+  #    since "/" and "/search/" do not resolve without a server. the value is bounded by its own
+  #    opening quote so the other quote type may appear inside it. a closing quote followed by
+  #    "+" marks a JS string prefix such as href="/items/" + id, which must keep its slash.
+  if type == :html
+    content = content.gsub(/((?:href|src|action|content|xlink:href|data-src|data|poster)=)(["'])#{sentinel}(\/.*?)\2(?=(\s*\+)?)/) do
+      attr, quote, path, concat = $1, $2, $3, $4
+      "#{attr}#{quote}#{offline_localize(path, prefix, nil, directory_index: concat.nil?)}#{quote}"
     end
   end
 
-  # 3. rewrite root-relative paths in HTML attribute values
-  #    covers href, src, action, content (meta), xlink:href (SVG), data-src (lazy-load)
-  #    negative lookahead (?!\/) prevents rewriting protocol-relative URLs (//)
-  content = content.gsub(/((?:href|src|action|content|xlink:href|data-src)=["'])(\/(?!\/)[^"']*)/) do
-    local = $2.delete_prefix('/')
-    local = 'index.html' if local.empty?
-    "#{$1}#{prefix}#{local}"
-  end
+  # 3. every remaining sentinel becomes a plain prefix: JS strings and template literals,
+  #    inline JSON, CSS url(), meta content, and data files
+  root = %i[html css].include?(type) ? prefix : '/'
+  content = content.gsub(%r{#{sentinel}/}, root)
+  content = content.gsub(sentinel, root.chomp('/'))
 
-  # 4. rewrite root-relative paths in CSS url() references (inline styles and <style> blocks)
-  content = content.gsub(/url\((['"]?)(\/(?!\/)[^'")\s]+)(['"]?)\)/) do
-    "url(#{$1}#{prefix}#{$2.delete_prefix('/')}#{$3})"
-  end
-
-  # 5. rewrite root-relative paths in JS/JSON string literals (single and double quoted)
-  #    handles inline data arrays like: "img": "/objects/thumbs/item_th.jpg"
-  content = content.gsub(/(["'])(\/(?!\/)[^"'\r\n]+)(["'])/) do
-    next "#{$1}#{$2}#{$3}" unless $1 == $3  # skip mismatched quotes (not a plain string)
-    "#{$1}#{prefix}#{$2.delete_prefix('/')}#{$3}"
-  end
-
-  # 6. rewrite root-relative paths in JS template literals (backtick strings)
-  #    handles dynamic hrefs like: `/items/${obj.id}.html`
-  content = content.gsub(/`(\/(?!\/)[^`]+)`/) do
-    "`#{prefix}#{$1.delete_prefix('/')}`"
+  # 4. fallback for hardcoded root-relative paths in HTML attributes that did not pass through
+  #    a Liquid url filter (e.g. a markdown link written as /browse.html). only rewritten when
+  #    the first segment is a top-level file or directory of the build, which leaves quoted text
+  #    or attribute values that merely begin with a slash untouched.
+  if type == :html && top_level
+    content = content.gsub(/((?:href|src|action|content|xlink:href|data-src|data|poster)=)(["'])(\/(?!\/).*?)\2(?=(\s*\+)?)/) do
+      attr, quote, path, concat = $1, $2, $3, $4
+      local = offline_localize(path, prefix, top_level, directory_index: concat.nil?)
+      "#{attr}#{quote}#{local || path}#{quote}"
+    end
   end
 
   content
 end
 
 desc 'Build jekyll site and rewrite links for offline use'
-task :build_offline, [:download_external, :output_dir, :skip_rewrite] do |_t, args|
+task :build_offline, [:download_external, :output_dir, :skip_rewrite, :download_video] do |_t, args|
   args.with_defaults(
     download_external: 'true',
     output_dir: 'offline_site',
-    skip_rewrite: 'assets/lib'
+    download_video: 'false'
   )
 
   download_external = args.download_external.to_s.strip.downcase != 'false'
-  offline_dir = args.output_dir
-  skip_rewrite_dir = args.skip_rewrite.to_s.strip
+  offline_dir = args.output_dir.to_s.strip.chomp('/')
+  abort 'output_dir cannot be empty' if offline_dir.empty?
+  download_video = args.download_video.to_s.strip.downcase == 'true'
+  media_extensions = download_video ? OFFLINE_MEDIA_EXTENSIONS + OFFLINE_VIDEO_EXTENSIONS : OFFLINE_MEDIA_EXTENSIONS
 
-  # build jekyll site with offline environment
-  ENV['JEKYLL_ENV'] = 'offline'
-  system('bundle', 'exec', 'jekyll', 'build') or abort 'Jekyll build failed'
-
-  jekyll_site = '_site'
-
-  # load site configuration for url, baseurl, and metadata filename
+  # load site configuration for metadata filename, library path, and exclude list
   config = YAML.load_file('_config.yml')
-  baseurl = (config['baseurl'] || '').strip.chomp('/')
-  site_url_val = (config['url'] || '').strip.chomp('/')
-  # when url is blank, Jekyll uses http://localhost:4000 for absolute URLs in generated data files
-  site_url = site_url_val.empty? ? "http://localhost:4000#{baseurl}" : "#{site_url_val}#{baseurl}"
   metadata_name = config['metadata']
 
-  # recreate output directory for a clean build
-  if Dir.exist?(offline_dir)
-    puts "Removing existing '#{offline_dir}' for a clean build..."
-    FileUtils.rm_rf(offline_dir)
-  end
-  FileUtils.mkdir_p(offline_dir)
+  # directories to leave untouched by the link rewrite, comma separated.
+  # defaults to the lib-assets directory from _config.yml (third-party libraries).
+  # an explicit empty value (e.g. rake build_offline[true,offline_site,]) means rewrite everything.
+  skip_rewrite_dirs = (args.skip_rewrite || config['lib-assets'] || 'assets/lib').to_s
+                      .split(',').map { |d| d.strip.delete('"\'').delete_prefix('/').chomp('/') }.reject(&:empty?)
 
-  # copy built site contents into the offline directory (contents only, not _site subfolder)
-  puts "Copying '#{jekyll_site}' to '#{offline_dir}'..."
-  Dir.glob(File.join(jekyll_site, '{*,.*}')).each do |entry|
-    next if ['.', '..'].include?(File.basename(entry))
-    FileUtils.cp_r(entry, offline_dir)
+  # build jekyll site with the offline environment directly into the output directory.
+  # a temporary config override:
+  #   - sets baseurl to the sentinel token (and blanks url) so every path produced by the
+  #     relative_url / absolute_url filters is marked for rewriting
+  #   - adds the output directory to the exclude list so that a custom output_dir is never
+  #     read back in as site content on later builds
+  ENV['JEKYLL_ENV'] = 'offline'
+  excludes = Array(config['exclude']).map(&:to_s)
+  excludes << "#{offline_dir}/" unless excludes.include?(offline_dir) || excludes.include?("#{offline_dir}/")
+  override = Tempfile.new(['offline_config', '.yml'])
+  override.write({ 'baseurl' => OFFLINE_SENTINEL, 'url' => '', 'exclude' => excludes }.to_yaml)
+  override.close
+  begin
+    system('bundle', 'exec', 'jekyll', 'build',
+           '--destination', offline_dir,
+           '--config', "_config.yml,#{override.path}") or abort 'Jekyll build failed'
+  ensure
+    override.unlink
   end
 
-  # track { external_url => root_relative_local_path } for all downloaded files
+  # track { external_url => root_relative_local_path } for successfully downloaded files only,
+  # so that a failed download leaves the original external link in place rather than a broken local path
   url_map = {}
+  downloaded = []   # urls fetched in this run
+  reused = []       # urls whose local file already existed in the build output
+  failed = []       # urls that could not be downloaded
+  skipped = []      # external urls in media fields left as-is (streaming, unsupported types, invalid)
 
   if download_external
     if metadata_name.nil? || metadata_name.strip.empty?
@@ -164,62 +240,95 @@ task :build_offline, [:download_external, :output_dir, :skip_rewrite] do |_t, ar
         puts "Scanning '#{metadata_file}' for external media to download..."
         csv_data = CSV.read(metadata_file, headers: true, encoding: 'utf-8')
 
-        # metadata field => objects/ subdirectory for downloaded files
-        media_field_dirs = {
-          'object_location' => 'objects',
-          'image_small'     => File.join('objects', 'small'),
-          'image_thumb'     => File.join('objects', 'thumbs')
-        }
-
-        media_field_dirs.each do |field, subdir|
+        OFFLINE_MEDIA_FIELDS.each do |field, (subdir, suffix)|
           next unless csv_data.headers.include?(field)
 
           dest_dir = File.join(offline_dir, subdir)
           FileUtils.mkdir_p(dest_dir)
 
           csv_data.each do |row|
-            url = row[field]
-            next if url.nil? || url.strip.empty?
+            url = row[field].to_s.strip
+            next if url.empty?
             next unless url.start_with?('http')
-            next if offline_skip_url?(url)
-            next unless offline_downloadable?(url)
-            next if url_map.key?(url)  # already queued from another field
+            next if url_map.key?(url) || failed.include?(url)  # already handled from another row/field
 
-            begin
-              filename = File.basename(URI.parse(url).path)
-            rescue URI::InvalidURIError
-              puts "  Skipping invalid URL: #{url}"
+            unless offline_downloadable?(url, media_extensions)
+              skipped << url unless skipped.include?(url)
               next
             end
 
+            filename = offline_dest_filename(row['objectid'], url, suffix)
             dest_path = File.join(dest_dir, filename)
-            # root_relative_path uses forward slashes regardless of OS
-            root_relative = "/#{[subdir.tr(File::SEPARATOR, '/'), filename].join('/')}"
-            url_map[url] = root_relative
+            # root-relative path uses forward slashes regardless of OS
+            root_relative = "/#{subdir}/#{filename}"
 
-            offline_download(url, dest_path) unless File.exist?(dest_path)
+            if File.exist?(dest_path)
+              # a local object with the same name was copied from the project; reuse it rather than overwrite
+              puts "Warning: '#{dest_path}' already exists, using it for #{url}"
+              reused << url
+              url_map[url] = root_relative
+            elsif offline_download(url, dest_path)
+              downloaded << url
+              url_map[url] = root_relative
+            else
+              failed << url
+            end
           end
         end
+
+        # summary of download results, also written to the output directory for reference
+        summary = []
+        summary << "External media download summary (#{Time.now.strftime('%Y-%m-%d %H:%M')})"
+        summary << "  downloaded: #{downloaded.size}"
+        summary << "  reused existing local files: #{reused.size}"
+        summary << "  failed: #{failed.size}"
+        summary << "  left as external links: #{skipped.size}"
+        unless failed.empty?
+          summary << ''
+          summary << 'Failed downloads (links left pointing to the external URL):'
+          failed.each { |u| summary << "  #{u}" }
+        end
+        unless skipped.empty?
+          summary << ''
+          summary << 'External links not downloaded (streaming platforms or unsupported file types):'
+          skipped.each { |u| summary << "  #{u}" }
+        end
+        puts
+        puts summary
+        File.write(File.join(offline_dir, 'offline_build_log.txt'), summary.join("\n") + "\n")
       end
     end
   end
 
-  # rewrite all links in html and js files for local filesystem use
+  # rewrite all links for local filesystem use by resolving the sentinel baseurl in every
+  # Liquid-rendered text file (see offline_rewrite_links for how each file type is handled)
   puts "Rewriting links for offline use..."
   updated = 0
-  Dir.glob(File.join(offline_dir, '**', '*.{html,js}')).each do |filepath|
+  top_level = Dir.children(offline_dir).to_set
+  Dir.glob(File.join(offline_dir, '**', "*.{#{OFFLINE_REWRITE_EXTENSIONS.join(',')}}")).each do |filepath|
     rel = Pathname.new(filepath).relative_path_from(Pathname.new(offline_dir)).to_s
-    # skip files inside the skip_rewrite directory (e.g. third-party libraries)
-    next if !skip_rewrite_dir.empty? && rel.start_with?(skip_rewrite_dir)
+    # skip files inside the skip_rewrite directories (e.g. third-party libraries), matching on directory boundary
+    next if skip_rewrite_dirs.any? { |d| rel == d || rel.start_with?("#{d}/") }
     depth = rel.count('/')
-    content = File.read(filepath, encoding: 'utf-8', invalid: :replace, undef: :replace)
-    new_content = offline_rewrite_links(content, depth, site_url, url_map)
+    type = File.extname(filepath).delete_prefix('.').downcase.to_sym
+    content = offline_read(filepath)
+    next if content.nil?
+    new_content = offline_rewrite_links(content, depth, url_map, top_level, type: type)
     if new_content != content
-      File.write(filepath, new_content, encoding: 'utf-8')
+      File.binwrite(filepath, new_content)
       updated += 1
     end
   end
-  puts "  #{updated} file(s) updated.#{skip_rewrite_dir.empty? ? '' : " (skipped '#{skip_rewrite_dir}')"}"
+  puts "  #{updated} file(s) updated.#{skip_rewrite_dirs.empty? ? '' : " (skipped '#{skip_rewrite_dirs.join("', '")}')"}"
+
+  # any sentinel left behind means a file type or location the rewrite did not cover
+  leftovers = Dir.glob(File.join(offline_dir, '**', '*')).select do |f|
+    File.file?(f) && File.size(f) < 50_000_000 && File.binread(f).include?(OFFLINE_SENTINEL)
+  end
+  unless leftovers.empty?
+    puts "  Warning: sentinel '#{OFFLINE_SENTINEL}' still present in #{leftovers.size} file(s):"
+    leftovers.first(20).each { |f| puts "    #{f}" }
+  end
 
   # inline SVG icon sprite: browsers block loading external SVG files in local file:// mode,
   # so we embed the full sprite as a hidden <svg> in each HTML page and rewrite all
@@ -236,7 +345,8 @@ task :build_offline, [:download_external, :output_dir, :skip_rewrite] do |_t, ar
 
     inlined = 0
     Dir.glob(File.join(offline_dir, '**', '*.html')).each do |filepath|
-      content = File.read(filepath, encoding: 'utf-8', invalid: :replace, undef: :replace)
+      content = offline_read(filepath)
+      next if content.nil?
       new_content = content.dup
 
       # inject the sprite right after the opening <body> tag so symbols are available
