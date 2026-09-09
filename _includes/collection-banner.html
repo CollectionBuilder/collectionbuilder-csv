@@ -28,7 +28,7 @@
         {% capture jumboLink %}{{ '/items/' | relative_url }}{% if jumboItem.parentid %}{{ jumboItem.parentid }}.html#{{ jumboItem.objectid }}{% else %}{{ jumboItem.objectid }}.html{% endif %}{% endcapture %}
     {% else %}
         {% capture jumboSrc %}{{ site.data.featured_item.src | relative_url }}{% endcapture %}
-        {% capture jumboLink %}{{ site.data.featured_item.link | relative_url }}{% endcapture %}
+        {% capture jumboLink %}{% if site.data.featured_item.link != "" %}{{ site.data.featured_item.link | relative_url }}{% endif %}{% endcapture %}
     {%- endif -%}
 
 <style>

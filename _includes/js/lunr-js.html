@@ -6,6 +6,8 @@
 
 /* initialize lunr */
 var idx = lunr(function () {
+    /* uncomment the line below to turn off the default Lunr stopword list */
+    //this.pipeline.remove(lunr.stopWordFilter)
     /* add index fields from config */
     this.ref('id')
     {% for f in index_fields %}

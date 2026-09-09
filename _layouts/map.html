@@ -3,5 +3,7 @@
 layout: default
 custom-foot: js/map-js.html
 ---
+{%- assign clean_content = content | strip | normalize_whitespace -%}
+{% if clean_content != "" %}<div class="container my-4">{{ content }}</div>{% endif %}
 <h2 class="visually-hidden">Map of Collection Items</h2>
 <div id="mapContainer"></div>

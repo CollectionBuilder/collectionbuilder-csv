@@ -4,7 +4,7 @@ See general documentation: <https://collectionbuilder.github.io/cb-docs/docs/met
 
 ## Required fields
 
-- `objectid`: unique string, all lowercase with no spaces or special characters as it will used to form the item’s URL. Underscores (_) and dashes (-) are okay; slashes (/) should NOT be used in this field. Objects without an objectid will not be displayed in the collection. Objects with non-unique objectid will be overwritten.
+- `objectid`: unique string, all lowercase with no spaces or special characters as it will used to form the item's URL. Underscores (_) and dashes (-) are okay; slashes (/) should NOT be used in this field. Objects without an objectid will not be displayed in the collection. Objects with non-unique objectid will be overwritten.
 - `title`: string description of object, used through out the template in representations of the object. *A title is not technically required, but will leave blanks areas in the template.*
 
 ## Object Download and Display images

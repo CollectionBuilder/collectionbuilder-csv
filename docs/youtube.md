@@ -27,7 +27,7 @@ Default images:
 - medium quality 320x180, https://img.youtube.com/vi/{{ youtubeid }}/mqdefault.jpg
 - high quality 480x360, https://img.youtube.com/vi/{{ youtubeid }}/hqdefault.jpg 
 - SD 640x480 (not available for all videos), https://img.youtube.com/vi/{{ youtubeid }}/sddefault.jpg
-- max quality 1280×720 (or 1920x1080?, not available for all videos), https://img.youtube.com/vi/{{ youtubeid }}/maxresdefault.jpg 
+- max quality 1280x720 (or 1920x1080?, not available for all videos), https://img.youtube.com/vi/{{ youtubeid }}/maxresdefault.jpg 
 
 Auto thumbs:
 
