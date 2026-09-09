@@ -14,6 +14,7 @@
 # see docs/rake_tasks/build_offline.md for full documentation
 ###############################################################################
 
+require 'csv'
 require 'net/http'
 require 'open-uri'
 require 'pathname'
