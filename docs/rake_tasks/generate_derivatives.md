@@ -42,3 +42,5 @@ rake generate_derivatives[,,70]
 The mini_magick Gem is used to interface with ImageMagick so it supports both current version 7 and legacy versions (which are common on Linux). 
 The image_optim Gem is used to optimize images using the optimization libraries provided by the image_optim_pack Gem. 
 image_optim_pack does not provide binaries for Windows, so optimization is skipped when using the rake task on Windows.
+
+ImageMagick (all image formats) and Ghostscript (PDF rendering) are essential software commonly used for batch processing, so although they are external dependencies, they may be useful for other tasks on your computer.

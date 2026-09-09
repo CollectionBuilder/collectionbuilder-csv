@@ -2,6 +2,7 @@
 
 This task resizes all images (.jpeg, .jpg, .png, .tif, or .tiff) in a folder of files within this repository. 
 It outputs the resized images to a new folder in this repository, with all filenames and extensions lowercased, and optionally converted into another image format.
+This is commonly used if you have a batch of scanned full sized TIF images and need to generate reasonable sized JPEG access copies for the web.
 
 Requirements:
 
