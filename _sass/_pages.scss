@@ -122,6 +122,48 @@ $toc-a-color: #191919 !default;
     }
 }
 
+/* browse-facets layout */
+#browse-facets legend {
+    font-size: inherit;
+}
+.browse-search-group {
+    flex: 1 1 20rem;
+    width: auto;
+}
+.browse-card-icon {
+    padding: 1.5rem;
+    text-align: center;
+    svg {
+        width: 5rem;
+        height: 5rem;
+    }
+}
+.browse-facet-toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0.25rem 0;
+    font-size: inherit;
+    font-weight: bold;
+    color: inherit;
+    text-align: start;
+    text-decoration: none;
+    /* chevron, points down when expanded */
+    &::after {
+        content: "";
+        width: 0.5em;
+        height: 0.5em;
+        margin-inline-end: 0.25em;
+        border-right: 2px solid currentColor;
+        border-bottom: 2px solid currentColor;
+        transform: rotate(45deg);
+    }
+    &[aria-expanded="false"]::after {
+        transform: rotate(-45deg);
+    }
+}
+
 
 /* map */
 #mapContainer { height: 750px; z-index: 98; }

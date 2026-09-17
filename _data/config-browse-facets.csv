@@ -1,0 +1,7 @@
+field,display_name,btn,hidden,search,date_field,multivalued,sort_name,facet_name
+date,Date,,,,true,,Date,Date
+creator,Creator,,,true,,,Creator,Creator
+description,,,true,true,,,,
+subject,,true,,2,,true,,Subject
+location,,true,,true,,true,,Location
+identifier,,,true,true,,,,

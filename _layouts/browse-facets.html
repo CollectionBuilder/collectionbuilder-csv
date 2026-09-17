@@ -1,0 +1,90 @@
+---
+# Browse page with keyword search, facets, and sort
+# fields are configured in _data/config-browse-facets.csv
+# child objects are included if theme.yml browse-child-objects is true
+# the options below can be overridden by adding the same key to the page front matter
+advanced-search: true # true / false, adds the Advanced search button and modal
+default-sort-field: # blank = random; "title"; or a field with a sort_name in config-browse-facets.csv
+default-sort-order: asc # asc / desc
+browse-per-page: 48 # number of items shown before the "Show more items" button
+browse-facet-size: 8 # number of values shown in each facet before the "Show all" button
+browse-facet-sort: count # count / alpha, order of values in each facet
+browse-facet-logic: or # or / and, how multiple selected values in the same facet are combined
+layout: page
+custom-foot: js/browse-facets-js.html
+---
+{%- assign advanced = layout.advanced-search -%}
+{%- unless page.advanced-search == nil -%}{%- assign advanced = page.advanced-search -%}{%- endunless -%}
+{%- assign facet_fields = site.data.config-browse-facets | where_exp: 'f', 'f.facet_name' -%}
+
+{{ content }}
+
+<!-- keyword search -->
+<form role="search" aria-label="Search collection" id="browse-search" class="mt-3" action="{{ page.url | relative_url }}">
+    <label for="browse-search-input" class="form-label">Search collection</label>
+    <div class="d-flex flex-wrap gap-2">
+        <div class="input-group input-group-lg browse-search-group">
+            <input type="search" id="browse-search-input" name="q" class="form-control">
+            <button class="btn btn-primary" type="submit">Search</button>
+        </div>
+        {% if advanced == true %}<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#browse-advanced-modal">Advanced search</button>{% endif %}
+    </div>
+</form>
+<details class="mt-2 small">
+    <summary id="browse-search-tips-summary">Search tips</summary>
+    <ul class="mt-2">
+        <li>Every word you enter must match, e.g. <code>moscow building</code>.</li>
+        <li>Partial words work, e.g. <code>univ</code> finds "university" and "universities".</li>
+        <li>Put words in quotes to match a phrase, e.g. <code>"court house"</code>.</li>
+        {% if advanced == true %}<li>Use <strong>Advanced search</strong> to search specific fields, dates, or combine terms with AND, OR, NOT.</li>{% endif %}
+    </ul>
+</details>
+
+<!-- active filters, filled by js -->
+<div id="browse-active" class="d-flex flex-wrap align-items-center gap-2 my-3" hidden>
+    <span id="browse-active-label">Active filters:</span>
+    <ul id="browse-chips" class="list-unstyled d-flex flex-wrap gap-2 mb-0" aria-labelledby="browse-active-label"></ul>
+    <button type="button" id="browse-clear" class="btn btn-sm btn-link">Clear all</button>
+</div>
+
+<noscript><p class="alert alert-warning mt-3">Browse requires JavaScript. See the <a href="{{ '/data.html' | relative_url }}">Data page</a> for a list of all items.</p></noscript>
+
+<div class="row mt-3">
+    {% if facet_fields.size > 0 %}
+    <div class="col-lg-3">
+        <!-- on small screens filters open in an offcanvas panel -->
+        <button type="button" class="btn btn-outline-secondary d-lg-none mb-3" data-bs-toggle="offcanvas" data-bs-target="#browse-filters" aria-controls="browse-filters">Filters <span id="browse-filter-count"></span></button>
+        <aside class="offcanvas-lg offcanvas-start" tabindex="-1" id="browse-filters" aria-labelledby="browse-filters-heading">
+            <div class="offcanvas-header justify-content-end">
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#browse-filters" aria-label="Close filters"></button>
+            </div>
+            <div class="offcanvas-body d-block">
+                <h2 id="browse-filters-heading" class="h4">Filters</h2>
+                <a href="#browse-results-heading" class="visually-hidden-focusable" id="browse-skip">Skip to results</a>
+                <!-- facets, filled by js -->
+                <div id="browse-facets"></div>
+            </div>
+        </aside>
+    </div>
+    {% endif %}
+    <section class="{% if facet_fields.size > 0 %}col-lg-9{% else %}col-12{% endif %}" aria-labelledby="browse-results-heading">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+            <h2 id="browse-results-heading" class="h4 mb-0" tabindex="-1">Items</h2>
+            <div class="d-flex align-items-center gap-2">
+                <label for="browse-sort" class="text-nowrap">Sort by</label>
+                <!-- sort options, filled by js -->
+                <select id="browse-sort" class="form-select"></select>
+            </div>
+        </div>
+        <!-- item cards, filled by js -->
+        <ul id="browse-item-list" class="row list-unstyled"></ul>
+        <div class="text-center mb-4">
+            <p id="browse-showing" class="text-body-secondary"></p>
+            <button type="button" id="browse-more" class="btn btn-outline-primary" hidden>Show more items</button>
+        </div>
+        <!-- screen reader announcements -->
+        <div id="browse-announcer" class="visually-hidden" aria-live="polite" aria-atomic="true"></div>
+    </section>
+</div>
+
+{% if advanced == true %}{% include advanced-search-modal-facets.html %}{% endif %}

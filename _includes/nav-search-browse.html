@@ -1,0 +1,12 @@
+{% comment %}
+
+    Navbar search box.
+
+    Form set up to point at the Browse page using the browse-facets layout.
+    To use, in _includes/collection-nav.html (or collection-side-nav.html) replace the "nav-search-lunr.html" include with "nav-search-browse.html".
+    On the Browse page itself, the search is applied in place without reloading the page.
+
+{%- endcomment -%}
+<form role="search" aria-label="Site search" id="nav-search" action="{{ '/browse.html' | relative_url }}">
+    <input id="nav-search-box" class="form-control" type="search" placeholder="Search" aria-label="Search collection items" name="q">
+</form>
