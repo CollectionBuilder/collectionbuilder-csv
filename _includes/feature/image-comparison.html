@@ -1,0 +1,81 @@
+{% comment %}
+
+    Before-After Image Comparison Slider feature, https://github.com/markpbaggett/before-after
+
+    Adds an interactive comparison of two images stacked on top of each other, with a slider to reveal one or the other (or fade between them using opacity).
+    Uses the web components in "assets/lib/before-after.js".
+
+    E.G. --> {% include feature/image-comparison.html img1="comp002" img2="comp003" %}
+
+    Options:
+    - "img1" = first image (shown on the left / top / bottom layer), several options below (required)
+        1. an objectid of an image item in this collection, e.g. "comp002"
+        2. a full URL to an external image file, e.g. "https://www.lib.uidaho.edu/digital/images/fluffyclouds.jpg"
+        3. a relative link to an image file stored in this repository (that is not included in the collection), i.e. "/assets/img/evan.jpg"
+    - "img2" = second image, same options as img1 (required)
+    - "alt1" = alternative text describing img1. Required for accessibility if using an external URL or relative link, automatically filled if using an objectid (optional)
+    - "alt2" = alternative text describing img2 (optional)
+    - "label1" = label displayed on img1. Defaults to the item title for objectids, or "Before" for image links. Give the value false ('label1=false' - no quotes around false) to display no labels (optional)
+    - "label2" = label displayed on img2. Defaults to the item title for objectids, or "After" for image links (optional)
+    - "type" = comparison type, choose from "horizontal" (slider moves left to right), "vertical" (slider moves top to bottom), or "opacity" (top image fades in and out). Default "horizontal" (optional)
+    - "start" = a percentage for starting slider position or opacity, e.g. "50". Default "65" (optional)
+    - "ratio" = use Bootstrap ratio options "21x9", "16x9", "4x3", or "1x1" to set the responsive aspect ratio of the comparison area. Default "4x3" (optional)
+    - "height" = a CSS height for the comparison area, e.g. "600px" or "75vh" or "100%". Overrides "ratio" if set (optional)
+    - "caption" = by default a caption is added linking to the collection items used in the comparison (for objectids only). The caption option allows you to manually add a different caption, or give the value false for none (optional)
+
+{%- endcomment -%}
+{%- assign compare_imgs = include.img1 | append: "|||" | append: include.img2 | split: "|||" -%}
+{%- assign compare_alts = include.alt1 | append: "|||" | append: include.alt2 | split: "|||" -%}
+{%- assign compare_default_labels = "Before|||After" | split: "|||" -%}
+{%- capture compare_caption -%}{%- endcapture -%}
+{%- for img in compare_imgs -%}
+    {%- if img contains "/" -%}
+        {%- capture img_src -%}{{ img | relative_url }}{%- endcapture -%}
+        {%- capture img_alt -%}{{ compare_alts[forloop.index0] }}{%- endcapture -%}
+        {%- capture img_label -%}{{ compare_default_labels[forloop.index0] }}{%- endcapture -%}
+    {%- else -%}
+        {%- assign compare_item = site.data[site.metadata] | where: "objectid", img | first -%}
+        {%- capture img_src -%}{{ compare_item.object_location | default: compare_item.image_small | relative_url }}{%- endcapture -%}
+        {%- capture img_alt -%}{{ compare_alts[forloop.index0] | default: compare_item.image_alt_text | default: compare_item.description | default: compare_item.title }}{%- endcapture -%}
+        {%- capture img_label -%}{{ compare_item.title }}{%- endcapture -%}
+        {%- capture img_link -%}{{ '/items/' | relative_url }}{% if compare_item.parentid %}{{ compare_item.parentid }}.html#{{ compare_item.objectid }}{% else %}{{ compare_item.objectid }}.html{% endif %}{%- endcapture -%}
+        {%- capture compare_caption -%}{{ compare_caption }}{% unless forloop.first %} / {% endunless %}<a href="{{ img_link }}">{{ compare_item.title }}</a>{%- endcapture -%}
+    {%- endif -%}
+    {%- if forloop.first -%}
+        {%- assign compare_src1 = img_src -%}{%- assign compare_alt1 = img_alt -%}{%- assign compare_label1 = include.label1 | default: img_label -%}
+    {%- else -%}
+        {%- assign compare_src2 = img_src -%}{%- assign compare_alt2 = img_alt -%}{%- assign compare_label2 = include.label2 | default: img_label -%}
+    {%- endif -%}
+{%- endfor -%}
+{%- if include.caption -%}{%- assign compare_caption = include.caption -%}{%- endif -%}
+{%- assign compare_type = include.type | default: "horizontal" -%}
+{%- assign compare_start = include.start | default: "65" -%}
+{%- assign compare_count = compare_count | plus: 1 -%}
+{%- capture compareid -%}image-comparison-{{ compare_count }}{%- endcapture -%}
+{%- unless before_after_js_loaded -%}
+<script src="{{ site.lib-assets | default: '/assets/lib' | relative_url }}/before-after.js"></script>
+{%- assign before_after_js_loaded = true -%}
+{%- endunless %}
+<figure class="feature-include image-comparison {% if include.height contains '%' %}h-100 m-0{% else %}my-3{% endif %}">
+    <div class="{% unless include.height %}ratio ratio-{{ include.ratio | default: '4x3' }}{% endunless %}" {% if include.height %}style="height: {{ include.height }};"{% endif %}>
+        {% if compare_type == "opacity" -%}
+        <opacity-compare id="{{ compareid }}" style="min-height: 0;" before="{{ compare_src1 }}" after="{{ compare_src2 }}" before-label="{% if include.label1 == false %}{{ compare_alt1 | escape }}{% else %}{{ compare_label1 | escape }}{% endif %}" after-label="{% if include.label1 == false %}{{ compare_alt2 | escape }}{% else %}{{ compare_label2 | escape }}{% endif %}" start-opacity="{{ compare_start }}"></opacity-compare>
+        {%- else -%}
+        <before-after id="{{ compareid }}" style="min-height: 0;" before="{{ compare_src1 }}" after="{{ compare_src2 }}" before-label="{% if include.label1 == false %}{{ compare_alt1 | escape }}{% else %}{{ compare_label1 | escape }}{% endif %}" after-label="{% if include.label1 == false %}{{ compare_alt2 | escape }}{% else %}{{ compare_label2 | escape }}{% endif %}" start-position="{{ compare_start }}" orientation="{{ compare_type }}"{% if include.label1 == false %} show-labels="false"{% endif %}></before-after>
+        {%- endif %}
+    </div>
+    {%- unless include.label1 == false %}
+    <span class="visually-hidden">Image comparison of {{ compare_alt1 | escape }} and {{ compare_alt2 | escape }}</span>
+    {%- endunless -%}
+    {%- if include.caption != false and compare_caption != "" %}
+    <figcaption class="figure-caption text-center mt-2">{{ compare_caption }}</figcaption>
+    {%- endif %}
+</figure>
+{%- if compare_type == "opacity" and include.label1 == false %}
+<script>
+    /* opacity-compare does not have a show-labels option, hide labels after render */
+    customElements.whenDefined('opacity-compare').then(() => {
+        document.getElementById('{{ compareid }}').shadowRoot.querySelectorAll('.oc-label').forEach(label => label.style.display = 'none');
+    });
+</script>
+{%- endif -%}

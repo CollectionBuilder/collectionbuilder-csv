@@ -1,0 +1,97 @@
+---
+# layout for before-after image comparison compound object items
+# parent item with two child image items, compared using _includes/feature/image-comparison.html
+# the options below apply to all image_comparison items in the collection
+layout: item/item-page-base
+gallery: true
+# comparison-display: "slider" = image comparison is the main item display, "side-by-side" = child images side by side with a button to open the comparison in a full screen modal
+comparison-display: slider
+# comparison-type: "horizontal", "vertical", or "opacity"
+comparison-type: horizontal
+# comparison-start: percentage for starting slider position or opacity
+comparison-start: 65
+# comparison-label-field: metadata field from the child items to use as the image labels, e.g. date or title (falls back to title if empty), or false for no labels
+comparison-label-field: date
+# comparison-ratio: Bootstrap ratio for the comparison area when using "slider" display, "21x9", "16x9", "4x3", or "1x1"
+comparison-ratio: 16x9
+---
+{% assign children = site.data[site.metadata] | where_exp: 'item','item.parentid == page.objectid' %}
+{%- assign child1 = children[0] -%}
+{%- assign child2 = children[1] -%}
+{%- if layout.comparison-label-field == false -%}
+    {%- assign label1 = false -%}{%- assign label2 = false -%}
+{%- else -%}
+    {%- assign label1 = child1[layout.comparison-label-field] | default: child1.title -%}
+    {%- assign label2 = child2[layout.comparison-label-field] | default: child2.title -%}
+{%- endif -%}
+{%- capture comparison_start -%}{{ layout.comparison-start }}{%- endcapture -%}
+
+<div class="mb-4">
+    {% if children.size < 2 %}
+    <div class="alert alert-warning">Image comparison items require two child image items.</div>
+    {% elsif layout.comparison-display == "side-by-side" %}
+    <div class="card card-body">
+        <div class="row g-3 text-center">
+            {% for child in children limit: 2 %}
+            <div class="col-md-6">
+                <a id="{{ child.objectid }}" class="spotlight gallery-img" {% if child.object_location %}data-download="true"{% endif %} title="{{ child.title | escape }}" href="{{ child.object_location | default: child.image_small | relative_url }}">
+                    <img src="{{ child.image_small | relative_url }}" alt="{{ child.image_alt_text | default: child.description | default: child.title | escape }}" class="img-fluid">
+                    <div><small class="text-dark">{% if label1 == false %}{{ child.title }}{% else %}{{ child[layout.comparison-label-field] | default: child.title }}{% endif %}</small></div>
+                </a>   
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-1">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#comparisonModal">Compare Images</button>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="comparisonModal" tabindex="-1" aria-labelledby="comparisonModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="comparisonModalLabel">{{ page.title }}</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {% include feature/image-comparison.html img1=child1.objectid img2=child2.objectid label1=label1 label2=label2 type=layout.comparison-type start=comparison_start height="100%" caption=false %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    {% include feature/image-comparison.html img1=child1.objectid img2=child2.objectid label1=label1 label2=label2 type=layout.comparison-type start=comparison_start ratio=layout.comparison-ratio caption=false %}
+    {% endif %}
+
+    <div class="accordion my-3">
+        {% for child in children limit: 2 %}
+        <div class="accordion-item" {% unless layout.comparison-display == "side-by-side" %} id="{{ child.objectid }}"{% endunless %}>
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ child.objectid }}" aria-expanded="false" aria-controls="collapse{{ child.objectid }}">
+                    Image {{ forloop.index }}: {{ child.title }}
+                </button>
+            </h2>
+            <div id="collapse{{ child.objectid }}" class="accordion-collapse collapse">
+                <div class="accordion-body">
+                    {% include item/child/metadata.html %}
+                    {% include item/child/download-buttons.html %}
+                    {% if child.rights or child.rightsstatement %}
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            {% include item/child/rights-box.html %}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <script>
+        /* open child metadata if linked to with hash, e.g. items/comp001.html#comp002 */
+        document.addEventListener('DOMContentLoaded', () => {
+            const childCollapse = window.location.hash ? document.getElementById('collapse' + window.location.hash.substring(1)) : null;
+            if (childCollapse) { new bootstrap.Collapse(childCollapse); }
+        });
+    </script>
+</div>
