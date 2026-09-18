@@ -2,6 +2,9 @@
 # TASK: download_by_csv
 #
 # read csv, download using wget
+#
+# Requires wget installed!
+#
 ###############################################################################
 
 desc "download objects and rename using csv"
