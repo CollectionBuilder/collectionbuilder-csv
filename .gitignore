@@ -20,3 +20,6 @@ objects/
 
 # Ignore offline site build
 offline_site/
+
+# Ignore offline media download cache
+offline_cache/
