@@ -27,8 +27,9 @@ Default supported options include: `image`,`pdf`, `video`, `audio`, `panorama`, 
 - `panorama`: a 360 degree image. Item pages will use the Javascript based panorama viewer, [Panellum](https://pannellum.org/) to display the image in a 360 degree view.
 - `record`: metadata only record.
 - `item`: generic fallback item page, displays image or icon depending on "image_thumb"
-- `compound_object`: a record for a object that includes multiple file instances that are described/managed separately in the metadata. Compound objects use their own set of conventions, see "docs/compound_objects.md" for details.
-- `multiple`: a record for a object that includes multiple images (such as a postcard) that are listed separately in the metadata. Multiples use their own set of conventions, see "docs/compound_objects.md" for details.
+- `compound_object`: a record for a object that includes multiple file instances that are described/managed separately in the metadata. Uses CB's compound object conventions to describe the parent and child items. see "docs/compound_objects.md".
+- `multiple`: a record for a object that includes multiple images (such as a postcard) that are listed separately in the metadata. Uses CB's compound object conventions to describe the parent and child items. see "docs/compound_objects.md".
+- `image_comparison`: a record describing a comparison between two images that are displayed together by stacking them on top of each other and providing a slider to reveal one or the other. Uses CB's compound object conventions to describe the parent and child items. see "docs/compound_objects.md".
 
 Each of these layouts in turn is generally given `layout: item-page-base`, so that the custom features of the display templates will share the same standard page layout.
 If you want to change the basic structure of all items pages (breadcrumbs and title at top, citation and rights at button), edit the "_layouts/item/item-page-base.html" or the relevant item includes. 
