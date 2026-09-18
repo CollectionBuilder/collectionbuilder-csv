@@ -66,14 +66,26 @@
     return spotlight && spotlight.classList.contains("show");
   };
 
+  function isImageComparisonFocused(evt) {
+    // Check if the key event originated from (or bubbled through) a before-after
+    // or opacity-compare web component, so its own arrow key handling isn't overridden.
+    var path = evt.composedPath ? evt.composedPath() : [];
+    return path.some(function (el) {
+      return el.tagName && ["BEFORE-AFTER", "OPACITY-COMPARE"].includes(el.tagName);
+    });
+  };
+
 
   document.onkeydown = function (evt) {
-    if (isSpotlightModalShown()) {
+    evt = evt || window.event;
+    if (isImageComparisonFocused(evt)) {
+      // Let the image comparison component handle its own arrow key navigation.
+
+    } else if (isSpotlightModalShown()) {
 
 
     } else if (isModalShown()) {
       // The modal is shown.
-      evt = evt || window.event;
       switch (evt.keyCode) {
         case 37:
           leftModalArrowPressed();
@@ -85,7 +97,6 @@
     }
     else {
       // The modal is not shown.
-      evt = evt || window.event;
       switch (evt.keyCode) {
         case 37:
           leftArrowPressed();
