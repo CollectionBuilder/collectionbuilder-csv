@@ -15,9 +15,22 @@ custom-foot: js/table-js.html
                 {% for f in fields %}
                 <th scope="col">{{ f }}</th>
                 {% endfor %}
-                <th>Link</th>
+                {% unless jekyll.environment == "offline" %}<th scope="col">Link</th>{% endunless %}
             </tr>
         </thead>
+        {% if jekyll.environment == "offline" or page.simple-table == true %}
+        <tbody>
+        {% if site.data.theme.data-child-objects == true %}
+        {%- assign items = site.data[site.metadata] | where_exp: 'item','item.objectid' -%}
+        {% else %}
+        {%- assign items = site.data[site.metadata] | where_exp: 'item','item.objectid and item.parentid == nil' -%}
+        {% endif %}
+        {%- assign fields = site.data.config-table | map: 'field' -%}
+        {%- for item in items -%}
+        <tr>{% for f in fields %}<td>{% if forloop.first %}<a href="{{ '/items/' | relative_url }}{% if item.parentid %}{{ item.parentid }}.html#{{ item.objectid }}{% else %}{{ item.objectid }}.html{% endif %}">{{ item[f] }}</a>{% else %}{{ item[f] }}{% endif %}</td>{% endfor %}</tr>
+        {%- endfor -%}
+        </tbody>
+        {% endif %}
     </table>
 </div>
     
