@@ -8,7 +8,9 @@
 #
 # options (passed as rake arguments, e.g. rake build_offline[true,offline_site,assets/lib,false,false]):
 #   download_external - download external media linked in metadata, true/false (default: true)
-#   output_dir        - directory name for the offline output (default: "offline_site")
+#   output_dir        - directory name for the offline output (default: "offline_site").
+#                       the site itself is built into a "site" folder inside it, next to a
+#                       generated README.html that links to the collection.
 #   skip_rewrite      - comma separated directories to skip rewriting, useful for external libraries that should not be modified (default: "lib-assets" value from _config.yml, usually "assets/lib")
 #   download_video    - also download directly hosted video files (mp4, webm, etc.), true/false (default: false)
 #   refresh_downloads - re-download external media even when it is already in the cache, true/false (default: false)
@@ -21,6 +23,7 @@
 
 require 'csv'
 require 'digest'
+require 'erb'
 require 'net/http'
 require 'open-uri'
 require 'pathname'
@@ -134,6 +137,46 @@ OFFLINE_REWRITE_EXTENSIONS = %w[html js css json xml csv txt svg webmanifest].fr
 # output directory, so downloads have to live outside it to survive to the next run.
 OFFLINE_CACHE_DIR = 'offline_cache'.freeze
 
+# folder inside the output directory that holds the built site. keeping the site files in their
+# own folder leaves only README.html (and the build log) at the top level, so it is obvious to
+# someone opening the output directory where to start.
+OFFLINE_SITE_SUBDIR = 'site'.freeze
+
+# build the README.html placed at the root of the output directory: a minimal, self-contained
+# page (no external resources) introducing the collection and linking into the site folder.
+def offline_readme_html(title, description)
+  h = ->(s) { ERB::Util.html_escape(s.to_s.strip) }
+  title = title.to_s.strip.empty? ? 'Digital Collection' : title
+  description_html = description.to_s.strip.empty? ? '' : "\n  <p class=\"description\">#{h.(description)}</p>"
+  <<~HTML
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>#{h.(title)} (Offline Version)</title>
+    <style>
+      body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.5; color: #222; background: #fafafa; margin: 0; padding: 2rem 1rem; }
+      main { max-width: 40rem; margin: 0 auto; }
+      h1 { margin-top: 0; }
+      .description { font-size: 1.15rem; }
+      .start { display: inline-block; margin: 1rem 0; padding: 0.75rem 1.5rem; background: #0d6efd; color: #fff; text-decoration: none; border-radius: 0.3rem; font-size: 1.1rem; }
+      .start:hover, .start:focus { background: #0a58ca; }
+      .note { color: #555; font-size: 0.9rem; }
+    </style>
+    </head>
+    <body>
+    <main>
+      <h1>#{h.(title)}</h1>#{description_html}
+      <p>This is an offline version of the digital collection website, generated so that it can be viewed directly from your computer without an internet connection or web server. All of the website files are in the "#{OFFLINE_SITE_SUBDIR}" folder.</p>
+      <p><a class="start" href="#{OFFLINE_SITE_SUBDIR}/index.html">Start viewing the collection</a></p>
+      <p class="note">Some features that rely on outside services, such as map background tiles or streaming video, require an internet connection to display. Generated #{Time.now.strftime('%Y-%m-%d')} with <a href="https://collectionbuilder.github.io/">CollectionBuilder</a>.</p>
+    </main>
+    </body>
+    </html>
+  HTML
+end
+
 # rewrite all internal links in a file's content for local filesystem use.
 # depth     - number of directory levels below the offline root (0 = root-level files)
 # url_map   - hash of { external_url => root_relative_local_path } for downloaded media
@@ -202,6 +245,12 @@ task :build_offline, [:download_external, :output_dir, :skip_rewrite, :download_
   download_external = args.download_external.to_s.strip.downcase != 'false'
   offline_dir = args.output_dir.to_s.strip.chomp('/')
   abort 'output_dir cannot be empty' if offline_dir.empty?
+  # the output directory is cleared before each build, so refuse anything that would remove the project itself
+  offline_path = File.expand_path(offline_dir)
+  if Dir.pwd == offline_path || Dir.pwd.start_with?("#{offline_path}/")
+    abort "output_dir '#{offline_dir}' contains the project, choose a different directory"
+  end
+  site_dir = File.join(offline_dir, OFFLINE_SITE_SUBDIR)
   download_video = args.download_video.to_s.strip.downcase == 'true'
   refresh_downloads = args.refresh_downloads.to_s.strip.downcase == 'true'
   media_extensions = download_video ? OFFLINE_MEDIA_EXTENSIONS + OFFLINE_VIDEO_EXTENSIONS : OFFLINE_MEDIA_EXTENSIONS
@@ -216,7 +265,11 @@ task :build_offline, [:download_external, :output_dir, :skip_rewrite, :download_
   skip_rewrite_dirs = (args.skip_rewrite || config['lib-assets'] || 'assets/lib').to_s
                       .split(',').map { |d| d.strip.delete('"\'').delete_prefix('/').chomp('/') }.reject(&:empty?)
 
-  # build jekyll site with the offline environment directly into the output directory.
+  # start from an empty output directory. Jekyll only cleans the "site" folder it builds into,
+  # so stale files from a previous run (e.g. an old build log) would otherwise linger alongside it.
+  FileUtils.rm_rf(offline_dir)
+
+  # build jekyll site with the offline environment into the "site" folder of the output directory.
   # a temporary config override:
   #   - sets baseurl to the sentinel token (and blanks url) so every path produced by the
   #     relative_url / absolute_url filters is marked for rewriting
@@ -232,7 +285,7 @@ task :build_offline, [:download_external, :output_dir, :skip_rewrite, :download_
   override.close
   begin
     system('bundle', 'exec', 'jekyll', 'build',
-           '--destination', offline_dir,
+           '--destination', site_dir,
            '--config', "_config.yml,#{override.path}") or abort 'Jekyll build failed'
   ensure
     override.unlink
@@ -261,7 +314,7 @@ task :build_offline, [:download_external, :output_dir, :skip_rewrite, :download_
         OFFLINE_MEDIA_FIELDS.each do |field, (subdir, suffix)|
           next unless csv_data.headers.include?(field)
 
-          dest_dir = File.join(offline_dir, subdir)
+          dest_dir = File.join(site_dir, subdir)
           cache_dir = File.join(OFFLINE_CACHE_DIR, subdir)
           FileUtils.mkdir_p(dest_dir)
           FileUtils.mkdir_p(cache_dir)
@@ -333,9 +386,9 @@ task :build_offline, [:download_external, :output_dir, :skip_rewrite, :download_
   # Liquid-rendered text file (see offline_rewrite_links for how each file type is handled)
   puts "Rewriting links for offline use..."
   updated = 0
-  top_level = Dir.children(offline_dir).to_set
-  Dir.glob(File.join(offline_dir, '**', "*.{#{OFFLINE_REWRITE_EXTENSIONS.join(',')}}")).each do |filepath|
-    rel = Pathname.new(filepath).relative_path_from(Pathname.new(offline_dir)).to_s
+  top_level = Dir.children(site_dir).to_set
+  Dir.glob(File.join(site_dir, '**', "*.{#{OFFLINE_REWRITE_EXTENSIONS.join(',')}}")).each do |filepath|
+    rel = Pathname.new(filepath).relative_path_from(Pathname.new(site_dir)).to_s
     # skip files inside the skip_rewrite directories (e.g. third-party libraries), matching on directory boundary
     next if skip_rewrite_dirs.any? { |d| rel == d || rel.start_with?("#{d}/") }
     depth = rel.count('/')
@@ -352,7 +405,7 @@ task :build_offline, [:download_external, :output_dir, :skip_rewrite, :download_
 
   # any sentinel left behind means a file type or location the rewrite did not cover.
   # only Liquid-rendered text files can contain it, so media files are not read.
-  leftovers = Dir.glob(File.join(offline_dir, '**', "*.{#{OFFLINE_REWRITE_EXTENSIONS.join(',')}}")).select do |f|
+  leftovers = Dir.glob(File.join(site_dir, '**', "*.{#{OFFLINE_REWRITE_EXTENSIONS.join(',')}}")).select do |f|
     File.file?(f) && File.binread(f).include?(OFFLINE_SENTINEL)
   end
   unless leftovers.empty?
@@ -365,7 +418,7 @@ task :build_offline, [:download_external, :output_dir, :skip_rewrite, :download_
   # href="PATH/cb-icons.svg#id" references to fragment-only href="#id".
   # this handles both static <use> elements in HTML and dynamically-built icon strings in JS.
   puts "Inlining SVG icon sprite for offline use..."
-  svg_sprite_path = File.join(offline_dir, 'assets', 'css', 'cb-icons.svg')
+  svg_sprite_path = File.join(site_dir, 'assets', 'css', 'cb-icons.svg')
   if File.exist?(svg_sprite_path)
     sprite_svg = File.read(svg_sprite_path, encoding: 'utf-8')
     # strip XML declaration — not valid inside HTML documents
@@ -375,8 +428,8 @@ task :build_offline, [:download_external, :output_dir, :skip_rewrite, :download_
 
     inlined = 0
     skipped_pages = 0
-    Dir.glob(File.join(offline_dir, '**', '*.html')).each do |filepath|
-      rel = Pathname.new(filepath).relative_path_from(Pathname.new(offline_dir)).to_s
+    Dir.glob(File.join(site_dir, '**', '*.html')).each do |filepath|
+      rel = Pathname.new(filepath).relative_path_from(Pathname.new(site_dir)).to_s
       # respect the same skip list as the link rewrite, so third-party HTML is left alone
       next if skip_rewrite_dirs.any? { |d| rel == d || rel.start_with?("#{d}/") }
       content = offline_read(filepath)
@@ -412,7 +465,11 @@ task :build_offline, [:download_external, :output_dir, :skip_rewrite, :download_
     puts "  Warning: '#{svg_sprite_path}' not found, skipping SVG icon inlining."
   end
 
+  # README.html at the root of the output directory is the starting point for viewers
+  readme_path = File.join(offline_dir, 'README.html')
+  File.write(readme_path, offline_readme_html(config['title'], config['description']))
+
   puts "\nDone! Offline site created in '#{offline_dir}'."
-  puts "Open '#{File.join(offline_dir, 'index.html')}' in a browser to browse the collection."
+  puts "Open '#{readme_path}' in a browser to get started, or go straight to '#{File.join(site_dir, 'index.html')}'."
 end
 
