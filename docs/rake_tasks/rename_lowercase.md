@@ -1,6 +1,7 @@
 # rename_lowercase
 
 This task takes a folder of files and copies them to a new folder with all filenames downcased. 
+This is commonly used to normalize the filenames for use on the web, where most servers are case sensitive, to simplify matching up with metadata CSV data.
 
 Using default:
 
