@@ -54,6 +54,24 @@ A "multiple" item is a set of images to be displayed together in a single Item p
 
 The "multiple" display_template (CB-CSV) or format (CB-GH) works well if the child files do *not* require their own metadata. By default, only the "title" of the child files will be represented on the item page -- all other metadata for child files will be ignored. 
 
+## One-Level Nested `multiple` Inside `compound_object`
+
+CollectionBuilder-CSV also supports one additional non-recursive pattern: a child of a `compound_object` may itself use the `multiple` display_template.
+
+This is intended for a single extra layer only:
+
+- Top-level parent record: "display_template" value `compound_object`
+- Nested container record: "display_template" value `multiple`, with a "parentid" matching the compound parent's "objectid"
+- Nested image records: direct children of the `multiple` record, with a "parentid" matching that `multiple` record's "objectid"
+
+Behavior and limits:
+
+- The nested `multiple` record is displayed inside the compound child modal, and its modal button shows the number of images it contains.
+- Its image children are rendered inline inside that modal as a spotlight gallery.
+- No recursive nesting is supported beyond this single extra layer.
+- The nested records (the `multiple` container and its image children) do not receive standalone item pages, matching existing child record behavior.
+- Browse, map, and timeline visualizations continue to use only the top-level compound parent record, so nested records are not searchable or displayed there.
+
 ### image_comparison
 
 A "image_comparison" item is TWO images that are displayed together by stacking them on top of each other and providing a slider to reveal one or the other.
