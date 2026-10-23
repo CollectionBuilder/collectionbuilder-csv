@@ -2,7 +2,9 @@
 # TASK: resize_images
 #
 # create smaller images for all image files in the 'objects' folder
-# requires ImageMagick installed!
+#
+# Requires ImageMagick installed!
+#
 ###############################################################################
 
 require 'mini_magick'

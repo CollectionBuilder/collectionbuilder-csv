@@ -2,6 +2,9 @@
 # TASK: generate_derivatives
 #
 # create small and thumb images for image and pdf files in the 'objects' folder
+#
+# Requires ImageMagick and Ghostscript installed!
+#
 ###############################################################################
 
 require 'image_optim' unless Gem.win_platform?
