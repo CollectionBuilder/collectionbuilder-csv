@@ -30,15 +30,6 @@ custom-foot: js/browse-facets-js.html
         {% if advanced == true %}<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#browse-advanced-modal">Advanced search</button>{% endif %}
     </div>
 </form>
-<details class="mt-2 small">
-    <summary id="browse-search-tips-summary">Search tips</summary>
-    <ul class="mt-2">
-        <li>Every word you enter must match, e.g. <code>moscow building</code>.</li>
-        <li>Partial words work, e.g. <code>univ</code> finds "university" and "universities".</li>
-        <li>Put words in quotes to match a phrase, e.g. <code>"court house"</code>.</li>
-        {% if advanced == true %}<li>Use <strong>Advanced search</strong> to search specific fields, dates, or combine terms with AND, OR, NOT.</li>{% endif %}
-    </ul>
-</details>
 
 <!-- active filters, filled by js -->
 <div id="browse-active" class="d-flex flex-wrap align-items-center gap-2 my-3" hidden>
