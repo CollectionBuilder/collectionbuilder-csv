@@ -1,6 +1,6 @@
 /* 
     This is a modified version of Bootstrap Sass for customizing theme colors.
-    It is intended to create an easy means to override basic theme colors for btn-, btn-outline-, text-, and bg- classes. 
+    It is intended to create an easy means to override basic theme colors for btn-, btn-outline-, text-, bg-, and border- classes. 
     It is not complete Bootstrap theming! 
 */
 
@@ -255,6 +255,13 @@ $_luminance-list: .0008 .001 .0011 .0013 .0015 .0017 .002 .0022 .0025 .0027 .003
     }
 }
 
+/* custom mixin to create border variants */ 
+@mixin theme-border($parent, $color) {
+    #{$parent} {
+        border-color: rgba($color, 1)!important;
+    }
+}
+
 /* bg-opacity classes needed to override */ 
 .bg-opacity-75 {
     --bs-bg-opacity: 0.75 !important;
@@ -286,5 +293,7 @@ $_luminance-list: .0008 .001 .0011 .0013 .0015 .0017 .002 .0022 .0025 .0027 .003
         @include theme-text(".text-#{$color}", $value);
         /* bg classes */
         @include theme-bg(".bg-#{$color}", $value);
+        /* border classes */
+        @include theme-border(".border-#{$color}", $value);
     }
 }
